@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboards - LuminaBI{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h1 class="text-4xl font-bold text-gray-900">Dashboards</h1>
+                <p class="mt-2 text-gray-600">Create and manage custom dashboards</p>
+            </div>
+            <a href="{% url 'analytics:dashboard_create' %}" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                + New Dashboard
+            </a>
+        </div>
+
+        <!-- Statistics -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div class="bg-white rounded-lg shadow-sm p-4 text-center">
+                <p class="text-gray-600 text-sm">My Dashboards</p>
+                <p class="text-3xl font-bold text-gray-900 mt-1">{{ owned_dashboards }}</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm p-4 text-center">
+                <p class="text-gray-600 text-sm">Shared with Me</p>
+                <p class="text-3xl font-bold text-blue-600 mt-1">{{ shared_dashboards }}</p>
+            </div>
+        </div>
+
+        <!-- Dashboards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for dashboard in dashboards %}
+            <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition overflow-hidden group">
+                <div class="p-6">
+                    <div class="flex items-start justify-between mb-3">
+                        <h3 class="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition flex-1">
+                            <a href="{% url 'analytics:dashboard_detail' dashboard.id %}">{{ dashboard.name }}</a>
+                        </h3>
+                        {% if dashboard.is_public %}
+                        <span class="text-lg">🌍</span>
+                        {% else %}
+                        <span class="text-lg">🔒</span>
+                        {% endif %}
+                    </div>
+                    
+                    <p class="text-gray-600 text-sm mb-4">{{ dashboard.description|truncatewords:15 }}</p>
+
+                    <div class="space-y-2 text-sm mb-4 pb-4 border-b border-gray-200">
+                        <p class="text-gray-600">📊 {{ dashboard.widget_count }} widgets</p>
+                        <p class="text-gray-600">👤 {{ dashboard.owner.username }}</p>
+                        <p class="text-gray-600">📅 Updated {{ dashboard.updated_at|date:"M d, Y" }}</p>
+                    </div>
+
+                    {% if dashboard.owner == user %}
+                    <div class="flex gap-2">
+                        <a href="{% url 'analytics:dashboard_edit' dashboard.id %}" class="flex-1 px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded hover:bg-blue-200 text-center transition">
+                            Edit
+                        </a>
+                        <a href="{% url 'analytics:dashboard_delete' dashboard.id %}" class="flex-1 px-3 py-1 bg-red-100 text-red-700 text-sm rounded hover:bg-red-200 text-center transition">
+                            Delete
+                        </a>
+                    </div>
+                    {% else %}
+                    <p class="text-xs text-gray-600 text-center">Shared by {{ dashboard.owner.username }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full bg-white rounded-lg shadow-sm p-12 text-center">
+                <p class="text-gray-600 text-lg mb-4">No dashboards yet. Create one to get started!</p>
+                <a href="{% url 'analytics:dashboard_create' %}" class="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                    Create Dashboard
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

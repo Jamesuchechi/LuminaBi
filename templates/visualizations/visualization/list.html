@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Visualizations{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-7xl mx-auto px-4">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">Visualizations</h1>
+                <p class="text-gray-600 mt-2">Create and manage data visualizations</p>
+            </div>
+            <a href="{% url 'visualization_create' %}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition">
+                + Create Visualization
+            </a>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-3 gap-4 mb-8">
+            <div class="bg-white rounded-lg shadow p-6">
+                <p class="text-gray-600 text-sm font-medium">Total Visualizations</p>
+                <p class="text-3xl font-bold text-gray-900 mt-2">{{ statistics.total_visualizations }}</p>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <p class="text-gray-600 text-sm font-medium">Public Visualizations</p>
+                <p class="text-3xl font-bold text-green-600 mt-2">{{ statistics.public_visualizations }}</p>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <p class="text-gray-600 text-sm font-medium">Chart Types Used</p>
+                <p class="text-3xl font-bold text-blue-600 mt-2">{{ statistics.chart_types|length }}</p>
+            </div>
+        </div>
+
+        <!-- Visualizations Grid -->
+        {% if visualizations %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for viz in visualizations %}
+                    <div class="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden">
+                        <!-- Preview Area -->
+                        <div class="bg-gradient-to-br from-indigo-50 to-blue-50 h-32 flex items-center justify-center border-b border-gray-200">
+                            <div class="text-center">
+                                <p class="text-gray-500 text-xs font-semibold">{{ viz.get_chart_type_display }}</p>
+                                <p class="text-gray-400 text-2xl mt-1">
+                                    {% if viz.chart_type == 'bar' %}📊
+                                    {% elif viz.chart_type == 'line' %}📈
+                                    {% elif viz.chart_type == 'pie' %}🥧
+                                    {% elif viz.chart_type == 'scatter' %}🔵
+                                    {% else %}📉{% endif %}
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Content -->
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-gray-900 truncate">{{ viz.title }}</h3>
+                            <p class="text-gray-600 text-sm mt-2 line-clamp-2">{{ viz.description|default:"No description" }}</p>
+                            
+                            <!-- Metadata -->
+                            <div class="mt-4 space-y-1 text-sm text-gray-600">
+                                {% if viz.dataset %}
+                                    <p><span class="font-medium">Dataset:</span> {{ viz.dataset.name }}</p>
+                                {% endif %}
+                                <p><span class="font-medium">Created:</span> {{ viz.created_at|date:"M d, Y" }}</p>
+                            </div>
+                            
+                            <!-- Status Badge -->
+                            <div class="mt-4">
+                                {% if viz.is_public %}
+                                    <span class="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">🌐 Public</span>
+                                {% else %}
+                                    <span class="inline-block bg-gray-100 text-gray-800 text-xs font-semibold px-3 py-1 rounded-full">🔒 Private</span>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Actions -->
+                            <div class="mt-6 flex gap-2">
+                                <a href="{% url 'visualization_detail' viz.pk %}" class="flex-1 bg-blue-50 hover:bg-blue-100 text-blue-700 text-center py-2 rounded font-medium text-sm transition">
+                                    View
+                                </a>
+                                {% if viz.owner == request.user %}
+                                    <a href="{% url 'visualization_edit' viz.pk %}" class="flex-1 bg-gray-50 hover:bg-gray-100 text-gray-700 text-center py-2 rounded font-medium text-sm transition">
+                                        Edit
+                                    </a>
+                                    <a href="{% url 'visualization_delete' viz.pk %}" class="flex-1 bg-red-50 hover:bg-red-100 text-red-700 text-center py-2 rounded font-medium text-sm transition">
+                                        Delete
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if is_paginated %}
+                <div class="mt-8 flex justify-center items-center gap-2">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1" class="px-3 py-2 bg-white border border-gray-300 rounded text-sm font-medium">First</a>
+                        <a href="?page={{ page_obj.previous_page_number }}" class="px-3 py-2 bg-white border border-gray-300 rounded text-sm font-medium">Previous</a>
+                    {% endif %}
+                    
+                    <span class="px-4 py-2 text-gray-700 font-medium">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                    </span>
+                    
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}" class="px-3 py-2 bg-white border border-gray-300 rounded text-sm font-medium">Next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}" class="px-3 py-2 bg-white border border-gray-300 rounded text-sm font-medium">Last</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="bg-white rounded-lg shadow p-12 text-center">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                <h3 class="mt-4 text-lg font-medium text-gray-900">No visualizations yet</h3>
+                <p class="mt-2 text-gray-600">Get started by creating your first visualization.</p>
+                <a href="{% url 'visualization_create' %}" class="mt-4 inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition">
+                    Create Visualization
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

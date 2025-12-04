@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ dashboard.name }} - LuminaBI{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Breadcrumb & Header -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <a href="{% url 'dashboards:dashboard_list' %}" class="text-blue-600 hover:text-blue-800 mb-2 inline-block">← Back to Dashboards</a>
+                    <h1 class="text-4xl font-bold text-gray-900">{{ dashboard.name }}</h1>
+                    {% if dashboard.description %}
+                    <p class="text-gray-600 mt-2">{{ dashboard.description }}</p>
+                    {% endif %}
+                </div>
+                <div class="flex gap-2">
+                    {% if dashboard.is_published %}
+                    <form method="post" action="{% url 'dashboards:dashboard_publish' dashboard.id %}" class="inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="unpublish">
+                        <button type="submit" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition">
+                            Unpublish
+                        </button>
+                    </form>
+                    {% else %}
+                    <form method="post" action="{% url 'dashboards:dashboard_publish' dashboard.id %}" class="inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="publish">
+                        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+                            Publish
+                        </button>
+                    </form>
+                    {% endif %}
+                    <a href="{% url 'dashboards:dashboard_edit' dashboard.id %}" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                        Edit
+                    </a>
+                </div>
+            </div>
+
+            <!-- Status & Info -->
+            <div class="flex items-center gap-4 text-sm">
+                {% if dashboard.is_published %}
+                <span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded">✓ Published</span>
+                {% else %}
+                <span class="inline-block px-3 py-1 bg-gray-100 text-gray-800 rounded">Draft</span>
+                {% endif %}
+                <span class="text-gray-600">{{ visualization_count }} visualizations</span>
+                <span class="text-gray-600">Updated {{ dashboard.updated_at|date:"M d, Y H:i" }}</span>
+            </div>
+        </div>
+
+        <!-- Dashboard Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- Main Content -->
+            <div class="lg:col-span-3 space-y-6">
+                {% if visualizations %}
+                    <!-- Visualizations -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {% for vis in visualizations %}
+                        <div class="bg-white rounded-lg shadow-sm p-4 border-l-4 border-blue-500">
+                            <h3 class="font-semibold text-gray-900 mb-2">{{ vis.title }}</h3>
+                            <p class="text-sm text-gray-600 mb-3">{{ vis.description|truncatewords:15 }}</p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs text-gray-500">{{ vis.visualization_type }}</span>
+                                <form method="post" action="{% url 'dashboards:dashboard_visualizations' dashboard.id %}" class="inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="remove">
+                                    <input type="hidden" name="visualization_id" value="{{ vis.id }}">
+                                    <button type="submit" class="text-red-600 hover:text-red-800 text-sm">Remove</button>
+                                </form>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="bg-white rounded-lg shadow-sm p-12 text-center">
+                        <p class="text-gray-600 mb-4">No visualizations added yet.</p>
+                        <a href="#" class="text-blue-600 hover:text-blue-800 font-medium">Add Visualizations</a>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Sidebar -->
+            <div class="space-y-4">
+                <!-- Dashboard Info Card -->
+                <div class="bg-white rounded-lg shadow-sm p-4">
+                    <h2 class="font-semibold text-gray-900 mb-4">Dashboard Info</h2>
+                    <div class="space-y-3 text-sm">
+                        <div>
+                            <p class="text-gray-600">Created</p>
+                            <p class="text-gray-900 font-medium">{{ dashboard.created_at|date:"M d, Y" }}</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Owner</p>
+                            <p class="text-gray-900 font-medium">{{ dashboard.owner.username }}</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600">Visualizations</p>
+                            <p class="text-gray-900 font-medium">{{ visualization_count }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions Card -->
+                <div class="bg-white rounded-lg shadow-sm p-4">
+                    <h2 class="font-semibold text-gray-900 mb-4">Actions</h2>
+                    <div class="space-y-2">
+                        <a href="{% url 'dashboards:dashboard_layout' dashboard.id %}" class="block w-full px-3 py-2 bg-blue-100 text-blue-700 rounded hover:bg-blue-200 text-center text-sm transition">
+                            Edit Layout
+                        </a>
+                        <a href="{% url 'dashboards:dashboard_edit' dashboard.id %}" class="block w-full px-3 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 text-center text-sm transition">
+                            Edit Details
+                        </a>
+                        <a href="{% url 'dashboards:dashboard_delete' dashboard.id %}" class="block w-full px-3 py-2 bg-red-100 text-red-700 rounded hover:bg-red-200 text-center text-sm transition">
+                            Delete
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

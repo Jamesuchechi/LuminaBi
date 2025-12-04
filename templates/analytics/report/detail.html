@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ report.title }} - LuminaBI{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Breadcrumb -->
+        <div class="mb-6">
+            <a href="{% url 'analytics:report_list' %}" class="text-blue-600 hover:text-blue-800">← Back to Reports</a>
+        </div>
+
+        <!-- Main Card -->
+        <div class="bg-white rounded-lg shadow-sm p-8">
+            <!-- Header -->
+            <div class="flex items-start justify-between mb-6">
+                <div>
+                    <h1 class="text-4xl font-bold text-gray-900 mb-2">{{ report.title }}</h1>
+                    <div class="flex items-center gap-3 flex-wrap">
+                        <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded">
+                            {{ report.get_report_type_display }}
+                        </span>
+                        {% if report.status == 'published' %}
+                        <span class="inline-block px-3 py-1 bg-green-100 text-green-800 rounded">Published</span>
+                        {% elif report.status == 'draft' %}
+                        <span class="inline-block px-3 py-1 bg-gray-100 text-gray-800 rounded">Draft</span>
+                        {% else %}
+                        <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded">{{ report.get_status_display }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-8 pb-8 border-b border-gray-200">
+                <p class="text-gray-700 text-lg">{{ report.description }}</p>
+            </div>
+
+            <!-- Details -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 pb-8 border-b border-gray-200">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-600 uppercase mb-3">Dataset</h3>
+                    <p class="text-gray-900 font-medium">{{ report.dataset.name }}</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-600 uppercase mb-3">Owner</h3>
+                    <p class="text-gray-900 font-medium">{{ report.owner.username }}</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-600 uppercase mb-3">Insights</h3>
+                    <p class="text-gray-900 font-medium">{{ report.insight_count }}</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-600 uppercase mb-3">Created</h3>
+                    <p class="text-gray-900 font-medium">{{ report.created_at|date:"M d, Y H:i" }}</p>
+                </div>
+            </div>
+
+            <!-- Content -->
+            {% if report.content %}
+            <div class="mb-8 pb-8 border-b border-gray-200">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Report Content</h2>
+                <div class="bg-gray-50 rounded-lg p-6 text-gray-700 prose max-w-none">
+                    {{ report.content|safe }}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Publish Section -->
+            {% if report.status == 'draft' and report.owner == user %}
+            <div class="mb-8 pb-8 border-b border-gray-200">
+                <form method="post" action="{% url 'analytics:report_publish' report.id %}" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+                        ✓ Publish Report
+                    </button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Related Reports -->
+        {% if related_reports %}
+        <div class="mt-8 bg-white rounded-lg shadow-sm p-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Related Reports</h2>
+            <div class="space-y-3">
+                {% for related in related_reports %}
+                <a href="{% url 'analytics:report_detail' related.id %}" class="block p-4 bg-gray-50 hover:bg-gray-100 rounded-lg transition">
+                    <p class="font-medium text-gray-900">{{ related.title }}</p>
+                    <p class="text-sm text-gray-600 mt-1">{{ related.get_status_display }}</p>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

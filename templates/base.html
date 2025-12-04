@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}LuminaBI - Data Analytics Platform{% endblock %}</title>
+    
+    <!-- TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    
+    <!-- HTMX for dynamic updates -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom styles -->
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+        
+        body {
+            background-color: #f8fafc;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        
+        .gradient-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            box-shadow: 0 10px 25px 0 rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background-color: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s ease;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .badge-success { background: #d1fae5; color: #065f46; }
+        .badge-warning { background: #fef3c7; color: #92400e; }
+        .badge-error { background: #fee2e2; color: #991b1b; }
+        .badge-info { background: #dbeafe; color: #0c2d6b; }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="gradient-primary text-white sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-3">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-chart-line text-2xl"></i>
+                    <span class="text-2xl font-bold">LuminaBI</span>
+                </div>
+                
+                <!-- Main Menu -->
+                <div class="hidden md:flex space-x-8">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'core:dashboard' %}" class="hover:opacity-80 transition">Dashboard</a>
+                        <a href="{% url 'core:dataset_list' %}" class="hover:opacity-80 transition">Datasets</a>
+                        <a href="{% url 'core:visualization_list' %}" class="hover:opacity-80 transition">Charts</a>
+                        <a href="{% url 'core:insight_list' %}" class="hover:opacity-80 transition">Insights</a>
+                    {% else %}
+                        <a href="#" class="hover:opacity-80 transition">Features</a>
+                        <a href="#" class="hover:opacity-80 transition">Pricing</a>
+                        <a href="#" class="hover:opacity-80 transition">Docs</a>
+                    {% endif %}
+                </div>
+                
+                <!-- User Menu -->
+                <div class="flex items-center space-x-4">
+                    {% if user.is_authenticated %}
+                        <span class="text-sm">{{ user.first_name|default:user.username }}</span>
+                        <div class="relative group">
+                            <button class="w-10 h-10 bg-white text-blue-600 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user"></i>
+                            </button>
+                            <div class="absolute right-0 mt-2 w-48 bg-white text-gray-800 rounded-lg shadow-lg hidden group-hover:block">
+                                <a href="{% url 'core:settings' %}" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
+                                <a href="/admin/" class="block px-4 py-2 hover:bg-gray-100">Admin</a>
+                                <hr>
+                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 text-red-600">Logout</a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <a href="#" class="btn-primary">Login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <div class="container mx-auto px-6 py-8">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="mb-4 p-4 rounded-lg {% if message.tags %}{{ message.tags }}{% else %}bg-blue-50 text-blue-800{% endif %}">
+                    <div class="flex items-center">
+                        <i class="fas fa-info-circle mr-3"></i>
+                        {{ message }}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        {% block content %}{% endblock %}
+    </div>
+    
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white mt-16">
+        <div class="container mx-auto px-6 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <!-- About -->
+                <div>
+                    <h3 class="text-lg font-bold mb-4">LuminaBI</h3>
+                    <p class="text-gray-400">Modern data analytics platform for everyone.</p>
+                </div>
+                
+                <!-- Product -->
+                <div>
+                    <h4 class="font-bold mb-4">Product</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">Features</a></li>
+                        <li><a href="#" class="hover:text-white transition">Pricing</a></li>
+                        <li><a href="#" class="hover:text-white transition">Security</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Resources -->
+                <div>
+                    <h4 class="font-bold mb-4">Resources</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">Documentation</a></li>
+                        <li><a href="#" class="hover:text-white transition">API Docs</a></li>
+                        <li><a href="#" class="hover:text-white transition">Support</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Legal -->
+                <div>
+                    <h4 class="font-bold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">Privacy</a></li>
+                        <li><a href="#" class="hover:text-white transition">Terms</a></li>
+                        <li><a href="#" class="hover:text-white transition">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8 flex justify-between items-center">
+                <p class="text-gray-400">&copy; 2025 LuminaBI. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-github"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- WebSocket utility script -->
+    <script>
+        // WebSocket connection utility
+        class WebSocketConnection {
+            constructor(url, onMessage, onOpen, onClose, onError) {
+                this.url = url;
+                this.onMessage = onMessage;
+                this.onOpen = onOpen;
+                this.onClose = onClose;
+                this.onError = onError;
+                this.ws = null;
+                this.connect();
+            }
+            
+            connect() {
+                this.ws = new WebSocket(this.url);
+                
+                this.ws.onopen = () => {
+                    console.log('WebSocket connected:', this.url);
+                    if (this.onOpen) this.onOpen();
+                };
+                
+                this.ws.onmessage = (event) => {
+                    try {
+                        const data = JSON.parse(event.data);
+                        if (this.onMessage) this.onMessage(data);
+                    } catch (e) {
+                        console.error('Error parsing WebSocket message:', e);
+                    }
+                };
+                
+                this.ws.onclose = () => {
+                    console.log('WebSocket disconnected');
+                    if (this.onClose) this.onClose();
+                    // Attempt to reconnect after 3 seconds
+                    setTimeout(() => this.connect(), 3000);
+                };
+                
+                this.ws.onerror = (error) => {
+                    console.error('WebSocket error:', error);
+                    if (this.onError) this.onError(error);
+                };
+            }
+            
+            send(data) {
+                if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+                    this.ws.send(JSON.stringify(data));
+                } else {
+                    console.warn('WebSocket not connected');
+                }
+            }
+            
+            close() {
+                if (this.ws) {
+                    this.ws.close();
+                }
+            }
+        }
+        
+        // Utility functions
+        function updateProgressBar(elementId, progress) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.style.width = progress + '%';
+            }
+        }
+        
+        function showNotification(message, type = 'info') {
+            const notif = document.createElement('div');
+            notif.className = `p-4 rounded-lg mb-4 ${
+                type === 'success' ? 'bg-green-50 text-green-800' :
+                type === 'error' ? 'bg-red-50 text-red-800' :
+                type === 'warning' ? 'bg-yellow-50 text-yellow-800' :
+                'bg-blue-50 text-blue-800'
+            }`;
+            notif.innerHTML = `<i class="fas fa-${
+                type === 'success' ? 'check' :
+                type === 'error' ? 'exclamation' :
+                type === 'warning' ? 'warning' :
+                'info'
+            }-circle mr-3"></i>${message}`;
+            
+            const container = document.querySelector('.container');
+            if (container) {
+                container.insertBefore(notif, container.firstChild);
+                setTimeout(() => notif.remove(), 5000);
+            }
+        }
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

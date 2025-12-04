@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ visualization.title }} - Visualization{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-6xl mx-auto px-4">
+        <!-- Back Link -->
+        <a href="{% url 'visualization_list' %}" class="text-indigo-600 hover:text-indigo-700 font-medium mb-6 inline-block">← Back to Visualizations</a>
+
+        <div class="grid grid-cols-3 gap-6">
+            <!-- Main Content -->
+            <div class="col-span-2">
+                <div class="bg-white rounded-lg shadow">
+                    <!-- Header -->
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h1 class="text-3xl font-bold text-gray-900">{{ visualization.title }}</h1>
+                        <p class="text-gray-600 mt-2">{{ visualization.description|default:"No description provided" }}</p>
+                    </div>
+
+                    <!-- Chart Preview -->
+                    <div class="px-6 py-8 bg-gradient-to-br from-indigo-50 to-blue-50 min-h-96">
+                        <div class="flex items-center justify-center h-full">
+                            <div class="text-center">
+                                <p class="text-6xl">
+                                    {% if visualization.chart_type == 'bar' %}📊
+                                    {% elif visualization.chart_type == 'line' %}📈
+                                    {% elif visualization.chart_type == 'pie' %}🥧
+                                    {% elif visualization.chart_type == 'scatter' %}🔵
+                                    {% else %}📉{% endif %}
+                                </p>
+                                <p class="text-gray-600 mt-4 text-lg font-medium">
+                                    {{ visualization.get_chart_type_display }} Chart
+                                </p>
+                                <p class="text-gray-500 text-sm mt-2">
+                                    {% if visualization.dataset %}
+                                        Using: {{ visualization.dataset.name }}
+                                    {% else %}
+                                        No dataset linked
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Configuration -->
+                    <div class="px-6 py-4 border-t border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-3">Configuration</h3>
+                        <div class="bg-gray-50 p-4 rounded font-mono text-sm text-gray-700 overflow-x-auto">
+                            <pre>{{ visualization.config|safe }}</pre>
+                        </div>
+                    </div>
+
+                    <!-- Metadata -->
+                    <div class="px-6 py-4 border-t border-gray-200 grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-gray-600 text-sm font-medium">Chart Type</p>
+                            <p class="text-gray-900 font-semibold">{{ visualization.get_chart_type_display }}</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-600 text-sm font-medium">Created</p>
+                            <p class="text-gray-900 font-semibold">{{ visualization.created_at|date:"M d, Y" }}</p>
+                        </div>
+                        {% if visualization.dataset %}
+                            <div>
+                                <p class="text-gray-600 text-sm font-medium">Dataset</p>
+                                <a href="{% url 'dataset_detail' visualization.dataset.pk %}" class="text-indigo-600 hover:text-indigo-700 font-semibold">
+                                    {{ visualization.dataset.name }}
+                                </a>
+                            </div>
+                        {% endif %}
+                        <div>
+                            <p class="text-gray-600 text-sm font-medium">Status</p>
+                            <p class="text-gray-900 font-semibold">
+                                {% if visualization.is_public %}🌐 Public{% else %}🔒 Private{% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar Actions -->
+            <div>
+                <div class="bg-white rounded-lg shadow p-6 sticky top-8">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Information</h3>
+                    
+                    <div class="mb-6 pb-6 border-b border-gray-200">
+                        <p class="text-sm text-gray-600 font-medium">Owner</p>
+                        <p class="text-gray-900 font-semibold">{{ visualization.owner.get_full_name|default:visualization.owner.username }}</p>
+                    </div>
+
+                    {% if can_edit %}
+                        <div class="mb-6">
+                            <h4 class="text-sm font-semibold text-gray-900 mb-3">Manage</h4>
+                            <div class="space-y-3">
+                                <a href="{% url 'visualization_edit' visualization.pk %}" class="block w-full bg-blue-50 hover:bg-blue-100 text-blue-700 text-center py-2 rounded font-medium text-sm transition">
+                                    ✏️ Edit
+                                </a>
+                                
+                                {% if visualization.is_public %}
+                                    <form method="POST" action="{% url 'visualization_publish' visualization.pk %}" class="w-full">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="unpublish">
+                                        <button type="submit" class="w-full bg-yellow-50 hover:bg-yellow-100 text-yellow-700 py-2 rounded font-medium text-sm transition">
+                                            🔒 Make Private
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <form method="POST" action="{% url 'visualization_publish' visualization.pk %}" class="w-full">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="publish">
+                                        <button type="submit" class="w-full bg-green-50 hover:bg-green-100 text-green-700 py-2 rounded font-medium text-sm transition">
+                                            🌐 Make Public
+                                        </button>
+                                    </form>
+                                {% endif %}
+                                
+                                <a href="{% url 'visualization_delete' visualization.pk %}" class="block w-full bg-red-50 hover:bg-red-100 text-red-700 text-center py-2 rounded font-medium text-sm transition">
+                                    🗑️ Delete
+                                </a>
+                            </div>
+                        </div>
+                    {% else %}
+                        {% if visualization.is_public %}
+                            <div class="mb-6 pb-6 border-b border-gray-200">
+                                <span class="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full">
+                                    🌐 Public Visualization
+                                </span>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+
+                    <div class="text-sm text-gray-600">
+                        <p class="font-medium mb-2">Last Updated</p>
+                        <p>{{ visualization.updated_at|date:"M d, Y H:i" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile - LuminaBI{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Sidebar -->
+        <div class="md:col-span-1">
+            <!-- Profile Card -->
+            <div class="bg-white rounded-lg shadow p-6">
+                {% if profile.avatar %}
+                    <img src="{{ profile.avatar.url }}" alt="{{ profile.full_name }}" class="w-24 h-24 rounded-full mx-auto mb-4">
+                {% else %}
+                    <div class="w-24 h-24 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
+                        {{ profile.full_name|first }}
+                    </div>
+                {% endif %}
+
+                <h2 class="text-xl font-bold text-gray-900 text-center">{{ profile.full_name }}</h2>
+                <p class="text-gray-600 text-center text-sm">@{{ request.user.username }}</p>
+                <p class="text-gray-600 text-center text-sm">{{ profile.get_role_display }}</p>
+
+                {% if profile.bio %}
+                    <p class="text-gray-700 text-center text-sm mt-3 italic">{{ profile.bio }}</p>
+                {% endif %}
+
+                <a href="{% url 'accounts:profile_edit' %}" class="w-full block text-center mt-6 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition">
+                    Edit Profile
+                </a>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="bg-white rounded-lg shadow p-6 mt-6">
+                <h3 class="text-lg font-bold text-gray-900 mb-4">Statistics</h3>
+                <div class="space-y-3">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Login Count</span>
+                        <span class="font-semibold text-gray-900">{{ profile.login_count }}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Joined</span>
+                        <span class="font-semibold text-gray-900">{{ profile.created_at|date:"M d, Y" }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="md:col-span-2">
+            <!-- Account Information -->
+            <div class="bg-white rounded-lg shadow p-6 mb-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Account Information</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <p class="text-gray-600 text-sm font-semibold uppercase">Email</p>
+                        <p class="text-gray-900 text-lg">{{ request.user.email }}</p>
+                        {% if profile.is_email_verified %}
+                            <span class="inline-block mt-2 bg-green-100 text-green-800 text-xs font-semibold px-3 py-1 rounded">Verified</span>
+                        {% else %}
+                            <span class="inline-block mt-2 bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded">Unverified</span>
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <p class="text-gray-600 text-sm font-semibold uppercase">Phone</p>
+                        <p class="text-gray-900 text-lg">{{ profile.phone_number|default:"Not provided" }}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-gray-600 text-sm font-semibold uppercase">Username</p>
+                        <p class="text-gray-900 text-lg">{{ request.user.username }}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-gray-600 text-sm font-semibold uppercase">Timezone</p>
+                        <p class="text-gray-900 text-lg">{{ profile.get_timezone_display }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preferences -->
+            <div class="bg-white rounded-lg shadow p-6 mb-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Preferences</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <p class="text-gray-600 text-sm font-semibold uppercase">Theme</p>
+                        <p class="text-gray-900 text-lg">{{ profile.get_theme_display }}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-gray-600 text-sm font-semibold uppercase">Language</p>
+                        <p class="text-gray-900 text-lg">{{ profile.get_language_display }}</p>
+                    </div>
+                </div>
+
+                <h3 class="text-lg font-bold text-gray-900 mt-6 mb-4">Email Preferences</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 {% if profile.email_notifications %}text-green-600{% else %}text-gray-400{% endif %}" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="ml-3 text-gray-700">Email notifications enabled</span>
+                    </div>
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 {% if profile.email_digest %}text-green-600{% else %}text-gray-400{% endif %}" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="ml-3 text-gray-700">Weekly digest emails enabled</span>
+                    </div>
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 {% if profile.email_updates %}text-green-600{% else %}text-gray-400{% endif %}" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                        <span class="ml-3 text-gray-700">Important updates enabled</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Security</h2>
+
+                <div class="space-y-3">
+                    <a href="{% url 'accounts:password_change' %}" class="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+                        <h3 class="font-semibold text-gray-900">Change Password</h3>
+                        <p class="text-gray-600 text-sm">Update your password regularly to keep your account secure</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back Link -->
+    <div class="mt-8">
+        <a href="{% url 'core:index' %}" class="text-blue-600 hover:text-blue-800 font-medium">
+            ← Back to Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}

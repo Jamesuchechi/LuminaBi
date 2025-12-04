@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ organization.name }} - LuminaBI{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="flex justify-between items-start mb-8">
+        <div>
+            <h1 class="text-4xl font-bold text-gray-900">{{ organization.name }}</h1>
+            <p class="text-gray-600 mt-2">Slug: <code class="bg-gray-100 px-2 py-1 rounded">{{ organization.slug }}</code></p>
+        </div>
+        {% if is_owner %}
+            <div class="flex gap-2">
+                <a href="{% url 'core:organization_update' organization.pk %}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
+                    Edit
+                </a>
+                <a href="{% url 'core:organization_delete' organization.pk %}" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg">
+                    Delete
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Main Content -->
+        <div class="md:col-span-2">
+            <!-- Organization Info -->
+            <div class="bg-white rounded-lg shadow p-6 mb-6">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Details</h2>
+                <div class="space-y-4">
+                    <div>
+                        <p class="text-gray-600 text-sm font-semibold uppercase">Created</p>
+                        <p class="text-lg text-gray-900">{{ organization.created_at|date:"F d, Y \a\t H:i" }}</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-600 text-sm font-semibold uppercase">Last Updated</p>
+                        <p class="text-lg text-gray-900">{{ organization.updated_at|date:"F d, Y \a\t H:i" }}</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-600 text-sm font-semibold uppercase">Owner</p>
+                        <p class="text-lg text-gray-900">{{ organization.owner.get_full_name|default:organization.owner.username }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Description (if available) -->
+            {% if organization.description %}
+                <div class="bg-white rounded-lg shadow p-6 mb-6">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Description</h2>
+                    <p class="text-gray-700">{{ organization.description }}</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar -->
+        <div>
+            <!-- Members Card -->
+            <div class="bg-white rounded-lg shadow p-6 mb-6">
+                <h2 class="text-xl font-bold text-gray-900 mb-4">Members</h2>
+                <div class="space-y-3">
+                    {% for member in members %}
+                        <div class="flex items-center justify-between p-2 hover:bg-gray-50 rounded">
+                            <div>
+                                <p class="font-semibold text-gray-900">{{ member.get_full_name|default:member.username }}</p>
+                                <p class="text-sm text-gray-600">{{ member.email }}</p>
+                            </div>
+                            {% if member == organization.owner %}
+                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded">Owner</span>
+                            {% endif %}
+                        </div>
+                    {% empty %}
+                        <p class="text-gray-600 text-sm">No members yet</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-bold text-gray-900 mb-4">Stats</h2>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-gray-600">Total Members</span>
+                        <span class="text-2xl font-bold text-blue-600">{{ members.count }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back Link -->
+    <div class="mt-8">
+        <a href="{% url 'core:organization_list' %}" class="text-blue-600 hover:text-blue-800 font-medium">
+            ← Back to Organizations
+        </a>
+    </div>
+</div>
+{% endblock %}

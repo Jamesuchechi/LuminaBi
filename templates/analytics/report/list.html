@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}Reports - LuminaBI{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h1 class="text-4xl font-bold text-gray-900">Reports</h1>
+                <p class="mt-2 text-gray-600">Compiled analysis reports</p>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <form method="get" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Report Type</label>
+                    <select name="type" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <option value="">All Types</option>
+                        {% for value, label in report_types %}
+                        <option value="{{ value }}" {% if current_type == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                    <select name="status" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <option value="">All Status</option>
+                        {% for value, label in statuses %}
+                        <option value="{{ value }}" {% if current_status == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Dataset</label>
+                    <select name="dataset" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                        <option value="">All Datasets</option>
+                        {% for dataset in datasets %}
+                        <option value="{{ dataset.id }}">{{ dataset.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </form>
+        </div>
+
+        <!-- Statistics -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div class="bg-white rounded-lg shadow-sm p-4 text-center">
+                <p class="text-gray-600 text-sm">Total Reports</p>
+                <p class="text-3xl font-bold text-gray-900 mt-1">{{ total_reports }}</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm p-4 text-center">
+                <p class="text-gray-600 text-sm">Published</p>
+                <p class="text-3xl font-bold text-green-600 mt-1">{{ published_reports }}</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm p-4 text-center">
+                <p class="text-gray-600 text-sm">Drafts</p>
+                <p class="text-3xl font-bold text-yellow-600 mt-1">{{ draft_reports }}</p>
+            </div>
+        </div>
+
+        <!-- Reports List -->
+        <div class="space-y-4">
+            {% for report in reports %}
+            <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition overflow-hidden">
+                <div class="p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                                <a href="{% url 'analytics:report_detail' report.id %}" class="text-blue-600 hover:text-blue-800">
+                                    {{ report.title }}
+                                </a>
+                            </h3>
+                            <p class="text-gray-600">{{ report.description }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center gap-4 flex-wrap">
+                        <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded">
+                            {{ report.get_report_type_display }}
+                        </span>
+                        {% if report.status == 'published' %}
+                        <span class="inline-block px-3 py-1 bg-green-100 text-green-800 text-sm rounded">Published</span>
+                        {% elif report.status == 'draft' %}
+                        <span class="inline-block px-3 py-1 bg-gray-100 text-gray-800 text-sm rounded">Draft</span>
+                        {% else %}
+                        <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded">{{ report.get_status_display }}</span>
+                        {% endif %}
+                        <span class="text-sm text-gray-600">{{ report.insight_count }} insights</span>
+                        <span class="text-sm text-gray-600">{{ report.created_at|date:"M d, Y" }}</span>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="bg-white rounded-lg shadow-sm p-12 text-center">
+                <p class="text-gray-600 text-lg">No reports found.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

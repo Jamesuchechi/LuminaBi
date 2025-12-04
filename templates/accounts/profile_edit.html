@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Profile - LuminaBI{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-4xl font-bold text-gray-900 mb-8">Edit Profile</h1>
+
+        <div class="bg-white rounded-lg shadow p-8">
+            <form method="post" enctype="multipart/form-data" class="space-y-6">
+                {% csrf_token %}
+
+                <!-- Bio -->
+                <div>
+                    <label for="{{ form.bio.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Bio
+                    </label>
+                    <textarea 
+                        name="bio" 
+                        id="{{ form.bio.id_for_label }}"
+                        rows="3"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Tell us about yourself"
+                    >{{ form.instance.bio }}</textarea>
+                    {% if form.bio.errors %}
+                        <p class="text-red-500 text-sm mt-1">{{ form.bio.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Avatar -->
+                <div>
+                    <label for="{{ form.avatar.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Avatar
+                    </label>
+                    {% if form.instance.avatar %}
+                        <div class="mb-3">
+                            <img src="{{ form.instance.avatar.url }}" alt="Current avatar" class="w-32 h-32 rounded-lg">
+                        </div>
+                    {% endif %}
+                    <input 
+                        type="file" 
+                        name="avatar" 
+                        id="{{ form.avatar.id_for_label }}"
+                        accept="image/*"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                    {% if form.avatar.errors %}
+                        <p class="text-red-500 text-sm mt-1">{{ form.avatar.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Phone Number -->
+                <div>
+                    <label for="{{ form.phone_number.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Phone Number
+                    </label>
+                    <input 
+                        type="tel" 
+                        name="phone_number" 
+                        id="{{ form.phone_number.id_for_label }}"
+                        value="{{ form.instance.phone_number }}"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="+1 (555) 123-4567"
+                    >
+                    {% if form.phone_number.errors %}
+                        <p class="text-red-500 text-sm mt-1">{{ form.phone_number.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Role -->
+                <div>
+                    <label for="{{ form.role.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Role
+                    </label>
+                    <select 
+                        name="role" 
+                        id="{{ form.role.id_for_label }}"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                        {% for value, label in form.fields.role.choices %}
+                            <option value="{{ value }}" {% if form.instance.role == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Theme -->
+                <div>
+                    <label for="{{ form.theme.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Theme
+                    </label>
+                    <select 
+                        name="theme" 
+                        id="{{ form.theme.id_for_label }}"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                        {% for value, label in form.fields.theme.choices %}
+                            <option value="{{ value }}" {% if form.instance.theme == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Language -->
+                <div>
+                    <label for="{{ form.language.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Language
+                    </label>
+                    <select 
+                        name="language" 
+                        id="{{ form.language.id_for_label }}"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                        {% for value, label in form.fields.language.choices %}
+                            <option value="{{ value }}" {% if form.instance.language == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Timezone -->
+                <div>
+                    <label for="{{ form.timezone.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Timezone
+                    </label>
+                    <select 
+                        name="timezone" 
+                        id="{{ form.timezone.id_for_label }}"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                        {% for value, label in form.fields.timezone.choices %}
+                            <option value="{{ value }}" {% if form.instance.timezone == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Email Preferences -->
+                <div class="border-t pt-6">
+                    <h3 class="text-lg font-bold text-gray-900 mb-4">Email Preferences</h3>
+
+                    <div class="space-y-3">
+                        <div class="flex items-center">
+                            <input 
+                                type="checkbox" 
+                                name="email_notifications" 
+                                id="{{ form.email_notifications.id_for_label }}"
+                                {% if form.instance.email_notifications %}checked{% endif %}
+                                class="h-4 w-4 text-blue-600 rounded"
+                            >
+                            <label for="{{ form.email_notifications.id_for_label }}" class="ml-3 text-sm text-gray-700">
+                                Receive email notifications
+                            </label>
+                        </div>
+
+                        <div class="flex items-center">
+                            <input 
+                                type="checkbox" 
+                                name="email_digest" 
+                                id="{{ form.email_digest.id_for_label }}"
+                                {% if form.instance.email_digest %}checked{% endif %}
+                                class="h-4 w-4 text-blue-600 rounded"
+                            >
+                            <label for="{{ form.email_digest.id_for_label }}" class="ml-3 text-sm text-gray-700">
+                                Receive weekly digest emails
+                            </label>
+                        </div>
+
+                        <div class="flex items-center">
+                            <input 
+                                type="checkbox" 
+                                name="email_updates" 
+                                id="{{ form.email_updates.id_for_label }}"
+                                {% if form.instance.email_updates %}checked{% endif %}
+                                class="h-4 w-4 text-blue-600 rounded"
+                            >
+                            <label for="{{ form.email_updates.id_for_label }}" class="ml-3 text-sm text-gray-700">
+                                Receive important updates
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Buttons -->
+                <div class="flex gap-4">
+                    <button 
+                        type="submit"
+                        class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition"
+                    >
+                        Save Changes
+                    </button>
+                    <a 
+                        href="{% url 'accounts:profile' %}"
+                        class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg text-center transition"
+                    >
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

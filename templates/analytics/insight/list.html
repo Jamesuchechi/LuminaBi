@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block title %}Insights - LuminaBI{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h1 class="text-4xl font-bold text-gray-900">Insights</h1>
+                <p class="mt-2 text-gray-600">Data insights and analysis results</p>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+            <form method="get" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Insight Type</label>
+                    <select name="type" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="">All Types</option>
+                        {% for value, label in insight_types %}
+                        <option value="{{ value }}" {% if current_type == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Dataset</label>
+                    <select name="dataset" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="">All Datasets</option>
+                        {% for dataset in datasets %}
+                        <option value="{{ dataset.id }}">{{ dataset.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Confidence</label>
+                    <select name="confidence" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="">All Levels</option>
+                        {% for value, label in confidence_levels %}
+                        <option value="{{ value }}" {% if current_confidence == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </form>
+            <div class="mt-4">
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Filter</button>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div class="bg-white rounded-lg shadow-sm p-4 text-center">
+                <p class="text-gray-600 text-sm">Total Insights</p>
+                <p class="text-3xl font-bold text-gray-900 mt-1">{{ total_insights }}</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm p-4 text-center">
+                <p class="text-gray-600 text-sm">Validated</p>
+                <p class="text-3xl font-bold text-green-600 mt-1">{{ validated_insights }}</p>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm p-4 text-center">
+                <p class="text-gray-600 text-sm">Recent (7 days)</p>
+                <p class="text-3xl font-bold text-blue-600 mt-1">{{ recent_insights }}</p>
+            </div>
+        </div>
+
+        <!-- Insights List -->
+        <div class="space-y-4">
+            {% for insight in insights %}
+            <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition overflow-hidden">
+                <div class="p-6">
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                                <a href="{% url 'analytics:insight_detail' insight.id %}" class="text-blue-600 hover:text-blue-800">
+                                    {{ insight.title }}
+                                </a>
+                            </h3>
+                            <p class="text-gray-600 mb-4">{{ insight.description }}</p>
+                            
+                            <div class="flex items-center gap-4 flex-wrap">
+                                <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded">
+                                    {{ insight.get_insight_type_display }}
+                                </span>
+                                <span class="text-sm text-gray-600">Dataset: <strong>{{ insight.dataset.name }}</strong></span>
+                                <span class="text-sm text-gray-600">Created: {{ insight.created_at|date:"M d, Y" }}</span>
+                                
+                                {% if insight.is_validated %}
+                                <span class="inline-block px-3 py-1 bg-green-100 text-green-800 text-sm rounded">✓ Validated</span>
+                                {% else %}
+                                <span class="inline-block px-3 py-1 bg-gray-100 text-gray-800 text-sm rounded">Unvalidated</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="text-right ml-4">
+                            <div class="text-xl font-bold">
+                                {% if insight.confidence_level == 'high' %}
+                                <span class="text-green-600">●</span>
+                                {% elif insight.confidence_level == 'medium' %}
+                                <span class="text-yellow-600">●</span>
+                                {% else %}
+                                <span class="text-orange-600">●</span>
+                                {% endif %}
+                            </div>
+                            <p class="text-sm text-gray-600 mt-1">{{ insight.get_confidence_level_display }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="bg-white rounded-lg shadow-sm p-12 text-center">
+                <p class="text-gray-600 text-lg">No insights found. Try adjusting your filters.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <div class="mt-8 flex justify-center gap-2">
+            {% if page_obj.has_previous %}
+            <a href="?page=1" class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">First</a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">Previous</a>
+            {% endif %}
+            
+            <span class="px-4 py-2">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">Next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">Last</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

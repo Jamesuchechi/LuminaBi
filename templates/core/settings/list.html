@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}System Settings - LuminaBI{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-4xl font-bold text-gray-900">System Settings</h1>
+            <p class="text-gray-600 mt-2">Manage site-wide configuration (Admin only)</p>
+        </div>
+    </div>
+
+    {% if not user.is_superuser %}
+        <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+            <p class="text-red-800 font-semibold">You do not have permission to access this page.</p>
+        </div>
+    {% else %}
+        <!-- Settings List -->
+        <div class="bg-white rounded-lg shadow overflow-hidden">
+            {% if settings %}
+                <table class="w-full">
+                    <thead class="bg-gray-50 border-b">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Setting Key</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Value</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Site Wide</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Updated</th>
+                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y">
+                        {% for setting in settings %}
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="px-6 py-4 font-mono text-sm">{{ setting.key }}</td>
+                                <td class="px-6 py-4">
+                                    <div class="max-w-xs truncate text-gray-900">
+                                        {% if setting.value|length > 50 %}
+                                            <span title="{{ setting.value }}">{{ setting.value|truncatewords:10 }}</span>
+                                        {% else %}
+                                            {{ setting.value }}
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    {% if setting.site_wide %}
+                                        <span class="bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded">Yes</span>
+                                    {% else %}
+                                        <span class="bg-gray-100 text-gray-800 text-xs font-semibold px-2 py-1 rounded">No</span>
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4 text-sm text-gray-600">
+                                    {{ setting.updated_at|date:"M d, Y" }}
+                                </td>
+                                <td class="px-6 py-4">
+                                    <a href="{% url 'core:settings_update' setting.pk %}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                        Edit
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <div class="px-6 py-12 text-center">
+                    <p class="text-gray-500 text-lg">No settings configured yet</p>
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

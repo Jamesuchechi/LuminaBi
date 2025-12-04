@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Accept Invitation - LuminaBI{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+        {% if invitation %}
+            <div class="bg-white rounded-lg shadow p-8">
+                <div class="text-center mb-8">
+                    <svg class="w-16 h-16 mx-auto text-blue-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
+                    </svg>
+                    <h1 class="text-3xl font-bold text-gray-900">Join Organization</h1>
+                </div>
+
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8 text-center">
+                    <p class="text-gray-700 mb-2">You've been invited to join:</p>
+                    <h2 class="text-2xl font-bold text-blue-600">{{ invitation.organization.name }}</h2>
+                </div>
+
+                <div class="space-y-4 mb-8">
+                    <div>
+                        <p class="text-gray-600 text-sm font-semibold uppercase">Invitation Details</p>
+                        <div class="mt-2 space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Email:</span>
+                                <span class="font-semibold">{{ invitation.email }}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Invited By:</span>
+                                <span class="font-semibold">{{ invitation.created_by.get_full_name|default:invitation.created_by.username }}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Expires:</span>
+                                <span class="font-semibold">{{ invitation.expires_at|date:"M d, Y H:i" }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <form method="post" class="space-y-4">
+                    {% csrf_token %}
+
+                    <button 
+                        type="submit"
+                        class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg transition text-lg"
+                    >
+                        Accept Invitation
+                    </button>
+
+                    <a 
+                        href="{% url 'core:index' %}"
+                        class="w-full block text-center bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-4 rounded-lg transition"
+                    >
+                        Decline
+                    </a>
+                </form>
+            </div>
+        {% else %}
+            <div class="bg-white rounded-lg shadow p-8 text-center">
+                <svg class="w-16 h-16 mx-auto text-red-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+                <h1 class="text-3xl font-bold text-gray-900 mb-4">Invalid Invitation</h1>
+                <p class="text-gray-600 mb-6">This invitation is invalid or has expired.</p>
+                <a href="{% url 'core:organization_list' %}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg inline-block">
+                    View Organizations
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}Organizations - LuminaBI{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-4xl font-bold text-gray-900">Organizations</h1>
+            <p class="text-gray-600 mt-2">Manage your organizations and memberships</p>
+        </div>
+        <a href="{% url 'core:organization_create' %}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg">
+            + New Organization
+        </a>
+    </div>
+
+    <!-- Statistics -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="text-gray-600 text-sm font-semibold uppercase">Total Organizations</div>
+            <div class="text-3xl font-bold text-blue-600 mt-2">{{ organizations.paginator.count }}</div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="text-gray-600 text-sm font-semibold uppercase">Owned</div>
+            <div class="text-3xl font-bold text-green-600 mt-2">{{ owned_organizations }}</div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="text-gray-600 text-sm font-semibold uppercase">Member Of</div>
+            <div class="text-3xl font-bold text-purple-600 mt-2">{{ member_organizations }}</div>
+        </div>
+    </div>
+
+    <!-- Organizations List -->
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+        {% if organizations %}
+            <table class="w-full">
+                <thead class="bg-gray-50 border-b">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Role</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Members</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Created</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y">
+                    {% for org in organizations %}
+                        <tr class="hover:bg-gray-50 transition">
+                            <td class="px-6 py-4">
+                                <a href="{% url 'core:organization_detail' org.pk %}" class="text-blue-600 hover:text-blue-800 font-semibold">
+                                    {{ org.name }}
+                                </a>
+                                <p class="text-gray-500 text-sm mt-1">{{ org.slug }}</p>
+                            </td>
+                            <td class="px-6 py-4">
+                                {% if org.owner == request.user %}
+                                    <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded">Owner</span>
+                                {% else %}
+                                    <span class="bg-gray-100 text-gray-800 text-xs font-semibold px-3 py-1 rounded">Member</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center">
+                                    <span class="text-sm text-gray-600">{{ org.members.count }} members</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-600">
+                                {{ org.created_at|date:"M d, Y" }}
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex gap-2">
+                                    <a href="{% url 'core:organization_detail' org.pk %}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                        View
+                                    </a>
+                                    {% if org.owner == request.user %}
+                                        <a href="{% url 'core:organization_update' org.pk %}" class="text-green-600 hover:text-green-800 text-sm font-medium">
+                                            Edit
+                                        </a>
+                                        <a href="{% url 'core:organization_delete' org.pk %}" class="text-red-600 hover:text-red-800 text-sm font-medium">
+                                            Delete
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Pagination -->
+            {% if is_paginated %}
+                <div class="bg-gray-50 border-t px-6 py-4 flex justify-center gap-2">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-100">First</a>
+                        <a href="?page={{ page_obj.previous_page_number }}" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-100">Previous</a>
+                    {% endif %}
+
+                    <span class="px-3 py-1">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-100">Next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-100">Last</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="px-6 py-12 text-center">
+                <p class="text-gray-500 text-lg mb-4">No organizations yet</p>
+                <a href="{% url 'core:organization_create' %}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg inline-block">
+                    Create Your First Organization
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

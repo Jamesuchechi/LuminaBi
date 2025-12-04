@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ form_title }}{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-2xl mx-auto px-4">
+        <!-- Back Link -->
+        <a href="{% url 'dataset_list' %}" class="text-indigo-600 hover:text-indigo-700 font-medium mb-6 inline-block">← Back to Datasets</a>
+
+        <div class="bg-white rounded-lg shadow">
+            <!-- Header -->
+            <div class="px-6 py-4 border-b border-gray-200">
+                <h1 class="text-3xl font-bold text-gray-900">{{ form_title }}</h1>
+                <p class="text-gray-600 mt-1">Fill in the details below</p>
+            </div>
+
+            <!-- Form -->
+            <form method="post" enctype="multipart/form-data" class="p-6 space-y-6">
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <!-- Name Field -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        {{ form.name.label }}
+                    </label>
+                    {{ form.name }}
+                    {% if form.name.errors %}
+                        <p class="text-red-600 text-sm mt-1">{{ form.name.errors }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Description Field -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        {{ form.description.label }}
+                    </label>
+                    {{ form.description }}
+                    {% if form.description.errors %}
+                        <p class="text-red-600 text-sm mt-1">{{ form.description.errors }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- File Upload (Create Only) -->
+                {% if form.file %}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            {{ form.file.label }}
+                        </label>
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-indigo-500 transition cursor-pointer"
+                             onclick="document.getElementById('id_file').click()">
+                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                            </svg>
+                            <p class="mt-2 text-sm text-gray-600">Click to upload or drag and drop</p>
+                            <p class="text-xs text-gray-500">CSV, XLSX, JSON, or other data formats</p>
+                        </div>
+                        {{ form.file }}
+                        {% if form.file.errors %}
+                            <p class="text-red-600 text-sm mt-1">{{ form.file.errors }}</p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                <!-- Actions -->
+                <div class="flex gap-3 pt-6 border-t border-gray-200">
+                    <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg font-medium transition">
+                        {{ button_text }}
+                    </button>
+                    <a href="{% url 'dataset_list' %}" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 text-center py-2 rounded-lg font-medium transition">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    input[type="text"],
+    textarea,
+    input[type="file"] {
+        @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent;
+    }
+    
+    input[type="file"] {
+        display: none;
+    }
+
+    textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+</style>
+{% endblock %}

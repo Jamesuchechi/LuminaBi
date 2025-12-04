@@ -16,45 +16,58 @@ It automatically transforms raw datasets into **clean data**, **visual dashboard
 - Secure session-based authentication  
 
 ### 📤 Dataset Upload
-- Upload CSV or Excel files  
-- Automatic validation  
+- Upload CSV, Excel, JSON, and PDF files 
+- Automatic file validation and preview
 - Metadata extraction (size, columns, rows, file type)  
+- Real-time upload progress with WebSocket
 - Raw & cleaned versions stored securely  
 
 ### 🧼 Automated Data Cleaning
-- Remove duplicates  
-- Handle missing values  
-- Normalize column names  
+- Intelligent duplicate detection and removal
+- Handle missing values(Smart missing value handling (mean, median, mode, interpolation))  
+- Column name normalization (snake_case, CamelCase, etc.)
 - Convert datatype inconsistencies  
-- Date parsing  
+- Date/time parsing with multiple format detection
 - Generate summary statistics  
 
 ### 📊 Auto-Generated Visualizations
 - Bar, Line, Pie charts  
 - Correlation heatmaps  
+- Auto-chart suggestions based on data types
 - Histograms  
 - Scatter plots  
+- Real-time chart updates with WebSocket
 - Smart chart suggestions based on column types  
 - Visualizations rendered with **Chart.js / Plotly.js**  
 
 ### 🧠 Insights Engine
-- Trend analysis  
+- Trend detection and analysis  
 - Category rankings  
-- Outlier detection  
+- Outlier identification with statistical methods
+- Correlation analysis and heatmaps 
 - Time-series summaries  
-- Optional: AI-powered insights  
+- AI-powered insights  
 
 ### 📉 Dashboard Builder
-- Drag-and-drop or grid layout  
-- Multiple saved dashboards per user  
-- Filters (category, date range, comparison)  
-- Real-time rendering with AJAX/HTMX  
+    Drag-and-drop interface with HTML5 Drag API
+
+    Grid-based layout system
+
+    Real-time collaboration with WebSocket
+
+    Multiple saved dashboards per user
+
+    Interactive filters (date ranges, categories, sliders)
+
+    Public shareable dashboard links
 
 ### 📄 Exporting & Reporting
 - PDF report generation  
 - Export cleaned dataset  
 - Export charts as PNG  
 - Public shareable dashboard links  
+- email report delivery
+- scheduled automated delivery
 
 ### 🧩 REST API (Optional)
 - Upload dataset  

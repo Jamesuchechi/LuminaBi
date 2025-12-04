@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - LuminaBI{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    {% if user.is_authenticated %}
+        <!-- Welcome Section -->
+        <div class="gradient-primary text-white rounded-xl p-12 mb-12">
+            <h1 class="text-4xl font-bold mb-4">Welcome back, {{ user.first_name|default:user.username }}!</h1>
+            <p class="text-lg opacity-90">Your data analytics dashboard is ready. Upload, clean, and analyze your data with ease.</p>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <a href="{% url 'core:dataset_upload' %}" class="card p-8 hover:shadow-lg transition">
+                <i class="fas fa-cloud-upload-alt text-4xl text-blue-500 mb-4"></i>
+                <h3 class="text-xl font-bold mb-2">Upload Dataset</h3>
+                <p class="text-gray-600">Import your CSV, Excel, or JSON files</p>
+            </a>
+            
+            <a href="{% url 'core:dataset_list' %}" class="card p-8 hover:shadow-lg transition">
+                <i class="fas fa-database text-4xl text-purple-500 mb-4"></i>
+                <h3 class="text-xl font-bold mb-2">View Datasets</h3>
+                <p class="text-gray-600">Manage and explore your uploaded data</p>
+            </a>
+            
+            <a href="{% url 'core:visualization_list' %}" class="card p-8 hover:shadow-lg transition">
+                <i class="fas fa-chart-bar text-4xl text-pink-500 mb-4"></i>
+                <h3 class="text-xl font-bold mb-2">View Charts</h3>
+                <p class="text-gray-600">Explore your visualizations and insights</p>
+            </a>
+        </div>
+        
+        <!-- Statistics -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+            <div class="card p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm">Total Datasets</p>
+                        <p class="text-3xl font-bold">{{ total_datasets }}</p>
+                    </div>
+                    <i class="fas fa-database text-4xl text-blue-200"></i>
+                </div>
+            </div>
+            
+            <div class="card p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm">Visualizations</p>
+                        <p class="text-3xl font-bold">{{ total_visualizations }}</p>
+                    </div>
+                    <i class="fas fa-chart-bar text-4xl text-green-200"></i>
+                </div>
+            </div>
+            
+            <div class="card p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm">Insights Generated</p>
+                        <p class="text-3xl font-bold">{{ total_insights }}</p>
+                    </div>
+                    <i class="fas fa-lightbulb text-4xl text-yellow-200"></i>
+                </div>
+            </div>
+            
+            <div class="card p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm">Data Cleaned</p>
+                        <p class="text-3xl font-bold">{{ cleaning_progress }}%</p>
+                    </div>
+                    <i class="fas fa-check-circle text-4xl text-pink-200"></i>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Activity -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
+            <!-- Recent Datasets -->
+            <div class="card p-8">
+                <h2 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-clock text-blue-500 mr-3"></i>
+                    Recent Datasets
+                </h2>
+                {% if recent_datasets %}
+                    <ul class="space-y-4">
+                        {% for dataset in recent_datasets %}
+                            <li class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                                <div class="flex items-center space-x-3">
+                                    <i class="fas fa-file-csv text-blue-500"></i>
+                                    <div>
+                                        <a href="{% url 'core:dataset_detail' dataset.id %}" class="font-semibold hover:text-blue-600">
+                                            {{ dataset.filename }}
+                                        </a>
+                                        <p class="text-sm text-gray-500">{{ dataset.created_at|date:"M d, Y" }}</p>
+                                    </div>
+                                </div>
+                                <span class="badge {% if dataset.status == 'cleaned' %}badge-success{% elif dataset.status == 'cleaning' %}badge-warning{% else %}badge-info{% endif %}">
+                                    {{ dataset.get_status_display }}
+                                </span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-gray-500">No datasets yet. <a href="{% url 'core:dataset_upload' %}" class="text-blue-600 hover:underline">Upload one now</a></p>
+                {% endif %}
+            </div>
+            
+            <!-- Recent Visualizations -->
+            <div class="card p-8">
+                <h2 class="text-2xl font-bold mb-6 flex items-center">
+                    <i class="fas fa-chart-line text-purple-500 mr-3"></i>
+                    Recent Visualizations
+                </h2>
+                {% if recent_visualizations %}
+                    <ul class="space-y-4">
+                        {% for viz in recent_visualizations %}
+                            <li class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                                <div class="flex items-center space-x-3">
+                                    <i class="fas fa-chart-bar text-purple-500"></i>
+                                    <div>
+                                        <a href="{% url 'core:visualization_detail' viz.id %}" class="font-semibold hover:text-blue-600">
+                                            {{ viz.title }}
+                                        </a>
+                                        <p class="text-sm text-gray-500">{{ viz.chart_type }} • {{ viz.created_at|date:"M d, Y" }}</p>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-gray-500">No visualizations yet. <a href="{% url 'core:dataset_list' %}" class="text-blue-600 hover:underline">Create one</a></p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Getting Started Guide -->
+        <div class="card p-12 bg-gradient-to-br from-blue-50 to-purple-50">
+            <h2 class="text-2xl font-bold mb-8">Getting Started</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-blue-500 text-white rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl font-bold">1</span>
+                    </div>
+                    <h3 class="font-bold mb-2">Upload Data</h3>
+                    <p class="text-sm text-gray-600">Import your data files (CSV, Excel, JSON)</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-purple-500 text-white rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl font-bold">2</span>
+                    </div>
+                    <h3 class="font-bold mb-2">Clean Data</h3>
+                    <p class="text-sm text-gray-600">Automatically or manually clean your data</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-pink-500 text-white rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl font-bold">3</span>
+                    </div>
+                    <h3 class="font-bold mb-2">Visualize</h3>
+                    <p class="text-sm text-gray-600">Create charts and visualizations</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl font-bold">4</span>
+                    </div>
+                    <h3 class="font-bold mb-2">Share Insights</h3>
+                    <p class="text-sm text-gray-600">Export and share your findings</p>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <!-- Landing Page for Unauthenticated Users -->
+        <div class="gradient-primary text-white rounded-xl p-16 mb-12 text-center">
+            <h1 class="text-5xl font-bold mb-4">Welcome to LuminaBI</h1>
+            <p class="text-2xl mb-8">Transform Your Data Into Actionable Insights</p>
+            <a href="#" class="btn-primary text-lg px-8 py-4">Get Started Free</a>
+        </div>
+        
+        <!-- Features -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div class="card p-8 text-center">
+                <i class="fas fa-bolt text-4xl text-yellow-500 mb-4"></i>
+                <h3 class="text-xl font-bold mb-2">Lightning Fast</h3>
+                <p class="text-gray-600">Real-time data processing and visualization</p>
+            </div>
+            
+            <div class="card p-8 text-center">
+                <i class="fas fa-shield-alt text-4xl text-green-500 mb-4"></i>
+                <h3 class="text-xl font-bold mb-2">Secure</h3>
+                <p class="text-gray-600">Enterprise-grade security for your data</p>
+            </div>
+            
+            <div class="card p-8 text-center">
+                <i class="fas fa-users text-4xl text-purple-500 mb-4"></i>
+                <h3 class="text-xl font-bold mb-2">Collaborate</h3>
+                <p class="text-gray-600">Share dashboards with your team</p>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

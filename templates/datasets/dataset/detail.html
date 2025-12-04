@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ dataset.name }} - Dataset{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-6xl mx-auto px-4">
+        <!-- Back Link -->
+        <a href="{% url 'dataset_list' %}" class="text-indigo-600 hover:text-indigo-700 font-medium mb-6 inline-block">← Back to Datasets</a>
+
+        <div class="grid grid-cols-3 gap-6">
+            <!-- Main Content -->
+            <div class="col-span-2">
+                <div class="bg-white rounded-lg shadow">
+                    <!-- Header -->
+                    <div class="px-6 py-4 border-b border-gray-200">
+                        <h1 class="text-3xl font-bold text-gray-900">{{ dataset.name }}</h1>
+                        <p class="text-gray-600 mt-2">{{ dataset.description|default:"No description provided" }}</p>
+                    </div>
+
+                    <!-- Metadata -->
+                    <div class="px-6 py-4 bg-gray-50 grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-gray-600 text-sm font-medium">Uploaded</p>
+                            <p class="text-gray-900 font-semibold">{{ dataset.uploaded_at|date:"M d, Y H:i" }}</p>
+                        </div>
+                        {% if dataset.row_count %}
+                            <div>
+                                <p class="text-gray-600 text-sm font-medium">Rows</p>
+                                <p class="text-gray-900 font-semibold">{{ dataset.row_count|floatformat:0 }}</p>
+                            </div>
+                        {% endif %}
+                        {% if dataset.col_count %}
+                            <div>
+                                <p class="text-gray-600 text-sm font-medium">Columns</p>
+                                <p class="text-gray-900 font-semibold">{{ dataset.col_count }}</p>
+                            </div>
+                        {% endif %}
+                        {% if file_size_mb %}
+                            <div>
+                                <p class="text-gray-600 text-sm font-medium">File Size</p>
+                                <p class="text-gray-900 font-semibold">{{ file_size_mb|floatformat:2 }} MB</p>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Status -->
+                    <div class="px-6 py-4 border-t border-gray-200">
+                        {% if dataset.is_cleaned %}
+                            <div class="inline-block bg-green-100 text-green-800 text-sm font-semibold px-4 py-2 rounded-full">
+                                ✓ Cleaned & Ready
+                            </div>
+                        {% else %}
+                            <div class="inline-block bg-yellow-100 text-yellow-800 text-sm font-semibold px-4 py-2 rounded-full">
+                                Raw Data
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Metadata Info -->
+                    {% if dataset.metadata %}
+                        <div class="px-6 py-4 border-t border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-3">Metadata</h3>
+                            <div class="bg-gray-50 p-4 rounded">
+                                <pre class="text-sm text-gray-700">{{ dataset.metadata|safe }}</pre>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <!-- Visualizations Using This Dataset -->
+                    {% if visualizations %}
+                        <div class="px-6 py-4 border-t border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-3">Visualizations</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                {% for viz in visualizations %}
+                                    <div class="border border-gray-200 rounded p-3">
+                                        <p class="font-medium text-gray-900">{{ viz.title }}</p>
+                                        <p class="text-sm text-gray-600">{{ viz.get_chart_type_display }}</p>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Sidebar Actions -->
+            <div>
+                <div class="bg-white rounded-lg shadow p-6 sticky top-8">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Actions</h3>
+                    
+                    <div class="space-y-3">
+                        <a href="{% url 'dataset_edit' dataset.pk %}" class="block w-full bg-blue-50 hover:bg-blue-100 text-blue-700 text-center py-2 rounded font-medium transition">
+                            Edit Details
+                        </a>
+                        
+                        {% if not dataset.is_cleaned %}
+                            <form method="POST" action="{% url 'dataset_clean' dataset.pk %}" class="w-full">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="mark_cleaned">
+                                <button type="submit" class="w-full bg-green-50 hover:bg-green-100 text-green-700 py-2 rounded font-medium transition">
+                                    Mark as Cleaned
+                                </button>
+                            </form>
+                        {% endif %}
+                        
+                        <button type="button" onclick="exportDataset({{ dataset.pk }})" class="w-full bg-purple-50 hover:bg-purple-100 text-purple-700 py-2 rounded font-medium transition">
+                            Export
+                        </button>
+                        
+                        <a href="{% url 'dataset_delete' dataset.pk %}" class="block w-full bg-red-50 hover:bg-red-100 text-red-700 text-center py-2 rounded font-medium transition">
+                            Delete
+                        </a>
+                    </div>
+
+                    <!-- File Download -->
+                    {% if dataset.file %}
+                        <div class="mt-6 pt-6 border-t border-gray-200">
+                            <p class="text-sm font-medium text-gray-700 mb-2">Download</p>
+                            <a href="{{ dataset.file.url }}" download class="block w-full bg-gray-100 hover:bg-gray-200 text-gray-900 text-center py-2 rounded font-medium transition">
+                                ↓ Original File
+                            </a>
+                        </div>
+                    {% endif %}
+
+                    {% if dataset.cleaned_file %}
+                        <div class="mt-3">
+                            <a href="{{ dataset.cleaned_file.url }}" download class="block w-full bg-gray-100 hover:bg-gray-200 text-gray-900 text-center py-2 rounded font-medium transition">
+                                ↓ Cleaned File
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function exportDataset(datasetId) {
+    const format = prompt('Export format (csv, json, xlsx):', 'csv');
+    if (format) {
+        window.location.href = `{% url 'dataset_export' 0 %}`.replace('0', datasetId) + `?format=${format}`;
+    }
+}
+</script>
+{% endblock %}

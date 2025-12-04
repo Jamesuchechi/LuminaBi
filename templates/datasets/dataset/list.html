@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Datasets{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-7xl mx-auto px-4">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">Datasets</h1>
+                <p class="text-gray-600 mt-2">Upload and manage your data files</p>
+            </div>
+            <a href="{% url 'dataset_create' %}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition">
+                + Upload Dataset
+            </a>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="grid grid-cols-3 gap-4 mb-8">
+            <div class="bg-white rounded-lg shadow p-6">
+                <p class="text-gray-600 text-sm font-medium">Total Datasets</p>
+                <p class="text-3xl font-bold text-gray-900 mt-2">{{ statistics.total_datasets }}</p>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <p class="text-gray-600 text-sm font-medium">Cleaned Datasets</p>
+                <p class="text-3xl font-bold text-green-600 mt-2">{{ statistics.cleaned_datasets }}</p>
+            </div>
+            <div class="bg-white rounded-lg shadow p-6">
+                <p class="text-gray-600 text-sm font-medium">Total Size</p>
+                <p class="text-3xl font-bold text-blue-600 mt-2">{{ statistics.total_size_mb|floatformat:1 }} MB</p>
+            </div>
+        </div>
+
+        <!-- Datasets Grid -->
+        {% if datasets %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for dataset in datasets %}
+                    <div class="bg-white rounded-lg shadow hover:shadow-lg transition">
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-gray-900 truncate">{{ dataset.name }}</h3>
+                            <p class="text-gray-600 text-sm mt-2 line-clamp-2">{{ dataset.description|default:"No description" }}</p>
+                            
+                            <!-- Metadata -->
+                            <div class="mt-4 space-y-2 text-sm text-gray-600">
+                                {% if dataset.row_count %}
+                                    <p><span class="font-medium">Rows:</span> {{ dataset.row_count }}</p>
+                                {% endif %}
+                                {% if dataset.col_count %}
+                                    <p><span class="font-medium">Columns:</span> {{ dataset.col_count }}</p>
+                                {% endif %}
+                                <p><span class="font-medium">Uploaded:</span> {{ dataset.uploaded_at|date:"M d, Y" }}</p>
+                            </div>
+                            
+                            <!-- Status Badge -->
+                            <div class="mt-4">
+                                {% if dataset.is_cleaned %}
+                                    <span class="inline-block bg-green-100 text-green-800 text-xs font-semibold px-3 py-1 rounded-full">✓ Cleaned</span>
+                                {% else %}
+                                    <span class="inline-block bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full">Raw</span>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Actions -->
+                            <div class="mt-6 flex gap-2">
+                                <a href="{% url 'dataset_detail' dataset.pk %}" class="flex-1 bg-blue-50 hover:bg-blue-100 text-blue-700 text-center py-2 rounded font-medium text-sm transition">
+                                    View
+                                </a>
+                                <a href="{% url 'dataset_edit' dataset.pk %}" class="flex-1 bg-gray-50 hover:bg-gray-100 text-gray-700 text-center py-2 rounded font-medium text-sm transition">
+                                    Edit
+                                </a>
+                                <a href="{% url 'dataset_delete' dataset.pk %}" class="flex-1 bg-red-50 hover:bg-red-100 text-red-700 text-center py-2 rounded font-medium text-sm transition">
+                                    Delete
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if is_paginated %}
+                <div class="mt-8 flex justify-center items-center gap-2">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1" class="px-3 py-2 bg-white border border-gray-300 rounded text-sm font-medium">First</a>
+                        <a href="?page={{ page_obj.previous_page_number }}" class="px-3 py-2 bg-white border border-gray-300 rounded text-sm font-medium">Previous</a>
+                    {% endif %}
+                    
+                    <span class="px-4 py-2 text-gray-700 font-medium">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                    </span>
+                    
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}" class="px-3 py-2 bg-white border border-gray-300 rounded text-sm font-medium">Next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}" class="px-3 py-2 bg-white border border-gray-300 rounded text-sm font-medium">Last</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="bg-white rounded-lg shadow p-12 text-center">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <h3 class="mt-4 text-lg font-medium text-gray-900">No datasets yet</h3>
+                <p class="mt-2 text-gray-600">Get started by uploading your first dataset.</p>
+                <a href="{% url 'dataset_create' %}" class="mt-4 inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition">
+                    Upload Dataset
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
