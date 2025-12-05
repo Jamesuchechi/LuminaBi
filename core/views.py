@@ -55,6 +55,31 @@ def set_setting(key, value):
 
 
 # ============================================================================
+# INDEX & HOME VIEW
+# ============================================================================
+
+class IndexView(LoginRequiredMixin, TemplateView):
+    """Home/index page for authenticated users."""
+    template_name = 'core/index.html'
+    
+    def get_context_data(self, **kwargs):
+        """Add dashboard statistics to context."""
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        
+        # Get user's organizations
+        context['user_organizations'] = Organization.objects.filter(
+            Q(owner=user) | Q(members=user)
+        ).distinct()
+        
+        # Get system stats if admin
+        if user.is_staff:
+            context['total_organizations'] = Organization.objects.count()
+        
+        return context
+
+
+# ============================================================================
 # ORGANIZATION VIEWS
 # ============================================================================
 

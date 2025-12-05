@@ -37,13 +37,18 @@ class VisualizationListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         user_viz = Visualization.objects.filter(owner=self.request.user)
         
+        # Build chart_types statistics
+        chart_types = {}
+        if user_viz.exists():
+            for chart_type, label in Visualization.CHART_TYPES:
+                count = user_viz.filter(chart_type=chart_type).count()
+                if count > 0:
+                    chart_types[label] = count
+        
         context['statistics'] = {
             'total_visualizations': user_viz.count(),
             'public_visualizations': user_viz.filter(is_public=True).count(),
-            'chart_types': dict(user_viz.values('chart_type').distinct().values_list(
-                'chart_type', 
-                lambda: 1
-            )) if user_viz.exists() else {}
+            'chart_types': chart_types
         }
         
         return context
@@ -80,11 +85,14 @@ class VisualizationCreateView(LoginRequiredMixin, CreateView):
     model = Visualization
     template_name = 'visualizations/visualization/form.html'
     fields = ['title', 'description', 'chart_type', 'dataset', 'config', 'is_public']
-    success_url = reverse_lazy('visualization_list')
+    success_url = reverse_lazy('visualizations:visualization_list')
     
     def form_valid(self, form):
-        """Set the owner to the current user."""
+        """Set the owner to the current user and handle empty config."""
         form.instance.owner = self.request.user
+        # Handle empty config field - convert empty string to empty dict
+        if not form.instance.config or form.instance.config == '':
+            form.instance.config = {}
         return super().form_valid(form)
     
     def get_context_data(self, **kwargs):
@@ -102,13 +110,19 @@ class VisualizationUpdateView(LoginRequiredMixin, OwnerCheckMixin, UpdateView):
     model = Visualization
     template_name = 'visualizations/visualization/form.html'
     fields = ['title', 'description', 'chart_type', 'dataset', 'config', 'is_public']
-    success_url = reverse_lazy('visualization_list')
+    success_url = reverse_lazy('visualizations:visualization_list')
     
     def get_object(self):
         """Get visualization and verify ownership."""
         obj = super().get_object()
         self.check_owner(obj, self.request.user)
         return obj
+    
+    def form_valid(self, form):
+        """Handle empty config field - convert empty string to empty dict."""
+        if not form.instance.config or form.instance.config == '':
+            form.instance.config = {}
+        return super().form_valid(form)
     
     def get_context_data(self, **kwargs):
         """Add form title for clarity."""
@@ -124,7 +138,7 @@ class VisualizationDeleteView(LoginRequiredMixin, OwnerCheckMixin, DeleteView):
     
     model = Visualization
     template_name = 'visualizations/visualization/confirm_delete.html'
-    success_url = reverse_lazy('visualization_list')
+    success_url = reverse_lazy('visualizations:visualization_list')
     
     def get_object(self):
         """Get visualization and verify ownership."""

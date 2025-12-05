@@ -396,7 +396,7 @@ class Metric(models.Model):
         return abs(self.current_value - self.target_value) <= (self.target_value * 0.1)
 
 
-class Dashboard(models.Model):
+class AnalyticsDashboard(models.Model):
     """
     Represents custom analytics dashboards.
     Aggregates insights, metrics, and visualizations.
@@ -405,19 +405,19 @@ class Dashboard(models.Model):
     # Dashboard details
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='dashboards')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='analytics_dashboards')
     
     # Content
-    datasets = models.ManyToManyField(Dataset, related_name='dashboards')
-    insights = models.ManyToManyField(Insight, related_name='dashboards', blank=True)
-    metrics = models.ManyToManyField(Metric, related_name='dashboards', blank=True)
+    datasets = models.ManyToManyField(Dataset, related_name='analytics_dashboards')
+    insights = models.ManyToManyField(Insight, related_name='analytics_dashboards', blank=True)
+    metrics = models.ManyToManyField(Metric, related_name='analytics_dashboards', blank=True)
     
     # Layout
     layout = JSONField(default=dict, help_text='Dashboard layout configuration')
     
     # Sharing
     is_public = models.BooleanField(default=False)
-    shared_with = models.ManyToManyField(User, related_name='shared_dashboards', blank=True)
+    shared_with = models.ManyToManyField(User, related_name='shared_analytics_dashboards', blank=True)
     
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
@@ -438,3 +438,4 @@ class Dashboard(models.Model):
     def widget_count(self):
         """Get number of widgets in dashboard."""
         return len(self.layout.get('widgets', []))
+

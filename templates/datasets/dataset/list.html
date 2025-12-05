@@ -12,7 +12,7 @@
                 <h1 class="text-3xl font-bold text-gray-900">Datasets</h1>
                 <p class="text-gray-600 mt-2">Upload and manage your data files</p>
             </div>
-            <a href="{% url 'dataset_create' %}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition">
+            <a href="{% url 'datasets:dataset_create' %}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition">
                 + Upload Dataset
             </a>
         </div>
@@ -64,13 +64,13 @@
                             
                             <!-- Actions -->
                             <div class="mt-6 flex gap-2">
-                                <a href="{% url 'dataset_detail' dataset.pk %}" class="flex-1 bg-blue-50 hover:bg-blue-100 text-blue-700 text-center py-2 rounded font-medium text-sm transition">
+                                <a href="{% url 'datasets:dataset_detail' dataset.pk %}" class="flex-1 bg-blue-50 hover:bg-blue-100 text-blue-700 text-center py-2 rounded font-medium text-sm transition">
                                     View
                                 </a>
-                                <a href="{% url 'dataset_edit' dataset.pk %}" class="flex-1 bg-gray-50 hover:bg-gray-100 text-gray-700 text-center py-2 rounded font-medium text-sm transition">
+                                <a href="{% url 'datasets:dataset_edit' dataset.pk %}" class="flex-1 bg-gray-50 hover:bg-gray-100 text-gray-700 text-center py-2 rounded font-medium text-sm transition">
                                     Edit
                                 </a>
-                                <a href="{% url 'dataset_delete' dataset.pk %}" class="flex-1 bg-red-50 hover:bg-red-100 text-red-700 text-center py-2 rounded font-medium text-sm transition">
+                                <a href="{% url 'datasets:dataset_delete' dataset.pk %}" class="flex-1 bg-red-50 hover:bg-red-100 text-red-700 text-center py-2 rounded font-medium text-sm transition">
                                     Delete
                                 </a>
                             </div>
@@ -104,7 +104,7 @@
                 </svg>
                 <h3 class="mt-4 text-lg font-medium text-gray-900">No datasets yet</h3>
                 <p class="mt-2 text-gray-600">Get started by uploading your first dataset.</p>
-                <a href="{% url 'dataset_create' %}" class="mt-4 inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition">
+                <a href="{% url 'datasets:dataset_create' %}" class="mt-4 inline-block bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition">
                     Upload Dataset
                 </a>
             </div>

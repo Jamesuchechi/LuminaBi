@@ -10,7 +10,7 @@ from . import views
 from .views import (
     OrganizationViewSet, SettingViewSet, AuditLogViewSet,
     InsightViewSet, ReportViewSet, TrendViewSet, AnomalyViewSet,
-    AlertViewSet, MetricViewSet, DashboardViewSet,
+    AlertViewSet, MetricViewSet, AnalyticsDashboardViewSet,
     DatasetViewSet, VisualizationViewSet, DashboardModelViewSet
 )
 
@@ -27,7 +27,7 @@ router.register(r'trends', TrendViewSet, basename='trend')
 router.register(r'anomalies', AnomalyViewSet, basename='anomaly')
 router.register(r'alerts', AlertViewSet, basename='alert')
 router.register(r'metrics', MetricViewSet, basename='metric')
-router.register(r'dashboards', DashboardViewSet, basename='dashboard')
+router.register(r'analytics-dashboards', AnalyticsDashboardViewSet, basename='analytics_dashboard')
 router.register(r'datasets', DatasetViewSet, basename='dataset')
 router.register(r'visualizations', VisualizationViewSet, basename='visualization')
 router.register(r'dashboard-models', DashboardModelViewSet, basename='dashboard_model')

@@ -13,7 +13,7 @@ from django.db.models import Q
 
 from core.models import Organization, Setting, AuditLog
 from accounts.models import UserProfile
-from analytics.models import Insight, Report, Trend, Anomaly, Alert, Metric, Dashboard
+from analytics.models import Insight, Report, Trend, Anomaly, Alert, Metric, AnalyticsDashboard
 from datasets.models import Dataset
 from visualizations.models import Visualization
 from dashboards.models import Dashboard as DashboardModel
@@ -22,7 +22,7 @@ from .serializers import (
     OrganizationSerializer, SettingSerializer, AuditLogSerializer,
     UserProfileSerializer, UserSerializer,
     InsightSerializer, ReportSerializer, TrendSerializer, AnomalySerializer,
-    AlertSerializer, MetricSerializer, DashboardSerializer,
+    AlertSerializer, MetricSerializer, AnalyticsDashboardSerializer,
     DatasetSerializer, VisualizationSerializer, DashboardModelSerializer
 )
 
@@ -269,15 +269,15 @@ class MetricViewSet(viewsets.ReadOnlyModelViewSet):
         return Metric.objects.filter(dataset__in=user_datasets)
 
 
-class DashboardViewSet(viewsets.ModelViewSet):
-    """ViewSet for Dashboard model."""
-    serializer_class = DashboardSerializer
+class AnalyticsDashboardViewSet(viewsets.ModelViewSet):
+    """ViewSet for AnalyticsDashboard model."""
+    serializer_class = AnalyticsDashboardSerializer
     permission_classes = [IsAuthenticated]
     ordering = ['-updated_at']
     
     def get_queryset(self):
         """Filter dashboards to user's dashboards."""
-        return Dashboard.objects.filter(
+        return AnalyticsDashboard.objects.filter(
             Q(owner=self.request.user) | Q(shared_with=self.request.user)
         ).distinct()
     

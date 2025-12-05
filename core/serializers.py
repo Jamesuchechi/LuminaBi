@@ -1,12 +1,13 @@
 from rest_framework import serializers
 from .models import Organization, Setting
 from django.conf import settings
+from django.contrib.auth import get_user_model
 
 
 class OrganizationSerializer(serializers.ModelSerializer):
     owner = serializers.StringRelatedField(read_only=True)
     members = serializers.PrimaryKeyRelatedField(
-        many=True, queryset=settings.AUTH_USER_MODEL and None, required=False
+        many=True, queryset=get_user_model().objects.all(), required=False
     )
 
     class Meta:

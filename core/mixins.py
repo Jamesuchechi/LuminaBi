@@ -204,3 +204,21 @@ class RateLimitMixin:
                 status=429
             )
         return super().dispatch(request, *args, **kwargs)
+
+
+class OwnerCheckMixin:
+    """
+    Mixin that verifies object ownership before allowing access.
+    Raises Http404 if user is not the owner.
+    """
+    
+    def check_owner(self, obj, user):
+        """Verify that user owns the object."""
+        if not hasattr(obj, 'owner'):
+            # If object doesn't have owner field, skip check
+            return True
+        
+        if obj.owner != user:
+            raise Http404('Permission denied')
+        
+        return True

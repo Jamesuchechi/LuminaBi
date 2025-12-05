@@ -1,230 +1,324 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuminaBI - Automated Business Intelligence Platform</title>
+    <title>LuminaBI | Next-Gen Intelligence</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-        
-        * {
-            font-family: 'Inter', sans-serif;
-        }
-
-        /* Gradient Background */
-        body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-        }
-
-        /* Glass morphism */
-        .glass {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        /* Animated gradient text */
-        .gradient-text {
-            background: linear-gradient(45deg, #fff, #a78bfa, #fff);
-            background-size: 200% auto;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: gradient-shift 3s ease infinite;
-        }
-
-        @keyframes gradient-shift {
-            0%, 100% { background-position: 0% center; }
-            50% { background-position: 100% center; }
-        }
-
-        /* Floating animation */
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-
-        .float {
-            animation: float 6s ease-in-out infinite;
-        }
-
-        /* 3D Card flip */
-        .card-3d {
-            perspective: 1000px;
-            transition: transform 0.6s;
-            transform-style: preserve-3d;
-        }
-
-        .card-3d:hover {
-            transform: rotateY(10deg) rotateX(5deg);
-        }
-
-        /* Glow effect */
-        .glow {
-            box-shadow: 0 0 20px rgba(167, 139, 250, 0.6),
-                        0 0 40px rgba(167, 139, 250, 0.4),
-                        0 0 60px rgba(167, 139, 250, 0.2);
-        }
-
-        /* Pulse animation */
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(167, 139, 250, 0.5); }
-            50% { box-shadow: 0 0 40px rgba(167, 139, 250, 0.8); }
-        }
-
-        .pulse-glow {
-            animation: pulse-glow 2s ease-in-out infinite;
-        }
-
-        /* Underline animation */
-        .animated-underline {
-            position: relative;
-            display: inline-block;
-        }
-
-        .animated-underline::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 3px;
-            bottom: -5px;
-            left: 0;
-            background: linear-gradient(90deg, #a78bfa, #c084fc);
-            transition: width 0.3s ease;
-        }
-
-        .animated-underline:hover::after {
-            width: 100%;
-        }
-
-        /* Spinner card rotation */
-        @keyframes spin-slow {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .spin-slow {
-            animation: spin-slow 20s linear infinite;
-        }
-
-        /* Overlay fade-in */
-        .overlay-fade {
-            opacity: 0;
-            animation: fadeIn 0.8s ease forwards;
-        }
-
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-
-        /* Slide up animation */
-        .slide-up {
-            opacity: 0;
-            transform: translateY(30px);
-            animation: slideUp 0.8s ease forwards;
-        }
-
-        @keyframes slideUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Outfit', 'sans-serif'] },
+                    colors: {
+                        deep: '#030014',
+                        glass: 'rgba(255, 255, 255, 0.05)',
+                        neonBlue: '#00f3ff',
+                        neonPurple: '#bd00ff',
+                        neonPink: '#ff00aa'
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                        'spin-slow': 'spin 10s linear infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'pulse-glow 3s infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        'pulse-glow': {
+                            '0%, 100%': { boxShadow: '0 0 15px rgba(0, 243, 255, 0.2)' },
+                            '50%': { boxShadow: '0 0 30px rgba(189, 0, 255, 0.5)' },
+                        }
+                    }
+                }
             }
         }
+    </script>
 
-        /* Button hover effects */
-        .btn-primary {
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s;
+    <style>
+        body {
+            background-color: #030014;
+            color: white;
+            overflow-x: hidden;
         }
 
-        .btn-primary::before {
+        /* Ambient Background Glow */
+        .ambient-light {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background: 
+                radial-gradient(circle at 15% 50%, rgba(189, 0, 255, 0.08), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(0, 243, 255, 0.08), transparent 25%);
+        }
+
+        /* Advanced Glasmorphism */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 3D Spotlight Effect Logic */
+        .spotlight-card {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .spotlight-card::before {
+            content: '';
+            position: absolute;
+            background: radial-gradient(
+                800px circle at var(--mouse-x) var(--mouse-y),
+                rgba(255, 255, 255, 0.06),
+                transparent 40%
+            );
+            z-index: 3;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+        }
+
+        .spotlight-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Neon Border Animation (Spinner Card) */
+        .animated-border-card {
+            position: relative;
+            overflow: hidden;
+            z-index: 0;
+        }
+        
+        .animated-border-card::before {
             content: '';
             position: absolute;
             top: 50%;
             left: 50%;
+            transform: translate(-50%, -50%) rotate(0deg);
+            width: 150%;
+            height: 150%;
+            background: conic-gradient(transparent 270deg, #00f3ff, #bd00ff);
+            animation: rotate-border 4s linear infinite;
+            z-index: -2;
+        }
+
+        .animated-border-card::after {
+            content: '';
+            position: absolute;
+            inset: 2px;
+            background: #0a0a0a;
+            border-radius: inherit;
+            z-index: -1;
+        }
+
+        @keyframes rotate-border {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Text Gradients */
+        .text-gradient {
+            background: linear-gradient(to right, #00f3ff, #bd00ff, #ff00aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: gradient-move 5s ease infinite;
+        }
+
+        @keyframes gradient-move {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Animated Underline */
+        .hover-underline {
+            position: relative;
+        }
+        .hover-underline::after {
+            content: '';
+            position: absolute;
             width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #00f3ff;
+            transition: width 0.3s ease-in-out;
+            box-shadow: 0 0 10px #00f3ff;
+        }
+        .hover-underline:hover::after {
+            width: 100%;
         }
 
-        .btn-primary:hover::before {
-            width: 300px;
-            height: 300px;
+        /* Hero Image Overflow */
+        .hero-overflow {
+            mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
         }
 
-        /* Stagger delay for cards */
-        .card-1 { animation-delay: 0.1s; }
-        .card-2 { animation-delay: 0.2s; }
-        .card-3 { animation-delay: 0.3s; }
-        .card-4 { animation-delay: 0.4s; }
-
-        /* Parallax effect */
-        .parallax {
-            transition: transform 0.3s ease-out;
-        }
     </style>
 </head>
-<body class="overflow-x-hidden">
-    
-    <!-- Navigation -->
-    <nav class="fixed w-full z-50 glass overlay-fade">
-        <div class="max-w-7xl mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-2">
-                    <div class="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg spin-slow"></div>
-                    <span class="text-2xl font-bold text-white">LuminaBI</span>
+<body class="antialiased selection:bg-neonPurple selection:text-white">
+
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-neonPurple rounded-full mix-blend-multiply filter blur-[128px] opacity-20 animate-blob"></div>
+        <div class="absolute top-0 right-1/4 w-96 h-96 bg-neonBlue rounded-full mix-blend-multiply filter blur-[128px] opacity-20 animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-32 left-1/3 w-96 h-96 bg-neonPink rounded-full mix-blend-multiply filter blur-[128px] opacity-20 animate-blob animation-delay-4000"></div>
+    </div>
+
+    <nav class="fixed w-full z-50 transition-all duration-300 border-b border-transparent" id="navbar">
+        <div class="glass-panel backdrop-blur-md">
+            <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+                <div class="flex items-center gap-3 group cursor-pointer">
+                    <div class="w-10 h-10 relative">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-neonBlue to-neonPurple rounded-lg blur group-hover:blur-md transition-all duration-300"></div>
+                        <div class="relative w-full h-full bg-black rounded-lg border border-white/20 flex items-center justify-center">
+                            <span class="text-xl">⚡</span>
+                        </div>
+                    </div>
+                    <span class="text-xl font-bold tracking-wide">Lumina<span class="text-neonBlue">BI</span></span>
                 </div>
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#features" class="text-white hover:text-purple-200 animated-underline transition">Features</a>
-                    <a href="#how-it-works" class="text-white hover:text-purple-200 animated-underline transition">How It Works</a>
-                    <a href="#pricing" class="text-white hover:text-purple-200 animated-underline transition">Pricing</a>
-                    <a href="#" class="text-white hover:text-purple-200 animated-underline transition">Docs</a>
+
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#" class="text-sm font-medium text-gray-300 hover:text-white transition-colors hover-underline">Platform</a>
+                    <a href="#" class="text-sm font-medium text-gray-300 hover:text-white transition-colors hover-underline">Solutions</a>
+                    <a href="#" class="text-sm font-medium text-gray-300 hover:text-white transition-colors hover-underline">Pricing</a>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <button class="text-white hover:text-purple-200 transition">Login</button>
-                    <button class="btn-primary bg-white text-purple-600 px-6 py-2 rounded-full font-semibold hover:shadow-2xl transform hover:scale-105 transition">
-                        Get Started
+
+                <div class="flex items-center gap-4">
+                    <button class="text-gray-300 hover:text-white text-sm font-medium transition-colors">Log In</button>
+                    <button class="relative px-6 py-2.5 rounded-full bg-white text-black font-semibold text-sm overflow-hidden group hover:scale-105 transition-transform duration-300">
+                        <span class="relative z-10 group-hover:text-neonPurple transition-colors">Get Started</span>
+                        <div class="absolute inset-0 bg-gray-200 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-out"></div>
                     </button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="pt-32 pb-20 px-6">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center slide-up">
-                <h1 class="text-6xl md:text-7xl font-black text-white mb-6 leading-tight">
-                    Transform Data Into
-                    <span class="gradient-text block">Actionable Insights</span>
+    <section class="relative pt-40 pb-20 px-6 min-h-screen flex flex-col justify-center overflow-hidden">
+        <div class="max-w-7xl mx-auto w-full relative z-10 grid lg:grid-cols-2 gap-16 items-center">
+            
+            <div class="space-y-8 animate-float">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full glass-panel border border-neonPurple/30 text-neonPurple text-xs font-bold uppercase tracking-wider">
+                    <span class="w-2 h-2 rounded-full bg-neonPurple animate-pulse"></span>
+                    v2.0 Now Live
+                </div>
+                
+                <h1 class="text-6xl md:text-7xl font-black leading-tight tracking-tight">
+                    Data Intelligence <br>
+                    <span class="text-gradient">Reimagined.</span>
                 </h1>
-                <p class="text-xl text-purple-100 mb-12 max-w-3xl mx-auto">
-                    The modern alternative to Power BI and Tableau. Upload your data, 
-                    get automated analytics, stunning visualizations, and AI-powered insights — 
-                    all without writing a single line of code.
+                
+                <p class="text-lg text-gray-400 max-w-lg leading-relaxed">
+                    Stop wrestling with spreadsheets. LuminaBI fuses AI-driven analytics with stunning visualization layers. 
+                    <span class="text-white font-medium">No code required.</span>
                 </p>
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-                    <button class="btn-primary bg-white text-purple-600 px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl transform hover:scale-105 transition glow">
-                        🚀 Start Free Trial
+
+                <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                    <button class="px-8 py-4 rounded-xl bg-gradient-to-r from-neonBlue to-neonPurple text-white font-bold text-lg hover:shadow-[0_0_40px_-10px_rgba(189,0,255,0.5)] transition-all duration-300 transform hover:-translate-y-1">
+                        Start Free Trial
                     </button>
-                    <button class="glass text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-purple-600 transform hover:scale-105 transition">
-                        📹 Watch Demo
+                    <button class="px-8 py-4 rounded-xl glass-panel border border-white/10 hover:bg-white/5 transition-all duration-300 flex items-center gap-3 group">
+                        <span>Watch Demo</span>
+                        <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                     </button>
+                </div>
+
+                <div class="flex items-center gap-4 pt-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+                    <p class="text-sm text-gray-500">Trusted by:</p>
+                    <div class="flex gap-4">
+                        <div class="h-6 w-20 bg-white/20 rounded"></div>
+                        <div class="h-6 w-20 bg-white/20 rounded"></div>
+                        <div class="h-6 w-20 bg-white/20 rounded"></div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Floating Dashboard Preview -->
-            <div class="mt-20 float">
-                <div class="glass rounded-3xl p-8 max-w-5xl mx-auto shadow-2xl">
-                    <div class="bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl p-6 aspect-video flex items-center justify-center">
-                        <div class="text-center">
-                            <div class="text-6xl mb-4">📊</div>
-                            <p class="text-white text-xl font-semibold">Interactive Dashboard Preview</p>
+            <div class="relative perspective-1000">
+                <div class="absolute -top-20 -right-20 w-64 h-64 bg-neonBlue/20 rounded-full blur-3xl animate-pulse"></div>
+                
+                <div class="animated-border-card rounded-2xl p-6 md:p-8 tilt-card transform transition-transform duration-100 hover:scale-[1.02]">
+                    <div class="flex justify-between items-center mb-8">
+                        <div>
+                            <h3 class="text-2xl font-bold text-white">Revenue Growth</h3>
+                            <p class="text-sm text-gray-400">Real-time Analysis</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                            <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+                            <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="relative h-64 w-full bg-gradient-to-b from-white/5 to-transparent rounded-lg border border-white/5 p-4 overflow-hidden">
+                        <div class="absolute inset-0 grid grid-cols-6 grid-rows-4 gap-4 opacity-10">
+                            <div class="border-t border-r border-white"></div>
+                            <div class="border-t border-r border-white"></div>
+                            <div class="border-t border-r border-white"></div>
+                            <div class="border-t border-r border-white"></div>
+                            <div class="border-t border-r border-white"></div>
+                            <div class="border-t border-white"></div>
+                        </div>
+                        
+                        <svg class="absolute inset-0 w-full h-full p-4 overflow-visible" preserveAspectRatio="none">
+                            <path d="M0,150 C100,150 150,50 250,100 S400,150 500,50" 
+                                stroke="url(#lineGradient)" 
+                                stroke-width="4" 
+                                fill="none"
+                                class="drop-shadow-[0_0_10px_rgba(0,243,255,0.5)]">
+                                <animate attributeName="d" 
+                                    values="M0,150 C100,150 150,50 250,100 S400,150 500,50; M0,150 C100,120 150,80 250,120 S400,100 500,20; M0,150 C100,150 150,50 250,100 S400,150 500,50" 
+                                    dur="5s" 
+                                    repeatCount="indefinite"/>
+                            </path>
+                            <defs>
+                                <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#bd00ff;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#00f3ff;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+
+                        <div class="absolute top-10 right-10 glass-panel p-3 rounded-lg border-l-4 border-l-neonBlue animate-float shadow-lg">
+                            <p class="text-xs text-gray-400">Active Users</p>
+                            <p class="text-xl font-bold">+24.5% 🚀</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4 mt-6">
+                        <div class="glass-panel p-4 rounded-xl text-center hover:bg-white/5 transition">
+                            <div class="text-neonBlue text-lg font-bold">85%</div>
+                            <div class="text-xs text-gray-500">Retention</div>
+                        </div>
+                        <div class="glass-panel p-4 rounded-xl text-center hover:bg-white/5 transition">
+                            <div class="text-neonPurple text-lg font-bold">$1.2M</div>
+                            <div class="text-xs text-gray-500">MRR</div>
+                        </div>
+                        <div class="glass-panel p-4 rounded-xl text-center hover:bg-white/5 transition">
+                            <div class="text-neonPink text-lg font-bold">4.9</div>
+                            <div class="text-xs text-gray-500">CSAT</div>
                         </div>
                     </div>
                 </div>
@@ -232,201 +326,137 @@
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section id="features" class="py-20 px-6">
-        <div class="max-w-7xl mx-auto">
+    <section class="py-24 relative" id="features">
+        <div class="max-w-7xl mx-auto px-6">
             <div class="text-center mb-16">
-                <h2 class="text-5xl font-bold text-white mb-4">Powerful Features</h2>
-                <p class="text-xl text-purple-100">Everything you need for modern business intelligence</p>
+                <h2 class="text-4xl font-bold mb-4">Intelligence <span class="text-neonBlue">Without Limits</span></h2>
+                <p class="text-gray-400">Everything you need to dominate your data stack.</p>
             </div>
 
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Feature Card 1 -->
-                <div class="glass rounded-2xl p-8 card-3d hover:shadow-2xl transition-all slide-up card-1">
-                    <div class="text-5xl mb-4">🔐</div>
-                    <h3 class="text-2xl font-bold text-white mb-3">Secure Authentication</h3>
-                    <p class="text-purple-100">
-                        Enterprise-grade security with role-based access control and encrypted data storage.
+            <div class="grid md:grid-cols-3 gap-6" id="cards-container">
+                <div class="glass-panel rounded-2xl p-8 spotlight-card group cursor-pointer">
+                    <div class="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 border border-white/10 group-hover:border-neonBlue/50">
+                        <svg class="w-6 h-6 text-neonBlue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-white group-hover:text-neonBlue transition-colors">Instant Processing</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Upload millions of rows. Our engine processes data in milliseconds using parallel GPU computing.
                     </p>
                 </div>
 
-                <!-- Feature Card 2 -->
-                <div class="glass rounded-2xl p-8 card-3d hover:shadow-2xl transition-all slide-up card-2">
-                    <div class="text-5xl mb-4">🧼</div>
-                    <h3 class="text-2xl font-bold text-white mb-3">Auto Data Cleaning</h3>
-                    <p class="text-purple-100">
-                        Automatically handles duplicates, missing values, and data inconsistencies.
+                <div class="glass-panel rounded-2xl p-8 spotlight-card group cursor-pointer">
+                    <div class="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 border border-white/10 group-hover:border-neonPurple/50">
+                        <svg class="w-6 h-6 text-neonPurple" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-white group-hover:text-neonPurple transition-colors">Predictive AI</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Don't just see what happened. See what will happen. Our models forecast trends with 94% accuracy.
                     </p>
                 </div>
 
-                <!-- Feature Card 3 -->
-                <div class="glass rounded-2xl p-8 card-3d hover:shadow-2xl transition-all slide-up card-3">
-                    <div class="text-5xl mb-4">📊</div>
-                    <h3 class="text-2xl font-bold text-white mb-3">Smart Visualizations</h3>
-                    <p class="text-purple-100">
-                        AI-powered chart suggestions based on your data types and patterns.
-                    </p>
-                </div>
-
-                <!-- Feature Card 4 -->
-                <div class="glass rounded-2xl p-8 card-3d hover:shadow-2xl transition-all slide-up card-4">
-                    <div class="text-5xl mb-4">🧠</div>
-                    <h3 class="text-2xl font-bold text-white mb-3">AI Insights</h3>
-                    <p class="text-purple-100">
-                        Get trend analysis, outlier detection, and predictive insights automatically.
+                <div class="glass-panel rounded-2xl p-8 spotlight-card group cursor-pointer">
+                    <div class="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 border border-white/10 group-hover:border-neonPink/50">
+                        <svg class="w-6 h-6 text-neonPink" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-white group-hover:text-neonPink transition-colors">Enterprise Security</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        SOC2 Type II certified. End-to-end encryption. Your data is safe in our fortified digital vault.
                     </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- How It Works -->
-    <section id="how-it-works" class="py-20 px-6">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="text-5xl font-bold text-white mb-4">How It Works</h2>
-                <p class="text-xl text-purple-100">Get insights in three simple steps</p>
-            </div>
-
-            <div class="grid md:grid-cols-3 gap-12">
-                <div class="text-center">
-                    <div class="glass rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6 pulse-glow">
-                        <span class="text-4xl font-bold text-white">1</span>
-                    </div>
-                    <h3 class="text-2xl font-bold text-white mb-4">Upload Your Data</h3>
-                    <p class="text-purple-100">
-                        Drop your CSV or Excel file. We support datasets of any size.
-                    </p>
-                </div>
-
-                <div class="text-center">
-                    <div class="glass rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6 pulse-glow" style="animation-delay: 0.3s;">
-                        <span class="text-4xl font-bold text-white">2</span>
-                    </div>
-                    <h3 class="text-2xl font-bold text-white mb-4">Automatic Processing</h3>
-                    <p class="text-purple-100">
-                        Our AI cleans, analyzes, and generates visualizations automatically.
-                    </p>
-                </div>
-
-                <div class="text-center">
-                    <div class="glass rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6 pulse-glow" style="animation-delay: 0.6s;">
-                        <span class="text-4xl font-bold text-white">3</span>
-                    </div>
-                    <h3 class="text-2xl font-bold text-white mb-4">Get Insights</h3>
-                    <p class="text-purple-100">
-                        Explore dashboards, export reports, and share with your team.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
     <section class="py-20 px-6">
-        <div class="max-w-4xl mx-auto">
-            <div class="glass rounded-3xl p-12 text-center">
-                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
-                    Ready to Transform Your Data?
-                </h2>
-                <p class="text-xl text-purple-100 mb-8">
-                    Join thousands of businesses using LuminaBI for smarter decisions.
-                </p>
-                <button class="btn-primary bg-white text-purple-600 px-12 py-4 rounded-full font-bold text-xl hover:shadow-2xl transform hover:scale-105 transition glow">
-                    Start Your Free Trial →
-                </button>
-                <p class="text-purple-200 mt-4 text-sm">No credit card required • 14-day free trial</p>
+        <div class="max-w-5xl mx-auto">
+            <div class="relative rounded-3xl overflow-hidden glass-panel border border-neonPurple/20">
+                <div class="absolute inset-0 bg-gradient-to-r from-neonPurple/20 to-neonBlue/20"></div>
+                
+                <div class="relative z-10 px-8 py-16 md:px-16 text-center">
+                    <h2 class="text-3xl md:text-5xl font-bold mb-6">Ready to see the future?</h2>
+                    <p class="text-gray-300 mb-8 max-w-2xl mx-auto">
+                        Join 10,000+ companies using LuminaBI to make data-driven decisions that actually matter.
+                    </p>
+                    <div class="flex justify-center gap-4">
+                        <button class="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
+                            <span class="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]"></span>
+                            <span class="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-8 py-1 text-sm font-medium text-white backdrop-blur-3xl hover:bg-slate-900 transition-colors">
+                                Get Started Now
+                            </span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="py-12 px-6 glass mt-20">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid md:grid-cols-4 gap-8 mb-8">
+    <footer class="border-t border-white/5 bg-black/40 backdrop-blur-xl mt-20">
+        <div class="max-w-7xl mx-auto px-6 py-12">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
                 <div>
-                    <h4 class="text-white font-bold text-lg mb-4">Product</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-purple-200 hover:text-white transition">Features</a></li>
-                        <li><a href="#" class="text-purple-200 hover:text-white transition">Pricing</a></li>
-                        <li><a href="#" class="text-purple-200 hover:text-white transition">API</a></li>
+                    <h4 class="font-bold text-white mb-4">Product</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-neonBlue transition-colors">Features</a></li>
+                        <li><a href="#" class="hover:text-neonBlue transition-colors">Integrations</a></li>
+                        <li><a href="#" class="hover:text-neonBlue transition-colors">Enterprise</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-white font-bold text-lg mb-4">Company</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-purple-200 hover:text-white transition">About</a></li>
-                        <li><a href="#" class="text-purple-200 hover:text-white transition">Blog</a></li>
-                        <li><a href="#" class="text-purple-200 hover:text-white transition">Careers</a></li>
+                    <h4 class="font-bold text-white mb-4">Resources</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-neonBlue transition-colors">Documentation</a></li>
+                        <li><a href="#" class="hover:text-neonBlue transition-colors">API Reference</a></li>
+                        <li><a href="#" class="hover:text-neonBlue transition-colors">Blog</a></li>
                     </ul>
                 </div>
-                <div>
-                    <h4 class="text-white font-bold text-lg mb-4">Resources</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-purple-200 hover:text-white transition">Documentation</a></li>
-                        <li><a href="#" class="text-purple-200 hover:text-white transition">Tutorials</a></li>
-                        <li><a href="#" class="text-purple-200 hover:text-white transition">Support</a></li>
-                    </ul>
                 </div>
-                <div>
-                    <h4 class="text-white font-bold text-lg mb-4">Legal</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-purple-200 hover:text-white transition">Privacy</a></li>
-                        <li><a href="#" class="text-purple-200 hover:text-white transition">Terms</a></li>
-                        <li><a href="#" class="text-purple-200 hover:text-white transition">Security</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="border-t border-purple-400 pt-8 text-center">
-                <p class="text-purple-200">© 2024 LuminaBI. All rights reserved.</p>
+            <div class="text-center text-gray-600 text-sm border-t border-white/5 pt-8">
+                &copy; 2024 LuminaBI. All systems operational.
             </div>
         </div>
     </footer>
 
     <script>
-        // Parallax effect on mouse move
-        document.addEventListener('mousemove', (e) => {
-            const cards = document.querySelectorAll('.card-3d');
-            cards.forEach(card => {
+        // 1. Spotlight Effect Script
+        const cardsContainer = document.getElementById("cards-container");
+        const cards = document.querySelectorAll(".spotlight-card");
+
+        cardsContainer.addEventListener("mousemove", (e) => {
+            for (const card of cards) {
                 const rect = card.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
-                
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                
-                const rotateX = (y - centerY) / 20;
-                const rotateY = (centerX - x) / 20;
-                
-                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-            });
+
+                card.style.setProperty("--mouse-x", `${x}px`);
+                card.style.setProperty("--mouse-y", `${y}px`);
+            }
         });
 
-        // Smooth scroll for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
+        // 2. 3D Tilt Effect Script
+        const tiltCard = document.querySelector('.tilt-card');
+        
+        document.addEventListener('mousemove', (e) => {
+            if(!tiltCard) return;
+            
+            const rect = tiltCard.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            // Limit rotation to small degrees
+            const rotateX = ((y - centerY) / centerY) * -5; // Negative for natural feel
+            const rotateY = ((x - centerX) / centerX) * 5;
+
+            tiltCard.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
         });
 
-        // Intersection Observer for scroll animations
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.animationPlayState = 'running';
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.slide-up').forEach(el => {
-            el.style.animationPlayState = 'paused';
-            observer.observe(el);
+        // Reset tilt on mouse leave
+        document.addEventListener('mouseleave', () => {
+            if(!tiltCard) return;
+            tiltCard.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
         });
     </script>
-
 </body>
 </html>

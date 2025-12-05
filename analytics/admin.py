@@ -4,7 +4,7 @@ Admin configuration for analytics models.
 
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Insight, Report, Trend, Anomaly, Alert, Metric, Dashboard
+from .models import Insight, Report, Trend, Anomaly, Alert, Metric, AnalyticsDashboard
 
 
 @admin.register(Insight)
@@ -105,23 +105,19 @@ class ReportAdmin(admin.ModelAdmin):
 @admin.register(Trend)
 class TrendAdmin(admin.ModelAdmin):
     """Admin for Trend model."""
-    list_display = ('name', 'dataset', 'direction_display', 'magnitude', 'start_date', 'end_date')
-    list_filter = ('direction', 'dataset', 'start_date')
-    search_fields = ('name', 'description', 'dataset__name')
-    readonly_fields = ('created_at', 'updated_at')
+    list_display = ('field_name', 'dataset', 'direction_display', 'magnitude', 'period_start', 'period_end')
+    list_filter = ('direction', 'dataset', 'period_start')
+    search_fields = ('field_name', 'dataset__name')
+    readonly_fields = ('created_at',)
     fieldsets = (
         ('Basic Info', {
-            'fields': ('name', 'description', 'dataset')
+            'fields': ('field_name', 'dataset', 'insight')
         }),
         ('Trend Analysis', {
             'fields': ('direction', 'magnitude', 'start_value', 'end_value', 'average_value')
         }),
         ('Time Period', {
-            'fields': ('start_date', 'end_date')
-        }),
-        ('Timestamps', {
-            'fields': ('created_at', 'updated_at'),
-            'classes': ('collapse',)
+            'fields': ('period_start', 'period_end')
         }),
     )
     
@@ -143,23 +139,19 @@ class AnomalyAdmin(admin.ModelAdmin):
     list_display = ('description', 'dataset', 'severity_display', 'status_display', 'detected_at')
     list_filter = ('severity', 'status', 'detected_at', 'dataset')
     search_fields = ('description', 'dataset__name')
-    readonly_fields = ('detected_at', 'created_at', 'updated_at', 'acknowledged_at', 'resolved_at')
+    readonly_fields = ('detected_at', 'acknowledged_at', 'resolved_at')
     fieldsets = (
         ('Basic Info', {
-            'fields': ('description', 'dataset')
+            'fields': ('description', 'dataset', 'insight', 'anomaly_type')
         }),
-        ('Anomaly Details', {
-            'fields': ('deviation_score', 'deviation_description', 'expected_value', 'actual_value')
+        ('Detection Details', {
+            'fields': ('detected_value', 'expected_range_min', 'expected_range_max', 'deviation_score')
         }),
         ('Severity & Status', {
             'fields': ('severity', 'status')
         }),
-        ('Tracking', {
-            'fields': ('acknowledged_by', 'acknowledged_at', 'investigation_notes', 'resolution_notes', 'resolved_at')
-        }),
-        ('Timestamps', {
-            'fields': ('detected_at', 'created_at', 'updated_at'),
-            'classes': ('collapse',)
+        ('Investigation', {
+            'fields': ('assigned_to', 'acknowledged_at', 'resolution_notes', 'resolved_at')
         }),
     )
     
@@ -200,26 +192,25 @@ class AnomalyAdmin(admin.ModelAdmin):
 @admin.register(Alert)
 class AlertAdmin(admin.ModelAdmin):
     """Admin for Alert model."""
-    list_display = ('description', 'alert_level_display', 'status_display', 'triggered_at')
+    list_display = ('title', 'alert_level_display', 'status_display', 'triggered_at')
     list_filter = ('alert_level', 'status', 'triggered_at')
-    search_fields = ('description', 'condition')
-    readonly_fields = ('triggered_at', 'created_at', 'updated_at', 'acknowledged_at', 'resolved_at')
+    search_fields = ('title', 'description')
+    readonly_fields = ('triggered_at', 'acknowledged_at', 'resolved_at')
     fieldsets = (
         ('Alert Info', {
-            'fields': ('description', 'condition', 'alert_level')
+            'fields': ('title', 'description', 'alert_level', 'status')
         }),
-        ('Trigger Details', {
-            'fields': ('triggered_by', 'trigger_data')
+        ('Related To', {
+            'fields': ('dataset', 'anomaly', 'insight')
         }),
-        ('Status', {
-            'fields': ('status', 'acknowledged_at', 'resolved_at')
+        ('Timeline', {
+            'fields': ('triggered_at', 'acknowledged_at', 'resolved_at')
         }),
         ('Recipients', {
             'fields': ('recipients',)
         }),
-        ('Timestamps', {
-            'fields': ('triggered_at', 'created_at', 'updated_at'),
-            'classes': ('collapse',)
+        ('Metadata', {
+            'fields': ('metadata',)
         }),
     )
     filter_horizontal = ('recipients',)
@@ -261,21 +252,18 @@ class AlertAdmin(admin.ModelAdmin):
 class MetricAdmin(admin.ModelAdmin):
     """Admin for Metric model."""
     list_display = ('name', 'dataset', 'current_value', 'status_display', 'is_on_target_display', 'updated_at')
-    list_filter = ('status', 'dataset', 'updated_at')
+    list_filter = ('dataset', 'updated_at')
     search_fields = ('name', 'description', 'dataset__name')
     readonly_fields = ('created_at', 'updated_at', 'change_percentage')
     fieldsets = (
         ('Basic Info', {
-            'fields': ('name', 'description', 'dataset')
+            'fields': ('name', 'description', 'dataset', 'metric_type')
         }),
         ('Metric Values', {
-            'fields': ('current_value', 'previous_value', 'change_percentage')
+            'fields': ('current_value', 'previous_value', 'change_percentage', 'measured_at')
         }),
         ('Thresholds & Targets', {
-            'fields': ('threshold', 'target_value', 'unit')
-        }),
-        ('Tracking', {
-            'fields': ('status',)
+            'fields': ('warning_threshold', 'critical_threshold', 'target_value')
         }),
         ('Timestamps', {
             'fields': ('created_at', 'updated_at'),
@@ -310,9 +298,9 @@ class MetricAdmin(admin.ModelAdmin):
     is_on_target_display.short_description = 'On Target'
 
 
-@admin.register(Dashboard)
-class DashboardAdmin(admin.ModelAdmin):
-    """Admin for Dashboard model."""
+@admin.register(AnalyticsDashboard)
+class AnalyticsDashboardAdmin(admin.ModelAdmin):
+    """Admin for AnalyticsDashboard model."""
     list_display = ('name', 'owner', 'widget_count', 'is_public_display', 'updated_at')
     list_filter = ('is_public', 'updated_at', 'owner')
     search_fields = ('name', 'description', 'owner__username')

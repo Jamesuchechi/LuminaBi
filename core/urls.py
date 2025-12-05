@@ -12,7 +12,7 @@ urlpatterns = [
     # ====================================================================
     # ORGANIZATION MANAGEMENT
     # ====================================================================
-    path('', views.IndexView.as_view(), name='index'),
+    path('dashboard/', views.IndexView.as_view(), name='index'),
     path('organizations/', views.OrganizationListView.as_view(), name='organization_list'),
     path('organizations/create/', views.OrganizationCreateView.as_view(), name='organization_create'),
     path('organizations/<int:pk>/', views.OrganizationDetailView.as_view(), name='organization_detail'),

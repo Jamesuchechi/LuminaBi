@@ -85,7 +85,7 @@ class DatasetCreateView(LoginRequiredMixin, CreateView):
     model = Dataset
     template_name = 'datasets/dataset/form.html'
     fields = ['name', 'description', 'file']
-    success_url = reverse_lazy('dataset_list')
+    success_url = reverse_lazy('datasets:dataset_list')
     
     def form_valid(self, form):
         """Set the owner to the current user."""
@@ -106,7 +106,7 @@ class DatasetUpdateView(LoginRequiredMixin, OwnerCheckMixin, UpdateView):
     model = Dataset
     template_name = 'datasets/dataset/form.html'
     fields = ['name', 'description']
-    success_url = reverse_lazy('dataset_list')
+    success_url = reverse_lazy('datasets:dataset_list')
     
     def get_object(self):
         """Get the dataset and verify ownership."""
@@ -127,7 +127,7 @@ class DatasetDeleteView(LoginRequiredMixin, OwnerCheckMixin, DeleteView):
     
     model = Dataset
     template_name = 'datasets/dataset/confirm_delete.html'
-    success_url = reverse_lazy('dataset_list')
+    success_url = reverse_lazy('datasets:dataset_list')
     
     def get_object(self):
         """Get the dataset and verify ownership."""

@@ -7,7 +7,7 @@
 <div class="min-h-screen bg-gray-50 py-8">
     <div class="max-w-6xl mx-auto px-4">
         <!-- Back Link -->
-        <a href="{% url 'dataset_list' %}" class="text-indigo-600 hover:text-indigo-700 font-medium mb-6 inline-block">← Back to Datasets</a>
+        <a href="{% url 'datasets:dataset_list' %}" class="text-indigo-600 hover:text-indigo-700 font-medium mb-6 inline-block">← Back to Datasets</a>
 
         <div class="grid grid-cols-3 gap-6">
             <!-- Main Content -->
@@ -91,12 +91,12 @@
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">Actions</h3>
                     
                     <div class="space-y-3">
-                        <a href="{% url 'dataset_edit' dataset.pk %}" class="block w-full bg-blue-50 hover:bg-blue-100 text-blue-700 text-center py-2 rounded font-medium transition">
+                        <a href="{% url 'datasets:dataset_edit' dataset.pk %}" class="block w-full bg-blue-50 hover:bg-blue-100 text-blue-700 text-center py-2 rounded font-medium transition">
                             Edit Details
                         </a>
                         
                         {% if not dataset.is_cleaned %}
-                            <form method="POST" action="{% url 'dataset_clean' dataset.pk %}" class="w-full">
+                            <form method="POST" action="{% url 'datasets:dataset_clean' dataset.pk %}" class="w-full">
                                 {% csrf_token %}
                                 <input type="hidden" name="action" value="mark_cleaned">
                                 <button type="submit" class="w-full bg-green-50 hover:bg-green-100 text-green-700 py-2 rounded font-medium transition">
@@ -109,7 +109,7 @@
                             Export
                         </button>
                         
-                        <a href="{% url 'dataset_delete' dataset.pk %}" class="block w-full bg-red-50 hover:bg-red-100 text-red-700 text-center py-2 rounded font-medium transition">
+                        <a href="{% url 'datasets:dataset_delete' dataset.pk %}" class="block w-full bg-red-50 hover:bg-red-100 text-red-700 text-center py-2 rounded font-medium transition">
                             Delete
                         </a>
                     </div>
@@ -141,7 +141,7 @@
 function exportDataset(datasetId) {
     const format = prompt('Export format (csv, json, xlsx):', 'csv');
     if (format) {
-        window.location.href = `{% url 'dataset_export' 0 %}`.replace('0', datasetId) + `?format=${format}`;
+        window.location.href = `{% url 'datasets:dataset_export' 0 %}`.replace('0', datasetId) + `?format=${format}`;
     }
 }
 </script>

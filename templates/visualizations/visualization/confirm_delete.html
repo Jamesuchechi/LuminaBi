@@ -7,7 +7,7 @@
 <div class="min-h-screen bg-gray-50 py-8">
     <div class="max-w-2xl mx-auto px-4">
         <!-- Back Link -->
-        <a href="{% url 'visualization_list' %}" class="text-indigo-600 hover:text-indigo-700 font-medium mb-6 inline-block">← Back to Visualizations</a>
+        <a href="{% url 'visualizations:visualization_list' %}" class="text-indigo-600 hover:text-indigo-700 font-medium mb-6 inline-block">← Back to Visualizations</a>
 
         <div class="bg-white rounded-lg shadow border-2 border-red-200">
             <!-- Alert -->
@@ -54,7 +54,7 @@
                             Yes, Delete Visualization
                         </button>
                     </form>
-                    <a href="{% url 'visualization_detail' visualization.pk %}" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-900 text-center py-2 rounded-lg font-semibold transition">
+                    <a href="{% url 'visualizations:visualization_detail' visualization.pk %}" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-900 text-center py-2 rounded-lg font-semibold transition">
                         Cancel
                     </a>
                 </div>

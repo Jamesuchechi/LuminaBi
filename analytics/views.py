@@ -14,7 +14,7 @@ from django.db.models import Q, Count, Avg
 from django.utils import timezone
 from datetime import timedelta
 
-from .models import Insight, Report, Trend, Anomaly, Alert, Metric, Dashboard
+from .models import Insight, Report, Trend, Anomaly, Alert, Metric, AnalyticsDashboard
 from datasets.models import Dataset
 from core.mixins import OwnerRequiredMixin
 
@@ -407,7 +407,7 @@ class DashboardListView(LoginRequiredMixin, ListView):
     List all dashboards for user.
     Shows owned and shared dashboards.
     """
-    model = Dashboard
+    model = AnalyticsDashboard
     template_name = 'analytics/dashboard/list.html'
     context_object_name = 'dashboards'
     paginate_by = 20
@@ -415,14 +415,14 @@ class DashboardListView(LoginRequiredMixin, ListView):
     
     def get_queryset(self):
         """Get dashboards owned by or shared with user."""
-        return Dashboard.objects.filter(
+        return AnalyticsDashboard.objects.filter(
             Q(owner=self.request.user) | Q(shared_with=self.request.user)
         ).distinct().order_by('-updated_at')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['owned_dashboards'] = Dashboard.objects.filter(owner=self.request.user).count()
-        context['shared_dashboards'] = Dashboard.objects.filter(
+        context['owned_dashboards'] = AnalyticsDashboard.objects.filter(owner=self.request.user).count()
+        context['shared_dashboards'] = AnalyticsDashboard.objects.filter(
             shared_with=self.request.user
         ).count()
         return context
@@ -430,14 +430,14 @@ class DashboardListView(LoginRequiredMixin, ListView):
 
 class DashboardDetailView(LoginRequiredMixin, DetailView):
     """Display a dashboard with all widgets and metrics."""
-    model = Dashboard
+    model = AnalyticsDashboard
     template_name = 'analytics/dashboard/detail.html'
     context_object_name = 'dashboard'
     login_url = 'accounts:login'
     
     def get_queryset(self):
         """Only show dashboards user owns or is shared with."""
-        return Dashboard.objects.filter(
+        return AnalyticsDashboard.objects.filter(
             Q(owner=self.request.user) | Q(shared_with=self.request.user)
         )
     
@@ -460,7 +460,7 @@ class DashboardDetailView(LoginRequiredMixin, DetailView):
 
 class DashboardCreateView(LoginRequiredMixin, CreateView):
     """Create a new dashboard."""
-    model = Dashboard
+    model = AnalyticsDashboard
     template_name = 'analytics/dashboard/form.html'
     fields = ['name', 'description', 'is_public']
     success_url = reverse_lazy('analytics:dashboard_list')
@@ -473,7 +473,7 @@ class DashboardCreateView(LoginRequiredMixin, CreateView):
 
 class DashboardUpdateView(LoginRequiredMixin, UpdateView):
     """Update a dashboard."""
-    model = Dashboard
+    model = AnalyticsDashboard
     template_name = 'analytics/dashboard/form.html'
     fields = ['name', 'description', 'is_public']
     success_url = reverse_lazy('analytics:dashboard_list')
@@ -481,19 +481,19 @@ class DashboardUpdateView(LoginRequiredMixin, UpdateView):
     
     def get_queryset(self):
         """Only allow owner to update."""
-        return Dashboard.objects.filter(owner=self.request.user)
+        return AnalyticsDashboard.objects.filter(owner=self.request.user)
 
 
 class DashboardDeleteView(LoginRequiredMixin, DeleteView):
     """Delete a dashboard."""
-    model = Dashboard
+    model = AnalyticsDashboard
     template_name = 'analytics/dashboard/confirm_delete.html'
     success_url = reverse_lazy('analytics:dashboard_list')
     login_url = 'accounts:login'
     
     def get_queryset(self):
         """Only allow owner to delete."""
-        return Dashboard.objects.filter(owner=self.request.user)
+        return AnalyticsDashboard.objects.filter(owner=self.request.user)
 
 
 # ============================================================================

@@ -15,7 +15,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.urls import reverse_lazy
-from django.http import JsonResponse, redirect
+from django.http import JsonResponse
 from django.utils import timezone
 from django.core.mail import send_mail
 from django.utils.html import format_html
@@ -141,6 +141,23 @@ class PasswordResetConfirmForm(forms.Form):
 # ============================================================================
 # AUTHENTICATION VIEWS
 # ============================================================================
+
+class LandingPageView(TemplateView):
+    """Landing page view - shows to unauthenticated users, redirects authenticated to dashboard."""
+    template_name = 'index.html'
+    
+    def dispatch(self, request, *args, **kwargs):
+        """Redirect authenticated users to dashboard."""
+        if request.user.is_authenticated:
+            return redirect('core:index')
+        return super().dispatch(request, *args, **kwargs)
+    
+    def get_context_data(self, **kwargs):
+        """Add context for landing page."""
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = 'LuminaBI - Data Analytics Made Simple'
+        return context
+
 
 class RegisterView(FormView):
     """User registration view."""

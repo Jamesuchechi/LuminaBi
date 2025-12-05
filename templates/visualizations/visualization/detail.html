@@ -7,7 +7,7 @@
 <div class="min-h-screen bg-gray-50 py-8">
     <div class="max-w-6xl mx-auto px-4">
         <!-- Back Link -->
-        <a href="{% url 'visualization_list' %}" class="text-indigo-600 hover:text-indigo-700 font-medium mb-6 inline-block">← Back to Visualizations</a>
+        <a href="{% url 'visualizations:visualization_list' %}" class="text-indigo-600 hover:text-indigo-700 font-medium mb-6 inline-block">← Back to Visualizations</a>
 
         <div class="grid grid-cols-3 gap-6">
             <!-- Main Content -->
@@ -65,7 +65,7 @@
                         {% if visualization.dataset %}
                             <div>
                                 <p class="text-gray-600 text-sm font-medium">Dataset</p>
-                                <a href="{% url 'dataset_detail' visualization.dataset.pk %}" class="text-indigo-600 hover:text-indigo-700 font-semibold">
+                                <a href="{% url 'datasets:dataset_detail' visualization.dataset.pk %}" class="text-indigo-600 hover:text-indigo-700 font-semibold">
                                     {{ visualization.dataset.name }}
                                 </a>
                             </div>
@@ -94,12 +94,12 @@
                         <div class="mb-6">
                             <h4 class="text-sm font-semibold text-gray-900 mb-3">Manage</h4>
                             <div class="space-y-3">
-                                <a href="{% url 'visualization_edit' visualization.pk %}" class="block w-full bg-blue-50 hover:bg-blue-100 text-blue-700 text-center py-2 rounded font-medium text-sm transition">
+                                <a href="{% url 'visualizations:visualization_edit' visualization.pk %}" class="block w-full bg-blue-50 hover:bg-blue-100 text-blue-700 text-center py-2 rounded font-medium text-sm transition">
                                     ✏️ Edit
                                 </a>
                                 
                                 {% if visualization.is_public %}
-                                    <form method="POST" action="{% url 'visualization_publish' visualization.pk %}" class="w-full">
+                                    <form method="POST" action="{% url 'visualizations:visualization_publish' visualization.pk %}" class="w-full">
                                         {% csrf_token %}
                                         <input type="hidden" name="action" value="unpublish">
                                         <button type="submit" class="w-full bg-yellow-50 hover:bg-yellow-100 text-yellow-700 py-2 rounded font-medium text-sm transition">
@@ -107,7 +107,7 @@
                                         </button>
                                     </form>
                                 {% else %}
-                                    <form method="POST" action="{% url 'visualization_publish' visualization.pk %}" class="w-full">
+                                    <form method="POST" action="{% url 'visualizations:visualization_publish' visualization.pk %}" class="w-full">
                                         {% csrf_token %}
                                         <input type="hidden" name="action" value="publish">
                                         <button type="submit" class="w-full bg-green-50 hover:bg-green-100 text-green-700 py-2 rounded font-medium text-sm transition">
@@ -116,7 +116,7 @@
                                     </form>
                                 {% endif %}
                                 
-                                <a href="{% url 'visualization_delete' visualization.pk %}" class="block w-full bg-red-50 hover:bg-red-100 text-red-700 text-center py-2 rounded font-medium text-sm transition">
+                                <a href="{% url 'visualizations:visualization_delete' visualization.pk %}" class="block w-full bg-red-50 hover:bg-red-100 text-red-700 text-center py-2 rounded font-medium text-sm transition">
                                     🗑️ Delete
                                 </a>
                             </div>

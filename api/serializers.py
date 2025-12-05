@@ -7,7 +7,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from core.models import Organization, Setting, AuditLog
 from accounts.models import UserProfile
-from analytics.models import Insight, Report, Trend, Anomaly, Alert, Metric, Dashboard
+from analytics.models import Insight, Report, Trend, Anomaly, Alert, Metric, AnalyticsDashboard
 from datasets.models import Dataset
 from visualizations.models import Visualization
 from dashboards.models import Dashboard as DashboardModel
@@ -147,13 +147,13 @@ class MetricSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'created_at', 'updated_at', 'change_percentage']
 
 
-class DashboardSerializer(serializers.ModelSerializer):
-    """Serializer for Dashboard model."""
+class AnalyticsDashboardSerializer(serializers.ModelSerializer):
+    """Serializer for AnalyticsDashboard model."""
     owner_name = serializers.CharField(source='owner.username', read_only=True)
     widget_count = serializers.SerializerMethodField()
     
     class Meta:
-        model = Dashboard
+        model = AnalyticsDashboard
         fields = ['id', 'name', 'description', 'owner', 'owner_name', 'layout', 'is_public', 'widget_count',
                   'insights', 'metrics', 'datasets', 'shared_with', 'created_at', 'updated_at']
         read_only_fields = ['id', 'created_at', 'updated_at']

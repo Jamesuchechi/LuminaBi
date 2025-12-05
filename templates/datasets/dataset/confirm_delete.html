@@ -7,7 +7,7 @@
 <div class="min-h-screen bg-gray-50 py-8">
     <div class="max-w-2xl mx-auto px-4">
         <!-- Back Link -->
-        <a href="{% url 'dataset_list' %}" class="text-indigo-600 hover:text-indigo-700 font-medium mb-6 inline-block">← Back to Datasets</a>
+        <a href="{% url 'datasets:dataset_list' %}" class="text-indigo-600 hover:text-indigo-700 font-medium mb-6 inline-block">← Back to Datasets</a>
 
         <div class="bg-white rounded-lg shadow border-2 border-red-200">
             <!-- Alert -->
@@ -54,7 +54,7 @@
                             Yes, Delete Dataset
                         </button>
                     </form>
-                    <a href="{% url 'dataset_detail' dataset.pk %}" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-900 text-center py-2 rounded-lg font-semibold transition">
+                    <a href="{% url 'datasets:dataset_detail' dataset.pk %}" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-900 text-center py-2 rounded-lg font-semibold transition">
                         Cancel
                     </a>
                 </div>
