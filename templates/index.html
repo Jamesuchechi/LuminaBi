@@ -207,11 +207,11 @@
                 </div>
 
                 <div class="flex items-center gap-4">
-                    <button class="text-gray-300 hover:text-white text-sm font-medium transition-colors">Log In</button>
-                    <button class="relative px-6 py-2.5 rounded-full bg-white text-black font-semibold text-sm overflow-hidden group hover:scale-105 transition-transform duration-300">
+                    <a href="{% url 'accounts:login' %}" class="text-gray-300 hover:text-white text-sm font-medium transition-colors">Log In</a>
+                    <a href="{% url 'accounts:register' %}" class="relative px-6 py-2.5 rounded-full bg-white text-black font-semibold text-sm overflow-hidden group hover:scale-105 transition-transform duration-300">
                         <span class="relative z-10 group-hover:text-neonPurple transition-colors">Get Started</span>
                         <div class="absolute inset-0 bg-gray-200 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300 ease-out"></div>
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -237,10 +237,10 @@
                 </p>
 
                 <div class="flex flex-col sm:flex-row gap-4 pt-4">
-                    <button class="px-8 py-4 rounded-xl bg-gradient-to-r from-neonBlue to-neonPurple text-white font-bold text-lg hover:shadow-[0_0_40px_-10px_rgba(189,0,255,0.5)] transition-all duration-300 transform hover:-translate-y-1">
+                    <a href="{% url 'accounts:register' %}" class="px-8 py-4 rounded-xl bg-gradient-to-r from-neonBlue to-neonPurple text-white font-bold text-lg hover:shadow-[0_0_40px_-10px_rgba(189,0,255,0.5)] transition-all duration-300 transform hover:-translate-y-1 text-center">
                         Start Free Trial
-                    </button>
-                    <button class="px-8 py-4 rounded-xl glass-panel border border-white/10 hover:bg-white/5 transition-all duration-300 flex items-center gap-3 group">
+                    </a>
+                    <button class="px-8 py-4 rounded-xl glass-panel border border-white/10 hover:bg-white/5 transition-all duration-300 flex items-center gap-3 group justify-center">
                         <span>Watch Demo</span>
                         <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                     </button>
@@ -378,12 +378,12 @@
                         Join 10,000+ companies using LuminaBI to make data-driven decisions that actually matter.
                     </p>
                     <div class="flex justify-center gap-4">
-                        <button class="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
+                        <a href="{% url 'accounts:register' %}" class="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
                             <span class="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]"></span>
                             <span class="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-8 py-1 text-sm font-medium text-white backdrop-blur-3xl hover:bg-slate-900 transition-colors">
                                 Get Started Now
                             </span>
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
