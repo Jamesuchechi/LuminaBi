@@ -58,6 +58,102 @@ class RegistrationForm(forms.ModelForm):
         label='I accept the Terms of Service'
     )
     
+    # Tier-specific fields
+    team_name = forms.CharField(
+        max_length=100,
+        required=False,
+        label='Team Name',
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Enter your team name',
+            'class': 'w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70'
+        })
+    )
+    business_name = forms.CharField(
+        max_length=100,
+        required=False,
+        label='Business Name',
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Enter your business name',
+            'class': 'w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70'
+        })
+    )
+    business_location = forms.CharField(
+        max_length=100,
+        required=False,
+        label='Business Location',
+        widget=forms.TextInput(attrs={
+            'placeholder': 'City, Country',
+            'class': 'w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70'
+        })
+    )
+    business_industry = forms.CharField(
+        max_length=100,
+        required=False,
+        label='Industry',
+        widget=forms.TextInput(attrs={
+            'placeholder': 'e.g., Technology, Finance, Healthcare',
+            'class': 'w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70'
+        })
+    )
+    team_size = forms.ChoiceField(
+        choices=[
+            ('', 'Select team size'),
+            ('1-5', '1-5 members'),
+            ('5-10', '5-10 members'),
+            ('10-25', '10-25 members'),
+            ('25-50', '25-50 members'),
+            ('50+', '50+ members'),
+        ],
+        required=False,
+        label='Team Size'
+    )
+    enterprise_name = forms.CharField(
+        max_length=100,
+        required=False,
+        label='Company Name',
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Your enterprise company name',
+            'class': 'w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70'
+        })
+    )
+    enterprise_location = forms.CharField(
+        max_length=100,
+        required=False,
+        label='Headquarters Location',
+        widget=forms.TextInput(attrs={
+            'placeholder': 'City, Country',
+            'class': 'w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70'
+        })
+    )
+    enterprise_industry = forms.CharField(
+        max_length=100,
+        required=False,
+        label='Industry',
+        widget=forms.TextInput(attrs={
+            'placeholder': 'e.g., Technology, Finance, Healthcare',
+            'class': 'w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70'
+        })
+    )
+    enterprise_size = forms.ChoiceField(
+        choices=[
+            ('', 'Select company size'),
+            ('100-500', '100-500 employees'),
+            ('500-1000', '500-1,000 employees'),
+            ('1000-5000', '1,000-5,000 employees'),
+            ('5000+', '5,000+ employees'),
+        ],
+        required=False,
+        label='Company Size'
+    )
+    enterprise_contact_email = forms.EmailField(
+        required=False,
+        label='Technical Contact Email',
+        widget=forms.EmailInput(attrs={
+            'placeholder': 'contact@company.com',
+            'class': 'w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70'
+        })
+    )
+    
     class Meta:
         model = User
         fields = ['username', 'email', 'first_name', 'last_name']
@@ -66,6 +162,7 @@ class RegistrationForm(forms.ModelForm):
         cleaned_data = super().clean()
         password = cleaned_data.get('password')
         password_confirm = cleaned_data.get('password_confirm')
+        subscription_tier = cleaned_data.get('subscription_tier')
         
         if password and password_confirm and password != password_confirm:
             raise forms.ValidationError('Passwords do not match')
@@ -80,6 +177,33 @@ class RegistrationForm(forms.ModelForm):
                 raise forms.ValidationError('Password must contain at least one digit')
             if not any(c in '!@#$%^&*()_+-=[]{}|;:,.<>?' for c in password):
                 raise forms.ValidationError('Password must contain at least one special character')
+        
+        # Validate tier-specific fields
+        if subscription_tier == 'team':
+            if not cleaned_data.get('team_name'):
+                raise forms.ValidationError('Team name is required for Team tier')
+            if not cleaned_data.get('team_size'):
+                raise forms.ValidationError('Team size is required for Team tier')
+        
+        elif subscription_tier == 'business':
+            if not cleaned_data.get('business_name'):
+                raise forms.ValidationError('Business name is required for this tier')
+            if not cleaned_data.get('business_location'):
+                raise forms.ValidationError('Business location is required for this tier')
+            if not cleaned_data.get('business_industry'):
+                raise forms.ValidationError('Industry is required for this tier')
+        
+        elif subscription_tier == 'enterprise':
+            if not cleaned_data.get('enterprise_name'):
+                raise forms.ValidationError('Company name is required for Enterprise tier')
+            if not cleaned_data.get('enterprise_location'):
+                raise forms.ValidationError('Headquarters location is required for Enterprise tier')
+            if not cleaned_data.get('enterprise_industry'):
+                raise forms.ValidationError('Industry is required for Enterprise tier')
+            if not cleaned_data.get('enterprise_size'):
+                raise forms.ValidationError('Company size is required for Enterprise tier')
+            if not cleaned_data.get('enterprise_contact_email'):
+                raise forms.ValidationError('Technical contact email is required for Enterprise tier')
         
         return cleaned_data
     
@@ -256,10 +380,26 @@ class RegisterView(FormView):
             last_name=form.cleaned_data.get('last_name', ''),
         )
         
-        # Update user profile with selected tier
+        # Update user profile with selected tier and tier-specific information
         user_profile = user.userprofile if hasattr(user, 'userprofile') else user.profile
         subscription_tier = form.cleaned_data.get('subscription_tier', 'individual')
         user_profile.preferred_subscription_tier = subscription_tier
+        
+        # Save tier-specific information based on selected tier
+        if subscription_tier == 'team':
+            user_profile.team_name = form.cleaned_data.get('team_name', '')
+            user_profile.team_size = form.cleaned_data.get('team_size', '')
+        elif subscription_tier == 'business':
+            user_profile.business_name = form.cleaned_data.get('business_name', '')
+            user_profile.business_location = form.cleaned_data.get('business_location', '')
+            user_profile.business_industry = form.cleaned_data.get('business_industry', '')
+        elif subscription_tier == 'enterprise':
+            user_profile.enterprise_name = form.cleaned_data.get('enterprise_name', '')
+            user_profile.enterprise_location = form.cleaned_data.get('enterprise_location', '')
+            user_profile.enterprise_industry = form.cleaned_data.get('enterprise_industry', '')
+            user_profile.enterprise_size = form.cleaned_data.get('enterprise_size', '')
+            user_profile.enterprise_contact_email = form.cleaned_data.get('enterprise_contact_email', '')
+        
         user_profile.save()
         
         # Create trial subscription for the selected tier

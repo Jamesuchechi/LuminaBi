@@ -7,11 +7,13 @@ import logging
 import json
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.http import JsonResponse
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.utils import timezone
+from datetime import timedelta
 from django.views.decorators.http import require_http_methods
 from django.utils.decorators import method_decorator
 
@@ -103,22 +105,148 @@ def create_notification(user, title, message, notification_type='info', related_
 # ============================================================================
 
 class IndexView(LoginRequiredMixin, TemplateView):
-    """Home/index page for authenticated users."""
+    """Home/index page for authenticated users with live analytics."""
     template_name = 'core/index.html'
     
     def get_context_data(self, **kwargs):
-        """Add dashboard statistics to context."""
+        """Add dashboard statistics and live analytics to context."""
+        from datasets.models import Dataset
+        from analytics.models import Insight, Anomaly, Alert, Trend, Metric
+        from visualizations.models import Visualization
+        from django.db.models import Count, Q
+        from django.utils import timezone
+        from datetime import timedelta
+        
         context = super().get_context_data(**kwargs)
         user = self.request.user
         
-        # Get user's organizations
+        # User's datasets
+        user_datasets = Dataset.objects.filter(owner=user)
         context['user_organizations'] = Organization.objects.filter(
             Q(owner=user) | Q(members=user)
         ).distinct()
         
-        # Get system stats if admin
+        # ======= LIVE STATISTICS =======
+        context['total_datasets'] = user_datasets.count()
+        context['cleaned_datasets'] = user_datasets.filter(is_cleaned=True).count()
+        
+        # Get visualizations
+        try:
+            context['total_visualizations'] = Visualization.objects.filter(
+                dataset__owner=user
+            ).count()
+        except:
+            context['total_visualizations'] = 0
+        
+        # Get insights
+        try:
+            user_insights = Insight.objects.filter(dataset__owner=user)
+            context['total_insights'] = user_insights.count()
+            context['recent_insights'] = user_insights.order_by('-created_at')[:5]
+        except:
+            context['total_insights'] = 0
+            context['recent_insights'] = []
+        
+        # Get anomalies
+        try:
+            user_anomalies = Anomaly.objects.filter(dataset__owner=user)
+            context['total_anomalies'] = user_anomalies.count()
+            context['active_anomalies'] = user_anomalies.exclude(
+                status='resolved'
+            ).count()
+            context['critical_anomalies'] = user_anomalies.filter(
+                severity='critical',
+                status__in=['new', 'acknowledged']
+            )[:3]
+        except:
+            context['total_anomalies'] = 0
+            context['active_anomalies'] = 0
+            context['critical_anomalies'] = []
+        
+        # Get alerts
+        try:
+            user_alerts = Alert.objects.filter(dataset__owner=user)
+            context['active_alerts'] = user_alerts.filter(status='active').count()
+            context['recent_alerts'] = user_alerts.order_by('-triggered_at')[:5]
+        except:
+            context['active_alerts'] = 0
+            context['recent_alerts'] = []
+        
+        # Get metrics
+        try:
+            context['total_metrics'] = Metric.objects.filter(
+                dataset__owner=user
+            ).count()
+        except:
+            context['total_metrics'] = 0
+        
+        # ======= DATA HEALTH & CLEANUP =======
+        if context['total_datasets'] > 0:
+            context['cleaning_progress'] = int(
+                (context['cleaned_datasets'] / context['total_datasets']) * 100
+            )
+        else:
+            context['cleaning_progress'] = 0
+        
+        # ======= ACTIVITY STREAMS =======
+        # Recent datasets
+        context['recent_datasets'] = user_datasets.order_by('-uploaded_at')[:5]
+        
+        # Trends
+        try:
+            context['recent_trends'] = Trend.objects.filter(
+                dataset__owner=user
+            ).order_by('-created_at')[:5]
+        except:
+            context['recent_trends'] = []
+        
+        # ======= CHART DATA (JSON) =======
+        # Datasets upload timeline (last 30 days)
+        last_30_days = timezone.now() - timedelta(days=30)
+        datasets_by_day = {}
+        for dataset in user_datasets.filter(uploaded_at__gte=last_30_days):
+            day = dataset.uploaded_at.strftime('%Y-%m-%d')
+            datasets_by_day[day] = datasets_by_day.get(day, 0) + 1
+        
+        context['datasets_chart_labels'] = sorted(datasets_by_day.keys())
+        context['datasets_chart_data'] = [
+            datasets_by_day.get(label, 0) for label in context['datasets_chart_labels']
+        ]
+        
+        # Insights distribution by type
+        try:
+            insights_by_type = user_insights.values('insight_type').annotate(
+                count=Count('id')
+            ).order_by('-count')
+            context['insights_types'] = [item['insight_type'] for item in insights_by_type]
+            context['insights_counts'] = [item['count'] for item in insights_by_type]
+        except:
+            context['insights_types'] = []
+            context['insights_counts'] = []
+        
+        # Anomalies by severity
+        try:
+            anomalies_by_severity = user_anomalies.values('severity').annotate(
+                count=Count('id')
+            )
+            severity_order = {'critical': 0, 'high': 1, 'medium': 2, 'low': 3}
+            anomalies_by_severity = sorted(
+                anomalies_by_severity, 
+                key=lambda x: severity_order.get(x['severity'], 99)
+            )
+            context['anomaly_severities'] = [
+                item['severity'].upper() for item in anomalies_by_severity
+            ]
+            context['anomaly_counts'] = [item['count'] for item in anomalies_by_severity]
+        except:
+            context['anomaly_severities'] = []
+            context['anomaly_counts'] = []
+        
+        # System stats if admin
         if user.is_staff:
             context['total_organizations'] = Organization.objects.count()
+            context['total_system_datasets'] = Dataset.objects.count()
+            context['total_system_users'] = User.objects.count()
         
         return context
 

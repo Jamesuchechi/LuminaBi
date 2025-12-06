@@ -128,23 +128,58 @@
     
     .tier-option {
         cursor: pointer;
-        transition: all 0.3s ease;
-        border: 2px solid rgba(255, 255, 255, 0.2);
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        border: 2px solid rgba(255, 255, 255, 0.15);
         position: relative;
         overflow: hidden;
+        display: block;
+        background: linear-gradient(135deg, rgba(0, 20, 40, 0.6) 0%, rgba(20, 10, 40, 0.6) 100%);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        padding: 24px !important;
+        min-height: 140px;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+    
+    .tier-option::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transition: left 0.5s ease;
+    }
+    
+    .tier-option:hover::before {
+        left: 100%;
     }
     
     .tier-option:hover {
-        border-color: rgba(0, 243, 255, 0.5);
-        transform: translateY(-4px);
-        box-shadow: 0 8px 20px rgba(0, 243, 255, 0.2);
+        border-color: rgba(0, 243, 255, 0.8);
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 20px 50px rgba(0, 243, 255, 0.3), 0 0 40px rgba(0, 243, 255, 0.2);
+        background: linear-gradient(135deg, rgba(0, 50, 80, 0.8) 0%, rgba(40, 20, 60, 0.8) 100%);
     }
     
     .tier-option.selected {
         border-color: #00f3ff !important;
-        background: rgba(0, 243, 255, 0.15) !important;
-        box-shadow: 0 0 30px rgba(0, 243, 255, 0.5), inset 0 0 30px rgba(0, 243, 255, 0.15) !important;
-        transform: scale(1.02);
+        background: linear-gradient(135deg, rgba(0, 80, 120, 0.9) 0%, rgba(60, 30, 90, 0.9) 100%) !important;
+        box-shadow: 0 0 40px rgba(0, 243, 255, 0.6), inset 0 0 40px rgba(0, 243, 255, 0.2), 0 20px 60px rgba(0, 243, 255, 0.3) !important;
+        transform: scale(1.05) !important;
+    }
+    
+    .tier-option.selected::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at top right, rgba(0, 243, 255, 0.2), transparent);
+        pointer-events: none;
     }
     
     .tier-option input[type="radio"] {
@@ -158,30 +193,116 @@
         background: #00f3ff !important;
         border-color: #00f3ff !important;
         color: black !important;
-        box-shadow: 0 0 15px rgba(0, 243, 255, 0.8) !important;
+        box-shadow: 0 0 20px rgba(0, 243, 255, 0.9), 0 0 40px rgba(0, 243, 255, 0.5) !important;
+        transform: scale(1.15);
     }
     
     .tier-checkbox {
         position: absolute;
-        top: 12px;
-        right: 12px;
-        width: 28px;
-        height: 28px;
+        top: 16px;
+        right: 16px;
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
-        border: 2px solid rgba(255, 255, 255, 0.4);
+        border: 2.5px solid rgba(255, 255, 255, 0.5);
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: all 0.3s ease;
-        font-size: 14px;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        font-size: 16px;
         font-weight: bold;
+        background: rgba(0, 0, 0, 0.4);
     }
     
     .tier-option.selected .tier-checkbox {
         background: #00f3ff;
         border-color: #00f3ff;
         color: black;
-        box-shadow: 0 0 15px rgba(0, 243, 255, 0.8);
+        box-shadow: 0 0 20px rgba(0, 243, 255, 0.9), 0 0 40px rgba(0, 243, 255, 0.5);
+    }
+    
+    .tier-icon {
+        font-size: 48px;
+        margin-bottom: 12px;
+        display: inline-block;
+        transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        filter: drop-shadow(0 0 8px currentColor);
+    }
+    
+    .tier-option:hover .tier-icon {
+        transform: scale(1.15) rotate(5deg);
+        filter: drop-shadow(0 0 16px currentColor);
+    }
+    
+    .tier-option.selected .tier-icon {
+        transform: scale(1.2);
+        filter: drop-shadow(0 0 20px currentColor);
+    }
+    
+    .tier-title {
+        font-size: 24px;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 8px;
+        letter-spacing: 0.5px;
+    }
+    
+    .tier-description {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.75);
+        line-height: 1.5;
+        font-weight: 500;
+    }
+    
+    .tier-option.selected .tier-title {
+        color: #00f3ff;
+        text-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
+    }
+    
+    .tier-option.selected .tier-description {
+        color: rgba(255, 255, 255, 0.9);
+    }
+    
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+            max-height: 0;
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+            max-height: 1000px;
+        }
+    }
+    
+    @keyframes slideUpHide {
+        from {
+            opacity: 1;
+            transform: translateY(0);
+            max-height: 1000px;
+        }
+        to {
+            opacity: 0;
+            transform: translateY(-20px);
+            max-height: 0;
+        }
+    }
+    
+    #tierFieldsContainer:not(.hidden) {
+        animation: slideDown 0.4s ease-out;
+    }
+    
+    #tierFieldsContainer.hidden {
+        animation: slideUpHide 0.3s ease-out;
+    }
+    
+    #teamFields:not(.hidden) {
+        animation: slideDown 0.4s ease-out;
+    }
+    
+    #businessFields:not(.hidden) {
+        animation: slideDown 0.4s ease-out;
     }
     
     .terms-checkbox-label {
@@ -485,39 +606,281 @@
                 </h2>
                 <p class="text-gray-400 text-sm mb-6">Tell us how you plan to use LuminaBI</p>
                 
-                <!-- Subscription Tiers -->
-                <div class="space-y-4 mb-8">
-                    <label class="tier-option glass-panel rounded-2xl p-6 border-2 border-white/20 backdrop-blur cursor-pointer transition-all duration-300 hover:border-neonBlue/50">
-                        <input type="radio" name="subscription_tier" value="individual" required>
+                <!-- Subscription Tiers - Enhanced with Icons and Features -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- Individual Tier -->
+                    <label class="tier-option">
+                        <input type="radio" name="subscription_tier" value="individual" required onchange="updateTierFields()">
                         <div class="tier-checkbox">
-                            <i class="fas fa-check text-xs"></i>
+                            <i class="fas fa-check"></i>
                         </div>
-                        <h3 class="text-lg font-bold text-white mb-2">Individual</h3>
-                        <p class="text-gray-400 text-sm">Perfect for solo analysts and small projects</p>
+                        <div class="flex flex-col items-center text-center">
+                            <div class="tier-icon text-neonBlue">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <h3 class="tier-title">Individual</h3>
+                            <p class="tier-description">Perfect for solo analysts and small projects. No additional information needed.</p>
+                        </div>
                     </label>
                     
-                    <label class="tier-option glass-panel rounded-2xl p-6 border-2 border-white/20 backdrop-blur cursor-pointer transition-all duration-300 hover:border-neonBlue/50">
-                        <input type="radio" name="subscription_tier" value="team">
+                    <!-- Team Tier -->
+                    <label class="tier-option">
+                        <input type="radio" name="subscription_tier" value="team" onchange="updateTierFields()">
                         <div class="tier-checkbox">
-                            <i class="fas fa-check text-xs"></i>
+                            <i class="fas fa-check"></i>
                         </div>
-                        <h3 class="text-lg font-bold text-white mb-2">Team</h3>
-                        <p class="text-gray-400 text-sm">Collaborate with your team on data projects</p>
+                        <div class="flex flex-col items-center text-center">
+                            <div class="tier-icon text-neonGreen">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3 class="tier-title">Team</h3>
+                            <p class="tier-description">Collaborate with your team on data projects</p>
+                        </div>
                     </label>
                     
-                    <label class="tier-option glass-panel rounded-2xl p-6 border-2 border-white/20 backdrop-blur cursor-pointer transition-all duration-300 hover:border-neonBlue/50">
-                        <input type="radio" name="subscription_tier" value="business">
+                    <!-- Business Tier -->
+                    <label class="tier-option">
+                        <input type="radio" name="subscription_tier" value="business" onchange="updateTierFields()">
                         <div class="tier-checkbox">
-                            <i class="fas fa-check text-xs"></i>
+                            <i class="fas fa-check"></i>
                         </div>
-                        <h3 class="text-lg font-bold text-white mb-2">Business</h3>
-                        <p class="text-gray-400 text-sm">Advanced features for enterprise needs</p>
+                        <div class="flex flex-col items-center text-center">
+                            <div class="tier-icon text-neonYellow">
+                                <i class="fas fa-briefcase"></i>
+                            </div>
+                            <h3 class="tier-title">Business</h3>
+                            <p class="tier-description">Advanced features for growing companies</p>
+                        </div>
                     </label>
+                    
+                    <!-- Enterprise Tier -->
+                    <label class="tier-option">
+                        <input type="radio" name="subscription_tier" value="enterprise" onchange="updateTierFields()">
+                        <div class="tier-checkbox">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="flex flex-col items-center text-center">
+                            <div class="tier-icon text-neonPurple">
+                                <i class="fas fa-crown"></i>
+                            </div>
+                            <h3 class="tier-title">Enterprise</h3>
+                            <p class="tier-description">Premium features with dedicated support and custom solutions</p>
+                        </div>
+                    </label>
+                </div>
+                
+                <!-- Dynamic Tier-Specific Fields Container -->
+                <div id="tierFieldsContainer" class="mb-8 hidden space-y-4">
+                    <!-- Team Fields -->
+                    <div id="teamFields" class="hidden space-y-4 p-6 glass-panel rounded-2xl border border-white/20 backdrop-blur">
+                        <h3 class="text-white font-bold text-sm flex items-center gap-2">
+                            <i class="fas fa-info-circle text-neonBlue/70"></i>
+                            Tell us about your team
+                        </h3>
+                        
+                        <!-- Team Name -->
+                        <div class="space-y-2">
+                            <label for="team_name" class="block text-sm font-semibold text-white/90">
+                                <i class="fas fa-tag mr-2 text-neonPurple/70"></i>
+                                Team Name
+                            </label>
+                            <input 
+                                type="text" 
+                                name="team_name"
+                                id="team_name"
+                                class="w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70 
+                                       focus:outline-none focus:border-neonPurple/50 focus:ring-2 focus:ring-neonPurple/20 transition-all duration-300
+                                       backdrop-blur-sm text-sm font-medium"
+                                placeholder="e.g., Analytics Team, Data Squad"
+                            >
+                        </div>
+                        
+                        <!-- Team Size -->
+                        <div class="space-y-2">
+                            <label for="team_size" class="block text-sm font-semibold text-white/90">
+                                <i class="fas fa-people-group mr-2 text-neonPurple/70"></i>
+                                Team Size
+                            </label>
+                            <select 
+                                name="team_size"
+                                id="team_size"
+                                class="w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white 
+                                       focus:outline-none focus:border-neonPurple/50 focus:ring-2 focus:ring-neonPurple/20 transition-all duration-300
+                                       backdrop-blur-sm text-sm font-medium"
+                            >
+                                <option value="">Select team size</option>
+                                <option value="1-5">1-5 members</option>
+                                <option value="5-10">5-10 members</option>
+                                <option value="10-25">10-25 members</option>
+                                <option value="25-50">25-50 members</option>
+                                <option value="50+">50+ members</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Business/Enterprise Fields -->
+                    <div id="businessFields" class="hidden space-y-4 p-6 glass-panel rounded-2xl border border-white/20 backdrop-blur">
+                        <h3 class="text-white font-bold text-sm flex items-center gap-2">
+                            <i class="fas fa-info-circle text-neonBlue/70"></i>
+                            Tell us about your business
+                        </h3>
+                        
+                        <!-- Business Name -->
+                        <div class="space-y-2">
+                            <label for="business_name" class="block text-sm font-semibold text-white/90">
+                                <i class="fas fa-building mr-2 text-neonPurple/70"></i>
+                                Business Name
+                            </label>
+                            <input 
+                                type="text" 
+                                name="business_name"
+                                id="business_name"
+                                class="w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70 
+                                       focus:outline-none focus:border-neonPurple/50 focus:ring-2 focus:ring-neonPurple/20 transition-all duration-300
+                                       backdrop-blur-sm text-sm font-medium"
+                                placeholder="Your company name"
+                            >
+                        </div>
+                        
+                        <!-- Business Location -->
+                        <div class="space-y-2">
+                            <label for="business_location" class="block text-sm font-semibold text-white/90">
+                                <i class="fas fa-map-pin mr-2 text-neonPurple/70"></i>
+                                Location
+                            </label>
+                            <input 
+                                type="text" 
+                                name="business_location"
+                                id="business_location"
+                                class="w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70 
+                                       focus:outline-none focus:border-neonPurple/50 focus:ring-2 focus:ring-neonPurple/20 transition-all duration-300
+                                       backdrop-blur-sm text-sm font-medium"
+                                placeholder="City, Country"
+                            >
+                        </div>
+                        
+                        <!-- Business Industry -->
+                        <div class="space-y-2">
+                            <label for="business_industry" class="block text-sm font-semibold text-white/90">
+                                <i class="fas fa-industry mr-2 text-neonPurple/70"></i>
+                                Industry
+                            </label>
+                            <input 
+                                type="text" 
+                                name="business_industry"
+                                id="business_industry"
+                                class="w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70 
+                                       focus:outline-none focus:border-neonPurple/50 focus:ring-2 focus:ring-neonPurple/20 transition-all duration-300
+                                       backdrop-blur-sm text-sm font-medium"
+                                placeholder="e.g., Technology, Finance, Healthcare"
+                            >
+                        </div>
+                    </div>
+                    
+                    <!-- Enterprise Fields -->
+                    <div id="enterpriseFields" class="hidden space-y-4 p-6 glass-panel rounded-2xl border border-white/20 backdrop-blur">
+                        <h3 class="text-white font-bold text-sm flex items-center gap-2">
+                            <i class="fas fa-crown text-neonPurple/70"></i>
+                            Enterprise Information
+                        </h3>
+                        
+                        <!-- Enterprise Company Name -->
+                        <div class="space-y-2">
+                            <label for="enterprise_name" class="block text-sm font-semibold text-white/90">
+                                <i class="fas fa-building mr-2 text-neonPurple/70"></i>
+                                Company Name
+                            </label>
+                            <input 
+                                type="text" 
+                                name="enterprise_name"
+                                id="enterprise_name"
+                                class="w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70 
+                                       focus:outline-none focus:border-neonPurple/50 focus:ring-2 focus:ring-neonPurple/20 transition-all duration-300
+                                       backdrop-blur-sm text-sm font-medium"
+                                placeholder="Your enterprise company name"
+                            >
+                        </div>
+                        
+                        <!-- Enterprise Location -->
+                        <div class="space-y-2">
+                            <label for="enterprise_location" class="block text-sm font-semibold text-white/90">
+                                <i class="fas fa-map-pin mr-2 text-neonPurple/70"></i>
+                                Headquarters Location
+                            </label>
+                            <input 
+                                type="text" 
+                                name="enterprise_location"
+                                id="enterprise_location"
+                                class="w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70 
+                                       focus:outline-none focus:border-neonPurple/50 focus:ring-2 focus:ring-neonPurple/20 transition-all duration-300
+                                       backdrop-blur-sm text-sm font-medium"
+                                placeholder="City, Country"
+                            >
+                        </div>
+                        
+                        <!-- Enterprise Industry -->
+                        <div class="space-y-2">
+                            <label for="enterprise_industry" class="block text-sm font-semibold text-white/90">
+                                <i class="fas fa-industry mr-2 text-neonPurple/70"></i>
+                                Industry
+                            </label>
+                            <input 
+                                type="text" 
+                                name="enterprise_industry"
+                                id="enterprise_industry"
+                                class="w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70 
+                                       focus:outline-none focus:border-neonPurple/50 focus:ring-2 focus:ring-neonPurple/20 transition-all duration-300
+                                       backdrop-blur-sm text-sm font-medium"
+                                placeholder="e.g., Technology, Finance, Healthcare"
+                            >
+                        </div>
+                        
+                        <!-- Enterprise Size -->
+                        <div class="space-y-2">
+                            <label for="enterprise_size" class="block text-sm font-semibold text-white/90">
+                                <i class="fas fa-chart-line mr-2 text-neonPurple/70"></i>
+                                Company Size
+                            </label>
+                            <select 
+                                name="enterprise_size"
+                                id="enterprise_size"
+                                class="w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white 
+                                       focus:outline-none focus:border-neonPurple/50 focus:ring-2 focus:ring-neonPurple/20 transition-all duration-300
+                                       backdrop-blur-sm text-sm font-medium"
+                            >
+                                <option value="">Select company size</option>
+                                <option value="100-500">100-500 employees</option>
+                                <option value="500-1000">500-1,000 employees</option>
+                                <option value="1000-5000">1,000-5,000 employees</option>
+                                <option value="5000+">5,000+ employees</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Technical Contact Email -->
+                        <div class="space-y-2">
+                            <label for="enterprise_contact_email" class="block text-sm font-semibold text-white/90">
+                                <i class="fas fa-envelope mr-2 text-neonPurple/70"></i>
+                                Technical Contact Email
+                            </label>
+                            <input 
+                                type="email" 
+                                name="enterprise_contact_email"
+                                id="enterprise_contact_email"
+                                class="w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70 
+                                       focus:outline-none focus:border-neonPurple/50 focus:ring-2 focus:ring-neonPurple/20 transition-all duration-300
+                                       backdrop-blur-sm text-sm font-medium"
+                                placeholder="contact@company.com"
+                            >
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Use Case Reasons -->
                 <div class="mb-6">
-                    <p class="text-sm font-semibold text-white/90 mb-3">What are you building? (Select all that apply)</p>
+                    <p class="text-sm font-semibold text-white/90 mb-3 flex items-center gap-2">
+                        <i class="fas fa-lightbulb text-neonYellow/70"></i>
+                        What are you building? (Select all that apply)
+                    </p>
                     <div class="space-y-2">
                         <label class="reason-checkbox">
                             <input type="checkbox" name="use_cases" value="personal_analysis">
@@ -774,6 +1137,83 @@ function previousStep() {
     }
 }
 
+function updateTierFields() {
+    const selectedTier = document.querySelector('input[name="subscription_tier"]:checked').value;
+    const tierFieldsContainer = document.getElementById('tierFieldsContainer');
+    const teamFields = document.getElementById('teamFields');
+    const businessFields = document.getElementById('businessFields');
+    const enterpriseFields = document.getElementById('enterpriseFields');
+    
+    // Reset all fields visibility
+    teamFields.classList.add('hidden');
+    businessFields.classList.add('hidden');
+    enterpriseFields.classList.add('hidden');
+    
+    // Show appropriate fields based on tier
+    if (selectedTier === 'team') {
+        tierFieldsContainer.classList.remove('hidden');
+        teamFields.classList.remove('hidden');
+        // Make team fields required
+        document.getElementById('team_name').required = true;
+        document.getElementById('team_size').required = true;
+        // Business fields optional
+        document.getElementById('business_name').required = false;
+        document.getElementById('business_location').required = false;
+        document.getElementById('business_industry').required = false;
+        // Enterprise fields optional
+        document.getElementById('enterprise_name').required = false;
+        document.getElementById('enterprise_location').required = false;
+        document.getElementById('enterprise_industry').required = false;
+        document.getElementById('enterprise_size').required = false;
+        document.getElementById('enterprise_contact_email').required = false;
+    } else if (selectedTier === 'business') {
+        tierFieldsContainer.classList.remove('hidden');
+        businessFields.classList.remove('hidden');
+        // Make business fields required
+        document.getElementById('business_name').required = true;
+        document.getElementById('business_location').required = true;
+        document.getElementById('business_industry').required = true;
+        // Team fields optional
+        document.getElementById('team_name').required = false;
+        document.getElementById('team_size').required = false;
+        // Enterprise fields optional
+        document.getElementById('enterprise_name').required = false;
+        document.getElementById('enterprise_location').required = false;
+        document.getElementById('enterprise_industry').required = false;
+        document.getElementById('enterprise_size').required = false;
+        document.getElementById('enterprise_contact_email').required = false;
+    } else if (selectedTier === 'enterprise') {
+        tierFieldsContainer.classList.remove('hidden');
+        enterpriseFields.classList.remove('hidden');
+        // Make enterprise fields required
+        document.getElementById('enterprise_name').required = true;
+        document.getElementById('enterprise_location').required = true;
+        document.getElementById('enterprise_industry').required = true;
+        document.getElementById('enterprise_size').required = true;
+        document.getElementById('enterprise_contact_email').required = true;
+        // Other fields optional
+        document.getElementById('team_name').required = false;
+        document.getElementById('team_size').required = false;
+        document.getElementById('business_name').required = false;
+        document.getElementById('business_location').required = false;
+        document.getElementById('business_industry').required = false;
+    } else {
+        // Individual tier - no additional fields needed
+        tierFieldsContainer.classList.add('hidden');
+        // All fields optional for individual
+        document.getElementById('team_name').required = false;
+        document.getElementById('team_size').required = false;
+        document.getElementById('business_name').required = false;
+        document.getElementById('business_location').required = false;
+        document.getElementById('business_industry').required = false;
+        document.getElementById('enterprise_name').required = false;
+        document.getElementById('enterprise_location').required = false;
+        document.getElementById('enterprise_industry').required = false;
+        document.getElementById('enterprise_size').required = false;
+        document.getElementById('enterprise_contact_email').required = false;
+    }
+}
+
 function validateStep(step) {
     switch(step) {
         case 1:
@@ -808,6 +1248,68 @@ function validateStep(step) {
                 showError('Please select a subscription tier');
                 return false;
             }
+            
+            const selectedTier = tierSelected.value;
+            
+            // Validate tier-specific fields
+            if (selectedTier === 'team') {
+                const teamName = document.getElementById('team_name').value.trim();
+                const teamSize = document.getElementById('team_size').value;
+                
+                if (!teamName) {
+                    showError('Please enter your team name');
+                    return false;
+                }
+                if (!teamSize) {
+                    showError('Please select team size');
+                    return false;
+                }
+            } else if (selectedTier === 'business') {
+                const businessName = document.getElementById('business_name').value.trim();
+                const businessLocation = document.getElementById('business_location').value.trim();
+                const businessIndustry = document.getElementById('business_industry').value.trim();
+                
+                if (!businessName) {
+                    showError('Please enter your business name');
+                    return false;
+                }
+                if (!businessLocation) {
+                    showError('Please enter your business location');
+                    return false;
+                }
+                if (!businessIndustry) {
+                    showError('Please enter your industry');
+                    return false;
+                }
+            } else if (selectedTier === 'enterprise') {
+                const enterpriseName = document.getElementById('enterprise_name').value.trim();
+                const enterpriseLocation = document.getElementById('enterprise_location').value.trim();
+                const enterpriseIndustry = document.getElementById('enterprise_industry').value.trim();
+                const enterpriseSize = document.getElementById('enterprise_size').value;
+                const enterpriseContactEmail = document.getElementById('enterprise_contact_email').value.trim();
+                
+                if (!enterpriseName) {
+                    showError('Please enter your company name');
+                    return false;
+                }
+                if (!enterpriseLocation) {
+                    showError('Please enter your headquarters location');
+                    return false;
+                }
+                if (!enterpriseIndustry) {
+                    showError('Please enter your industry');
+                    return false;
+                }
+                if (!enterpriseSize) {
+                    showError('Please select your company size');
+                    return false;
+                }
+                if (!enterpriseContactEmail || !enterpriseContactEmail.includes('@')) {
+                    showError('Please enter a valid technical contact email');
+                    return false;
+                }
+            }
+            
             return true;
             
         case 3:
@@ -1075,15 +1577,35 @@ function initializeFormHandlers() {
         confirmInput.addEventListener('blur', checkPasswordMatch);
     }
     
+    // Tier selection
+    document.querySelectorAll('.tier-option').forEach(option => {
+        option.addEventListener('click', function() {
+            document.querySelectorAll('.tier-option').forEach(o => o.classList.remove('selected'));
+            this.classList.add('selected');
+            this.querySelector('input[type="radio"]').checked = true;
+            updateTierFields();
+        });
+    });
+    
+    // Tier radio button change events
+    const tierRadios = document.querySelectorAll('input[name="subscription_tier"]');
+    tierRadios.forEach(radio => {
+        radio.addEventListener('change', updateTierFields);
+    });
+    
     // Form input focus effects
-    const formInputs = document.querySelectorAll('input:not([type="checkbox"]):not([type="submit"])');
+    const formInputs = document.querySelectorAll('input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]), select');
     formInputs.forEach(input => {
         input.addEventListener('focus', function() {
-            this.parentElement.classList.add('form-input-focus');
+            if (this.parentElement.classList) {
+                this.parentElement.classList.add('form-input-focus');
+            }
         });
         
         input.addEventListener('blur', function() {
-            this.parentElement.classList.remove('form-input-focus');
+            if (this.parentElement.classList) {
+                this.parentElement.classList.remove('form-input-focus');
+            }
         });
     });
 }

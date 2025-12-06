@@ -63,8 +63,39 @@ class DashboardDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         dashboard = self.get_object()
-        context['visualizations'] = dashboard.visualizations.all()
-        context['visualization_count'] = dashboard.visualizations.count()
+        visualizations = dashboard.visualizations.all()
+        context['visualizations'] = visualizations
+        context['visualization_count'] = visualizations.count()
+        
+        # Format visualization data for Chart.js
+        vis_data_list = []
+        for vis in visualizations:
+            # Use existing config or create default structure
+            if vis.config and isinstance(vis.config, dict):
+                chart_data = vis.config
+            else:
+                # Fallback to default data structure
+                chart_data = {
+                    'labels': ['Data 1', 'Data 2', 'Data 3'],
+                    'datasets': [{
+                        'label': vis.title,
+                        'data': [10, 20, 30],
+                        'backgroundColor': 'rgba(0, 243, 255, 0.1)',
+                        'borderColor': 'rgba(0, 243, 255, 1)',
+                        'borderWidth': 2,
+                    }]
+                }
+            vis_data_list.append({
+                'id': vis.id,
+                'title': vis.title,
+                'type': vis.chart_type,
+                'data': chart_data
+            })
+        
+        # Pass formatted data as JSON-safe string
+        import json
+        context['vis_data'] = json.dumps({v['id']: v['data'] for v in vis_data_list})
+        
         return context
 
 

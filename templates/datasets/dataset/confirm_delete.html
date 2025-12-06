@@ -1,61 +1,106 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Delete Dataset{% endblock %}
+{% block title %}Delete Dataset - LuminaBI{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gray-50 py-8">
-    <div class="max-w-2xl mx-auto px-4">
-        <!-- Back Link -->
-        <a href="{% url 'datasets:dataset_list' %}" class="text-indigo-600 hover:text-indigo-700 font-medium mb-6 inline-block">← Back to Datasets</a>
+<div class="min-h-screen py-12">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Back Navigation -->
+        <div class="mb-8">
+            <a href="{% url 'datasets:dataset_list' %}" class="inline-flex items-center gap-2 text-neonBlue hover:text-neonPurple transition group">
+                <i class="fas fa-arrow-left group-hover:-translate-x-1 transition"></i>
+                <span class="font-mono text-sm">Back to Datasets</span>
+            </a>
+        </div>
 
-        <div class="bg-white rounded-lg shadow border-2 border-red-200">
-            <!-- Alert -->
-            <div class="bg-red-50 px-6 py-4 border-b border-red-200">
-                <div class="flex gap-3">
-                    <svg class="h-6 w-6 text-red-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
+        <!-- Alert Card -->
+        <div class="glass-panel rounded-2xl border-2 border-red-500/50 overflow-hidden mb-8">
+            <!-- Red Alert Header -->
+            <div class="bg-gradient-to-r from-red-500/20 to-red-600/20 px-6 py-4 border-b border-red-500/30 backdrop-blur-xl">
+                <div class="flex items-start gap-3">
+                    <div class="mt-1">
+                        <i class="fas fa-exclamation-triangle text-red-400 text-2xl"></i>
+                    </div>
                     <div>
-                        <h3 class="text-lg font-semibold text-red-900">Delete Dataset</h3>
-                        <p class="text-red-800 text-sm mt-1">This action cannot be undone. All data will be permanently deleted.</p>
+                        <h1 class="text-2xl font-bold text-red-300">Delete Dataset</h1>
+                        <p class="text-red-300/80 text-sm mt-1 font-mono">This action cannot be undone. All data will be permanently deleted.</p>
                     </div>
                 </div>
             </div>
 
             <!-- Content -->
-            <div class="px-6 py-6">
-                <div class="bg-gray-50 rounded-lg p-4 mb-6">
-                    <p class="text-sm text-gray-600 mb-2">Dataset to be deleted:</p>
-                    <p class="text-xl font-bold text-gray-900">{{ dataset.name }}</p>
+            <div class="p-8 space-y-6">
+                <!-- Dataset Info -->
+                <div class="glass-panel rounded-xl p-4 border border-white/10">
+                    <p class="text-gray-400 font-mono text-xs uppercase mb-2">Dataset to be deleted:</p>
+                    <p class="text-2xl font-bold text-white flex items-center gap-2">
+                        <i class="fas fa-database text-neonBlue"></i>
+                        {{ dataset.name }}
+                    </p>
                     {% if dataset.description %}
-                        <p class="text-gray-600 text-sm mt-2">{{ dataset.description }}</p>
+                    <p class="text-gray-400 text-sm mt-3">{{ dataset.description }}</p>
                     {% endif %}
                 </div>
 
-                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-                    <h4 class="font-semibold text-yellow-900 mb-2">Warning:</h4>
-                    <ul class="text-sm text-yellow-800 space-y-1 list-disc list-inside">
-                        <li>This dataset will be permanently removed</li>
-                        <li>{{ dataset.visualizations.count }} visualization(s) may be affected</li>
-                        <li>All associated files will be deleted</li>
+                <!-- Warning List -->
+                <div class="glass-panel rounded-xl p-4 border border-red-500/30 bg-red-500/10">
+                    <div class="flex items-center gap-2 mb-3 pb-3 border-b border-red-500/20">
+                        <i class="fas fa-bell text-red-400"></i>
+                        <h3 class="font-bold text-red-300">Deletion Impact</h3>
+                    </div>
+                    <ul class="space-y-2">
+                        <li class="flex items-start gap-2 text-red-300/90 text-sm">
+                            <i class="fas fa-times-circle text-red-400 mt-0.5 flex-shrink-0"></i>
+                            <span>This dataset will be <strong>permanently removed</strong> from the system</span>
+                        </li>
+                        <li class="flex items-start gap-2 text-red-300/90 text-sm">
+                            <i class="fas fa-chart-bar text-red-400 mt-0.5 flex-shrink-0"></i>
+                            <span><strong>{{ dataset.visualizations.count }} visualization(s)</strong> may lose data source</span>
+                        </li>
+                        <li class="flex items-start gap-2 text-red-300/90 text-sm">
+                            <i class="fas fa-trash text-red-400 mt-0.5 flex-shrink-0"></i>
+                            <span>All associated <strong>files and backups</strong> will be deleted</span>
+                        </li>
+                        <li class="flex items-start gap-2 text-red-300/90 text-sm">
+                            <i class="fas fa-clock text-red-400 mt-0.5 flex-shrink-0"></i>
+                            <span><strong>No recovery</strong> possible after confirmation</span>
+                        </li>
                     </ul>
                 </div>
 
-                <p class="text-gray-700 mb-6">
-                    Are you absolutely sure you want to delete <strong>{{ dataset.name }}</strong>?
+                <!-- Confirmation Text -->
+                <p class="text-gray-300 text-center">
+                    Are you absolutely sure you want to delete <span class="font-bold text-red-400">{{ dataset.name }}</span>?
                 </p>
 
                 <!-- Actions -->
-                <div class="flex gap-3">
+                <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-white/10">
                     <form method="post" class="flex-1">
                         {% csrf_token %}
-                        <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg font-semibold transition">
+                        <button type="submit" class="flex items-center justify-center gap-2 w-full px-6 py-3 bg-gradient-to-r from-red-600/80 to-red-700/80 hover:from-red-600 hover:to-red-700 border border-red-500/50 text-white font-bold rounded-lg transition-all hover:scale-105">
+                            <i class="fas fa-trash-alt"></i>
                             Yes, Delete Dataset
                         </button>
                     </form>
-                    <a href="{% url 'datasets:dataset_detail' dataset.pk %}" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-900 text-center py-2 rounded-lg font-semibold transition">
+                    <a href="{% url 'datasets:dataset_detail' dataset.pk %}" class="flex items-center justify-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold rounded-lg transition">
+                        <i class="fas fa-times"></i>
                         Cancel
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Safety Info -->
+        <div class="glass-panel rounded-2xl p-6 border border-white/10">
+            <div class="flex items-start gap-3">
+                <i class="fas fa-shield-alt text-neonBlue mt-1"></i>
+                <div>
+                    <h3 class="text-white font-bold mb-2">Need Help?</h3>
+                    <p class="text-gray-400 text-sm">If you're unsure about this decision, you can go back and export this dataset first to keep a backup.</p>
+                    <a href="{% url 'datasets:dataset_detail' dataset.pk %}" class="inline-flex items-center gap-2 text-neonBlue hover:text-neonPurple text-sm mt-3 transition">
+                        <i class="fas fa-arrow-right text-xs"></i>
+                        View Dataset Details
                     </a>
                 </div>
             </div>

@@ -83,6 +83,80 @@ class UserProfile(models.Model):
         help_text='Preferred subscription tier selected during registration'
     )
     
+    # Tier-specific information
+    team_name = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text='Team name for Team and Team Plus tiers'
+    )
+    team_size = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True,
+        choices=[
+            ('1-5', '1-5 members'),
+            ('5-10', '5-10 members'),
+            ('10-25', '10-25 members'),
+            ('25-50', '25-50 members'),
+            ('50+', '50+ members'),
+        ],
+        help_text='Team size for Team and Team Plus tiers'
+    )
+    business_name = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text='Business name for Business and Enterprise tiers'
+    )
+    business_location = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text='Business location (city, country)'
+    )
+    business_industry = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text='Industry or business sector'
+    )
+    enterprise_name = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text='Enterprise company name'
+    )
+    enterprise_location = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text='Enterprise headquarters location (city, country)'
+    )
+    enterprise_industry = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text='Enterprise industry or business sector'
+    )
+    enterprise_size = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True,
+        choices=[
+            ('100-500', '100-500 employees'),
+            ('500-1000', '500-1,000 employees'),
+            ('1000-5000', '1,000-5,000 employees'),
+            ('5000+', '5,000+ employees'),
+        ],
+        help_text='Enterprise company size'
+    )
+    enterprise_contact_email = models.EmailField(
+        blank=True,
+        null=True,
+        help_text='Enterprise technical contact email'
+    )
+    
     # Account tracking
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

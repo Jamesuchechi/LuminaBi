@@ -3,10 +3,86 @@
 
 {% block title %}Command Center | LuminaBI{% endblock %}
 
+{% block extra_css %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<style>
+    .chart-container {
+        position: relative;
+        height: 300px;
+        margin-bottom: 2rem;
+    }
+    
+    .stat-card {
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    }
+    
+    .event-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 999px;
+        font-size: 0.875rem;
+        font-weight: 600;
+    }
+    
+    .event-badge.critical {
+        background: rgba(239, 68, 68, 0.1);
+        color: #fca5a5;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    
+    .event-badge.warning {
+        background: rgba(251, 146, 60, 0.1);
+        color: #fdba74;
+        border: 1px solid rgba(251, 146, 60, 0.3);
+    }
+    
+    .event-badge.success {
+        background: rgba(34, 197, 94, 0.1);
+        color: #86efac;
+        border: 1px solid rgba(34, 197, 94, 0.3);
+    }
+    
+    .event-badge.info {
+        background: rgba(59, 130, 246, 0.1);
+        color: #93c5fd;
+        border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+    
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .event-item {
+        animation: slideInUp 0.5s ease-out forwards;
+    }
+    
+    .event-item:nth-child(1) { animation-delay: 0s; }
+    .event-item:nth-child(2) { animation-delay: 0.1s; }
+    .event-item:nth-child(3) { animation-delay: 0.2s; }
+    .event-item:nth-child(4) { animation-delay: 0.3s; }
+    .event-item:nth-child(5) { animation-delay: 0.4s; }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="max-w-7xl mx-auto space-y-12">
 
     {% if user.is_authenticated %}
+        <!-- Welcome Hero Section -->
         <div class="relative rounded-3xl p-8 md:p-12 overflow-hidden glass-panel border border-neonPurple/30 group">
             <div class="absolute top-0 right-0 w-96 h-96 bg-neonBlue/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 group-hover:bg-neonBlue/20 transition-all duration-700"></div>
             <div class="absolute bottom-0 left-0 w-64 h-64 bg-neonPurple/10 rounded-full blur-[60px] translate-y-1/2 -translate-x-1/2 group-hover:bg-neonPurple/20 transition-all duration-700"></div>
@@ -15,13 +91,13 @@
                 <div>
                     <div class="flex items-center gap-2 text-neonBlue font-mono text-sm mb-2">
                         <span class="w-2 h-2 bg-neonBlue rounded-full animate-pulse"></span>
-                        SYSTEM ONLINE
+                        SYSTEM ONLINE - {{ total_datasets }} ACTIVE {{ total_datasets|pluralize:"DATASET,DATASETS" }}
                     </div>
                     <h1 class="text-4xl md:text-5xl font-bold text-white mb-2">
                         Welcome back, <span class="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">{{ user.first_name|default:user.username }}</span>
                     </h1>
                     <p class="text-gray-400 max-w-xl text-lg">
-                        Your intelligence hub is active. You have <span class="text-white font-bold">{{ total_datasets }}</span> active datasets ready for analysis.
+                        Your intelligence hub is active. <strong class="text-white">{{ cleaned_datasets }}</strong> datasets cleaned · <strong class="text-white">{{ total_insights }}</strong> insights generated · <strong class="text-white">{{ active_anomalies }}</strong> active alerts
                     </p>
                 </div>
                 
@@ -34,152 +110,239 @@
             </div>
         </div>
 
+        <!-- Key Metrics Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="glass-panel p-6 rounded-2xl border-t-2 border-neonBlue/50 hover:bg-white/5 transition-colors group">
+            <div class="stat-card glass-panel p-6 rounded-2xl border-t-2 border-neonBlue/50 hover:bg-white/5 transition-colors group">
                 <div class="flex justify-between items-start mb-4">
                     <div class="p-3 bg-neonBlue/10 rounded-lg text-neonBlue group-hover:scale-110 transition-transform">
                         <i class="fas fa-database text-xl"></i>
                     </div>
-                    <span class="text-xs font-mono text-gray-500">TOTAL DATASETS</span>
+                    <span class="text-xs font-mono text-gray-500">DATASETS</span>
                 </div>
                 <div class="text-3xl font-bold text-white mb-1">{{ total_datasets }}</div>
-                <div class="text-xs text-gray-400">Stored in vault</div>
+                <div class="text-xs text-gray-400 flex items-center gap-1">
+                    <i class="fas fa-check-circle text-emerald-400"></i>
+                    {{ cleaned_datasets }} cleaned
+                </div>
             </div>
 
-            <div class="glass-panel p-6 rounded-2xl border-t-2 border-neonPurple/50 hover:bg-white/5 transition-colors group">
+            <div class="stat-card glass-panel p-6 rounded-2xl border-t-2 border-neonPurple/50 hover:bg-white/5 transition-colors group">
                 <div class="flex justify-between items-start mb-4">
                     <div class="p-3 bg-neonPurple/10 rounded-lg text-neonPurple group-hover:scale-110 transition-transform">
-                        <i class="fas fa-chart-pie text-xl"></i>
-                    </div>
-                    <span class="text-xs font-mono text-gray-500">VISUALIZATIONS</span>
-                </div>
-                <div class="text-3xl font-bold text-white mb-1">{{ total_visualizations }}</div>
-                <div class="text-xs text-gray-400">Charts generated</div>
-            </div>
-
-            <div class="glass-panel p-6 rounded-2xl border-t-2 border-neonPink/50 hover:bg-white/5 transition-colors group">
-                <div class="flex justify-between items-start mb-4">
-                    <div class="p-3 bg-neonPink/10 rounded-lg text-neonPink group-hover:scale-110 transition-transform">
                         <i class="fas fa-brain text-xl"></i>
                     </div>
-                    <span class="text-xs font-mono text-gray-500">AI INSIGHTS</span>
+                    <span class="text-xs font-mono text-gray-500">INSIGHTS</span>
                 </div>
                 <div class="text-3xl font-bold text-white mb-1">{{ total_insights }}</div>
-                <div class="text-xs text-gray-400">Patterns detected</div>
+                <div class="text-xs text-gray-400">{{ insights_types|length }} types detected</div>
             </div>
 
-            <div class="glass-panel p-6 rounded-2xl border-t-2 border-emerald-500/50 hover:bg-white/5 transition-colors group">
+            <div class="stat-card glass-panel p-6 rounded-2xl border-t-2 border-red-500/50 hover:bg-white/5 transition-colors group">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 bg-red-500/10 rounded-lg text-red-400 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-triangle-exclamation text-xl"></i>
+                    </div>
+                    <span class="text-xs font-mono text-gray-500">ANOMALIES</span>
+                </div>
+                <div class="text-3xl font-bold text-white mb-1">{{ active_anomalies }}</div>
+                <div class="text-xs text-gray-400">{{ total_anomalies }} total · <span class="text-red-400 font-bold">{{ critical_anomalies|length }} critical</span></div>
+            </div>
+
+            <div class="stat-card glass-panel p-6 rounded-2xl border-t-2 border-emerald-500/50 hover:bg-white/5 transition-colors group">
                 <div class="flex justify-between items-start mb-4">
                     <div class="p-3 bg-emerald-500/10 rounded-lg text-emerald-400 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-magic text-xl"></i>
+                        <i class="fas fa-chart-line text-xl"></i>
                     </div>
                     <span class="text-xs font-mono text-gray-500">DATA HEALTH</span>
                 </div>
                 <div class="flex items-end gap-2 mb-2">
                     <div class="text-3xl font-bold text-white">{{ cleaning_progress }}%</div>
                 </div>
-                <div class="w-full bg-gray-700 h-1.5 rounded-full overflow-hidden">
-                    <div class="h-full bg-gradient-to-r from-emerald-500 to-emerald-300 rounded-full" style="width: {{ cleaning_progress }}%"></div>
+                <div class="w-full bg-gray-700 h-2 rounded-full overflow-hidden">
+                    <div class="h-full bg-gradient-to-r from-emerald-500 to-emerald-300 rounded-full transition-all duration-700" style="width: {{ cleaning_progress }}%"></div>
                 </div>
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
-            <div class="lg:col-span-1 space-y-6">
-                <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                    <i class="fas fa-bolt text-neonBlue"></i> Quick Actions
-                </h2>
-                
-                <div class="grid gap-4">
-                    <a href="{% url 'datasets:dataset_create' %}" class="spotlight-card glass-panel p-6 rounded-2xl group border border-white/5 hover:border-neonBlue/30 transition-all">
-                        <div class="flex items-center gap-4 relative z-10">
-                            <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 group-hover:text-white group-hover:bg-blue-500 transition-all">
-                                <i class="fas fa-upload"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-white">Upload Data</h3>
-                                <p class="text-xs text-gray-400">CSV, JSON, Excel</p>
-                            </div>
-                            <i class="fas fa-chevron-right ml-auto text-gray-600 group-hover:text-white transition-transform group-hover:translate-x-1"></i>
-                        </div>
-                    </a>
-
-                    <a href="{% url 'visualizations:visualization_list' %}" class="spotlight-card glass-panel p-6 rounded-2xl group border border-white/5 hover:border-neonPurple/30 transition-all">
-                        <div class="flex items-center gap-4 relative z-10">
-                            <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 group-hover:text-white group-hover:bg-purple-500 transition-all">
-                                <i class="fas fa-layer-group"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-white">Dashboard Builder</h3>
-                                <p class="text-xs text-gray-400">Create new views</p>
-                            </div>
-                            <i class="fas fa-chevron-right ml-auto text-gray-600 group-hover:text-white transition-transform group-hover:translate-x-1"></i>
-                        </div>
-                    </a>
+        <!-- Analytics Charts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Datasets Upload Timeline -->
+            <div class="glass-panel p-8 rounded-2xl border border-white/10 hover:border-white/20 transition-all">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fas fa-calendar-days text-neonBlue"></i>
+                        Upload Timeline (30 Days)
+                    </h3>
                 </div>
+                <div class="chart-container">
+                    <canvas id="datasetsChart"></canvas>
+                </div>
+            </div>
 
-                <div class="glass-panel p-6 rounded-2xl mt-8">
-                    <h3 class="text-sm font-bold text-gray-300 mb-4 uppercase tracking-wider">System Roadmap</h3>
-                    <div class="space-y-6 relative before:absolute before:left-3.5 before:top-2 before:h-full before:w-0.5 before:bg-white/10">
-                        <div class="relative pl-10">
-                            <span class="absolute left-1 top-1 w-5 h-5 rounded-full bg-neonBlue/20 border border-neonBlue flex items-center justify-center text-[10px] text-neonBlue">1</span>
-                            <h4 class="text-sm font-bold text-white">Upload</h4>
-                            <p class="text-xs text-gray-500">Import raw data source</p>
-                        </div>
-                        <div class="relative pl-10">
-                            <span class="absolute left-1 top-1 w-5 h-5 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-[10px] text-gray-400">2</span>
-                            <h4 class="text-sm font-bold text-gray-400">Clean</h4>
-                            <p class="text-xs text-gray-500">Auto-fix inconsistencies</p>
-                        </div>
-                        <div class="relative pl-10">
-                            <span class="absolute left-1 top-1 w-5 h-5 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-[10px] text-gray-400">3</span>
-                            <h4 class="text-sm font-bold text-gray-400">Visualize</h4>
-                            <p class="text-xs text-gray-500">Generate insights</p>
-                        </div>
+            <!-- Insights Distribution -->
+            <div class="glass-panel p-8 rounded-2xl border border-white/10 hover:border-white/20 transition-all">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fas fa-chart-pie text-neonPurple"></i>
+                        Insight Types Distribution
+                    </h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="insightsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Anomaly Severity -->
+            <div class="glass-panel p-8 rounded-2xl border border-white/10 hover:border-white/20 transition-all">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fas fa-exclamation-circle text-red-500"></i>
+                        Anomalies by Severity
+                    </h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="anomaliesChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Active Alerts -->
+            <div class="glass-panel p-8 rounded-2xl border border-white/10 hover:border-white/20 transition-all">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fas fa-bell text-emerald-400"></i>
+                        Active Alerts ({{ active_alerts }})
+                    </h3>
+                </div>
+                {% if active_alerts > 0 %}
+                    <div class="space-y-2 max-h-64 overflow-y-auto">
+                        {% for alert in recent_alerts %}
+                            <div class="event-item flex items-start gap-4 p-3 rounded-lg hover:bg-white/5 transition-colors border border-white/5">
+                                <div class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0
+                                    {% if alert.alert_level == 'critical' %}bg-red-500/10 text-red-400{% elif alert.alert_level == 'error' %}bg-orange-500/10 text-orange-400{% elif alert.alert_level == 'warning' %}bg-yellow-500/10 text-yellow-400{% else %}bg-blue-500/10 text-blue-400{% endif %}">
+                                    {% if alert.alert_level == 'critical' %}<i class="fas fa-bolt"></i>
+                                    {% elif alert.alert_level == 'error' %}<i class="fas fa-exclamation"></i>
+                                    {% elif alert.alert_level == 'warning' %}<i class="fas fa-alert-circle"></i>
+                                    {% else %}<i class="fas fa-info"></i>{% endif %}
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center gap-2 mb-1">
+                                        <h4 class="font-bold text-white">{{ alert.title }}</h4>
+                                        <span class="event-badge {% if alert.alert_level == 'critical' %}critical{% elif alert.alert_level == 'error' %}warning{% else %}info{% endif %}">
+                                            {{ alert.get_alert_level_display }}
+                                        </span>
+                                    </div>
+                                    <p class="text-xs text-gray-400">{{ alert.description }}</p>
+                                    <div class="text-xs text-gray-500 mt-2">{{ alert.triggered_at|timesince }} ago</div>
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
+                {% else %}
+                    <div class="text-center py-12">
+                        <div class="text-4xl mb-3 text-emerald-400"><i class="fas fa-check-circle"></i></div>
+                        <p class="text-gray-400">No active alerts. Everything is running smoothly!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Critical Anomalies & Recent Activity -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-1">
+                <!-- Quick Actions -->
+                <div class="space-y-6">
+                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                        <i class="fas fa-bolt text-neonBlue"></i> Quick Actions
+                    </h2>
+                    
+                    <div class="grid gap-4">
+                        <a href="{% url 'datasets:dataset_create' %}" class="spotlight-card glass-panel p-6 rounded-2xl group border border-white/5 hover:border-neonBlue/30 transition-all">
+                            <div class="flex items-center gap-4 relative z-10">
+                                <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 group-hover:text-white group-hover:bg-blue-500 transition-all">
+                                    <i class="fas fa-upload"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-white">Upload Data</h3>
+                                    <p class="text-xs text-gray-400">CSV, JSON, Excel</p>
+                                </div>
+                                <i class="fas fa-chevron-right ml-auto text-gray-600 group-hover:text-white transition-transform group-hover:translate-x-1"></i>
+                            </div>
+                        </a>
+
+                        <a href="{% url 'visualizations:visualization_list' %}" class="spotlight-card glass-panel p-6 rounded-2xl group border border-white/5 hover:border-neonPurple/30 transition-all">
+                            <div class="flex items-center gap-4 relative z-10">
+                                <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 group-hover:text-white group-hover:bg-purple-500 transition-all">
+                                    <i class="fas fa-layer-group"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-bold text-white">Dashboard Builder</h3>
+                                    <p class="text-xs text-gray-400">Create new views</p>
+                                </div>
+                                <i class="fas fa-chevron-right ml-auto text-gray-600 group-hover:text-white transition-transform group-hover:translate-x-1"></i>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Critical Anomalies -->
+                    {% if critical_anomalies %}
+                        <div class="glass-panel p-6 rounded-2xl border-l-4 border-l-red-500">
+                            <h3 class="text-sm font-bold text-red-400 mb-4 uppercase tracking-wider flex items-center gap-2">
+                                <i class="fas fa-alert-circle"></i>
+                                Critical Anomalies
+                            </h3>
+                            <div class="space-y-3">
+                                {% for anomaly in critical_anomalies %}
+                                    <div class="event-item text-xs">
+                                        <div class="flex items-start gap-2 mb-1">
+                                            <span class="w-2 h-2 bg-red-500 rounded-full mt-1.5 flex-shrink-0"></span>
+                                            <p class="text-gray-300 font-medium">{{ anomaly.description|truncatewords:10 }}</p>
+                                        </div>
+                                        <div class="text-gray-500 text-xs ml-3">
+                                            Dataset: <strong class="text-white">{{ anomaly.dataset.name }}</strong>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
 
             <div class="lg:col-span-2 space-y-8">
-                
+                <!-- Recent Datasets -->
                 <div>
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                            <i class="fas fa-clock text-neonPurple"></i> Recent Streams
+                            <i class="fas fa-clock text-neonPurple"></i> Recent Datasets
                         </h2>
-                        <a href="{% url 'datasets:dataset_list' %}" class="text-xs text-neonPurple hover:text-white transition">View All</a>
+                        <a href="{% url 'datasets:dataset_list' %}" class="text-xs text-neonPurple hover:text-white transition">View All →</a>
                     </div>
 
                     <div class="glass-panel rounded-2xl overflow-hidden">
                         {% if recent_datasets %}
                             <div class="divide-y divide-white/5">
                                 {% for dataset in recent_datasets %}
-                                    <div class="p-4 flex items-center justify-between hover:bg-white/5 transition duration-300 group">
+                                    <div class="event-item p-4 flex items-center justify-between hover:bg-white/5 transition duration-300 group">
                                         <div class="flex items-center gap-4">
                                             <div class="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center text-gray-400 group-hover:text-neonBlue group-hover:bg-neonBlue/10 transition">
                                                 <i class="fas fa-file-csv"></i>
                                             </div>
                                             <div>
                                                 <a href="{% url 'datasets:dataset_detail' dataset.id %}" class="font-semibold text-white group-hover:text-neonBlue transition block">
-                                                    {{ dataset.filename }}
+                                                    {{ dataset.name }}
                                                 </a>
                                                 <div class="text-xs text-gray-500 flex items-center gap-2">
-                                                    <span>{{ dataset.created_at|date:"M d, Y" }}</span>
+                                                    <span>{{ dataset.uploaded_at|date:"M d, Y" }}</span>
                                                     <span class="w-1 h-1 rounded-full bg-gray-600"></span>
-                                                    <span>{{ dataset.file_size|filesizeformat }}</span>
+                                                    <span>{{ dataset.row_count }} rows</span>
                                                 </div>
                                             </div>
                                         </div>
                                         
                                         <div>
-                                            {% if dataset.status == 'cleaned' %}
+                                            {% if dataset.is_cleaned %}
                                                 <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
-                                                    Ready
-                                                </span>
-                                            {% elif dataset.status == 'cleaning' %}
-                                                <span class="px-3 py-1 rounded-full text-xs font-bold bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 animate-pulse">
-                                                    Processing
+                                                    Cleaned
                                                 </span>
                                             {% else %}
                                                 <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">
@@ -195,48 +358,63 @@
                                 <div class="inline-flex w-16 h-16 rounded-full bg-white/5 items-center justify-center mb-4 text-gray-500">
                                     <i class="fas fa-inbox text-2xl"></i>
                                 </div>
-                                <p class="text-gray-400 mb-4">No data streams found.</p>
-                                <a href="{% url 'datasets:dataset_create' %}" class="text-neonBlue hover:underline text-sm">Initiate Upload</a>
+                                <p class="text-gray-400 mb-4">No datasets uploaded yet.</p>
+                                <a href="{% url 'datasets:dataset_create' %}" class="text-neonBlue hover:underline text-sm">Upload your first dataset →</a>
                             </div>
                         {% endif %}
                     </div>
                 </div>
 
+                <!-- Recent Insights -->
                 <div>
-                    <h2 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                        <i class="fas fa-chart-bar text-neonPink"></i> Latest Visuals
-                    </h2>
-                    
-                    {% if recent_visualizations %}
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {% for viz in recent_visualizations %}
-                                <a href="{% url 'visualizations:visualization_detail' viz.id %}" class="glass-panel p-4 rounded-xl hover:bg-white/5 transition group border border-transparent hover:border-white/10">
-                                    <div class="flex justify-between items-start mb-3">
-                                        <div class="p-2 bg-gray-800 rounded text-gray-400 group-hover:text-neonPink transition">
-                                            {% if viz.chart_type == 'bar' %}<i class="fas fa-chart-bar"></i>
-                                            {% elif viz.chart_type == 'line' %}<i class="fas fa-chart-line"></i>
-                                            {% elif viz.chart_type == 'pie' %}<i class="fas fa-chart-pie"></i>
-                                            {% else %}<i class="fas fa-chart-area"></i>{% endif %}
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                            <i class="fas fa-lightbulb text-neonPurple"></i> Recent Insights
+                        </h2>
+                        <a href="{% url 'analytics:insight_list' %}" class="text-xs text-neonPurple hover:text-white transition">View All →</a>
+                    </div>
+
+                    {% if recent_insights %}
+                        <div class="glass-panel rounded-2xl overflow-hidden">
+                            <div class="divide-y divide-white/5">
+                                {% for insight in recent_insights %}
+                                    <div class="event-item p-4 flex items-start gap-4 hover:bg-white/5 transition duration-300 group">
+                                        <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 text-gray-400 group-hover:text-white transition
+                                            {% if insight.insight_type == 'trend' %}bg-blue-500/20 text-blue-400
+                                            {% elif insight.insight_type == 'anomaly' %}bg-red-500/20 text-red-400
+                                            {% elif insight.insight_type == 'correlation' %}bg-purple-500/20 text-purple-400
+                                            {% else %}bg-gray-500/20{% endif %}">
+                                            {% if insight.insight_type == 'trend' %}<i class="fas fa-chart-line"></i>
+                                            {% elif insight.insight_type == 'anomaly' %}<i class="fas fa-exclamation-circle"></i>
+                                            {% elif insight.insight_type == 'correlation' %}<i class="fas fa-link"></i>
+                                            {% else %}<i class="fas fa-chart-bar"></i>{% endif %}
                                         </div>
-                                        <span class="text-[10px] text-gray-500 bg-white/5 px-2 py-1 rounded uppercase tracking-wider">{{ viz.chart_type }}</span>
+                                        <div class="flex-1 min-w-0">
+                                            <div class="flex items-center gap-2 mb-1">
+                                                <h4 class="font-bold text-white">{{ insight.title }}</h4>
+                                                <span class="text-xs px-2 py-1 rounded-full bg-white/10 text-gray-300">{{ insight.get_insight_type_display }}</span>
+                                            </div>
+                                            <p class="text-xs text-gray-400 line-clamp-2">{{ insight.description }}</p>
+                                            <div class="text-xs text-gray-500 mt-2">
+                                                {{ insight.created_at|timesince }} ago · Confidence: <strong>{{ insight.get_confidence_level_display }}</strong>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <h3 class="font-bold text-gray-200 group-hover:text-white truncate">{{ viz.title }}</h3>
-                                    <p class="text-xs text-gray-500 mt-1">Updated {{ viz.updated_at|timesince }} ago</p>
-                                </a>
-                            {% endfor %}
+                                {% endfor %}
+                            </div>
                         </div>
                     {% else %}
                         <div class="glass-panel p-8 rounded-2xl text-center border-dashed border-2 border-white/10">
-                            <p class="text-gray-500 mb-2">Visual cortex empty.</p>
-                            <a href="{% url 'visualizations:visualization_list' %}" class="text-neonPink hover:text-white transition text-sm">Create Visualization &rarr;</a>
+                            <p class="text-gray-500 mb-2">No insights generated yet.</p>
+                            <p class="text-xs text-gray-600">Upload a dataset and analyze it to generate insights.</p>
                         </div>
                     {% endif %}
                 </div>
-
             </div>
         </div>
 
     {% else %}
+        <!-- Unauthenticated Landing Page -->
         <div class="min-h-[80vh] flex flex-col justify-center items-center text-center relative">
             
             <div class="max-w-4xl mx-auto space-y-8 relative z-10">
@@ -314,4 +492,133 @@
         </div>
     {% endif %}
 </div>
+
+<!-- Chart.js Configuration Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Chart color palette
+        const colors = {
+            primary: '#00f3ff',
+            secondary: '#bd00ff',
+            success: '#10b981',
+            warning: '#f59e0b',
+            danger: '#ef4444',
+            purple: '#a855f7',
+            pink: '#ec4899'
+        };
+
+        // Datasets Upload Chart
+        const datasetsCtx = document.getElementById('datasetsChart');
+        if (datasetsCtx) {
+            new Chart(datasetsCtx, {
+                type: 'line',
+                data: {
+                    labels: {{ datasets_chart_labels|safe }},
+                    datasets: [{
+                        label: 'Datasets Uploaded',
+                        data: {{ datasets_chart_data|safe }},
+                        borderColor: colors.primary,
+                        backgroundColor: 'rgba(0, 243, 255, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: colors.primary,
+                        pointBorderColor: colors.primary,
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255,255,255,0.05)' },
+                            ticks: { color: '#9ca3af' }
+                        },
+                        x: {
+                            grid: { color: 'rgba(255,255,255,0.05)' },
+                            ticks: { color: '#9ca3af' }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Insights Distribution Chart
+        const insightsCtx = document.getElementById('insightsChart');
+        if (insightsCtx) {
+            new Chart(insightsCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: {{ insights_types|safe }},
+                    datasets: [{
+                        data: {{ insights_counts|safe }},
+                        backgroundColor: [
+                            colors.primary,
+                            colors.secondary,
+                            colors.purple,
+                            colors.warning,
+                            colors.danger,
+                            colors.success
+                        ],
+                        borderColor: 'rgba(0, 0, 0, 0)',
+                        borderWidth: 0,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#d1d5db', padding: 15 }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Anomalies Chart
+        const anomaliesCtx = document.getElementById('anomaliesChart');
+        if (anomaliesCtx) {
+            new Chart(anomaliesCtx, {
+                type: 'bar',
+                data: {
+                    labels: {{ anomaly_severities|safe }},
+                    datasets: [{
+                        label: 'Count',
+                        data: {{ anomaly_counts|safe }},
+                        backgroundColor: [colors.danger, colors.warning, colors.primary, colors.success],
+                        borderRadius: 8,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255,255,255,0.05)' },
+                            ticks: { color: '#9ca3af' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#9ca3af' }
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
+
 {% endblock %}
