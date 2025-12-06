@@ -124,7 +124,7 @@
         {% endif %}
         
         <!-- Register Form -->
-        <form method="post" class="space-y-6" hx-post="{% url 'accounts:register' %}" hx-target="#register-errors">
+        <form method="post" class="space-y-6" hx-post="{% url 'accounts:register' %}" hx-swap="outerHTML swap:1s">
             {% csrf_token %}
             
             <!-- Row 1: Username & Email -->
@@ -390,8 +390,8 @@ function checkPasswordMatch() {
     }
 }
 
-// Event listeners
-document.addEventListener('DOMContentLoaded', function() {
+// Initialize form handlers
+function initializeFormHandlers() {
     const passwordInput = document.querySelector('.password-input');
     const confirmInput = document.querySelector('.password-confirm');
     
@@ -405,17 +405,6 @@ document.addEventListener('DOMContentLoaded', function() {
         confirmInput.addEventListener('blur', checkPasswordMatch);
     }
     
-    // Auto-hide messages
-    setTimeout(() => {
-        const messages = document.querySelectorAll('.animate-float');
-        messages.forEach(msg => {
-            msg.style.transition = 'all 0.4s ease';
-            msg.style.opacity = '0';
-            msg.style.transform = 'translateY(-10px)';
-            setTimeout(() => msg.remove(), 400);
-        });
-    }, 6000);
-    
     // Form input focus effects
     const formInputs = document.querySelectorAll('input:not([type="checkbox"]):not([type="submit"])');
     formInputs.forEach(input => {
@@ -427,6 +416,31 @@ document.addEventListener('DOMContentLoaded', function() {
             this.parentElement.classList.remove('form-input-focus');
         });
     });
+}
+
+// Auto-hide messages
+function autoHideMessages() {
+    setTimeout(() => {
+        const messages = document.querySelectorAll('.animate-float');
+        messages.forEach(msg => {
+            msg.style.transition = 'all 0.4s ease';
+            msg.style.opacity = '0';
+            msg.style.transform = 'translateY(-10px)';
+            setTimeout(() => msg.remove(), 400);
+        });
+    }, 6000);
+}
+
+// Event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    initializeFormHandlers();
+    autoHideMessages();
+});
+
+// Re-attach handlers after HTMX swap
+document.addEventListener('htmx:afterSwap', function(event) {
+    initializeFormHandlers();
+    autoHideMessages();
 });
 </script>
 {% endblock %}

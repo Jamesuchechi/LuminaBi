@@ -165,6 +165,10 @@ class RegisterView(FormView):
     form_class = RegistrationForm
     success_url = reverse_lazy('accounts:login')
     
+    def is_htmx(self):
+        """Check if request is from HTMX."""
+        return self.request.headers.get('HX-Request') == 'true'
+    
     def form_valid(self, form):
         # Create user
         user = User.objects.create_user(
@@ -202,7 +206,19 @@ class RegisterView(FormView):
                 'Account created but we could not send verification email.'
             )
         
+        # Handle HTMX redirect
+        if self.is_htmx():
+            response = HttpResponse()
+            response['HX-Redirect'] = str(self.success_url)
+            return response
+        
         return super().form_valid(form)
+    
+    def form_invalid(self, form):
+        """Handle invalid form submission - for HTMX requests, return updated form."""
+        if self.is_htmx():
+            return render(self.request, self.template_name, self.get_context_data(form=form))
+        return super().form_invalid(form)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
