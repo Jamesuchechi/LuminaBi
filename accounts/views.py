@@ -15,7 +15,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.urls import reverse_lazy
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
 from django.core.mail import send_mail
 from django.utils.html import format_html
@@ -216,6 +216,10 @@ class LoginView(FormView):
     form_class = LoginForm
     success_url = reverse_lazy('core:index')
     
+    def is_htmx(self):
+        """Check if request is from HTMX."""
+        return self.request.headers.get('HX-Request') == 'true'
+    
     def form_valid(self, form):
         username = form.cleaned_data['username']
         password = form.cleaned_data['password']
@@ -247,6 +251,13 @@ class LoginView(FormView):
                 self.request.session.set_expiry(0)
             
             messages.success(self.request, f'Welcome back, {user.username}!')
+            
+            # Handle HTMX redirect
+            if self.is_htmx():
+                response = HttpResponse()
+                response['HX-Redirect'] = str(self.success_url)
+                return response
+            
             return super().form_valid(form)
         else:
             # Record failed login
@@ -264,6 +275,12 @@ class LoginView(FormView):
             
             messages.error(self.request, 'Invalid username or password')
             return self.form_invalid(form)
+    
+    def form_invalid(self, form):
+        """Handle invalid form submission - for HTMX requests, return updated form."""
+        if self.is_htmx():
+            return render(self.request, self.template_name, self.get_context_data(form=form))
+        return super().form_invalid(form)
     
     def get_client_ip(self):
         """Get client IP address."""

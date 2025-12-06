@@ -2,142 +2,334 @@
 
 {% block title %}My Profile - LuminaBI{% endblock %}
 
+{% block extra_css %}
+<style>
+    .profile-blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        animation: blob 15s infinite;
+        opacity: 0.6;
+    }
+    .profile-blob-1 {
+        width: 500px; height: 500px;
+        background: radial-gradient(circle, rgba(0, 243, 255, 0.12) 0%, transparent 70%);
+        top: 10%; right: 10%;
+        animation-delay: 0s;
+    }
+    .profile-blob-2 {
+        width: 400px; height: 400px;
+        background: radial-gradient(circle, rgba(189, 0, 255, 0.1) 0%, transparent 70%);
+        bottom: 20%; left: 5%;
+        animation-delay: 5s;
+    }
+    
+    @keyframes float-glow {
+        0%, 100% { box-shadow: 0 0 20px rgba(0, 243, 255, 0.3), 0 0 40px rgba(0, 243, 255, 0.1); }
+        50% { box-shadow: 0 0 30px rgba(0, 243, 255, 0.5), 0 0 60px rgba(0, 243, 255, 0.2); transform: translateY(-5px); }
+    }
+    
+    @keyframes card-slide {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .profile-card {
+        animation: card-slide 0.6s ease-out;
+    }
+    
+    .stats-card {
+        animation: card-slide 0.6s ease-out 0.1s both;
+    }
+    
+    .info-card {
+        animation: card-slide 0.6s ease-out 0.2s both;
+    }
+    
+    .pref-card {
+        animation: card-slide 0.6s ease-out 0.3s both;
+    }
+    
+    .security-card {
+        animation: card-slide 0.6s ease-out 0.4s both;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container mx-auto px-4 py-8">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <!-- Sidebar -->
-        <div class="md:col-span-1">
-            <!-- Profile Card -->
-            <div class="bg-white rounded-lg shadow p-6">
-                {% if profile.avatar %}
-                    <img src="{{ profile.avatar.url }}" alt="{{ profile.full_name }}" class="w-24 h-24 rounded-full mx-auto mb-4">
-                {% else %}
-                    <div class="w-24 h-24 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 mx-auto mb-4 flex items-center justify-center text-white text-2xl font-bold">
-                        {{ profile.full_name|first }}
-                    </div>
-                {% endif %}
-
-                <h2 class="text-xl font-bold text-gray-900 text-center">{{ profile.full_name }}</h2>
-                <p class="text-gray-600 text-center text-sm">@{{ request.user.username }}</p>
-                <p class="text-gray-600 text-center text-sm">{{ profile.get_role_display }}</p>
-
-                {% if profile.bio %}
-                    <p class="text-gray-700 text-center text-sm mt-3 italic">{{ profile.bio }}</p>
-                {% endif %}
-
-                <a href="{% url 'accounts:profile_edit' %}" class="w-full block text-center mt-6 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition">
-                    Edit Profile
-                </a>
-            </div>
-
-            <!-- Quick Stats -->
-            <div class="bg-white rounded-lg shadow p-6 mt-6">
-                <h3 class="text-lg font-bold text-gray-900 mb-4">Statistics</h3>
-                <div class="space-y-3">
-                    <div class="flex justify-between">
-                        <span class="text-gray-600">Login Count</span>
-                        <span class="font-semibold text-gray-900">{{ profile.login_count }}</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span class="text-gray-600">Joined</span>
-                        <span class="font-semibold text-gray-900">{{ profile.created_at|date:"M d, Y" }}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Main Content -->
-        <div class="md:col-span-2">
-            <!-- Account Information -->
-            <div class="bg-white rounded-lg shadow p-6 mb-6">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">Account Information</h2>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <p class="text-gray-600 text-sm font-semibold uppercase">Email</p>
-                        <p class="text-gray-900 text-lg">{{ request.user.email }}</p>
-                        {% if profile.is_email_verified %}
-                            <span class="inline-block mt-2 bg-green-100 text-green-800 text-xs font-semibold px-3 py-1 rounded">Verified</span>
-                        {% else %}
-                            <span class="inline-block mt-2 bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded">Unverified</span>
-                        {% endif %}
-                    </div>
-
-                    <div>
-                        <p class="text-gray-600 text-sm font-semibold uppercase">Phone</p>
-                        <p class="text-gray-900 text-lg">{{ profile.phone_number|default:"Not provided" }}</p>
-                    </div>
-
-                    <div>
-                        <p class="text-gray-600 text-sm font-semibold uppercase">Username</p>
-                        <p class="text-gray-900 text-lg">{{ request.user.username }}</p>
-                    </div>
-
-                    <div>
-                        <p class="text-gray-600 text-sm font-semibold uppercase">Timezone</p>
-                        <p class="text-gray-900 text-lg">{{ profile.get_timezone_display }}</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Preferences -->
-            <div class="bg-white rounded-lg shadow p-6 mb-6">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">Preferences</h2>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <p class="text-gray-600 text-sm font-semibold uppercase">Theme</p>
-                        <p class="text-gray-900 text-lg">{{ profile.get_theme_display }}</p>
-                    </div>
-
-                    <div>
-                        <p class="text-gray-600 text-sm font-semibold uppercase">Language</p>
-                        <p class="text-gray-900 text-lg">{{ profile.get_language_display }}</p>
-                    </div>
-                </div>
-
-                <h3 class="text-lg font-bold text-gray-900 mt-6 mb-4">Email Preferences</h3>
-                <div class="space-y-3">
-                    <div class="flex items-center">
-                        <svg class="w-5 h-5 {% if profile.email_notifications %}text-green-600{% else %}text-gray-400{% endif %}" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span class="ml-3 text-gray-700">Email notifications enabled</span>
-                    </div>
-                    <div class="flex items-center">
-                        <svg class="w-5 h-5 {% if profile.email_digest %}text-green-600{% else %}text-gray-400{% endif %}" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span class="ml-3 text-gray-700">Weekly digest emails enabled</span>
-                    </div>
-                    <div class="flex items-center">
-                        <svg class="w-5 h-5 {% if profile.email_updates %}text-green-600{% else %}text-gray-400{% endif %}" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                        <span class="ml-3 text-gray-700">Important updates enabled</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Security -->
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6">Security</h2>
-
-                <div class="space-y-3">
-                    <a href="{% url 'accounts:password_change' %}" class="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
-                        <h3 class="font-semibold text-gray-900">Change Password</h3>
-                        <p class="text-gray-600 text-sm">Update your password regularly to keep your account secure</p>
-                    </a>
-                </div>
-            </div>
-        </div>
+<div class="min-h-screen relative py-12 px-6 profile-container">
+    <!-- Ambient Background -->
+    <div class="fixed inset-0 pointer-events-none z-0">
+        <div class="profile-blob profile-blob-1"></div>
+        <div class="profile-blob profile-blob-2"></div>
     </div>
+    
+    <div class="max-w-7xl mx-auto">
+        <!-- Back Link -->
+        <div class="mb-12">
+            <a href="{% url 'core:index' %}" class="inline-flex items-center gap-2 text-neonBlue/80 hover:text-neonBlue font-medium group transition-all">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back to Dashboard</span>
+                <span class="w-0 h-0.5 bg-neonBlue group-hover:w-8 transition-all ml-2"></span>
+            </a>
+        </div>
 
-    <!-- Back Link -->
-    <div class="mt-8">
-        <a href="{% url 'core:index' %}" class="text-blue-600 hover:text-blue-800 font-medium">
-            ← Back to Dashboard
-        </a>
+        <div class="grid grid-cols-1 xl:grid-cols-4 gap-8">
+            <!-- Sidebar -->
+            <div class="xl:col-span-1 space-y-6">
+                <!-- Profile Card -->
+                <div class="spotlight-card glass-panel rounded-3xl p-8 border-white/10 backdrop-blur-xl profile-card">
+                    <div class="text-center">
+                        {% if profile.avatar %}
+                            <div class="w-28 h-28 mx-auto mb-6 relative rounded-3xl overflow-hidden border-4 border-white/20 shadow-2xl">
+                                <img src="{{ profile.avatar.url }}" alt="{{ profile.full_name }}" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                            </div>
+                        {% else %}
+                            <div class="w-28 h-28 mx-auto mb-6 relative bg-gradient-to-br from-neonBlue to-neonPurple p-1 rounded-3xl shadow-2xl animate-float-glow">
+                                <div class="w-full h-full bg-black rounded-3xl flex items-center justify-center text-2xl font-black text-white">
+                                    {{ profile.full_name|first|upper }}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <h2 class="text-2xl font-bold bg-gradient-to-r from-white via-neonBlue to-neonPurple bg-clip-text text-transparent mb-2 tracking-tight">
+                            {{ profile.full_name }}
+                        </h2>
+                        <p class="text-neonBlue/90 font-semibold text-sm mb-1">@{{ request.user.username }}</p>
+                        <p class="text-gray-400 text-xs uppercase tracking-wider font-medium mb-4">{{ profile.get_role_display }}</p>
+
+                        {% if profile.bio %}
+                            <p class="text-gray-400 text-sm italic bg-black/20 px-4 py-3 rounded-2xl backdrop-blur-sm border border-white/10 mb-6 leading-relaxed">
+                                "{{ profile.bio }}"
+                            </p>
+                        {% endif %}
+
+                        <a href="{% url 'accounts:profile_edit' %}" 
+                           class="w-full glass-panel bg-gradient-to-r from-neonBlue to-neonPurple text-white font-bold py-4 px-6 rounded-2xl 
+                                  shadow-2xl hover:shadow-[0_20px_40px_rgba(0,243,255,0.4)] hover:scale-[1.02] transition-all duration-300
+                                  border border-white/20 backdrop-blur-xl relative overflow-hidden group flex items-center justify-center gap-2">
+                            <i class="fas fa-edit"></i>
+                            Edit Profile
+                            <div class="absolute inset-0 bg-gradient-to-r from-neonBlue/30 to-neonPurple/30 blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="spotlight-card glass-panel rounded-3xl p-8 border-white/10 backdrop-blur-xl stats-card">
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                        <i class="fas fa-chart-line text-neonBlue"></i>
+                        Statistics
+                    </h3>
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-center p-4 bg-black/20 rounded-2xl border border-white/10">
+                            <div>
+                                <p class="text-gray-400 text-xs uppercase tracking-wider">Login Count</p>
+                                <p class="text-2xl font-black text-white">{{ profile.login_count|floatformat:0 }}</p>
+                            </div>
+                            <i class="fas fa-sign-in-alt text-3xl text-neonBlue/50"></i>
+                        </div>
+                        <div class="flex justify-between items-center p-4 bg-black/20 rounded-2xl border border-white/10">
+                            <div>
+                                <p class="text-gray-400 text-xs uppercase tracking-wider">Member Since</p>
+                                <p class="text-lg font-semibold text-white">{{ profile.created_at|date:"MMM d, yyyy" }}</p>
+                            </div>
+                            <i class="fas fa-calendar text-2xl text-success/60"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="xl:col-span-3 space-y-8">
+                <!-- Account Information -->
+                <div class="spotlight-card glass-panel rounded-3xl p-10 border-white/10 backdrop-blur-xl info-card">
+                    <div class="flex items-center gap-4 mb-8">
+                        <i class="fas fa-user-shield text-3xl text-neonBlue"></i>
+                        <h2 class="text-3xl font-bold bg-gradient-to-r from-white to-neonBlue bg-clip-text text-transparent tracking-tight">
+                            Account Information
+                        </h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="space-y-6">
+                            <div class="p-6 bg-black/20 rounded-2xl border border-white/10 hover:border-neonBlue/50 transition-all">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <i class="fas fa-envelope text-2xl text-neonBlue"></i>
+                                    <p class="text-gray-400 text-xs uppercase tracking-wider font-medium">Email</p>
+                                </div>
+                                <p class="text-2xl font-bold text-white mb-3 truncate">{{ request.user.email }}</p>
+                                {% if profile.is_email_verified %}
+                                    <span class="inline-flex items-center gap-2 px-4 py-2 bg-success/20 text-success border border-success/50 text-sm font-semibold rounded-xl backdrop-blur-sm">
+                                        <i class="fas fa-check-circle"></i>
+                                        Verified
+                                    </span>
+                                {% else %}
+                                    <span class="inline-flex items-center gap-2 px-4 py-2 bg-warning/20 text-warning border border-warning/50 text-sm font-semibold rounded-xl backdrop-blur-sm">
+                                        <i class="fas fa-clock"></i>
+                                        Unverified
+                                    </span>
+                                {% endif %}
+                            </div>
+
+                            <div class="p-6 bg-black/20 rounded-2xl border border-white/10 hover:border-neonBlue/50 transition-all">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <i class="fas fa-phone text-2xl text-neonBlue"></i>
+                                    <p class="text-gray-400 text-xs uppercase tracking-wider font-medium">Phone</p>
+                                </div>
+                                <p class="text-xl font-semibold text-white">{{ profile.phone_number|default:"Not provided" }}</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="p-6 bg-black/20 rounded-2xl border border-white/10 hover:border-neonBlue/50 transition-all">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <i class="fas fa-at text-2xl text-neonBlue"></i>
+                                    <p class="text-gray-400 text-xs uppercase tracking-wider font-medium">Username</p>
+                                </div>
+                                <p class="text-2xl font-black text-white">@{{ request.user.username }}</p>
+                            </div>
+
+                            <div class="p-6 bg-black/20 rounded-2xl border border-white/10 hover:border-neonBlue/50 transition-all">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <i class="fas fa-globe text-2xl text-neonBlue"></i>
+                                    <p class="text-gray-400 text-xs uppercase tracking-wider font-medium">Timezone</p>
+                                </div>
+                                <p class="text-xl font-semibold text-white">{{ profile.get_timezone_display }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preferences -->
+                <div class="spotlight-card glass-panel rounded-3xl p-10 border-white/10 backdrop-blur-xl pref-card">
+                    <div class="flex items-center gap-4 mb-8">
+                        <i class="fas fa-cog text-3xl text-neonPurple"></i>
+                        <h2 class="text-3xl font-bold bg-gradient-to-r from-white to-neonPurple bg-clip-text text-transparent tracking-tight">
+                            Preferences
+                        </h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+                        <div class="p-8 bg-black/20 rounded-3xl border border-white/10 hover:border-neonPurple/50 transition-all text-center">
+                            <i class="fas fa-moon text-4xl text-neonPurple mb-4"></i>
+                            <p class="text-2xl font-bold text-white mb-2">{{ profile.get_theme_display }}</p>
+                            <p class="text-gray-400 text-sm uppercase tracking-wider">Theme</p>
+                        </div>
+                        <div class="p-8 bg-black/20 rounded-3xl border border-white/10 hover:border-neonPurple/50 transition-all text-center">
+                            <i class="fas fa-globe-americas text-4xl text-neonPurple mb-4"></i>
+                            <p class="text-2xl font-bold text-white mb-2">{{ profile.get_language_display }}</p>
+                            <p class="text-gray-400 text-sm uppercase tracking-wider">Language</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                            <i class="fas fa-envelope-open-text text-neonPurple"></i>
+                            Email Preferences
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="p-6 glass-panel rounded-2xl border border-white/10 flex items-center gap-4 hover:border-success/50 transition-all group">
+                                <div class="w-12 h-12 rounded-xl flex items-center justify-center 
+                                    {% if profile.email_notifications %}bg-success/20 text-success border-2 border-success/50{% else %}bg-gray-800/50 text-gray-500 border-2 border-gray-500/30{% endif %}">
+                                    <i class="fas fa-bell {% if profile.email_notifications %}fa-check{% else %}fa-times{% endif %}"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-semibold text-white text-sm">Email Notifications</p>
+                                    <p class="text-gray-400 text-xs">Real-time updates and alerts</p>
+                                </div>
+                            </div>
+
+                            <div class="p-6 glass-panel rounded-2xl border border-white/10 flex items-center gap-4 hover:border-success/50 transition-all group">
+                                <div class="w-12 h-12 rounded-xl flex items-center justify-center 
+                                    {% if profile.email_digest %}bg-success/20 text-success border-2 border-success/50{% else %}bg-gray-800/50 text-gray-500 border-2 border-gray-500/30{% endif %}">
+                                    <i class="fas fa-newspaper {% if profile.email_digest %}fa-check{% else %}fa-times{% endif %}"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-semibold text-white text-sm">Weekly Digest</p>
+                                    <p class="text-gray-400 text-xs">Performance summary emails</p>
+                                </div>
+                            </div>
+
+                            <div class="p-6 glass-panel rounded-2xl border border-white/10 flex items-center gap-4 hover:border-success/50 transition-all group">
+                                <div class="w-12 h-12 rounded-xl flex items-center justify-center 
+                                    {% if profile.email_updates %}bg-success/20 text-success border-2 border-success/50{% else %}bg-gray-800/50 text-gray-500 border-2 border-gray-500/30{% endif %}">
+                                    <i class="fas fa-rocket {% if profile.email_updates %}fa-check{% else %}fa-times{% endif %}"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-semibold text-white text-sm">Product Updates</p>
+                                    <p class="text-gray-400 text-xs">New features and announcements</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security -->
+                <div class="spotlight-card glass-panel rounded-3xl p-10 border-white/10 backdrop-blur-xl security-card">
+                    <div class="flex items-center gap-4 mb-8">
+                        <i class="fas fa-shield-alt text-3xl text-error"></i>
+                        <h2 class="text-3xl font-bold bg-gradient-to-r from-white to-error bg-clip-text text-transparent tracking-tight">
+                            Security
+                        </h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <a href="{% url 'accounts:password_change' %}" 
+                           class="group p-8 glass-panel rounded-3xl border border-white/10 hover:border-error/50 hover:shadow-[0_20px_40px_rgba(255,0,85,0.3)] 
+                                  transition-all duration-300 hover:scale-[1.02] backdrop-blur-xl">
+                            <div class="flex items-start gap-4 mb-4">
+                                <div class="w-16 h-16 rounded-2xl bg-error/20 border-2 border-error/40 flex items-center justify-center group-hover:bg-error/30 transition-all">
+                                    <i class="fas fa-key text-2xl text-error"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-bold text-white mb-2 group-hover:text-error transition-colors">Change Password</h3>
+                                    <p class="text-gray-400 text-sm leading-relaxed">Update your password regularly to keep your account secure and protected from unauthorized access.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 text-error/80 font-medium group-hover:translate-x-2 transition-all">
+                                Update Now <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </a>
+
+                        <div class="p-8 glass-panel rounded-3xl border border-white/10 text-center">
+                            <i class="fas fa-lock text-6xl text-success mb-6 opacity-75"></i>
+                            <h3 class="text-2xl font-bold text-white mb-4">Account Secured</h3>
+                            <p class="text-gray-400 text-lg mb-6">Your account is protected with the latest security measures.</p>
+                            <div class="inline-flex items-center gap-2 px-6 py-3 bg-success/20 text-success border border-success/50 text-sm font-semibold rounded-2xl backdrop-blur-sm">
+                                <i class="fas fa-shield-check"></i>
+                                All checks passed
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Staggered animations on load
+document.addEventListener('DOMContentLoaded', function() {
+    const cards = document.querySelectorAll('.profile-card, .stats-card, .info-card, .pref-card, .security-card');
+    cards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+    });
+    
+    // Spotlight effect enhancement for profile cards
+    const spotlightCards = document.querySelectorAll('.spotlight-card');
+    document.addEventListener('mousemove', (e) => {
+        spotlightCards.forEach(card => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+        });
+    });
+});
+</script>
 {% endblock %}

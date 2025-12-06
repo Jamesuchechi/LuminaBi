@@ -2,103 +2,290 @@
 
 {% block title %}Login - LuminaBI{% endblock %}
 
+{% block extra_css %}
+<style>
+    .login-blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(60px);
+        animation: blob 10s infinite;
+    }
+    .login-blob-1 {
+        width: 400px; height: 400px;
+        background: radial-gradient(circle, rgba(0, 243, 255, 0.15) 0%, transparent 70%);
+        top: 20%; right: 20%;
+        animation-delay: 0s;
+    }
+    .login-blob-2 {
+        width: 300px; height: 300px;
+        background: radial-gradient(circle, rgba(189, 0, 255, 0.12) 0%, transparent 70%);
+        bottom: 20%; left: 15%;
+        animation-delay: 3s;
+    }
+    .login-blob-3 {
+        width: 250px; height: 250px;
+        background: radial-gradient(circle, rgba(255, 0, 170, 0.1) 0%, transparent 70%);
+        top: 50%; right: 5%;
+        animation-delay: 6s;
+    }
+    
+    @keyframes pulse-glow {
+        0%, 100% { box-shadow: 0 0 20px rgba(0, 243, 255, 0.3); }
+        50% { box-shadow: 0 0 40px rgba(0, 243, 255, 0.6), 0 0 60px rgba(0, 243, 255, 0.3); }
+    }
+    
+    .form-input-focus {
+        box-shadow: 0 0 0 3px rgba(0, 243, 255, 0.2);
+    }
+    
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .login-container {
+        animation: slideUp 0.8s ease-out;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-blue-600 to-purple-700 flex items-center justify-center p-4">
-    <div class="w-full max-w-md bg-white rounded-lg shadow-2xl overflow-hidden">
-        <!-- Header -->
-        <div class="bg-gradient-to-r from-blue-600 to-purple-700 px-6 py-8">
-            <h1 class="text-3xl font-bold text-white">LuminaBI</h1>
-            <p class="text-blue-100 mt-2">Data Analytics Platform</p>
+<div class="min-h-screen relative flex items-center justify-center p-4 login-container">
+    <!-- Ambient Background Blobs -->
+    <div class="fixed inset-0 pointer-events-none z-0">
+        <div class="login-blob login-blob-1"></div>
+        <div class="login-blob login-blob-2"></div>
+        <div class="login-blob login-blob-3"></div>
+    </div>
+    
+    <!-- Main Login Card -->
+    <div class="spotlight-card relative w-full max-w-md glass-panel rounded-3xl p-8 shadow-2xl border-white/10 backdrop-blur-xl z-10">
+        <!-- Logo Header -->
+        <div class="text-center mb-10 pb-8 border-b border-white/10">
+            <div class="mx-auto w-20 h-20 mb-6 relative flex items-center justify-center bg-black/50 rounded-2xl border-2 border-white/20 animate-pulse-glow">
+                <i class="fas fa-bolt text-2xl text-neonBlue"></i>
+                <div class="absolute inset-0 bg-gradient-to-r from-neonBlue/30 to-neonPurple/30 rounded-2xl blur-xl opacity-70 animate-spin-slow"></div>
+            </div>
+            <h1 class="text-3xl font-bold bg-gradient-to-r from-white via-neonBlue to-neonPurple bg-clip-text text-transparent mb-2">
+                Lumina<span class="text-neonBlue font-black">BI</span>
+            </h1>
+            <p class="text-gray-400 text-sm font-medium">Welcome back to intelligent analytics</p>
         </div>
-
-        <!-- Form -->
-        <div class="p-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Welcome Back</h2>
-
-            {% if messages %}
+        
+        <!-- Messages -->
+        {% if messages %}
+            <div class="mb-8 space-y-3">
                 {% for message in messages %}
-                    <div class="mb-4 p-4 rounded-lg {% if message.tags %}bg-{{ message.tags }}-50 border border-{{ message.tags }}-200 text-{{ message.tags }}-800{% else %}bg-blue-50 border border-blue-200 text-blue-800{% endif %}">
-                        {{ message }}
+                <div class="glass-panel p-4 rounded-2xl border-l-4 flex items-center animate-float
+                    {% if 'success' in message.tags %}border-l-success text-success bg-success/10
+                    {% elif 'error' in message.tags %}border-l-error text-error bg-error/10
+                    {% elif 'warning' in message.tags %}border-l-warning text-warning bg-warning/10
+                    {% else %}border-l-neonBlue text-neonBlue bg-neonBlue/10{% endif %}">
+                    <div class="mr-4 text-xl flex-shrink-0">
+                        {% if 'success' in message.tags %}<i class="fas fa-check-circle"></i>
+                        {% elif 'error' in message.tags %}<i class="fas fa-exclamation-circle"></i>
+                        {% elif 'warning' in message.tags %}<i class="fas fa-exclamation-triangle"></i>
+                        {% else %}<i class="fas fa-info-circle"></i>{% endif %}
                     </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-medium text-sm">{{ message }}</p>
+                    </div>
+                    <button onclick="this.parentElement.remove()" class="ml-4 p-1 opacity-60 hover:opacity-100 transition-all">
+                        <i class="fas fa-times text-sm"></i>
+                    </button>
+                </div>
                 {% endfor %}
-            {% endif %}
-
-            <form method="post" class="space-y-4">
-                {% csrf_token %}
-
-                <!-- Username -->
-                <div>
-                    <label for="{{ form.username.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
-                        Username
-                    </label>
+            </div>
+        {% endif %}
+        
+        <!-- Login Form -->
+        <form method="post" class="space-y-6" hx-post="{% url 'accounts:login' %}" hx-swap="outerHTML swap:1s" hx-on="htmx:responseError: showError(event)">
+            {% csrf_token %}
+            
+            <!-- Username Field -->
+            <div class="space-y-2">
+                <label for="{{ form.username.id_for_label }}" class="block text-sm font-semibold text-white/90 tracking-wide">
+                    <i class="fas fa-user mr-2 text-neonBlue/70"></i>
+                    Username or Email
+                </label>
+                <div class="relative">
                     <input 
                         type="text" 
                         name="username"
                         id="{{ form.username.id_for_label }}"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Enter your username"
+                        autocomplete="username"
+                        class="w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70 
+                               focus:outline-none focus:border-neonBlue/50 focus:ring-2 focus:ring-neonBlue/20 transition-all duration-300
+                               backdrop-blur-sm text-sm font-medium"
+                        placeholder="Enter your username or email"
                         required
                     >
-                    {% if form.username.errors %}
-                        <p class="text-red-500 text-sm mt-1">{{ form.username.errors.0 }}</p>
-                    {% endif %}
+                    <i class="fas fa-user absolute right-4 top-1/2 -translate-y-1/2 text-gray-500/50 text-lg"></i>
                 </div>
-
-                <!-- Password -->
-                <div>
-                    <label for="{{ form.password.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
-                        Password
-                    </label>
+                {% if form.username.errors %}
+                    <p class="text-error text-xs mt-1 flex items-center">
+                        <i class="fas fa-exclamation-circle mr-1"></i>
+                        {{ form.username.errors.0 }}
+                    </p>
+                {% endif %}
+            </div>
+            
+            <!-- Password Field -->
+            <div class="space-y-2">
+                <label for="{{ form.password.id_for_label }}" class="block text-sm font-semibold text-white/90 tracking-wide">
+                    <i class="fas fa-lock mr-2 text-neonBlue/70"></i>
+                    Password
+                </label>
+                <div class="relative">
                     <input 
                         type="password" 
                         name="password"
                         id="{{ form.password.id_for_label }}"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        autocomplete="current-password"
+                        class="w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70 
+                               focus:outline-none focus:border-neonBlue/50 focus:ring-2 focus:ring-neonBlue/20 transition-all duration-300
+                               backdrop-blur-sm text-sm font-medium pr-12"
                         placeholder="Enter your password"
                         required
                     >
-                    {% if form.password.errors %}
-                        <p class="text-red-500 text-sm mt-1">{{ form.password.errors.0 }}</p>
-                    {% endif %}
+                    <i class="fas fa-eye-slash absolute right-4 top-1/2 -translate-y-1/2 text-gray-500/50 text-lg cursor-pointer" 
+                       onclick="togglePassword(this)"></i>
                 </div>
-
-                <!-- Remember Me -->
-                <div class="flex items-center">
+                {% if form.password.errors %}
+                    <p class="text-error text-xs mt-1 flex items-center">
+                        <i class="fas fa-exclamation-circle mr-1"></i>
+                        {{ form.password.errors.0 }}
+                    </p>
+                {% endif %}
+            </div>
+            
+            <!-- Remember Me -->
+            <div class="flex items-center justify-between">
+                <label class="flex items-center space-x-3 cursor-pointer group">
                     <input 
                         type="checkbox" 
                         name="remember_me"
                         id="{{ form.remember_me.id_for_label }}"
-                        class="h-4 w-4 text-blue-600 rounded"
+                        class="w-5 h-5 text-neonBlue bg-black/50 border-2 border-white/30 rounded focus:ring-neonBlue focus:ring-2 transition-all duration-200 group-hover:border-neonBlue/50"
                     >
-                    <label for="{{ form.remember_me.id_for_label }}" class="ml-2 text-sm text-gray-700">
-                        Remember me
-                    </label>
-                </div>
-
-                <!-- Submit Button -->
-                <button 
-                    type="submit"
-                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition mt-6"
-                >
-                    Sign In
-                </button>
-            </form>
-
-            <!-- Links -->
-            <div class="mt-6 space-y-3 text-center text-sm">
-                <div>
-                    <a href="{% url 'accounts:password_reset' %}" class="text-blue-600 hover:text-blue-800 font-medium">
-                        Forgot password?
-                    </a>
-                </div>
-                <div class="border-t pt-3">
-                    Don't have an account?
-                    <a href="{% url 'accounts:register' %}" class="text-blue-600 hover:text-blue-800 font-medium">
-                        Sign up here
-                    </a>
-                </div>
+                    <span class="text-sm text-gray-300 font-medium">Remember me</span>
+                </label>
+                <a href="{% url 'accounts:password_reset' %}" class="text-sm text-neonBlue/80 hover:text-neonBlue font-medium group transition-all">
+                    Forgot password?
+                    <span class="block h-0.5 bg-neonBlue/50 w-0 group-hover:w-full transition-all duration-300"></span>
+                </a>
             </div>
+            
+            <!-- Submit Button -->
+            <button 
+                type="submit"
+                class="w-full glass-panel bg-gradient-to-r from-neonBlue to-neonPurple text-white font-bold py-5 px-6 rounded-2xl 
+                       text-lg shadow-2xl hover:shadow-[0_20px_40px_rgba(0,243,255,0.4)] hover:scale-[1.02] transition-all duration-300
+                       border border-white/20 backdrop-blur-xl relative overflow-hidden group"
+            >
+                <span class="relative z-10 flex items-center justify-center gap-2">
+                    <i class="fas fa-arrow-right"></i>
+                    Sign In
+                </span>
+                <div class="absolute inset-0 bg-gradient-to-r from-neonBlue/20 to-neonPurple/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            </button>
+        </form>
+        
+        <!-- Register Link -->
+        <div class="mt-10 pt-8 border-t border-white/10 text-center">
+            <p class="text-sm text-gray-400 mb-4">
+                Don't have an account?
+            </p>
+            <a href="{% url 'accounts:register' %}" 
+               class="inline-flex items-center gap-2 px-6 py-3 text-sm font-bold text-neonBlue hover:text-white 
+                      border border-neonBlue/50 hover:border-neonBlue hover:bg-neonBlue/10 rounded-2xl 
+                      transition-all duration-300 group backdrop-blur-sm">
+                <i class="fas fa-user-plus"></i>
+                Create Account
+                <span class="ml-1 group-hover:translate-x-1 transition-transform"></span>
+            </a>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function togglePassword(button) {
+    const input = button.closest('.space-y-2').querySelector('input[type="password"]');
+    const isPassword = input.type === 'password';
+    
+    input.type = isPassword ? 'text' : 'password';
+    button.className = isPassword 
+        ? 'fas fa-eye absolute right-4 top-1/2 -translate-y-1/2 text-gray-500/50 text-lg cursor-pointer' 
+        : 'fas fa-eye-slash absolute right-4 top-1/2 -translate-y-1/2 text-gray-500/50 text-lg cursor-pointer';
+}
+
+function showError(event) {
+    console.error('HTMX Error:', event.detail);
+}
+
+// Auto-hide messages after 6 seconds
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(() => {
+        const messages = document.querySelectorAll('.animate-float');
+        messages.forEach(msg => {
+            msg.style.transition = 'all 0.4s ease';
+            msg.style.opacity = '0';
+            msg.style.transform = 'translateY(-10px)';
+            setTimeout(() => msg.remove(), 400);
+        });
+    }, 6000);
+});
+
+// Form validation feedback
+const formInputs = document.querySelectorAll('input[name="username"], input[name="password"]');
+formInputs.forEach(input => {
+    input.addEventListener('blur', function() {
+        if (this.value.trim()) {
+            this.parentElement.classList.add('ring-2', 'ring-neonBlue/20');
+        }
+    });
+    
+    input.addEventListener('focus', function() {
+        this.parentElement.classList.add('form-input-focus');
+    });
+    
+    input.addEventListener('blur', function() {
+        this.parentElement.classList.remove('form-input-focus');
+    });
+});
+
+// Re-attach HTMX attributes after DOM swap
+document.addEventListener('htmx:afterSwap', function(event) {
+    // Re-initialize form handlers
+    const newFormInputs = document.querySelectorAll('input[name="username"], input[name="password"]');
+    newFormInputs.forEach(input => {
+        input.addEventListener('blur', function() {
+            if (this.value.trim()) {
+                this.parentElement.classList.add('ring-2', 'ring-neonBlue/20');
+            }
+        });
+        
+        input.addEventListener('focus', function() {
+            this.parentElement.classList.add('form-input-focus');
+        });
+        
+        input.addEventListener('blur', function() {
+            this.parentElement.classList.remove('form-input-focus');
+        });
+    });
+    
+    // Re-initialize message auto-hide
+    setTimeout(() => {
+        const messages = document.querySelectorAll('.animate-float');
+        messages.forEach(msg => {
+            msg.style.transition = 'all 0.4s ease';
+            msg.style.opacity = '0';
+            msg.style.transform = 'translateY(-10px)';
+            setTimeout(() => msg.remove(), 400);
+        });
+    }, 6000);
+});
+</script>
 {% endblock %}

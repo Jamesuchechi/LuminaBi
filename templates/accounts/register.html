@@ -2,154 +2,431 @@
 
 {% block title %}Register - LuminaBI{% endblock %}
 
+{% block extra_css %}
+<style>
+    .register-blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(60px);
+        animation: blob 12s infinite;
+    }
+    .register-blob-1 {
+        width: 450px; height: 450px;
+        background: radial-gradient(circle, rgba(0, 243, 255, 0.18) 0%, transparent 70%);
+        top: 15%; right: 25%;
+        animation-delay: 0s;
+    }
+    .register-blob-2 {
+        width: 350px; height: 350px;
+        background: radial-gradient(circle, rgba(189, 0, 255, 0.15) 0%, transparent 70%);
+        bottom: 15%; left: 20%;
+        animation-delay: 4s;
+    }
+    .register-blob-3 {
+        width: 300px; height: 300px;
+        background: radial-gradient(circle, rgba(0, 255, 157, 0.12) 0%, transparent 70%);
+        top: 60%; right: 10%;
+        animation-delay: 8s;
+    }
+    
+    @keyframes pulse-glow-reg {
+        0%, 100% { box-shadow: 0 0 20px rgba(189, 0, 255, 0.3); }
+        50% { box-shadow: 0 0 40px rgba(189, 0, 255, 0.6), 0 0 60px rgba(189, 0, 255, 0.3); }
+    }
+    
+    .form-input-focus {
+        box-shadow: 0 0 0 3px rgba(189, 0, 255, 0.2);
+    }
+    
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .register-container {
+        animation: slideUp 0.8s ease-out;
+    }
+    
+    .password-strength {
+        height: 3px;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.1);
+    }
+    .strength-weak { background: #ff0055; width: 25%; }
+    .strength-fair { background: #ffb800; width: 50%; }
+    .strength-good { background: #00ff9d; width: 75%; }
+    .strength-strong { background: linear-gradient(90deg, #00ff9d, #00f3ff); width: 100%; }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-blue-600 to-purple-700 flex items-center justify-center p-4">
-    <div class="w-full max-w-md bg-white rounded-lg shadow-2xl overflow-hidden">
-        <!-- Header -->
-        <div class="bg-gradient-to-r from-blue-600 to-purple-700 px-6 py-8">
-            <h1 class="text-3xl font-bold text-white">LuminaBI</h1>
-            <p class="text-blue-100 mt-2">Data Analytics Platform</p>
+<div class="min-h-screen relative flex items-center justify-center p-4 register-container">
+    <!-- Ambient Background Blobs -->
+    <div class="fixed inset-0 pointer-events-none z-0">
+        <div class="register-blob register-blob-1"></div>
+        <div class="register-blob register-blob-2"></div>
+        <div class="register-blob register-blob-3"></div>
+    </div>
+    
+    <!-- Main Register Card -->
+    <div class="spotlight-card relative w-full max-w-lg glass-panel rounded-3xl p-10 shadow-2xl border-white/10 backdrop-blur-xl z-10">
+        <!-- Logo Header -->
+        <div class="text-center mb-12 pb-10 border-b border-white/10">
+            <div class="mx-auto w-20 h-20 mb-6 relative flex items-center justify-center bg-black/50 rounded-2xl border-2 border-white/20 animate-pulse-glow-reg">
+                <i class="fas fa-user-plus text-2xl text-neonPurple"></i>
+                <div class="absolute inset-0 bg-gradient-to-r from-neonPurple/30 to-neonBlue/30 rounded-2xl blur-xl opacity-70 animate-spin-slow"></div>
+            </div>
+            <h1 class="text-3xl font-bold bg-gradient-to-r from-white via-neonPurple to-neonBlue bg-clip-text text-transparent mb-2">
+                Lumina<span class="text-neonPurple font-black">BI</span>
+            </h1>
+            <p class="text-gray-400 text-sm font-medium">Join the future of intelligent analytics</p>
         </div>
-
-        <!-- Form -->
-        <div class="p-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">Create Account</h2>
-
-            {% if messages %}
+        
+        <!-- Messages -->
+        {% if messages %}
+            <div class="mb-10 space-y-3">
                 {% for message in messages %}
-                    <div class="mb-4 p-4 rounded-lg bg-blue-50 border border-blue-200 text-blue-800">
-                        {{ message }}
+                <div class="glass-panel p-4 rounded-2xl border-l-4 flex items-center animate-float
+                    {% if 'success' in message.tags %}border-l-success text-success bg-success/10
+                    {% elif 'error' in message.tags %}border-l-error text-error bg-error/10
+                    {% elif 'warning' in message.tags %}border-l-warning text-warning bg-warning/10
+                    {% else %}border-l-neonPurple text-neonPurple bg-neonPurple/10{% endif %}">
+                    <div class="mr-4 text-xl flex-shrink-0">
+                        {% if 'success' in message.tags %}<i class="fas fa-check-circle"></i>
+                        {% elif 'error' in message.tags %}<i class="fas fa-exclamation-circle"></i>
+                        {% elif 'warning' in message.tags %}<i class="fas fa-exclamation-triangle"></i>
+                        {% else %}<i class="fas fa-info-circle"></i>{% endif %}
                     </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="font-medium text-sm">{{ message }}</p>
+                    </div>
+                    <button onclick="this.parentElement.remove()" class="ml-4 p-1 opacity-60 hover:opacity-100 transition-all">
+                        <i class="fas fa-times text-sm"></i>
+                    </button>
+                </div>
                 {% endfor %}
-            {% endif %}
-
-            <form method="post" class="space-y-4">
-                {% csrf_token %}
-
+            </div>
+        {% endif %}
+        
+        <!-- Non-field Errors -->
+        {% if form.non_field_errors %}
+            <div class="glass-panel p-4 rounded-2xl border-l-4 border-l-error bg-error/10 mb-8">
+                <div class="flex items-center">
+                    <i class="fas fa-exclamation-circle text-xl text-error mr-3"></i>
+                    <div>
+                        {% for error in form.non_field_errors %}
+                            <p class="text-error font-medium text-sm">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        
+        <!-- Register Form -->
+        <form method="post" class="space-y-6" hx-post="{% url 'accounts:register' %}" hx-target="#register-errors">
+            {% csrf_token %}
+            
+            <!-- Row 1: Username & Email -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Username -->
-                <div>
-                    <label for="{{ form.username.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                <div class="space-y-2">
+                    <label for="{{ form.username.id_for_label }}" class="block text-sm font-semibold text-white/90 tracking-wide">
+                        <i class="fas fa-user mr-2 text-neonPurple/70"></i>
                         Username
                     </label>
-                    <input 
-                        type="text" 
-                        name="username"
-                        id="{{ form.username.id_for_label }}"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required
-                    >
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            name="username"
+                            id="{{ form.username.id_for_label }}"
+                            autocomplete="username"
+                            class="w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70 
+                                   focus:outline-none focus:border-neonPurple/50 focus:ring-2 focus:ring-neonPurple/20 transition-all duration-300
+                                   backdrop-blur-sm text-sm font-medium"
+                            placeholder="Choose a username"
+                            required
+                        >
+                        <i class="fas fa-user absolute right-4 top-1/2 -translate-y-1/2 text-gray-500/50 text-lg"></i>
+                    </div>
                     {% if form.username.errors %}
-                        <p class="text-red-500 text-sm mt-1">{{ form.username.errors.0 }}</p>
+                        <p class="text-error text-xs mt-1 flex items-center">
+                            <i class="fas fa-exclamation-circle mr-1"></i>
+                            {{ form.username.errors.0 }}
+                        </p>
                     {% endif %}
                 </div>
-
+                
                 <!-- Email -->
-                <div>
-                    <label for="{{ form.email.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                <div class="space-y-2">
+                    <label for="{{ form.email.id_for_label }}" class="block text-sm font-semibold text-white/90 tracking-wide">
+                        <i class="fas fa-envelope mr-2 text-neonPurple/70"></i>
                         Email
                     </label>
-                    <input 
-                        type="email" 
-                        name="email"
-                        id="{{ form.email.id_for_label }}"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required
-                    >
+                    <div class="relative">
+                        <input 
+                            type="email" 
+                            name="email"
+                            id="{{ form.email.id_for_label }}"
+                            autocomplete="email"
+                            class="w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70 
+                                   focus:outline-none focus:border-neonPurple/50 focus:ring-2 focus:ring-neonPurple/20 transition-all duration-300
+                                   backdrop-blur-sm text-sm font-medium"
+                            placeholder="your@email.com"
+                            required
+                        >
+                        <i class="fas fa-envelope absolute right-4 top-1/2 -translate-y-1/2 text-gray-500/50 text-lg"></i>
+                    </div>
                     {% if form.email.errors %}
-                        <p class="text-red-500 text-sm mt-1">{{ form.email.errors.0 }}</p>
+                        <p class="text-error text-xs mt-1 flex items-center">
+                            <i class="fas fa-exclamation-circle mr-1"></i>
+                            {{ form.email.errors.0 }}
+                        </p>
                     {% endif %}
                 </div>
-
+            </div>
+            
+            <!-- Row 2: First & Last Name -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- First Name -->
-                <div>
-                    <label for="{{ form.first_name.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                <div class="space-y-2">
+                    <label for="{{ form.first_name.id_for_label }}" class="block text-sm font-semibold text-white/90 tracking-wide">
+                        <i class="fas fa-user-circle mr-2 text-neonPurple/70"></i>
                         First Name
                     </label>
                     <input 
                         type="text" 
                         name="first_name"
                         id="{{ form.first_name.id_for_label }}"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        autocomplete="given-name"
+                        class="w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70 
+                               focus:outline-none focus:border-neonPurple/50 focus:ring-2 focus:ring-neonPurple/20 transition-all duration-300
+                               backdrop-blur-sm text-sm font-medium"
+                        placeholder="John"
                     >
                 </div>
-
+                
                 <!-- Last Name -->
-                <div>
-                    <label for="{{ form.last_name.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                <div class="space-y-2">
+                    <label for="{{ form.last_name.id_for_label }}" class="block text-sm font-semibold text-white/90 tracking-wide">
+                        <i class="fas fa-user-circle mr-2 text-neonPurple/70"></i>
                         Last Name
                     </label>
                     <input 
                         type="text" 
                         name="last_name"
                         id="{{ form.last_name.id_for_label }}"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        autocomplete="family-name"
+                        class="w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70 
+                               focus:outline-none focus:border-neonPurple/50 focus:ring-2 focus:ring-neonPurple/20 transition-all duration-300
+                               backdrop-blur-sm text-sm font-medium"
+                        placeholder="Doe"
                     >
                 </div>
-
+            </div>
+            
+            <!-- Password Fields -->
+            <div class="space-y-6">
                 <!-- Password -->
-                <div>
-                    <label for="{{ form.password.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                <div class="space-y-3">
+                    <label for="{{ form.password.id_for_label }}" class="block text-sm font-semibold text-white/90 tracking-wide">
+                        <i class="fas fa-lock mr-2 text-neonPurple/70"></i>
                         Password
                     </label>
-                    <input 
-                        type="password" 
-                        name="password"
-                        id="{{ form.password.id_for_label }}"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required
-                    >
-                    <p class="text-gray-600 text-xs mt-1">Password must be at least 8 characters</p>
+                    <div class="relative">
+                        <input 
+                            type="password" 
+                            name="password"
+                            id="{{ form.password.id_for_label }}"
+                            autocomplete="new-password"
+                            class="w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70 
+                                   focus:outline-none focus:border-neonPurple/50 focus:ring-2 focus:ring-neonPurple/20 transition-all duration-300
+                                   backdrop-blur-sm text-sm font-medium pr-12 password-input"
+                            placeholder="Create a strong password"
+                            required
+                        >
+                        <i class="fas fa-eye-slash absolute right-4 top-1/2 -translate-y-1/2 text-gray-500/50 text-lg cursor-pointer" 
+                           onclick="togglePassword(this)"></i>
+                    </div>
+                    <div class="password-strength mb-2" id="password-strength"></div>
+                    <p class="text-xs text-gray-500 flex items-center">
+                        <i class="fas fa-info-circle mr-1 text-success/70"></i>
+                        Minimum 8 characters, 1 uppercase, 1 number, 1 special character
+                    </p>
                     {% if form.password.errors %}
-                        <p class="text-red-500 text-sm mt-1">{{ form.password.errors.0 }}</p>
+                        <p class="text-error text-xs flex items-center">
+                            <i class="fas fa-exclamation-circle mr-1"></i>
+                            {{ form.password.errors.0 }}
+                        </p>
                     {% endif %}
                 </div>
-
+                
                 <!-- Confirm Password -->
-                <div>
-                    <label for="{{ form.password_confirm.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                <div class="space-y-2">
+                    <label for="{{ form.password_confirm.id_for_label }}" class="block text-sm font-semibold text-white/90 tracking-wide">
+                        <i class="fas fa-lock mr-2 text-neonPurple/70"></i>
                         Confirm Password
                     </label>
-                    <input 
-                        type="password" 
-                        name="password_confirm"
-                        id="{{ form.password_confirm.id_for_label }}"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required
-                    >
+                    <div class="relative">
+                        <input 
+                            type="password" 
+                            name="password_confirm"
+                            id="{{ form.password_confirm.id_for_label }}"
+                            autocomplete="new-password"
+                            class="w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70 
+                                   focus:outline-none focus:border-neonPurple/50 focus:ring-2 focus:ring-neonPurple/20 transition-all duration-300
+                                   backdrop-blur-sm text-sm font-medium pr-12 password-confirm"
+                            placeholder="Repeat your password"
+                            required
+                        >
+                        <i class="fas fa-eye-slash absolute right-4 top-1/2 -translate-y-1/2 text-gray-500/50 text-lg cursor-pointer" 
+                           onclick="togglePassword(this)"></i>
+                    </div>
                     {% if form.password_confirm.errors %}
-                        <p class="text-red-500 text-sm mt-1">{{ form.password_confirm.errors.0 }}</p>
+                        <p class="text-error text-xs mt-1 flex items-center">
+                            <i class="fas fa-exclamation-circle mr-1"></i>
+                            {{ form.password_confirm.errors.0 }}
+                        </p>
                     {% endif %}
                 </div>
-
-                <!-- Non-field Errors -->
-                {% if form.non_field_errors %}
-                    <div class="bg-red-50 border border-red-200 text-red-800 p-3 rounded">
-                        {{ form.non_field_errors.0 }}
-                    </div>
-                {% endif %}
-
-                <!-- Submit Button -->
-                <button 
-                    type="submit"
-                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition mt-6"
-                >
-                    Create Account
-                </button>
-            </form>
-
-            <!-- Terms -->
-            <div class="mt-6 text-center text-xs text-gray-600">
-                By signing up, you agree to our Terms of Service and Privacy Policy
             </div>
-
-            <!-- Login Link -->
-            <div class="mt-4 text-center text-sm border-t pt-4">
-                Already have an account?
-                <a href="{% url 'accounts:login' %}" class="text-blue-600 hover:text-blue-800 font-medium">
-                    Sign in here
+            
+            <!-- Submit Button -->
+            <button 
+                type="submit"
+                class="w-full glass-panel bg-gradient-to-r from-neonPurple to-neonBlue text-white font-bold py-5 px-6 rounded-2xl 
+                       text-lg shadow-2xl hover:shadow-[0_20px_40px_rgba(189,0,255,0.4)] hover:scale-[1.02] transition-all duration-300
+                       border border-white/20 backdrop-blur-xl relative overflow-hidden group"
+            >
+                <span class="relative z-10 flex items-center justify-center gap-2">
+                    <i class="fas fa-rocket"></i>
+                    Create Account
+                </span>
+                <div class="absolute inset-0 bg-gradient-to-r from-neonPurple/20 to-neonBlue/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            </button>
+        </form>
+        
+        <!-- Terms & Login Link -->
+        <div class="mt-12 pt-10 border-t border-white/10 space-y-4 text-center">
+            <p class="text-xs text-gray-500 flex items-center justify-center">
+                <i class="fas fa-shield-check mr-2 text-success/70"></i>
+                By signing up, you agree to our <a href="#" class="text-neonBlue hover:text-white underline">Terms of Service</a> and 
+                <a href="#" class="text-neonBlue hover:text-white underline">Privacy Policy</a>
+            </p>
+            <div>
+                <p class="text-sm text-gray-400 mb-4">
+                    Already have an account?
+                </p>
+                <a href="{% url 'accounts:login' %}" 
+                   class="inline-flex items-center gap-2 px-6 py-3 text-sm font-bold text-neonBlue hover:text-white 
+                          border border-neonBlue/50 hover:border-neonBlue hover:bg-neonBlue/10 rounded-2xl 
+                          transition-all duration-300 group backdrop-blur-sm">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Sign In Instead
+                    <span class="ml-1 group-hover:translate-x-1 transition-transform"></span>
                 </a>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function togglePassword(button) {
+    const input = button.closest('.space-y-2, .space-y-3').querySelector('input[type="password"]');
+    const isPassword = input.type === 'password';
+    
+    input.type = isPassword ? 'text' : 'password';
+    button.className = isPassword 
+        ? 'fas fa-eye absolute right-4 top-1/2 -translate-y-1/2 text-gray-500/50 text-lg cursor-pointer' 
+        : 'fas fa-eye-slash absolute right-4 top-1/2 -translate-y-1/2 text-gray-500/50 text-lg cursor-pointer';
+}
+
+// Password strength checker
+function checkPasswordStrength() {
+    const password = document.querySelector('.password-input');
+    const strengthBar = document.getElementById('password-strength');
+    const confirmInput = document.querySelector('.password-confirm');
+    
+    if (!password || !strengthBar) return;
+    
+    const value = password.value;
+    let strength = 0;
+    
+    // Basic checks
+    if (value.length >= 8) strength += 1;
+    if (/[a-z]/.test(value)) strength += 1;
+    if (/[A-Z]/.test(value)) strength += 1;
+    if (/[0-9]/.test(value)) strength += 1;
+    if (/[^A-Za-z0-9]/.test(value)) strength += 1;
+    
+    strengthBar.className = 'password-strength';
+    if (strength < 2) {
+        strengthBar.classList.add('strength-weak');
+    } else if (strength < 4) {
+        strengthBar.classList.add('strength-fair');
+    } else if (strength < 5) {
+        strengthBar.classList.add('strength-good');
+    } else {
+        strengthBar.classList.add('strength-strong');
+    }
+}
+
+// Real-time password matching
+function checkPasswordMatch() {
+    const password = document.querySelector('.password-input');
+    const confirm = document.querySelector('.password-confirm');
+    const confirmBorder = confirm?.parentElement;
+    
+    if (password && confirm && confirm.value) {
+        if (password.value === confirm.value) {
+            confirmBorder.classList.remove('border-error');
+            confirmBorder.classList.add('border-success', 'ring-1', 'ring-success/30');
+        } else {
+            confirmBorder.classList.remove('border-success', 'ring-1', 'ring-success/30');
+            confirmBorder.classList.add('border-error', 'ring-1', 'ring-error/30');
+        }
+    }
+}
+
+// Event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordInput = document.querySelector('.password-input');
+    const confirmInput = document.querySelector('.password-confirm');
+    
+    if (passwordInput) {
+        passwordInput.addEventListener('input', checkPasswordStrength);
+        passwordInput.addEventListener('blur', checkPasswordStrength);
+    }
+    
+    if (confirmInput) {
+        confirmInput.addEventListener('input', checkPasswordMatch);
+        confirmInput.addEventListener('blur', checkPasswordMatch);
+    }
+    
+    // Auto-hide messages
+    setTimeout(() => {
+        const messages = document.querySelectorAll('.animate-float');
+        messages.forEach(msg => {
+            msg.style.transition = 'all 0.4s ease';
+            msg.style.opacity = '0';
+            msg.style.transform = 'translateY(-10px)';
+            setTimeout(() => msg.remove(), 400);
+        });
+    }, 6000);
+    
+    // Form input focus effects
+    const formInputs = document.querySelectorAll('input:not([type="checkbox"]):not([type="submit"])');
+    formInputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            this.parentElement.classList.add('form-input-focus');
+        });
+        
+        input.addEventListener('blur', function() {
+            this.parentElement.classList.remove('form-input-focus');
+        });
+    });
+});
+</script>
 {% endblock %}
