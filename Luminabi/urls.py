@@ -10,6 +10,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', LandingPageView.as_view(), name='landing'),  # Landing page
     path('accounts/', include('accounts.urls')),  # Accounts
+    path('billing/', include('billing.urls')),  # Billing & Subscriptions
     path('core/', include('core.urls')),  # Core application
     path('analytics/', include('analytics.urls')),  # Analytics application
     path('dashboards/', include('dashboards.urls')),  # Dashboards application
@@ -23,4 +24,3 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-

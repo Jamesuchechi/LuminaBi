@@ -16,6 +16,7 @@ from rest_framework.response import Response
 
 from .models import Dashboard
 from .serializers import DashboardSerializer
+from core.views import create_notification
 
 
 # ============================================================================
@@ -80,7 +81,20 @@ class DashboardCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         """Set owner to current user."""
         form.instance.owner = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        
+        # Create notification
+        create_notification(
+            user=self.request.user,
+            title='Dashboard Created',
+            message=f'Dashboard "{form.instance.name}" has been created successfully.',
+            notification_type='success',
+            related_app='dashboards',
+            related_model='Dashboard',
+            related_object_id=form.instance.id
+        )
+        
+        return response
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -122,6 +136,24 @@ class DashboardDeleteView(LoginRequiredMixin, DeleteView):
     def get_queryset(self):
         """Only allow owner to delete."""
         return Dashboard.objects.filter(owner=self.request.user)
+    
+    def delete(self, request, *args, **kwargs):
+        """Delete the dashboard and create notification."""
+        obj = self.get_object()
+        dashboard_name = obj.name
+        response = super().delete(request, *args, **kwargs)
+        
+        # Create notification
+        create_notification(
+            user=request.user,
+            title='Dashboard Deleted',
+            message=f'Dashboard "{dashboard_name}" has been deleted.',
+            notification_type='info',
+            related_app='dashboards',
+            related_model='Dashboard'
+        )
+        
+        return response
 
 
 class DashboardPublishView(LoginRequiredMixin, DetailView):

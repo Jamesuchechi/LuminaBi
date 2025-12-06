@@ -20,6 +20,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from .models import Dataset
 from api.serializers import DatasetSerializer
 from core.mixins import OwnerCheckMixin
+from core.views import create_notification
 
 
 class DatasetListView(LoginRequiredMixin, ListView):
@@ -90,7 +91,20 @@ class DatasetCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         """Set the owner to the current user."""
         form.instance.owner = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        
+        # Create notification
+        create_notification(
+            user=self.request.user,
+            title='Dataset Uploaded Successfully',
+            message=f'Your dataset "{form.instance.name}" has been uploaded successfully.',
+            notification_type='success',
+            related_app='datasets',
+            related_model='Dataset',
+            related_object_id=form.instance.id
+        )
+        
+        return response
     
     def get_context_data(self, **kwargs):
         """Add form title for clarity."""
@@ -134,6 +148,24 @@ class DatasetDeleteView(LoginRequiredMixin, OwnerCheckMixin, DeleteView):
         obj = super().get_object()
         self.check_owner(obj, self.request.user)
         return obj
+    
+    def delete(self, request, *args, **kwargs):
+        """Delete the dataset and create notification."""
+        obj = self.get_object()
+        dataset_name = obj.name
+        response = super().delete(request, *args, **kwargs)
+        
+        # Create notification
+        create_notification(
+            user=request.user,
+            title='Dataset Deleted',
+            message=f'Your dataset "{dataset_name}" has been deleted.',
+            notification_type='info',
+            related_app='datasets',
+            related_model='Dataset'
+        )
+        
+        return response
 
 
 class DatasetCleaningView(LoginRequiredMixin, OwnerCheckMixin, View):

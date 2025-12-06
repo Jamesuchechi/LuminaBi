@@ -45,4 +45,12 @@ urlpatterns = [
     # ====================================================================
     path('health/', views.HealthCheckView.as_view(), name='health_check'),
     path('stats/', views.SystemStatsView.as_view(), name='system_stats'),
+    
+    # ====================================================================
+    # NOTIFICATIONS VIEWS & API
+    # ====================================================================
+    path('notifications/', views.NotificationsPageView.as_view(), name='notifications'),
+    path('api/notifications/unread/', views.UnreadNotificationsAPIView.as_view(), name='api_unread_notifications'),
+    path('api/notifications/', views.NotificationsListAPIView.as_view(), name='api_notifications'),
+    path('api/notifications/<int:pk>/read/', views.NotificationMarkReadAPIView.as_view(), name='api_notification_read'),
 ]

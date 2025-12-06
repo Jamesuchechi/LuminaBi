@@ -24,6 +24,10 @@
                         'spin-slow': 'spin 10s linear infinite',
                         'float': 'float 6s ease-in-out infinite',
                         'pulse-glow': 'pulse-glow 3s infinite',
+                        'shimmer': 'shimmer 2s infinite',
+                        'slide-up': 'slide-up 0.6s ease-out',
+                        'fade-in': 'fade-in 0.8s ease-out',
+                        'glow-pulse': 'glow-pulse 2s ease-in-out infinite',
                     },
                     keyframes: {
                         blob: {
@@ -39,6 +43,22 @@
                         'pulse-glow': {
                             '0%, 100%': { boxShadow: '0 0 15px rgba(0, 243, 255, 0.2)' },
                             '50%': { boxShadow: '0 0 30px rgba(189, 0, 255, 0.5)' },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '-1000px 0' },
+                            '100%': { backgroundPosition: '1000px 0' },
+                        },
+                        'slide-up': {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        'fade-in': {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        'glow-pulse': {
+                            '0%, 100%': { opacity: '0.5' },
+                            '50%': { opacity: '1' },
                         }
                     }
                 }
@@ -177,6 +197,103 @@
             mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
         }
 
+        /* Scroll reveal animation */
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .scroll-reveal.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Icon glow hover effect */
+        .icon-glow {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            filter: drop-shadow(0 0 0 rgba(0, 243, 255, 0));
+        }
+
+        .icon-glow:hover {
+            filter: drop-shadow(0 0 15px rgba(0, 243, 255, 0.8));
+            transform: scale(1.2) rotate(-5deg);
+        }
+
+        /* Feature card enhanced effects */
+        .feature-card {
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+        }
+
+        .feature-card:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 243, 255, 0.1);
+        }
+
+        /* CTA button enhanced */
+        .cta-button {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .cta-button:hover::before {
+            left: 100%;
+        }
+
+        /* Testimonial dot styles */
+        .testimonial-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .testimonial-dot.active {
+            background: #00f3ff;
+            transform: scale(1.3);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.6);
+        }
+
+        .testimonial-dot:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: scale(1.2);
+        }
+
+        /* Stagger animation for list items */
+        @for $i from 1 through 6 {
+            .delay-#{$i * 100}ms {
+                animation-delay: calc(#{$i} * 100ms);
+            }
+        }
+
+        /* Badge pulse animation */
+        .badge-pulse {
+            animation: badge-pulse-animation 2s ease-in-out infinite;
+        }
+
+        @keyframes badge-pulse-animation {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 243, 255, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(0, 243, 255, 0); }
+        }
     </style>
 </head>
 <body class="antialiased selection:bg-neonPurple selection:text-white">
@@ -328,109 +445,307 @@
 
     <section class="py-24 relative" id="features">
         <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">Intelligence <span class="text-neonBlue">Without Limits</span></h2>
-                <p class="text-gray-400">Everything you need to dominate your data stack.</p>
+            <div class="text-center mb-20">
+                <h2 class="text-5xl md:text-6xl font-black mb-6 leading-tight">
+                    Intelligence <span class="text-neonBlue">Without Limits</span>
+                </h2>
+                <p class="text-gray-400 text-xl max-w-2xl mx-auto leading-relaxed">Everything you need to dominate your data stack with cutting-edge AI and visualization technology.</p>
             </div>
 
-            <div class="grid md:grid-cols-3 gap-6" id="cards-container">
-                <div class="glass-panel rounded-2xl p-8 spotlight-card group cursor-pointer">
-                    <div class="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 border border-white/10 group-hover:border-neonBlue/50">
-                        <svg class="w-6 h-6 text-neonBlue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+            <div class="grid md:grid-cols-3 gap-8" id="cards-container">
+                <div class="feature-card glass-panel rounded-2xl p-8 spotlight-card group cursor-pointer scroll-reveal">
+                    <div class="w-16 h-16 bg-gradient-to-br from-neonBlue/30 to-neonBlue/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-125 transition-all duration-300 border border-neonBlue/30 group-hover:border-neonBlue/80 shadow-lg">
+                        <svg class="w-8 h-8 text-neonBlue icon-glow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-3 text-white group-hover:text-neonBlue transition-colors">Instant Processing</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">
-                        Upload millions of rows. Our engine processes data in milliseconds using parallel GPU computing.
+                    <h3 class="text-2xl font-bold mb-3 text-white group-hover:text-neonBlue transition-colors duration-300">⚡ Instant Processing</h3>
+                    <p class="text-gray-400 text-base leading-relaxed mb-4">
+                        Upload millions of rows. Our engine processes data in milliseconds using parallel GPU computing. Real-time streaming, zero latency.
                     </p>
+                    <div class="text-sm text-neonBlue/70 group-hover:text-neonBlue transition-colors">Learn more →</div>
                 </div>
 
-                <div class="glass-panel rounded-2xl p-8 spotlight-card group cursor-pointer">
-                    <div class="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 border border-white/10 group-hover:border-neonPurple/50">
-                        <svg class="w-6 h-6 text-neonPurple" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                <div class="feature-card glass-panel rounded-2xl p-8 spotlight-card group cursor-pointer scroll-reveal">
+                    <div class="w-16 h-16 bg-gradient-to-br from-neonPurple/30 to-neonPurple/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-125 transition-all duration-300 border border-neonPurple/30 group-hover:border-neonPurple/80 shadow-lg">
+                        <svg class="w-8 h-8 text-neonPurple icon-glow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-3 text-white group-hover:text-neonPurple transition-colors">Predictive AI</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">
-                        Don't just see what happened. See what will happen. Our models forecast trends with 94% accuracy.
+                    <h3 class="text-2xl font-bold mb-3 text-white group-hover:text-neonPurple transition-colors duration-300">🤖 Predictive AI</h3>
+                    <p class="text-gray-400 text-base leading-relaxed mb-4">
+                        Don't just see what happened. See what will happen. Our models forecast trends with 94% accuracy using advanced machine learning.
                     </p>
+                    <div class="text-sm text-neonPurple/70 group-hover:text-neonPurple transition-colors">Learn more →</div>
                 </div>
 
-                <div class="glass-panel rounded-2xl p-8 spotlight-card group cursor-pointer">
-                    <div class="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 border border-white/10 group-hover:border-neonPink/50">
-                        <svg class="w-6 h-6 text-neonPink" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                <div class="feature-card glass-panel rounded-2xl p-8 spotlight-card group cursor-pointer scroll-reveal">
+                    <div class="w-16 h-16 bg-gradient-to-br from-neonPink/30 to-neonPink/10 rounded-xl flex items-center justify-center mb-6 group-hover:scale-125 transition-all duration-300 border border-neonPink/30 group-hover:border-neonPink/80 shadow-lg">
+                        <svg class="w-8 h-8 text-neonPink icon-glow" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-3 text-white group-hover:text-neonPink transition-colors">Enterprise Security</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">
-                        SOC2 Type II certified. End-to-end encryption. Your data is safe in our fortified digital vault.
+                    <h3 class="text-2xl font-bold mb-3 text-white group-hover:text-neonPink transition-colors duration-300">🔐 Enterprise Security</h3>
+                    <p class="text-gray-400 text-base leading-relaxed mb-4">
+                        SOC2 Type II certified. End-to-end encryption. Your data is safe in our fortified digital vault with military-grade protocols.
                     </p>
+                    <div class="text-sm text-neonPink/70 group-hover:text-neonPink transition-colors">Learn more →</div>
+                </div>
+            </div>
+
+            <!-- Additional Features Grid -->
+            <div class="grid md:grid-cols-2 gap-8 mt-12">
+                <div class="feature-card glass-panel rounded-2xl p-8 group scroll-reveal">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-lg bg-neonBlue/20 flex items-center justify-center flex-shrink-0 border border-neonBlue/30 group-hover:border-neonBlue/80 transition-colors">
+                            <svg class="w-6 h-6 text-neonBlue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg mb-2 group-hover:text-neonBlue transition-colors">No-Code Builder</h4>
+                            <p class="text-gray-400">Create stunning dashboards with drag-and-drop simplicity. No technical skills required.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feature-card glass-panel rounded-2xl p-8 group scroll-reveal">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-lg bg-neonPurple/20 flex items-center justify-center flex-shrink-0 border border-neonPurple/30 group-hover:border-neonPurple/80 transition-colors">
+                            <svg class="w-6 h-6 text-neonPurple" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg mb-2 group-hover:text-neonPurple transition-colors">Real-time Sync</h4>
+                            <p class="text-gray-400">Data updates automatically. Collaborate with your team on live dashboards in real-time.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="py-20 px-6">
-        <div class="max-w-5xl mx-auto">
-            <div class="relative rounded-3xl overflow-hidden glass-panel border border-neonPurple/20">
-                <div class="absolute inset-0 bg-gradient-to-r from-neonPurple/20 to-neonBlue/20"></div>
+    
+    <!-- Testimonials -->
+    <section id="testimonials" class="py-24 bg-black/20 backdrop-blur-xl px-6" aria-label="Customer testimonials">
+      <div class="max-w-5xl mx-auto text-center mb-14">
+        <h2 class="text-4xl font-extrabold mb-4 text-gradient">What Our Users Say</h2>
+        <p class="text-gray-400 max-w-xl mx-auto text-lg">
+          Real feedback from professionals transforming their businesses with LuminaBI.
+        </p>
+      </div>
+    
+      <div class="relative max-w-4xl mx-auto">
+        <div id="testimonial-container" class="min-h-[220px] px-8 py-8 glass-panel rounded-3xl shadow-lg select-none">
+          <blockquote class="text-gray-200 text-lg italic" id="testimonial-text">
+            "LuminaBI has completely changed how we approach data analysis. The ease and speed are unmatched."
+          </blockquote>
+          <footer class="mt-6 flex items-center justify-center gap-4">
+            <img id="testimonial-avatar" src="https://randomuser.me/api/portraits/women/44.jpg" alt="User avatar" class="w-12 h-12 rounded-full ring-2 ring-neonBlue" />
+            <div class="text-left">
+              <p id="testimonial-name" class="font-semibold text-white">Jessica Parker</p>
+              <p id="testimonial-role" class="text-gray-400 text-sm">Head of Data, TechSolutions Inc.</p>
+            </div>
+          </footer>
+        </div>
+    
+        <div class="flex justify-center pt-10 space-x-4" id="testimonial-dots" aria-label="Testimonial navigation">
+          <!-- Dots inserted by script -->
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20 px-6 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-neonBlue/5 via-transparent to-neonPurple/5 pointer-events-none"></div>
+        <div class="max-w-5xl mx-auto relative z-10">
+            <div class="rounded-3xl overflow-hidden glass-panel border border-neonPurple/30 backdrop-blur-xl">
+                <div class="absolute inset-0 bg-gradient-to-r from-neonPurple/10 to-neonBlue/10"></div>
                 
-                <div class="relative z-10 px-8 py-16 md:px-16 text-center">
-                    <h2 class="text-3xl md:text-5xl font-bold mb-6">Ready to see the future?</h2>
-                    <p class="text-gray-300 mb-8 max-w-2xl mx-auto">
-                        Join 10,000+ companies using LuminaBI to make data-driven decisions that actually matter.
+                <div class="relative z-10 px-8 py-20 md:px-16 text-center">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-neonBlue/10 border border-neonBlue/30 text-neonBlue text-xs font-bold uppercase tracking-wider mb-6 badge-pulse">
+                        <span class="w-2 h-2 rounded-full bg-neonBlue"></span>
+                        Transform Your Data Today
+                    </div>
+
+                    <h2 class="text-4xl md:text-6xl font-black mb-6 leading-tight">
+                        Ready to unlock
+                        <span class="text-gradient"> data superpowers?</span>
+                    </h2>
+                    <p class="text-gray-300 mb-10 max-w-3xl mx-auto text-lg leading-relaxed">
+                        Join 10,000+ forward-thinking companies using LuminaBI to make data-driven decisions that actually matter. Free for 14 days, no credit card required.
                     </p>
-                    <div class="flex justify-center gap-4">
-                        <a href="{% url 'accounts:register' %}" class="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
-                            <span class="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]"></span>
-                            <span class="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-8 py-1 text-sm font-medium text-white backdrop-blur-3xl hover:bg-slate-900 transition-colors">
-                                Get Started Now
+                    <div class="flex flex-col sm:flex-row justify-center gap-4">
+                        <a href="{% url 'accounts:register' %}" class="cta-button relative inline-flex h-14 overflow-hidden rounded-xl focus:outline-none focus:ring-2 focus:ring-neonBlue focus:ring-offset-2 focus:ring-offset-slate-950">
+                            <span class="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#00f3ff_0%,#bd00ff_50%,#00f3ff_100%)]"></span>
+                            <span class="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-xl bg-black px-8 text-lg font-bold text-white backdrop-blur-3xl hover:bg-slate-900 transition-colors relative">
+                                Start Free Trial
                             </span>
                         </a>
+                        <button class="px-8 py-3.5 rounded-xl glass-panel border border-white/20 hover:border-neonBlue/50 hover:bg-white/5 transition-all duration-300 flex items-center gap-3 group justify-center font-semibold text-lg">
+                            <span>Schedule Demo</span>
+                            <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                        </button>
+                    </div>
+
+                    <!-- Stats Row -->
+                    <div class="grid grid-cols-3 gap-4 md:gap-8 mt-16 pt-12 border-t border-white/10">
+                        <div class="scroll-reveal">
+                            <div class="text-3xl md:text-4xl font-black text-neonBlue mb-2">10K+</div>
+                            <div class="text-gray-400 text-sm md:text-base">Active Companies</div>
+                        </div>
+                        <div class="scroll-reveal">
+                            <div class="text-3xl md:text-4xl font-black text-neonPurple mb-2">99.9%</div>
+                            <div class="text-gray-400 text-sm md:text-base">Uptime SLA</div>
+                        </div>
+                        <div class="scroll-reveal">
+                            <div class="text-3xl md:text-4xl font-black text-neonPink mb-2">4.9/5</div>
+                            <div class="text-gray-400 text-sm md:text-base">Customer Rating</div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="border-t border-white/5 bg-black/40 backdrop-blur-xl mt-20">
-        <div class="max-w-7xl mx-auto px-6 py-12">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
-                <div>
-                    <h4 class="font-bold text-white mb-4">Product</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-neonBlue transition-colors">Features</a></li>
-                        <li><a href="#" class="hover:text-neonBlue transition-colors">Integrations</a></li>
-                        <li><a href="#" class="hover:text-neonBlue transition-colors">Enterprise</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="font-bold text-white mb-4">Resources</h4>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-neonBlue transition-colors">Documentation</a></li>
-                        <li><a href="#" class="hover:text-neonBlue transition-colors">API Reference</a></li>
-                        <li><a href="#" class="hover:text-neonBlue transition-colors">Blog</a></li>
-                    </ul>
-                </div>
-                </div>
-            <div class="text-center text-gray-600 text-sm border-t border-white/5 pt-8">
-                &copy; 2024 LuminaBI. All systems operational.
-            </div>
+    
+    <!-- Footer -->
+    <footer class="border-t border-white/10 bg-black/40 backdrop-blur-xl mt-20 select-none" aria-label="Footer">
+      <div class="max-w-7xl mx-auto px-6 py-14 grid grid-cols-2 md:grid-cols-4 gap-10 text-gray-400 text-sm">
+        <div>
+          <h4 class="text-white font-bold mb-4">Product</h4>
+          <ul class="space-y-2">
+            <li><a href="#features" class="hover:text-neonBlue transition">Features</a></li>
+            <li><a href="#" class="hover:text-neonBlue transition">Integrations</a></li>
+            <li><a href="#" class="hover:text-neonBlue transition">Enterprise</a></li>
+          </ul>
         </div>
+        <div>
+          <h4 class="text-white font-bold mb-4">Resources</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="hover:text-neonBlue transition">Documentation</a></li>
+            <li><a href="#" class="hover:text-neonBlue transition">API Reference</a></li>
+            <li><a href="#" class="hover:text-neonBlue transition">Blog</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-bold mb-4">Company</h4>
+          <ul class="space-y-2">
+            <li><a href="#pricing" class="hover:text-neonBlue transition">Pricing</a></li>
+            <li><a href="#contact" class="hover:text-neonBlue transition">Contact</a></li>
+            <li><a href="#" class="hover:text-neonBlue transition">About Us</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-white font-bold mb-4">Legal</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="hover:text-neonBlue transition">Privacy Policy</a></li>
+            <li><a href="#" class="hover:text-neonBlue transition">Terms of Service</a></li>
+            <li><a href="#" class="hover:text-neonBlue transition">Security</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="text-center text-gray-600 text-xs border-t border-white/10 pt-6 pb-4">
+        &copy; 2025 LuminaBI. All systems operational.
+      </div>
     </footer>
 
     <script>
+        // Scroll Reveal Animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.scroll-reveal').forEach(el => {
+            observer.observe(el);
+        });
+
         // 1. Spotlight Effect Script
         const cardsContainer = document.getElementById("cards-container");
-        const cards = document.querySelectorAll(".spotlight-card");
+        if (cardsContainer) {
+            const cards = document.querySelectorAll(".spotlight-card");
 
-        cardsContainer.addEventListener("mousemove", (e) => {
-            for (const card of cards) {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
+            cardsContainer.addEventListener("mousemove", (e) => {
+                for (const card of cards) {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
 
-                card.style.setProperty("--mouse-x", `${x}px`);
-                card.style.setProperty("--mouse-y", `${y}px`);
-            }
-        });
+                    card.style.setProperty("--mouse-x", `${x}px`);
+                    card.style.setProperty("--mouse-y", `${y}px`);
+                }
+            });
+        }
+
+        // Testimonial data
+        const testimonials = [
+          {
+            text: "LuminaBI has completely changed how we approach data analysis. The ease and speed are unmatched.",
+            name: "Jessica Parker",
+            role: "Head of Data, TechSolutions Inc.",
+            avatar: "https://randomuser.me/api/portraits/women/44.jpg"
+          },
+          {
+            text: "With LuminaBI, our team can build dashboards and uncover insights without writing a line of code.",
+            name: "Mahesh Patel",
+            role: "Product Manager, DataForge",
+            avatar: "https://randomuser.me/api/portraits/men/22.jpg"
+          },
+          {
+            text: "The AI-powered insights engine saved us weeks of manual analysis. It's like having a data scientist on demand.",
+            name: "Emily Zhang",
+            role: "CEO, BrightMetrics",
+            avatar: "https://randomuser.me/api/portraits/women/68.jpg"
+          }
+        ];
+      
+        const testimonialText = document.getElementById('testimonial-text');
+        const testimonialName = document.getElementById('testimonial-name');
+        const testimonialRole = document.getElementById('testimonial-role');
+        const testimonialAvatar = document.getElementById('testimonial-avatar');
+        const dotsContainer = document.getElementById('testimonial-dots');
+      
+        let currentIndex = 0;
+      
+        function setTestimonial(index) {
+          const t = testimonials[index];
+          testimonialText.textContent = `"${t.text}"`;
+          testimonialName.textContent = t.name;
+          testimonialRole.textContent = t.role;
+          testimonialAvatar.src = t.avatar;
+      
+          [...dotsContainer.children].forEach((dot, i) => dot.classList.toggle('active', i === index));
+        }
+      
+        function createDots() {
+          testimonials.forEach((_, idx) => {
+            const dot = document.createElement('div');
+            dot.className = 'testimonial-dot';
+            dot.setAttribute('aria-label', `Show testimonial ${idx + 1}`);
+            dot.setAttribute('role', 'button');
+            dot.tabIndex = 0;
+            dot.addEventListener('click', () => {
+              currentIndex = idx;
+              setTestimonial(idx);
+            });
+            dot.addEventListener('keydown', e => {
+              if(e.key === 'Enter' || e.key === ' ') {
+                currentIndex = idx;
+                setTestimonial(idx);
+              }
+            });
+            dotsContainer.appendChild(dot);
+          });
+        }
+      
+        createDots();
+        setTestimonial(0);
+      
+        // Auto cycle testimonials every 10 seconds
+        setInterval(() => {
+          currentIndex = (currentIndex + 1) % testimonials.length;
+          setTestimonial(currentIndex);
+        }, 10000);
 
         // 2. 3D Tilt Effect Script
         const tiltCard = document.querySelector('.tilt-card');
@@ -446,16 +761,25 @@
             const centerY = rect.height / 2;
             
             // Limit rotation to small degrees
-            const rotateX = ((y - centerY) / centerY) * -5; // Negative for natural feel
+            const rotateX = ((y - centerY) / centerY) * -5;
             const rotateY = ((x - centerX) / centerX) * 5;
 
             tiltCard.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
         });
 
-        // Reset tilt on mouse leave
         document.addEventListener('mouseleave', () => {
             if(!tiltCard) return;
             tiltCard.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+        });
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('border-white/10', 'shadow-lg');
+            } else {
+                navbar.classList.remove('border-white/10', 'shadow-lg');
+            }
         });
     </script>
 </body>

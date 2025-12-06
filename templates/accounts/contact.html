@@ -1,0 +1,239 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Us - LuminaBI{% endblock %}
+
+{% block extra_css %}
+<style>
+    .contact-blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(60px);
+        animation: blob 12s infinite;
+    }
+    .contact-blob-1 {
+        width: 400px; height: 400px;
+        background: radial-gradient(circle, rgba(189, 0, 255, 0.15) 0%, transparent 70%);
+        top: 10%; right: 15%;
+        animation-delay: 0s;
+    }
+    .contact-blob-2 {
+        width: 350px; height: 350px;
+        background: radial-gradient(circle, rgba(0, 243, 255, 0.12) 0%, transparent 70%);
+        bottom: 20%; left: 10%;
+        animation-delay: 3s;
+    }
+    
+    @keyframes blob {
+        0% { transform: translate(0px, 0px) scale(1); }
+        33% { transform: translate(30px, -50px) scale(1.1); }
+        66% { transform: translate(-20px, 20px) scale(0.9); }
+        100% { transform: translate(0px, 0px) scale(1); }
+    }
+    
+    .form-input-focus {
+        box-shadow: 0 0 0 3px rgba(0, 243, 255, 0.2);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="min-h-[calc(100vh-200px)] relative flex items-center justify-center p-4">
+    <!-- Ambient Background Blobs -->
+    <div class="fixed inset-0 pointer-events-none z-0">
+        <div class="contact-blob contact-blob-1"></div>
+        <div class="contact-blob contact-blob-2"></div>
+    </div>
+
+    <!-- Main Contact Section -->
+    <div class="w-full max-w-5xl relative z-10">
+        <!-- Header -->
+        <div class="text-center mb-16">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-neonBlue/10 border border-neonBlue/30 text-neonBlue text-xs font-bold uppercase tracking-wider mb-6">
+                <span class="w-2 h-2 rounded-full bg-neonBlue animate-pulse"></span>
+                Get In Touch
+            </div>
+            <h1 class="text-5xl md:text-6xl font-black leading-tight tracking-tight mb-4">
+                We'd love to hear from you
+            </h1>
+            <p class="text-gray-400 text-lg max-w-2xl mx-auto">
+                Have questions? Need support? Want to discuss a partnership? Reach out to our team and we'll get back to you as soon as possible.
+            </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8 mb-16">
+            <!-- Email Card -->
+            <div class="glass-panel rounded-2xl p-8 backdrop-blur-xl border border-white/10 hover:border-neonBlue/30 transition-all duration-300 text-center group">
+                <div class="w-16 h-16 bg-neonBlue/20 rounded-xl flex items-center justify-center mb-6 mx-auto group-hover:bg-neonBlue/30 transition-all">
+                    <i class="fas fa-envelope text-2xl text-neonBlue"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Email Us</h3>
+                <p class="text-gray-400 mb-4">Direct support for all inquiries</p>
+                <a href="mailto:support@luminabi.com" class="text-neonBlue hover:text-white transition font-medium">
+                    support@luminabi.com
+                </a>
+            </div>
+
+            <!-- Phone Card -->
+            <div class="glass-panel rounded-2xl p-8 backdrop-blur-xl border border-white/10 hover:border-neonPurple/30 transition-all duration-300 text-center group">
+                <div class="w-16 h-16 bg-neonPurple/20 rounded-xl flex items-center justify-center mb-6 mx-auto group-hover:bg-neonPurple/30 transition-all">
+                    <i class="fas fa-phone text-2xl text-neonPurple"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Call Us</h3>
+                <p class="text-gray-400 mb-4">Monday - Friday, 9 AM - 6 PM EST</p>
+                <a href="tel:+1-555-123-4567" class="text-neonPurple hover:text-white transition font-medium">
+                    +1 (555) 123-4567
+                </a>
+            </div>
+
+            <!-- Response Time Card -->
+            <div class="glass-panel rounded-2xl p-8 backdrop-blur-xl border border-white/10 hover:border-neonPink/30 transition-all duration-300 text-center group">
+                <div class="w-16 h-16 bg-neonPink/20 rounded-xl flex items-center justify-center mb-6 mx-auto group-hover:bg-neonPink/30 transition-all">
+                    <i class="fas fa-clock text-2xl text-neonPink"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Response Time</h3>
+                <p class="text-gray-400 mb-4">We typically respond within 24 hours</p>
+                <span class="text-neonPink font-medium">Average: 4 hours</span>
+            </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="spotlight-card glass-panel rounded-3xl p-12 backdrop-blur-xl border border-white/10">
+            <h2 class="text-3xl font-bold mb-2 text-gradient">Send us a message</h2>
+            <p class="text-gray-400 mb-10">Fill out the form below and we'll get back to you shortly</p>
+
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+
+                <!-- Name & Email Row -->
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Name Field -->
+                    <div class="space-y-2">
+                        <label for="{{ form.name.id_for_label }}" class="block text-sm font-semibold text-white/90">
+                            <i class="fas fa-user mr-2 text-neonBlue/70"></i>Full Name
+                        </label>
+                        <div class="relative">
+                            {{ form.name }}
+                            <i class="fas fa-user absolute right-4 top-1/2 -translate-y-1/2 text-gray-500/50 text-lg pointer-events-none"></i>
+                        </div>
+                        {% if form.name.errors %}
+                            <p class="text-error text-xs mt-1 flex items-center">
+                                <i class="fas fa-exclamation-circle mr-1"></i>
+                                {{ form.name.errors.0 }}
+                            </p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Email Field -->
+                    <div class="space-y-2">
+                        <label for="{{ form.email.id_for_label }}" class="block text-sm font-semibold text-white/90">
+                            <i class="fas fa-envelope mr-2 text-neonBlue/70"></i>Email
+                        </label>
+                        <div class="relative">
+                            {{ form.email }}
+                            <i class="fas fa-envelope absolute right-4 top-1/2 -translate-y-1/2 text-gray-500/50 text-lg pointer-events-none"></i>
+                        </div>
+                        {% if form.email.errors %}
+                            <p class="text-error text-xs mt-1 flex items-center">
+                                <i class="fas fa-exclamation-circle mr-1"></i>
+                                {{ form.email.errors.0 }}
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Subject & Phone Row -->
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Subject Field -->
+                    <div class="space-y-2">
+                        <label for="{{ form.subject.id_for_label }}" class="block text-sm font-semibold text-white/90">
+                            <i class="fas fa-heading mr-2 text-neonPurple/70"></i>Subject
+                        </label>
+                        <div class="relative">
+                            {{ form.subject }}
+                            <i class="fas fa-heading absolute right-4 top-1/2 -translate-y-1/2 text-gray-500/50 text-lg pointer-events-none"></i>
+                        </div>
+                        {% if form.subject.errors %}
+                            <p class="text-error text-xs mt-1 flex items-center">
+                                <i class="fas fa-exclamation-circle mr-1"></i>
+                                {{ form.subject.errors.0 }}
+                            </p>
+                        {% endif %}
+                    </div>
+
+                    <!-- Phone Field (Optional) -->
+                    <div class="space-y-2">
+                        <label for="{{ form.phone.id_for_label }}" class="block text-sm font-semibold text-white/90">
+                            <i class="fas fa-phone mr-2 text-neonPurple/70"></i>Phone (Optional)
+                        </label>
+                        <div class="relative">
+                            {{ form.phone }}
+                            <i class="fas fa-phone absolute right-4 top-1/2 -translate-y-1/2 text-gray-500/50 text-lg pointer-events-none"></i>
+                        </div>
+                        {% if form.phone.errors %}
+                            <p class="text-error text-xs mt-1 flex items-center">
+                                <i class="fas fa-exclamation-circle mr-1"></i>
+                                {{ form.phone.errors.0 }}
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Message Field -->
+                <div class="space-y-2">
+                    <label for="{{ form.message.id_for_label }}" class="block text-sm font-semibold text-white/90">
+                        <i class="fas fa-message mr-2 text-neonPink/70"></i>Message
+                    </label>
+                    <div class="relative">
+                        {{ form.message }}
+                    </div>
+                    {% if form.message.errors %}
+                        <p class="text-error text-xs mt-1 flex items-center">
+                            <i class="fas fa-exclamation-circle mr-1"></i>
+                            {{ form.message.errors.0 }}
+                        </p>
+                    {% endif %}
+                </div>
+
+                <!-- Submit Button -->
+                <button 
+                    type="submit"
+                    class="w-full glass-panel bg-gradient-to-r from-neonBlue to-neonPurple text-white font-bold py-5 px-6 rounded-2xl text-lg shadow-2xl hover:shadow-[0_20px_40px_rgba(0,243,255,0.4)] hover:scale-[1.02] transition-all duration-300 border border-white/20 backdrop-blur-xl relative overflow-hidden group"
+                >
+                    <span class="relative z-10 flex items-center justify-center gap-2">
+                        <i class="fas fa-paper-plane"></i>
+                        Send Message
+                    </span>
+                    <div class="absolute inset-0 bg-gradient-to-r from-neonBlue/20 to-neonPurple/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </button>
+            </form>
+
+            <div class="mt-8 pt-8 border-t border-white/10 text-center">
+                <p class="text-sm text-gray-500">
+                    By submitting this form, you agree to our <a href="#" class="text-neonBlue hover:text-white underline">Privacy Policy</a> and <a href="#" class="text-neonBlue hover:text-white underline">Terms of Service</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Form validation feedback
+document.addEventListener('DOMContentLoaded', function() {
+    const formInputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], textarea');
+    
+    formInputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            const parent = this.closest('div');
+            if (parent) parent.classList.add('form-input-focus');
+        });
+        
+        input.addEventListener('blur', function() {
+            const parent = this.closest('div');
+            if (parent) parent.classList.remove('form-input-focus');
+        });
+    });
+});
+</script>
+{% endblock %}

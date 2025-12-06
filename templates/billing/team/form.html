@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{% if form.instance.pk %}Edit Team{% else %}Create Team{% endif %} - Luminabi{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-black via-slate-900 to-black pt-24 pb-12">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-12">
+            <h1 class="text-4xl font-bold text-white mb-2">
+                {% if form.instance.pk %}Edit Team{% else %}Create Team{% endif %}
+            </h1>
+            <p class="text-lg text-gray-400">
+                {% if form.instance.pk %}Update your team details{% else %}Start collaborating by creating a team{% endif %}
+            </p>
+        </div>
+
+        <!-- Form Card -->
+        <div class="bg-slate-800/50 border border-white/10 rounded-xl p-8 backdrop-blur">
+            <form method="post" class="space-y-8">
+                {% csrf_token %}
+
+                <!-- Name Field -->
+                <div>
+                    <label class="block text-sm font-semibold text-white mb-2">Team Name</label>
+                    <input type="text" name="name" value="{{ form.instance.name }}" maxlength="100" required
+                        class="w-full px-4 py-2 bg-slate-700/50 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-neonBlue/50 transition">
+                    {% if form.name.errors %}
+                        <p class="text-red-400 text-sm mt-2">{{ form.name.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Description Field -->
+                <div>
+                    <label class="block text-sm font-semibold text-white mb-2">Description</label>
+                    <textarea name="description" maxlength="500" rows="4"
+                        class="w-full px-4 py-2 bg-slate-700/50 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-neonBlue/50 transition resize-none">{{ form.instance.description }}</textarea>
+                    <p class="text-xs text-gray-400 mt-1">Optional. Brief description of your team's purpose.</p>
+                    {% if form.description.errors %}
+                        <p class="text-red-400 text-sm mt-2">{{ form.description.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Team Size Info -->
+                {% if user_subscription %}
+                    <div class="bg-slate-700/30 border border-white/5 rounded-lg p-4">
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-users text-neonBlue text-xl flex-shrink-0 mt-0.5"></i>
+                            <div>
+                                <p class="font-semibold text-white">Team Size Limit</p>
+                                <p class="text-sm text-gray-300 mt-1">
+                                    Your <strong>{{ user_subscription.plan.name }}</strong> plan supports
+                                    {% if user_subscription.plan.max_team_size == 0 %}
+                                        <strong>unlimited</strong> team members.
+                                    {% else %}
+                                        up to <strong>{{ user_subscription.plan.max_team_size }}</strong> members.
+                                    {% endif %}
+                                </p>
+                                {% if form.instance.pk %}
+                                    <p class="text-xs text-gray-400 mt-2">Currently: {{ form.instance.member_count }} members</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- Members Section (if editing) -->
+                {% if form.instance.pk %}
+                    <div class="border-t border-white/10 pt-8">
+                        <h3 class="text-lg font-semibold text-white mb-4">Team Members</h3>
+
+                        <!-- Current Members -->
+                        <div class="mb-6">
+                            <label class="block text-sm font-semibold text-white mb-3">Current Members</label>
+                            {% if form.instance.members.all %}
+                                <div class="space-y-2">
+                                    {% for member in form.instance.members.all %}
+                                        <div class="flex items-center justify-between p-3 bg-slate-700/30 border border-white/5 rounded-lg">
+                                            <div class="flex items-center gap-3">
+                                                <img src="https://ui-avatars.com/api/?name={{ member.get_full_name }}&background=random" alt="{{ member.username }}" class="w-8 h-8 rounded-full">
+                                                <div>
+                                                    <p class="text-white font-medium">{{ member.get_full_name|default:member.username }}</p>
+                                                    <p class="text-xs text-gray-400">{{ member.email }}</p>
+                                                </div>
+                                            </div>
+                                            {% if member != form.instance.owner %}
+                                                <a href="{% url 'billing:remove_team_member' form.instance.id member.id %}" class="px-3 py-1 bg-red-500/20 border border-red-500 text-red-400 text-xs rounded hover:bg-red-500/30 transition" onclick="return confirm('Remove this member?');">
+                                                    <i class="fas fa-trash mr-1"></i>Remove
+                                                </a>
+                                            {% else %}
+                                                <span class="px-3 py-1 bg-neonBlue/20 text-neonBlue text-xs rounded font-medium">Owner</span>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <p class="text-gray-400 text-sm">No members yet</p>
+                            {% endif %}
+                        </div>
+
+                        <!-- Add Members -->
+                        <div>
+                            <label class="block text-sm font-semibold text-white mb-3">Add Members</label>
+                            <p class="text-sm text-gray-400 mb-3">Invite team members by email:</p>
+                            <div class="flex gap-2">
+                                <input type="email" id="new-member-email" placeholder="member@example.com"
+                                    class="flex-1 px-4 py-2 bg-slate-700/50 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-neonBlue/50 transition">
+                                <button type="button" id="add-member-btn" class="px-6 py-2 bg-neonBlue/20 border border-neonBlue text-neonBlue rounded-lg hover:bg-neonBlue/30 transition font-medium">
+                                    <i class="fas fa-plus mr-2"></i>Add
+                                </button>
+                            </div>
+                            <div id="members-list" class="mt-4 space-y-2"></div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- Actions -->
+                <div class="flex gap-3 pt-8 border-t border-white/10">
+                    <button type="submit" class="flex-1 px-6 py-3 bg-neonBlue text-white rounded-lg hover:bg-neonBlue/80 transition font-semibold">
+                        <i class="fas fa-save mr-2"></i>
+                        {% if form.instance.pk %}Update Team{% else %}Create Team{% endif %}
+                    </button>
+                    <a href="{% url 'billing:team_list' %}" class="flex-1 px-6 py-3 bg-white/10 border border-white/20 text-white rounded-lg hover:bg-white/20 transition font-semibold text-center">
+                        <i class="fas fa-times mr-2"></i>Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Info Box -->
+        <div class="mt-8 bg-blue-500/10 border border-blue-500/30 rounded-xl p-6">
+            <div class="flex gap-4">
+                <i class="fas fa-lightbulb text-blue-400 text-xl flex-shrink-0 mt-0.5"></i>
+                <div>
+                    <h3 class="font-semibold text-blue-400 mb-1">Tips for Effective Teams</h3>
+                    <ul class="text-sm text-gray-300 space-y-1 list-disc list-inside">
+                        <li>Use clear, descriptive team names</li>
+                        <li>Add a description to help members understand the team's purpose</li>
+                        <li>Invite team members early to start collaborating</li>
+                        <li>Team members can start using shared dashboards immediately</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Add member to list (client-side preview)
+    const addMemberBtn = document.getElementById('add-member-btn');
+    const newMemberEmail = document.getElementById('new-member-email');
+    const membersList = document.getElementById('members-list');
+    const members = [];
+
+    addMemberBtn?.addEventListener('click', function() {
+        const email = newMemberEmail.value.trim();
+        if (!email) {
+            alert('Please enter an email address');
+            return;
+        }
+        if (!email.includes('@')) {
+            alert('Please enter a valid email address');
+            return;
+        }
+        if (members.includes(email)) {
+            alert('This email is already added');
+            return;
+        }
+
+        members.push(email);
+        renderMembers();
+        newMemberEmail.value = '';
+    });
+
+    function renderMembers() {
+        membersList.innerHTML = members.map(email => `
+            <div class="flex items-center justify-between p-3 bg-slate-700/30 border border-white/5 rounded-lg">
+                <p class="text-white text-sm">${email}</p>
+                <button type="button" class="text-red-400 hover:text-red-300 transition" onclick="removeMember('${email}')">
+                    <i class="fas fa-trash text-sm"></i>
+                </button>
+            </div>
+        `).join('');
+
+        // Add hidden inputs for form submission
+        const form = document.querySelector('form');
+        const existingInputs = form.querySelectorAll('input[name="members"]');
+        existingInputs.forEach(input => input.remove());
+        members.forEach(email => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'members';
+            input.value = email;
+            form.appendChild(input);
+        });
+    }
+
+    function removeMember(email) {
+        const index = members.indexOf(email);
+        if (index > -1) {
+            members.splice(index, 1);
+            renderMembers();
+        }
+    }
+
+    // Allow Enter key to add member
+    newMemberEmail?.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            addMemberBtn.click();
+        }
+    });
+</script>
+{% endblock %}

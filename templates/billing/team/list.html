@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Teams - Luminabi{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-black via-slate-900 to-black pt-24 pb-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 mb-12">
+            <div>
+                <h1 class="text-4xl font-bold text-white mb-2">Teams</h1>
+                <p class="text-lg text-gray-400">Collaborate with your team members</p>
+            </div>
+            <a href="{% url 'billing:create_team' %}" class="inline-flex items-center justify-center px-6 py-3 bg-neonBlue text-white rounded-lg hover:bg-neonBlue/80 transition font-medium whitespace-nowrap">
+                <i class="fas fa-plus mr-2"></i>Create Team
+            </a>
+        </div>
+
+        <!-- Teams Grid -->
+        {% if teams %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                {% for team in teams %}
+                    <div class="group bg-slate-800/50 border border-white/10 hover:border-neonBlue/30 rounded-xl p-6 backdrop-blur transition">
+                        <!-- Team Header -->
+                        <div class="mb-4 pb-4 border-b border-white/10">
+                            <h3 class="text-lg font-bold text-white mb-1">{{ team.name }}</h3>
+                            {% if team.owner == user %}
+                                <span class="inline-block px-2 py-1 bg-neonBlue/20 text-neonBlue text-xs font-medium rounded">Owner</span>
+                            {% else %}
+                                <span class="inline-block px-2 py-1 bg-gray-500/20 text-gray-400 text-xs font-medium rounded">Member</span>
+                            {% endif %}
+                        </div>
+
+                        <!-- Description -->
+                        {% if team.description %}
+                            <p class="text-sm text-gray-300 mb-4 line-clamp-2">{{ team.description }}</p>
+                        {% else %}
+                            <p class="text-sm text-gray-500 mb-4 italic">No description</p>
+                        {% endif %}
+
+                        <!-- Team Stats -->
+                        <div class="grid grid-cols-2 gap-4 mb-6 pb-6 border-b border-white/10">
+                            <div>
+                                <p class="text-xs text-gray-400 mb-1">Members</p>
+                                <p class="text-lg font-semibold text-white">{{ team.member_count }}</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400 mb-1">Created</p>
+                                <p class="text-lg font-semibold text-white">{{ team.created_at|date:"M d, Y" }}</p>
+                            </div>
+                        </div>
+
+                        <!-- Members Preview -->
+                        <div class="mb-6">
+                            <p class="text-xs text-gray-400 mb-2">Members:</p>
+                            {% if team.members.all %}
+                                <div class="flex flex-wrap gap-2">
+                                    {% for member in team.members.all|slice:":3" %}
+                                        <div class="flex items-center gap-2 px-2 py-1 bg-slate-700/50 rounded text-xs text-gray-300">
+                                            <img src="https://ui-avatars.com/api/?name={{ member.get_full_name }}&background=random" alt="{{ member.username }}" class="w-5 h-5 rounded-full">
+                                            <span>{{ member.first_name|default:member.username }}</span>
+                                        </div>
+                                    {% endfor %}
+                                    {% if team.member_count > 3 %}
+                                        <div class="px-2 py-1 bg-slate-700/50 rounded text-xs text-gray-400">
+                                            +{{ team.member_count|add:"-3" }} more
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% else %}
+                                <p class="text-xs text-gray-500 italic">No members yet</p>
+                            {% endif %}
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="flex gap-2">
+                            <a href="{% url 'billing:team_detail' team.id %}" class="flex-1 px-3 py-2 bg-white/10 border border-white/20 text-white text-sm rounded-lg hover:bg-white/20 transition font-medium text-center">
+                                <i class="fas fa-eye mr-1"></i>View
+                            </a>
+                            {% if team.owner == user %}
+                                <a href="{% url 'billing:team_edit' team.id %}" class="flex-1 px-3 py-2 bg-neonBlue/20 border border-neonBlue text-neonBlue text-sm rounded-lg hover:bg-neonBlue/30 transition font-medium text-center">
+                                    <i class="fas fa-edit mr-1"></i>Edit
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <!-- Empty State -->
+            <div class="bg-slate-800/50 border border-white/10 rounded-xl p-12 backdrop-blur text-center">
+                <i class="fas fa-users text-5xl text-gray-600 mb-4"></i>
+                <h3 class="text-2xl font-bold text-white mb-2">No Teams Yet</h3>
+                <p class="text-gray-400 mb-8">Create your first team to collaborate with others</p>
+                <a href="{% url 'billing:create_team' %}" class="inline-flex items-center px-6 py-2 bg-neonBlue text-white rounded-lg hover:bg-neonBlue/80 transition font-medium">
+                    <i class="fas fa-plus mr-2"></i>Create Team
+                </a>
+            </div>
+        {% endif %}
+
+        <!-- Info Box -->
+        <div class="bg-blue-500/10 border border-blue-500/30 rounded-xl p-6 mt-8">
+            <div class="flex gap-4">
+                <i class="fas fa-info-circle text-blue-400 text-xl flex-shrink-0 mt-0.5"></i>
+                <div>
+                    <h3 class="font-semibold text-blue-400 mb-1">Team Requirements</h3>
+                    <p class="text-sm text-gray-300">
+                        To create or manage teams, you need an active subscription with team collaboration features.
+                        Your current plan supports up to <strong>{{ user_plan_limit }}</strong> team members.
+                        <a href="{% url 'billing:pricing' %}" class="text-blue-400 hover:text-blue-300 font-medium">View Plans</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

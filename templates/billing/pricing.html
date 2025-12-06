@@ -1,0 +1,435 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Pricing - LuminaBI | Affordable Plans for Everyone{% endblock %}
+
+{% block content %}
+<div class="min-h-screen py-16 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-bold text-white mb-4">Simple, Transparent Pricing</h1>
+            <p class="text-xl text-gray-400">Choose the perfect plan for your data analytics needs</p>
+        </div>
+
+        <!-- Billing Toggle -->
+        <div class="flex justify-center mb-12">
+            <div class="inline-flex rounded-lg bg-white/5 border border-white/20 p-1">
+                <button class="billing-toggle active px-6 py-2 rounded font-semibold text-white transition-all" data-cycle="monthly">
+                    Monthly Billing
+                </button>
+                <button class="billing-toggle px-6 py-2 rounded font-semibold text-gray-400 hover:text-white transition-all" data-cycle="yearly">
+                    Yearly Billing <span class="text-success text-xs ml-2">Save 20%</span>
+                </button>
+                <button class="billing-toggle px-6 py-2 rounded font-semibold text-gray-400 hover:text-white transition-all" data-cycle="24months">
+                    24 Months <span class="text-success text-xs ml-2">Save 35%</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Plans Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            {% for plan in plans %}
+                <div class="pricing-card group glass-panel rounded-2xl p-8 border border-white/20 hover:border-neonBlue/50 transition-all duration-300 {% if plan.tier == current_plan %}highlighted{% endif %} flex flex-col h-full">
+                    <!-- Tier Badge -->
+                    {% if plan.tier == "enterprise" %}
+                        <div class="mb-4">
+                            <span class="inline-block bg-neonPurple/20 text-neonPurple px-3 py-1 rounded-full text-xs font-semibold">Most Popular</span>
+                        </div>
+                    {% endif %}
+                    
+                    <!-- Plan Name -->
+                    <h3 class="text-2xl font-bold text-white mb-2">{{ plan.name }}</h3>
+                    <p class="text-gray-400 text-sm mb-6">{{ plan.description }}</p>
+                    
+                    <!-- Price -->
+                    <div class="mb-8">
+                        <div class="flex items-baseline gap-2 mb-2">
+                            <span class="text-4xl font-bold text-neonBlue plan-price" data-monthly="{{ plan.price_monthly }}" data-yearly="{{ plan.price_yearly }}" data-24months="{{ plan.price_24months }}">
+                                $<span class="price-value">{{ plan.price_monthly|add:0|floatformat:0 }}</span>
+                            </span>
+                            <span class="text-gray-400">/<span class="price-period">month</span></span>
+                        </div>
+                        <p class="text-xs text-gray-500 monthly-equivalent">
+                            {% if plan.price_yearly %}
+                                Billed <span class="billing-amount">${{ plan.price_yearly|add:0|floatformat:0 }}</span> yearly
+                            {% endif %}
+                        </p>
+                    </div>
+                    
+                    <!-- Team Size -->
+                    <div class="mb-6 pb-6 border-b border-white/10">
+                        <p class="text-xs text-gray-500 mb-2">Team Size</p>
+                        <p class="text-lg font-semibold text-white">
+                            {% if plan.max_team_size == 0 %}
+                                <span class="text-neonBlue">Unlimited</span>
+                            {% else %}
+                                Up to {{ plan.max_team_size }} member{{ plan.max_team_size|pluralize }}
+                            {% endif %}
+                        </p>
+                    </div>
+                    
+                    <!-- Features List with Collapse -->
+                    <div class="mb-8 flex-grow">
+                        <div class="space-y-3 features-container" data-plan="{{ plan.tier }}">
+                            {% for feature in plan.features|slice:":4" %}
+                                <div class="flex items-start gap-3 feature-item">
+                                    <span class="text-neonBlue mt-1 flex-shrink-0"><i class="fas fa-check-circle"></i></span>
+                                    <span class="text-gray-300 text-sm">{{ feature }}</span>
+                                </div>
+                            {% endfor %}
+                            
+                            {% if plan.features|length > 4 %}
+                                <div class="hidden feature-items-hidden">
+                                    {% for feature in plan.features|slice:"4:" %}
+                                        <div class="flex items-start gap-3 feature-item">
+                                            <span class="text-neonBlue mt-1 flex-shrink-0"><i class="fas fa-check-circle"></i></span>
+                                            <span class="text-gray-300 text-sm">{{ feature }}</span>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <button class="toggle-features text-neonBlue text-sm font-semibold mt-3 hover:text-neonBlue/80 transition flex items-center gap-2">
+                                    <span class="toggle-text">Show more</span>
+                                    <i class="fas fa-chevron-down toggle-icon"></i>
+                                </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <!-- Trial CTA (if applicable) -->
+                    {% if not user.is_authenticated or not current_plan %}
+                        <div class="mb-4 pt-4 border-t border-white/10">
+                            <form method="post" action="{% url 'billing:start_trial' plan.tier %}" class="w-full">
+                                {% csrf_token %}
+                                <button type="submit" class="w-full py-2 px-4 rounded-lg font-semibold bg-white/5 text-neonBlue hover:bg-white/10 transition-all border border-neonBlue/30 text-sm">
+                                    <i class="fas fa-play mr-2"></i>Start {{ plan.trial_duration_days }}-Day Trial
+                                </button>
+                            </form>
+                        </div>
+                    {% endif %}
+                    
+                    <!-- CTA Button (at bottom) -->
+                    <div class="mt-auto pt-4">
+                        {% if user.is_authenticated and current_plan == plan.tier %}
+                            <button class="w-full py-3 px-4 rounded-lg font-semibold bg-white/10 text-white border border-white/20 cursor-default" disabled>
+                                ✓ Current Plan
+                            </button>
+                        {% elif user.is_authenticated %}
+                            <form method="post" action="{% url 'billing:upgrade_subscription' %}" class="w-full">
+                                {% csrf_token %}
+                                <input type="hidden" name="plan" value="{{ plan.tier }}">
+                                <button type="submit" class="w-full py-3 px-4 rounded-lg font-semibold bg-gradient-to-r from-neonBlue to-neonPurple text-white hover:shadow-lg hover:shadow-neonBlue/50 transition-all">
+                                    Upgrade Now
+                                </button>
+                            </form>
+                        {% else %}
+                            <form method="post" action="{% url 'billing:subscribe' %}" class="w-full">
+                                {% csrf_token %}
+                                <input type="hidden" name="plan" value="{{ plan.tier }}">
+                                <input type="hidden" name="billing_cycle" class="billing-cycle-input" value="monthly">
+                                <button type="submit" class="w-full py-3 px-4 rounded-lg font-semibold bg-gradient-to-r from-neonBlue to-neonPurple text-white hover:shadow-lg hover:shadow-neonBlue/50 transition-all">
+                                    Subscribe Now
+                                </button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Comparison Table -->
+        <div class="mt-20">
+            <h2 class="text-3xl font-bold text-white text-center mb-12">Detailed Feature Comparison</h2>
+            
+            <div class="glass-panel rounded-2xl border border-white/20 p-8 overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b border-white/10">
+                            <th class="text-left py-4 px-4 text-white font-semibold">Feature</th>
+                            {% for plan in plans %}
+                                <th class="text-center py-4 px-4 text-white font-semibold">{{ plan.name }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="border-b border-white/10">
+                            <td class="py-4 px-4 text-gray-400">Datasets Upload</td>
+                            {% for plan in plans %}
+                                <td class="text-center py-4 px-4"><i class="fas fa-check text-success"></i></td>
+                            {% endfor %}
+                        </tr>
+                        <tr class="border-b border-white/10">
+                            <td class="py-4 px-4 text-gray-400">Data Visualizations</td>
+                            {% for plan in plans %}
+                                <td class="text-center py-4 px-4"><i class="fas fa-check text-success"></i></td>
+                            {% endfor %}
+                        </tr>
+                        <tr class="border-b border-white/10">
+                            <td class="py-4 px-4 text-gray-400">Dashboards</td>
+                            {% for plan in plans %}
+                                <td class="text-center py-4 px-4"><i class="fas fa-check text-success"></i></td>
+                            {% endfor %}
+                        </tr>
+                        <tr class="border-b border-white/10">
+                            <td class="py-4 px-4 text-gray-400">AI-Powered Insights</td>
+                            {% for plan in plans %}
+                                <td class="text-center py-4 px-4">
+                                    {% if plan.tier == "individual" %}
+                                        <span class="text-gray-500">-</span>
+                                    {% else %}
+                                        <i class="fas fa-check text-success"></i>
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                        <tr class="border-b border-white/10">
+                            <td class="py-4 px-4 text-gray-400">Team Collaboration</td>
+                            {% for plan in plans %}
+                                <td class="text-center py-4 px-4">
+                                    {% if plan.tier in "individual" %}
+                                        <span class="text-gray-500">-</span>
+                                    {% else %}
+                                        <i class="fas fa-check text-success"></i>
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                        <tr class="border-b border-white/10">
+                            <td class="py-4 px-4 text-gray-400">Advanced Reporting</td>
+                            {% for plan in plans %}
+                                <td class="text-center py-4 px-4">
+                                    {% if plan.tier in "individual,team" %}
+                                        <span class="text-gray-500">-</span>
+                                    {% else %}
+                                        <i class="fas fa-check text-success"></i>
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                        <tr class="border-b border-white/10">
+                            <td class="py-4 px-4 text-gray-400">Priority Support</td>
+                            {% for plan in plans %}
+                                <td class="text-center py-4 px-4">
+                                    {% if plan.tier == "enterprise" %}
+                                        <i class="fas fa-check text-success"></i>
+                                    {% else %}
+                                        <span class="text-gray-500">-</span>
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-4 text-gray-400">Daily Trial Limit</td>
+                            {% for plan in plans %}
+                                <td class="text-center py-4 px-4 text-gray-300">{{ plan.trial_daily_limit }} uses</td>
+                            {% endfor %}
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="mt-20">
+            <h2 class="text-3xl font-bold text-white text-center mb-12">Frequently Asked Questions</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="glass-panel rounded-lg p-6 border border-white/20">
+                    <h3 class="text-lg font-semibold text-white mb-2">Can I cancel anytime?</h3>
+                    <p class="text-gray-400 text-sm">Yes! You can cancel your subscription anytime. No long-term contracts required.</p>
+                </div>
+                
+                <div class="glass-panel rounded-lg p-6 border border-white/20">
+                    <h3 class="text-lg font-semibold text-white mb-2">Do I need a credit card for trial?</h3>
+                    <p class="text-gray-400 text-sm">No. Start your free trial with just an email. No credit card required.</p>
+                </div>
+                
+                <div class="glass-panel rounded-lg p-6 border border-white/20">
+                    <h3 class="text-lg font-semibold text-white mb-2">Can I upgrade/downgrade anytime?</h3>
+                    <p class="text-gray-400 text-sm">Absolutely! Change your plan anytime. Adjustments are pro-rated.</p>
+                </div>
+                
+                <div class="glass-panel rounded-lg p-6 border border-white/20">
+                    <h3 class="text-lg font-semibold text-white mb-2">What payment methods do you accept?</h3>
+                    <p class="text-gray-400 text-sm">We accept Paystack, Flutterwave, and Stripe for secure payments.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .pricing-card {
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .pricing-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 243, 255, 0.1);
+        border-color: rgba(0, 243, 255, 0.5);
+    }
+    
+    .pricing-card.highlighted {
+        background: linear-gradient(135deg, rgba(0, 243, 255, 0.05) 0%, rgba(189, 0, 255, 0.05) 100%);
+        border-color: rgba(0, 243, 255, 0.3);
+        box-shadow: 0 0 30px rgba(0, 243, 255, 0.1);
+    }
+    
+    .billing-toggle {
+        cursor: pointer;
+    }
+    
+    .billing-toggle.active {
+        background: linear-gradient(to right, #00f3ff, #bd00ff);
+        box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+    }
+    
+    .feature-items-hidden {
+        animation: slideDown 0.3s ease-out;
+    }
+    
+    .feature-items-hidden.hidden {
+        animation: slideUp 0.3s ease-out;
+    }
+    
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            max-height: 0;
+        }
+        to {
+            opacity: 1;
+            max-height: 500px;
+        }
+    }
+    
+    @keyframes slideUp {
+        from {
+            opacity: 1;
+            max-height: 500px;
+        }
+        to {
+            opacity: 0;
+            max-height: 0;
+        }
+    }
+    
+    .toggle-icon {
+        transition: transform 0.3s ease;
+    }
+    
+    .toggle-icon.rotate-180 {
+        transform: rotate(180deg);
+    }
+</style>
+
+<script>
+    // Format price with thousand separators
+    function formatPrice(price) {
+        return (price / 100).toLocaleString('en-US', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        });
+    }
+    
+    // Format price with decimals for billing display
+    function formatPriceWithDecimals(price) {
+        return (price / 100).toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+
+    // Toggle features collapse/expand
+    document.querySelectorAll('.toggle-features').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const container = this.closest('.features-container');
+            const hiddenItems = container.querySelector('.feature-items-hidden');
+            const toggleText = this.querySelector('.toggle-text');
+            const toggleIcon = this.querySelector('.toggle-icon');
+            
+            if (hiddenItems.classList.contains('hidden')) {
+                hiddenItems.classList.remove('hidden');
+                toggleText.textContent = 'Show less';
+                toggleIcon.classList.add('rotate-180');
+            } else {
+                hiddenItems.classList.add('hidden');
+                toggleText.textContent = 'Show more';
+                toggleIcon.classList.remove('rotate-180');
+            }
+        });
+    });
+
+    // Billing cycle toggle
+    document.querySelectorAll('.billing-toggle').forEach(button => {
+        button.addEventListener('click', function() {
+            const cycle = this.dataset.cycle;
+            
+            // Update active state
+            document.querySelectorAll('.billing-toggle').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Update prices
+            document.querySelectorAll('.plan-price').forEach(priceEl => {
+                const monthly = parseInt(priceEl.dataset.monthly);
+                const yearly = parseInt(priceEl.dataset.yearly);
+                const months24 = parseInt(priceEl.dataset['24months']);
+                
+                let price = monthly;
+                let billingText = 'month';
+                let billingAmount = yearly;
+                
+                if (cycle === 'yearly') {
+                    price = yearly;
+                    billingText = 'year';
+                    billingAmount = yearly;
+                } else if (cycle === '24months') {
+                    price = months24;
+                    billingText = '24 months';
+                    billingAmount = months24;
+                }
+                
+                priceEl.querySelector('.price-value').textContent = formatPrice(price);
+                priceEl.closest('.pricing-card').querySelector('.price-period').textContent = billingText;
+                
+                // Update billing amount display
+                const monthlyEquiv = priceEl.closest('.pricing-card').querySelector('.monthly-equivalent');
+                if (monthlyEquiv) {
+                    if (cycle === 'monthly') {
+                        monthlyEquiv.innerHTML = `Billed <span class="billing-amount">$${formatPriceWithDecimals(monthly)}</span> monthly`;
+                    } else {
+                        monthlyEquiv.innerHTML = `Billed <span class="billing-amount">$${formatPriceWithDecimals(billingAmount)}</span> ${billingText}`;
+                    }
+                }
+            });
+            
+            // Update form inputs
+            document.querySelectorAll('.billing-cycle-input').forEach(input => {
+                input.value = cycle;
+            });
+        });
+    });
+
+    // Initialize prices with formatting on page load
+    window.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.plan-price').forEach(priceEl => {
+            const currentValue = priceEl.querySelector('.price-value').textContent;
+            priceEl.querySelector('.price-value').textContent = formatPrice(parseInt(priceEl.dataset.monthly));
+        });
+        
+        document.querySelectorAll('.monthly-equivalent').forEach(el => {
+            const billingAmount = el.querySelector('.billing-amount');
+            if (billingAmount) {
+                const currentPrice = parseInt(billingAmount.textContent.replace(/[$,]/g, ''));
+                // Re-render with proper formatting
+                const priceEl = el.closest('.pricing-card').querySelector('.plan-price');
+                const yearly = parseInt(priceEl.dataset.yearly);
+                billingAmount.textContent = '$' + formatPriceWithDecimals(yearly);
+            }
+        });
+    });
+</script>
+{% endblock %}

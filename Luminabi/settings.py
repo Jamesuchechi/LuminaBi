@@ -51,6 +51,7 @@ INSTALLED_APPS += [
     'datasets',
     'visualizations',
     'analytics',
+    'billing',
 ]
 
 MIDDLEWARE = [
@@ -61,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'billing.middleware.SubscriptionAccessMiddleware',
 ]
 
 ROOT_URLCONF = 'Luminabi.urls'

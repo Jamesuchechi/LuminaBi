@@ -43,6 +43,16 @@
         to { opacity: 1; transform: translateY(0); }
     }
     
+    @keyframes slideIn {
+        from { opacity: 0; transform: translateX(50px); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+    
+    @keyframes slideOut {
+        from { opacity: 1; transform: translateX(0); }
+        to { opacity: 0; transform: translateX(-50px); }
+    }
+    
     .register-container {
         animation: slideUp 0.8s ease-out;
     }
@@ -57,6 +67,224 @@
     .strength-fair { background: #ffb800; width: 50%; }
     .strength-good { background: #00ff9d; width: 75%; }
     .strength-strong { background: linear-gradient(90deg, #00ff9d, #00f3ff); width: 100%; }
+    
+    /* Multi-Step Form Styles */
+    .form-step {
+        animation: slideIn 0.4s ease-out forwards;
+    }
+    
+    .form-step.hidden {
+        animation: slideOut 0.4s ease-out forwards;
+        display: none;
+    }
+    
+    .step-indicator {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 32px;
+        justify-content: center;
+    }
+    
+    .step-dot {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        background: rgba(0, 0, 0, 0.3);
+        color: rgba(255, 255, 255, 0.6);
+    }
+    
+    .step-dot.active {
+        background: linear-gradient(135deg, #00f3ff, #bd00ff);
+        border-color: #00f3ff;
+        color: white;
+        box-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
+    }
+    
+    .step-dot.completed {
+        background: rgba(0, 255, 157, 0.2);
+        border-color: #00ff9d;
+        color: #00ff9d;
+    }
+    
+    .step-connector {
+        flex: 1;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.1);
+        margin-top: 19px;
+        transition: all 0.3s ease;
+    }
+    
+    .step-connector.active {
+        background: linear-gradient(90deg, #00f3ff, #bd00ff);
+    }
+    
+    .tier-option {
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .tier-option:hover {
+        border-color: rgba(0, 243, 255, 0.5);
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(0, 243, 255, 0.2);
+    }
+    
+    .tier-option.selected {
+        border-color: #00f3ff !important;
+        background: rgba(0, 243, 255, 0.15) !important;
+        box-shadow: 0 0 30px rgba(0, 243, 255, 0.5), inset 0 0 30px rgba(0, 243, 255, 0.15) !important;
+        transform: scale(1.02);
+    }
+    
+    .tier-option input[type="radio"] {
+        position: absolute;
+        width: 0;
+        height: 0;
+        opacity: 0;
+    }
+    
+    .tier-option input[type="radio"]:checked + .tier-checkbox {
+        background: #00f3ff !important;
+        border-color: #00f3ff !important;
+        color: black !important;
+        box-shadow: 0 0 15px rgba(0, 243, 255, 0.8) !important;
+    }
+    
+    .tier-checkbox {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        font-size: 14px;
+        font-weight: bold;
+    }
+    
+    .tier-option.selected .tier-checkbox {
+        background: #00f3ff;
+        border-color: #00f3ff;
+        color: black;
+        box-shadow: 0 0 15px rgba(0, 243, 255, 0.8);
+    }
+    
+    .terms-checkbox-label {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        cursor: pointer;
+        padding: 12px;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+    
+    .terms-checkbox-label:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+    
+    .terms-checkbox {
+        width: 20px;
+        height: 20px;
+        accent-color: #00f3ff;
+        cursor: pointer;
+        margin-top: 2px;
+        flex-shrink: 0;
+    }
+    
+    .progress-bar {
+        height: 4px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+        margin-bottom: 24px;
+        overflow: hidden;
+    }
+    
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #00f3ff, #bd00ff);
+        border-radius: 2px;
+        transition: width 0.4s ease;
+    }
+    
+    .button-group {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+    }
+    
+    .btn-next, .btn-back, .btn-submit {
+        flex: 1;
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+    }
+    
+    .btn-next, .btn-submit {
+        background: linear-gradient(to right, #00f3ff, #bd00ff);
+        color: white;
+    }
+    
+    .btn-next:hover, .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(0, 243, 255, 0.3);
+    }
+    
+    .btn-next:disabled, .btn-submit:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+    }
+    
+    .btn-back {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .btn-back:hover {
+        background: rgba(255, 255, 255, 0.15);
+    }
+    
+    .reason-checkbox {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+    
+    .reason-checkbox:hover {
+        border-color: rgba(0, 243, 255, 0.3);
+        background: rgba(0, 243, 255, 0.05);
+    }
+    
+    .reason-checkbox input {
+        accent-color: #00f3ff;
+        cursor: pointer;
+    }
 </style>
 {% endblock %}
 
@@ -72,7 +300,7 @@
     <!-- Main Register Card -->
     <div class="spotlight-card relative w-full max-w-lg glass-panel rounded-3xl p-10 shadow-2xl border-white/10 backdrop-blur-xl z-10">
         <!-- Logo Header -->
-        <div class="text-center mb-12 pb-10 border-b border-white/10">
+        <div class="text-center mb-8 pb-8 border-b border-white/10">
             <div class="mx-auto w-20 h-20 mb-6 relative flex items-center justify-center bg-black/50 rounded-2xl border-2 border-white/20 animate-pulse-glow-reg">
                 <i class="fas fa-user-plus text-2xl text-neonPurple"></i>
                 <div class="absolute inset-0 bg-gradient-to-r from-neonPurple/30 to-neonBlue/30 rounded-2xl blur-xl opacity-70 animate-spin-slow"></div>
@@ -81,6 +309,22 @@
                 Lumina<span class="text-neonPurple font-black">BI</span>
             </h1>
             <p class="text-gray-400 text-sm font-medium">Join the future of intelligent analytics</p>
+        </div>
+        
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 25%;"></div>
+        </div>
+        
+        <!-- Step Indicators -->
+        <div class="step-indicator">
+            <div class="step-dot active" data-step="1">1</div>
+            <div class="step-connector"></div>
+            <div class="step-dot" data-step="2">2</div>
+            <div class="step-connector"></div>
+            <div class="step-dot" data-step="3">3</div>
+            <div class="step-connector"></div>
+            <div class="step-dot" data-step="4">4</div>
         </div>
         
         <!-- Messages -->
@@ -123,113 +367,196 @@
             </div>
         {% endif %}
         
-        <!-- Register Form -->
-        <form method="post" class="space-y-6" hx-post="{% url 'accounts:register' %}" hx-swap="outerHTML swap:1s">
+        <!-- Multi-Step Registration Form -->
+        <form method="post" id="registrationForm" class="space-y-6">
             {% csrf_token %}
             
-            <!-- Row 1: Username & Email -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Username -->
-                <div class="space-y-2">
-                    <label for="{{ form.username.id_for_label }}" class="block text-sm font-semibold text-white/90 tracking-wide">
-                        <i class="fas fa-user mr-2 text-neonPurple/70"></i>
-                        Username
-                    </label>
-                    <div class="relative">
+            <!-- STEP 1: Personal Information -->
+            <div class="form-step" id="step1">
+                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <i class="fas fa-user-circle text-neonPurple"></i>
+                    Personal Information
+                </h2>
+                
+                <!-- Row 1: Username & Email -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <!-- Username -->
+                    <div class="space-y-2">
+                        <label for="username" class="block text-sm font-semibold text-white/90 tracking-wide">
+                            <i class="fas fa-at mr-2 text-neonPurple/70"></i>
+                            Username
+                        </label>
+                        <div class="relative">
+                            <input 
+                                type="text" 
+                                name="username"
+                                id="username"
+                                autocomplete="username"
+                                class="w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70 
+                                       focus:outline-none focus:border-neonPurple/50 focus:ring-2 focus:ring-neonPurple/20 transition-all duration-300
+                                       backdrop-blur-sm text-sm font-medium"
+                                placeholder="Choose a username"
+                                required
+                            >
+                            <i class="fas fa-user absolute right-4 top-1/2 -translate-y-1/2 text-gray-500/50 text-lg"></i>
+                        </div>
+                        {% if form.username.errors %}
+                            <p class="text-error text-xs mt-1 flex items-center">
+                                <i class="fas fa-exclamation-circle mr-1"></i>
+                                {{ form.username.errors.0 }}
+                            </p>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Email -->
+                    <div class="space-y-2">
+                        <label for="email" class="block text-sm font-semibold text-white/90 tracking-wide">
+                            <i class="fas fa-envelope mr-2 text-neonPurple/70"></i>
+                            Email
+                        </label>
+                        <div class="relative">
+                            <input 
+                                type="email" 
+                                name="email"
+                                id="email"
+                                autocomplete="email"
+                                class="w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70 
+                                       focus:outline-none focus:border-neonPurple/50 focus:ring-2 focus:ring-neonPurple/20 transition-all duration-300
+                                       backdrop-blur-sm text-sm font-medium"
+                                placeholder="your@email.com"
+                                required
+                            >
+                            <i class="fas fa-envelope absolute right-4 top-1/2 -translate-y-1/2 text-gray-500/50 text-lg"></i>
+                        </div>
+                        {% if form.email.errors %}
+                            <p class="text-error text-xs mt-1 flex items-center">
+                                <i class="fas fa-exclamation-circle mr-1"></i>
+                                {{ form.email.errors.0 }}
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Row 2: First & Last Name -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- First Name -->
+                    <div class="space-y-2">
+                        <label for="first_name" class="block text-sm font-semibold text-white/90 tracking-wide">
+                            <i class="fas fa-user-circle mr-2 text-neonPurple/70"></i>
+                            First Name
+                        </label>
                         <input 
                             type="text" 
-                            name="username"
-                            id="{{ form.username.id_for_label }}"
-                            autocomplete="username"
+                            name="first_name"
+                            id="first_name"
+                            autocomplete="given-name"
                             class="w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70 
                                    focus:outline-none focus:border-neonPurple/50 focus:ring-2 focus:ring-neonPurple/20 transition-all duration-300
                                    backdrop-blur-sm text-sm font-medium"
-                            placeholder="Choose a username"
-                            required
+                            placeholder="John"
                         >
-                        <i class="fas fa-user absolute right-4 top-1/2 -translate-y-1/2 text-gray-500/50 text-lg"></i>
                     </div>
-                    {% if form.username.errors %}
-                        <p class="text-error text-xs mt-1 flex items-center">
-                            <i class="fas fa-exclamation-circle mr-1"></i>
-                            {{ form.username.errors.0 }}
-                        </p>
-                    {% endif %}
-                </div>
-                
-                <!-- Email -->
-                <div class="space-y-2">
-                    <label for="{{ form.email.id_for_label }}" class="block text-sm font-semibold text-white/90 tracking-wide">
-                        <i class="fas fa-envelope mr-2 text-neonPurple/70"></i>
-                        Email
-                    </label>
-                    <div class="relative">
+                    
+                    <!-- Last Name -->
+                    <div class="space-y-2">
+                        <label for="last_name" class="block text-sm font-semibold text-white/90 tracking-wide">
+                            <i class="fas fa-user-circle mr-2 text-neonPurple/70"></i>
+                            Last Name
+                        </label>
                         <input 
-                            type="email" 
-                            name="email"
-                            id="{{ form.email.id_for_label }}"
-                            autocomplete="email"
+                            type="text" 
+                            name="last_name"
+                            id="last_name"
+                            autocomplete="family-name"
                             class="w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70 
                                    focus:outline-none focus:border-neonPurple/50 focus:ring-2 focus:ring-neonPurple/20 transition-all duration-300
                                    backdrop-blur-sm text-sm font-medium"
-                            placeholder="your@email.com"
-                            required
+                            placeholder="Doe"
                         >
-                        <i class="fas fa-envelope absolute right-4 top-1/2 -translate-y-1/2 text-gray-500/50 text-lg"></i>
                     </div>
-                    {% if form.email.errors %}
-                        <p class="text-error text-xs mt-1 flex items-center">
-                            <i class="fas fa-exclamation-circle mr-1"></i>
-                            {{ form.email.errors.0 }}
-                        </p>
-                    {% endif %}
                 </div>
             </div>
             
-            <!-- Row 2: First & Last Name -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- First Name -->
-                <div class="space-y-2">
-                    <label for="{{ form.first_name.id_for_label }}" class="block text-sm font-semibold text-white/90 tracking-wide">
-                        <i class="fas fa-user-circle mr-2 text-neonPurple/70"></i>
-                        First Name
+            <!-- STEP 2: Subscription Tier & Use Case -->
+            <div class="form-step hidden" id="step2">
+                <h2 class="text-2xl font-bold text-white mb-2 flex items-center gap-3">
+                    <i class="fas fa-layer-group text-neonPurple"></i>
+                    Choose Your Plan
+                </h2>
+                <p class="text-gray-400 text-sm mb-6">Tell us how you plan to use LuminaBI</p>
+                
+                <!-- Subscription Tiers -->
+                <div class="space-y-4 mb-8">
+                    <label class="tier-option glass-panel rounded-2xl p-6 border-2 border-white/20 backdrop-blur cursor-pointer transition-all duration-300 hover:border-neonBlue/50">
+                        <input type="radio" name="subscription_tier" value="individual" required>
+                        <div class="tier-checkbox">
+                            <i class="fas fa-check text-xs"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Individual</h3>
+                        <p class="text-gray-400 text-sm">Perfect for solo analysts and small projects</p>
                     </label>
-                    <input 
-                        type="text" 
-                        name="first_name"
-                        id="{{ form.first_name.id_for_label }}"
-                        autocomplete="given-name"
-                        class="w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70 
-                               focus:outline-none focus:border-neonPurple/50 focus:ring-2 focus:ring-neonPurple/20 transition-all duration-300
-                               backdrop-blur-sm text-sm font-medium"
-                        placeholder="John"
-                    >
+                    
+                    <label class="tier-option glass-panel rounded-2xl p-6 border-2 border-white/20 backdrop-blur cursor-pointer transition-all duration-300 hover:border-neonBlue/50">
+                        <input type="radio" name="subscription_tier" value="team">
+                        <div class="tier-checkbox">
+                            <i class="fas fa-check text-xs"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Team</h3>
+                        <p class="text-gray-400 text-sm">Collaborate with your team on data projects</p>
+                    </label>
+                    
+                    <label class="tier-option glass-panel rounded-2xl p-6 border-2 border-white/20 backdrop-blur cursor-pointer transition-all duration-300 hover:border-neonBlue/50">
+                        <input type="radio" name="subscription_tier" value="business">
+                        <div class="tier-checkbox">
+                            <i class="fas fa-check text-xs"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Business</h3>
+                        <p class="text-gray-400 text-sm">Advanced features for enterprise needs</p>
+                    </label>
                 </div>
                 
-                <!-- Last Name -->
-                <div class="space-y-2">
-                    <label for="{{ form.last_name.id_for_label }}" class="block text-sm font-semibold text-white/90 tracking-wide">
-                        <i class="fas fa-user-circle mr-2 text-neonPurple/70"></i>
-                        Last Name
-                    </label>
-                    <input 
-                        type="text" 
-                        name="last_name"
-                        id="{{ form.last_name.id_for_label }}"
-                        autocomplete="family-name"
-                        class="w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70 
-                               focus:outline-none focus:border-neonPurple/50 focus:ring-2 focus:ring-neonPurple/20 transition-all duration-300
-                               backdrop-blur-sm text-sm font-medium"
-                        placeholder="Doe"
-                    >
+                <!-- Use Case Reasons -->
+                <div class="mb-6">
+                    <p class="text-sm font-semibold text-white/90 mb-3">What are you building? (Select all that apply)</p>
+                    <div class="space-y-2">
+                        <label class="reason-checkbox">
+                            <input type="checkbox" name="use_cases" value="personal_analysis">
+                            <span class="text-sm text-gray-300">Personal data analysis</span>
+                        </label>
+                        <label class="reason-checkbox">
+                            <input type="checkbox" name="use_cases" value="business_intelligence">
+                            <span class="text-sm text-gray-300">Business intelligence & dashboards</span>
+                        </label>
+                        <label class="reason-checkbox">
+                            <input type="checkbox" name="use_cases" value="team_collaboration">
+                            <span class="text-sm text-gray-300">Team collaboration & reporting</span>
+                        </label>
+                        <label class="reason-checkbox">
+                            <input type="checkbox" name="use_cases" value="client_projects">
+                            <span class="text-sm text-gray-300">Client projects & delivery</span>
+                        </label>
+                        <label class="reason-checkbox">
+                            <input type="checkbox" name="use_cases" value="data_science">
+                            <span class="text-sm text-gray-300">Data science & research</span>
+                        </label>
+                        <label class="reason-checkbox">
+                            <input type="checkbox" name="use_cases" value="other">
+                            <span class="text-sm text-gray-300">Other</span>
+                        </label>
+                    </div>
                 </div>
             </div>
             
-            <!-- Password Fields -->
-            <div class="space-y-6">
+            <!-- STEP 3: Password Setup -->
+            <div class="form-step hidden" id="step3">
+                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <i class="fas fa-lock text-neonPurple"></i>
+                    Create Your Password
+                </h2>
+                
                 <!-- Password -->
-                <div class="space-y-3">
-                    <label for="{{ form.password.id_for_label }}" class="block text-sm font-semibold text-white/90 tracking-wide">
+                <div class="space-y-3 mb-6">
+                    <label for="password" class="block text-sm font-semibold text-white/90 tracking-wide">
                         <i class="fas fa-lock mr-2 text-neonPurple/70"></i>
                         Password
                     </label>
@@ -237,7 +564,7 @@
                         <input 
                             type="password" 
                             name="password"
-                            id="{{ form.password.id_for_label }}"
+                            id="password"
                             autocomplete="new-password"
                             class="w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70 
                                    focus:outline-none focus:border-neonPurple/50 focus:ring-2 focus:ring-neonPurple/20 transition-all duration-300
@@ -263,7 +590,7 @@
                 
                 <!-- Confirm Password -->
                 <div class="space-y-2">
-                    <label for="{{ form.password_confirm.id_for_label }}" class="block text-sm font-semibold text-white/90 tracking-wide">
+                    <label for="password_confirm" class="block text-sm font-semibold text-white/90 tracking-wide">
                         <i class="fas fa-lock mr-2 text-neonPurple/70"></i>
                         Confirm Password
                     </label>
@@ -271,7 +598,7 @@
                         <input 
                             type="password" 
                             name="password_confirm"
-                            id="{{ form.password_confirm.id_for_label }}"
+                            id="password_confirm"
                             autocomplete="new-password"
                             class="w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70 
                                    focus:outline-none focus:border-neonPurple/50 focus:ring-2 focus:ring-neonPurple/20 transition-all duration-300
@@ -291,42 +618,385 @@
                 </div>
             </div>
             
-            <!-- Submit Button -->
-            <button 
-                type="submit"
-                class="w-full glass-panel bg-gradient-to-r from-neonPurple to-neonBlue text-white font-bold py-5 px-6 rounded-2xl 
-                       text-lg shadow-2xl hover:shadow-[0_20px_40px_rgba(189,0,255,0.4)] hover:scale-[1.02] transition-all duration-300
-                       border border-white/20 backdrop-blur-xl relative overflow-hidden group"
-            >
-                <span class="relative z-10 flex items-center justify-center gap-2">
-                    <i class="fas fa-rocket"></i>
-                    Create Account
-                </span>
-                <div class="absolute inset-0 bg-gradient-to-r from-neonPurple/20 to-neonBlue/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            </button>
+            <!-- STEP 4: Terms & Conditions -->
+            <div class="form-step hidden" id="step4">
+                <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <i class="fas fa-file-contract text-neonPurple"></i>
+                    Terms & Conditions
+                </h2>
+                
+                <!-- Terms Display -->
+                <div class="glass-panel rounded-2xl p-6 border border-white/20 backdrop-blur mb-6 max-h-64 overflow-y-auto">
+                    <h3 class="text-white font-bold mb-4">LuminaBI Terms of Service</h3>
+                    <div class="text-gray-300 text-sm space-y-3">
+                        <p><strong>1. Service Terms</strong><br>
+                        By using LuminaBI, you agree to comply with these terms and conditions. Our service provides data analytics and visualization tools for both personal and business use.</p>
+                        
+                        <p><strong>2. Account Responsibility</strong><br>
+                        You are responsible for maintaining the confidentiality of your account information and password. You agree to accept responsibility for all activities that occur under your account.</p>
+                        
+                        <p><strong>3. Data Privacy</strong><br>
+                        Your data is protected with industry-standard encryption. We do not share your personal data with third parties without explicit consent, except as required by law.</p>
+                        
+                        <p><strong>4. Acceptable Use</strong><br>
+                        You agree not to use LuminaBI for unlawful purposes, including but not limited to spreading malware, harassment, or violating intellectual property rights.</p>
+                        
+                        <p><strong>5. Subscription Terms</strong><br>
+                        Subscriptions are billed monthly. You may cancel anytime with no penalty. Changes to pricing will be notified 30 days in advance.</p>
+                        
+                        <p><strong>6. Limitation of Liability</strong><br>
+                        LuminaBI is provided "as-is". We are not liable for indirect, incidental, or consequential damages arising from your use of the service.</p>
+                        
+                        <p><strong>7. Changes to Terms</strong><br>
+                        We reserve the right to modify these terms at any time. Continued use of the service after changes constitutes acceptance of new terms.</p>
+                    </div>
+                </div>
+                
+                <!-- Privacy Policy Link -->
+                <div class="glass-panel rounded-2xl p-4 border border-white/20 backdrop-blur mb-6 bg-white/5">
+                    <p class="text-xs text-gray-400 mb-2 flex items-center">
+                        <i class="fas fa-shield-alt mr-2 text-neonBlue/70"></i>
+                        <strong>Privacy & Data Protection</strong>
+                    </p>
+                    <p class="text-xs text-gray-400">
+                        We process your data in accordance with GDPR and other privacy regulations. 
+                        <a href="#" class="text-neonBlue hover:text-white underline">Read our full Privacy Policy</a>
+                    </p>
+                </div>
+                
+                <!-- Terms Acceptance Checkbox -->
+                <label class="terms-checkbox-label mb-6">
+                    <input 
+                        type="checkbox" 
+                        id="terms_accepted"
+                        name="terms_accepted"
+                        class="terms-checkbox"
+                        required
+                    >
+                    <span class="text-sm text-gray-300">
+                        I agree to the <a href="#" class="text-neonBlue hover:text-white underline">Terms of Service</a>, 
+                        <a href="#" class="text-neonBlue hover:text-white underline">Privacy Policy</a>, and 
+                        <a href="#" class="text-neonBlue hover:text-white underline">Cookie Policy</a>
+                    </span>
+                </label>
+                
+                <!-- Final Confirmation -->
+                <div class="glass-panel rounded-2xl p-4 border border-neonBlue/20 bg-neonBlue/5 flex items-center gap-3">
+                    <i class="fas fa-check-circle text-neonBlue text-xl flex-shrink-0"></i>
+                    <p class="text-xs text-gray-300">
+                        By clicking "Create Account", you'll complete your registration and receive a confirmation email shortly.
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Navigation Buttons -->
+            <div class="button-group">
+                <button type="button" class="btn-back" id="btnBack" style="display: none;" onclick="previousStep()">
+                    <i class="fas fa-arrow-left mr-2"></i>Back
+                </button>
+                <button type="button" class="btn-next" id="btnNext" onclick="nextStep()">
+                    Next <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+                <button type="submit" class="btn-submit" id="btnSubmit" style="display: none;">
+                    <i class="fas fa-check mr-2"></i>Create Account
+                </button>
+            </div>
         </form>
         
-        <!-- Terms & Login Link -->
-        <div class="mt-12 pt-10 border-t border-white/10 space-y-4 text-center">
-            <p class="text-xs text-gray-500 flex items-center justify-center">
-                <i class="fas fa-shield-check mr-2 text-success/70"></i>
-                By signing up, you agree to our <a href="#" class="text-neonBlue hover:text-white underline">Terms of Service</a> and 
-                <a href="#" class="text-neonBlue hover:text-white underline">Privacy Policy</a>
+        <!-- Login Link -->
+        <div class="mt-12 pt-10 border-t border-white/10 text-center">
+            <p class="text-sm text-gray-400 mb-4">
+                Already have an account?
             </p>
-            <div>
-                <p class="text-sm text-gray-400 mb-4">
-                    Already have an account?
-                </p>
-                <a href="{% url 'accounts:login' %}" 
-                   class="inline-flex items-center gap-2 px-6 py-3 text-sm font-bold text-neonBlue hover:text-white 
-                          border border-neonBlue/50 hover:border-neonBlue hover:bg-neonBlue/10 rounded-2xl 
-                          transition-all duration-300 group backdrop-blur-sm">
-                    <i class="fas fa-sign-in-alt"></i>
-                    Sign In Instead
-                    <span class="ml-1 group-hover:translate-x-1 transition-transform"></span>
-                </a>
-            </div>
+            <a href="{% url 'accounts:login' %}" 
+               class="inline-flex items-center gap-2 px-6 py-3 text-sm font-bold text-neonBlue hover:text-white 
+                      border border-neonBlue/50 hover:border-neonBlue hover:bg-neonBlue/10 rounded-2xl 
+                      transition-all duration-300 group backdrop-blur-sm">
+                <i class="fas fa-sign-in-alt"></i>
+                Sign In Instead
+                <span class="ml-1 group-hover:translate-x-1 transition-transform"></span>
+            </a>
         </div>
+    </div>
+</div>
+
+<script>
+// Multi-step form management
+let currentStep = 1;
+const totalSteps = 4;
+
+function updateStep() {
+    // Hide all steps
+    for (let i = 1; i <= totalSteps; i++) {
+        document.getElementById(`step${i}`).classList.add('hidden');
+    }
+    // Show current step
+    document.getElementById(`step${currentStep}`).classList.remove('hidden');
+    
+    // Update progress bar
+    const progress = (currentStep / totalSteps) * 100;
+    document.getElementById('progressFill').style.width = progress + '%';
+    
+    // Update step indicators
+    for (let i = 1; i <= totalSteps; i++) {
+        const dot = document.querySelector(`[data-step="${i}"]`);
+        dot.classList.remove('active', 'completed');
+        if (i === currentStep) {
+            dot.classList.add('active');
+        } else if (i < currentStep) {
+            dot.classList.add('completed');
+        }
+    }
+    
+    // Update buttons
+    document.getElementById('btnBack').style.display = currentStep > 1 ? 'flex' : 'none';
+    document.getElementById('btnNext').style.display = currentStep < totalSteps ? 'flex' : 'none';
+    document.getElementById('btnSubmit').style.display = currentStep === totalSteps ? 'flex' : 'none';
+    
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function nextStep() {
+    // Validate current step before proceeding
+    if (validateStep(currentStep)) {
+        if (currentStep < totalSteps) {
+            currentStep++;
+            updateStep();
+        }
+    }
+}
+
+function previousStep() {
+    if (currentStep > 1) {
+        currentStep--;
+        updateStep();
+    }
+}
+
+function validateStep(step) {
+    switch(step) {
+        case 1:
+            // Validate personal info
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const firstName = document.getElementById('first_name').value.trim();
+            const lastName = document.getElementById('last_name').value.trim();
+            
+            if (!username) {
+                showError('Please enter a username');
+                return false;
+            }
+            if (!email || !email.includes('@')) {
+                showError('Please enter a valid email');
+                return false;
+            }
+            if (!firstName) {
+                showError('Please enter your first name');
+                return false;
+            }
+            if (!lastName) {
+                showError('Please enter your last name');
+                return false;
+            }
+            return true;
+            
+        case 2:
+            // Validate subscription tier selection
+            const tierSelected = document.querySelector('input[name="subscription_tier"]:checked');
+            if (!tierSelected) {
+                showError('Please select a subscription tier');
+                return false;
+            }
+            return true;
+            
+        case 3:
+            // Validate passwords
+            const password = document.getElementById('password').value;
+            const passwordConfirm = document.getElementById('password_confirm').value;
+            
+            if (!password || password.length < 8) {
+                showError('Password must be at least 8 characters');
+                return false;
+            }
+            if (password !== passwordConfirm) {
+                showError('Passwords do not match');
+                return false;
+            }
+            if (!isPasswordStrong(password)) {
+                showError('Password must contain uppercase, number, and special character');
+                return false;
+            }
+            return true;
+            
+        case 4:
+            // Validate terms acceptance
+            const termsCheckbox = document.getElementById('terms_accepted');
+            if (!termsCheckbox.checked) {
+                showError('You must accept the terms and conditions');
+                return false;
+            }
+            return true;
+            
+        default:
+            return true;
+    }
+}
+
+function isPasswordStrong(password) {
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecialChar = /[^A-Za-z0-9]/.test(password);
+    return hasUpperCase && hasNumber && hasSpecialChar;
+}
+
+function showError(message) {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'glass-panel p-4 rounded-2xl border-l-4 border-l-error bg-error/10 mb-6 flex items-center animate-float';
+    errorDiv.innerHTML = `
+        <i class="fas fa-exclamation-circle text-xl text-error mr-3 flex-shrink-0"></i>
+        <div class="flex-1 min-w-0">
+            <p class="font-medium text-sm text-error">${message}</p>
+        </div>
+        <button onclick="this.parentElement.remove()" class="ml-4 p-1 opacity-60 hover:opacity-100 transition-all">
+            <i class="fas fa-times text-sm text-error"></i>
+        </button>
+    `;
+    const form = document.getElementById('registrationForm');
+    form.insertBefore(errorDiv, form.firstChild);
+    setTimeout(() => errorDiv.remove(), 5000);
+}
+
+function checkPasswordStrength() {
+    const password = document.querySelector('.password-input');
+    const strengthBar = document.getElementById('password-strength');
+    
+    if (!password || !strengthBar) return;
+    
+    const value = password.value;
+    let strength = 0;
+    
+    if (value.length >= 8) strength += 1;
+    if (/[a-z]/.test(value)) strength += 1;
+    if (/[A-Z]/.test(value)) strength += 1;
+    if (/[0-9]/.test(value)) strength += 1;
+    if (/[^A-Za-z0-9]/.test(value)) strength += 1;
+    
+    strengthBar.className = 'password-strength';
+    if (strength < 2) {
+        strengthBar.classList.add('strength-weak');
+    } else if (strength < 4) {
+        strengthBar.classList.add('strength-fair');
+    } else if (strength < 5) {
+        strengthBar.classList.add('strength-good');
+    } else {
+        strengthBar.classList.add('strength-strong');
+    }
+}
+
+function checkPasswordMatch() {
+    const password = document.querySelector('.password-input');
+    const confirm = document.querySelector('.password-confirm');
+    const confirmBorder = confirm?.parentElement;
+    
+    if (password && confirm && confirm.value) {
+        if (password.value === confirm.value) {
+            confirmBorder.classList.remove('border-error', 'ring-1', 'ring-error/30');
+            confirmBorder.classList.add('border-success', 'ring-1', 'ring-success/30');
+        } else {
+            confirmBorder.classList.remove('border-success', 'ring-1', 'ring-success/30');
+            confirmBorder.classList.add('border-error', 'ring-1', 'ring-error/30');
+        }
+    }
+}
+
+function togglePassword(button) {
+    const input = button.closest('.space-y-2, .space-y-3').querySelector('input[type="password"]');
+    const isPassword = input.type === 'password';
+    
+    input.type = isPassword ? 'text' : 'password';
+    button.className = isPassword 
+        ? 'fas fa-eye absolute right-4 top-1/2 -translate-y-1/2 text-gray-500/50 text-lg cursor-pointer' 
+        : 'fas fa-eye-slash absolute right-4 top-1/2 -translate-y-1/2 text-gray-500/50 text-lg cursor-pointer';
+}
+
+function initializeFormHandlers() {
+    const passwordInput = document.querySelector('.password-input');
+    const confirmInput = document.querySelector('.password-confirm');
+    
+    if (passwordInput) {
+        passwordInput.addEventListener('input', checkPasswordStrength);
+        passwordInput.addEventListener('blur', checkPasswordStrength);
+    }
+    
+    if (confirmInput) {
+        confirmInput.addEventListener('input', checkPasswordMatch);
+        confirmInput.addEventListener('blur', checkPasswordMatch);
+    }
+    
+    // Tier selection
+    document.querySelectorAll('.tier-option').forEach(option => {
+        option.addEventListener('click', function() {
+            document.querySelectorAll('.tier-option').forEach(o => o.classList.remove('selected'));
+            this.classList.add('selected');
+            this.querySelector('input[type="radio"]').checked = true;
+        });
+    });
+    
+    // Form input focus effects
+    const formInputs = document.querySelectorAll('input:not([type="checkbox"]):not([type="radio"]):not([type="submit"])');
+    formInputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            if (this.parentElement.classList) {
+                this.parentElement.classList.add('form-input-focus');
+            }
+        });
+        
+        input.addEventListener('blur', function() {
+            if (this.parentElement.classList) {
+                this.parentElement.classList.remove('form-input-focus');
+            }
+        });
+    });
+}
+
+function autoHideMessages() {
+    setTimeout(() => {
+        const messages = document.querySelectorAll('.animate-float');
+        messages.forEach(msg => {
+            msg.style.transition = 'all 0.4s ease';
+            msg.style.opacity = '0';
+            msg.style.transform = 'translateY(-10px)';
+            setTimeout(() => msg.remove(), 400);
+        });
+    }, 6000);
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    updateStep();
+    initializeFormHandlers();
+    autoHideMessages();
+    
+    // Handle form submission
+    document.getElementById('registrationForm').addEventListener('submit', function(e) {
+        if (!validateStep(currentStep)) {
+            e.preventDefault();
+        }
+    });
+});
+
+// Re-attach handlers after updates
+document.addEventListener('htmx:afterSwap', function(event) {
+    initializeFormHandlers();
+    autoHideMessages();
+});
+</script>
+    <!-- Ambient Background Blobs -->
+    <div class="fixed inset-0 pointer-events-none z-0">
+        <div class="register-blob register-blob-1"></div>
+        <div class="register-blob register-blob-2"></div>
+        <div class="register-blob register-blob-3"></div>
     </div>
 </div>
 {% endblock %}

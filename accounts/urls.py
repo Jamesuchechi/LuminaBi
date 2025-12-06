@@ -41,4 +41,9 @@ urlpatterns = [
     # ORGANIZATION INVITATIONS
     # ====================================================================
     path('invitation/<str:token>/', views.InvitationAcceptView.as_view(), name='accept_invitation'),
+    
+    # ====================================================================
+    # CONTACT & SUPPORT
+    # ====================================================================
+    path('contact/', views.ContactView.as_view(), name='contact'),
 ]

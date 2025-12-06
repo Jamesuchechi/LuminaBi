@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 # ============================================================================
 
 class RegistrationForm(forms.ModelForm):
-    """Registration form for new users."""
+    """Registration form for new users with multi-step support."""
     password = forms.CharField(
         widget=forms.PasswordInput,
         min_length=8,
@@ -41,6 +41,21 @@ class RegistrationForm(forms.ModelForm):
     password_confirm = forms.CharField(
         widget=forms.PasswordInput,
         label='Confirm Password'
+    )
+    subscription_tier = forms.ChoiceField(
+        choices=[
+            ('individual', 'Individual'),
+            ('team', 'Team'),
+            ('business', 'Business'),
+            ('enterprise', 'Enterprise'),
+        ],
+        required=False,
+        widget=forms.RadioSelect,
+        label='Subscription Tier'
+    )
+    terms_accepted = forms.BooleanField(
+        required=True,
+        label='I accept the Terms of Service'
     )
     
     class Meta:
@@ -54,6 +69,17 @@ class RegistrationForm(forms.ModelForm):
         
         if password and password_confirm and password != password_confirm:
             raise forms.ValidationError('Passwords do not match')
+        
+        # Check password strength
+        if password:
+            if len(password) < 8:
+                raise forms.ValidationError('Password must be at least 8 characters')
+            if not any(c.isupper() for c in password):
+                raise forms.ValidationError('Password must contain at least one uppercase letter')
+            if not any(c.isdigit() for c in password):
+                raise forms.ValidationError('Password must contain at least one digit')
+            if not any(c in '!@#$%^&*()_+-=[]{}|;:,.<>?' for c in password):
+                raise forms.ValidationError('Password must contain at least one special character')
         
         return cleaned_data
     
@@ -97,6 +123,55 @@ class PasswordChangeForm(forms.Form):
     new_password_confirm = forms.CharField(
         widget=forms.PasswordInput,
         label='Confirm New Password'
+    )
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        new_password = cleaned_data.get('new_password')
+        new_password_confirm = cleaned_data.get('new_password_confirm')
+        
+        if new_password and new_password_confirm and new_password != new_password_confirm:
+            raise forms.ValidationError('New passwords do not match')
+        
+        return cleaned_data
+
+
+class ContactForm(forms.Form):
+    """Contact form for user inquiries."""
+    name = forms.CharField(
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Your name',
+            'class': 'w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70'
+        })
+    )
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            'placeholder': 'your@email.com',
+            'class': 'w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70'
+        })
+    )
+    subject = forms.CharField(
+        max_length=150,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Subject of your inquiry',
+            'class': 'w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70'
+        })
+    )
+    message = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'placeholder': 'Tell us how we can help...',
+            'rows': 6,
+            'class': 'w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70 resize-none'
+        })
+    )
+    phone = forms.CharField(
+        max_length=20,
+        required=False,
+        widget=forms.TextInput(attrs={
+            'placeholder': '+1 (555) 000-0000',
+            'class': 'w-full px-5 py-4 bg-black/30 border border-white/20 rounded-2xl text-white placeholder-gray-500/70'
+        })
     )
     
     def clean(self):
@@ -160,7 +235,7 @@ class LandingPageView(TemplateView):
 
 
 class RegisterView(FormView):
-    """User registration view."""
+    """User registration view with multi-step form support."""
     template_name = 'accounts/register.html'
     form_class = RegistrationForm
     success_url = reverse_lazy('accounts:login')
@@ -170,6 +245,8 @@ class RegisterView(FormView):
         return self.request.headers.get('HX-Request') == 'true'
     
     def form_valid(self, form):
+        from billing.models import Subscription, SubscriptionPlan
+        
         # Create user
         user = User.objects.create_user(
             username=form.cleaned_data['username'],
@@ -178,6 +255,32 @@ class RegisterView(FormView):
             first_name=form.cleaned_data.get('first_name', ''),
             last_name=form.cleaned_data.get('last_name', ''),
         )
+        
+        # Update user profile with selected tier
+        user_profile = user.userprofile if hasattr(user, 'userprofile') else user.profile
+        subscription_tier = form.cleaned_data.get('subscription_tier', 'individual')
+        user_profile.preferred_subscription_tier = subscription_tier
+        user_profile.save()
+        
+        # Create trial subscription for the selected tier
+        try:
+            plan = SubscriptionPlan.objects.get(name=subscription_tier.capitalize())
+            # Use get_or_create to avoid UNIQUE constraint violation
+            subscription, created = Subscription.objects.get_or_create(
+                user=user,
+                defaults={
+                    'plan': plan,
+                    'status': 'trial',
+                    'billing_cycle': 'monthly'
+                }
+            )
+            if not created:
+                # Update existing subscription
+                subscription.plan = plan
+                subscription.status = 'trial'
+                subscription.save()
+        except SubscriptionPlan.DoesNotExist:
+            logger.warning(f'SubscriptionPlan "{subscription_tier}" not found for user {user.id}')
         
         # Create email verification token
         token = secrets.token_urlsafe(32)
@@ -622,6 +725,80 @@ class InvitationAcceptView(LoginRequiredMixin, TemplateView):
         )
         
         return redirect('core:organization_detail', pk=invitation.organization.pk)
+
+
+# ============================================================================
+# CONTACT & SUPPORT
+# ============================================================================
+
+class ContactView(FormView):
+    """Contact form view for user inquiries."""
+    template_name = 'accounts/contact.html'
+    form_class = ContactForm
+    success_url = reverse_lazy('accounts:contact')
+    
+    def form_valid(self, form):
+        # Get form data
+        name = form.cleaned_data['name']
+        email = form.cleaned_data['email']
+        subject = form.cleaned_data['subject']
+        message_text = form.cleaned_data['message']
+        phone = form.cleaned_data.get('phone', '')
+        
+        # Prepare email for admin
+        try:
+            admin_message = render_to_string('accounts/emails/contact_notification.html', {
+                'name': name,
+                'email': email,
+                'phone': phone,
+                'subject': subject,
+                'message': message_text,
+            })
+            
+            send_mail(
+                f'New Contact Form Submission: {subject}',
+                admin_message,
+                email,
+                ['support@luminabi.com'],
+                html_message=admin_message,
+                fail_silently=False,
+            )
+            
+            # Send confirmation to user
+            user_subject = 'We received your message - LuminaBI'
+            user_message = render_to_string('accounts/emails/contact_confirmation.html', {
+                'name': name,
+                'subject': subject,
+            })
+            
+            send_mail(
+                user_subject,
+                user_message,
+                'noreply@luminabi.com',
+                [email],
+                html_message=user_message,
+                fail_silently=False,
+            )
+            
+            messages.success(
+                self.request,
+                'Thank you for reaching out! We\'ll get back to you soon.'
+            )
+            logger.info(f'Contact form submitted by {email} with subject: {subject}')
+            
+        except Exception as e:
+            logger.error(f'Error sending contact form emails: {e}')
+            messages.warning(
+                self.request,
+                'Message received! We may have trouble sending confirmation, but we will review your inquiry.'
+            )
+        
+        return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = 'Contact Us'
+        return context
 
 
 # ============================================================================

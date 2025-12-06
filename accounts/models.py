@@ -70,6 +70,19 @@ class UserProfile(models.Model):
     email_digest = models.BooleanField(default=True, help_text='Receive weekly digest emails')
     email_updates = models.BooleanField(default=True, help_text='Receive important updates')
     
+    # Subscription preferences
+    preferred_subscription_tier = models.CharField(
+        max_length=20,
+        choices=[
+            ('individual', 'Individual'),
+            ('team', 'Team'),
+            ('business', 'Business'),
+            ('enterprise', 'Enterprise'),
+        ],
+        default='individual',
+        help_text='Preferred subscription tier selected during registration'
+    )
+    
     # Account tracking
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

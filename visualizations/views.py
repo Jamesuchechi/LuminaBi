@@ -16,6 +16,7 @@ from rest_framework.response import Response
 from .models import Visualization
 from api.serializers import VisualizationSerializer
 from core.mixins import OwnerCheckMixin
+from core.views import create_notification
 
 
 class VisualizationListView(LoginRequiredMixin, ListView):
@@ -93,7 +94,20 @@ class VisualizationCreateView(LoginRequiredMixin, CreateView):
         # Handle empty config field - convert empty string to empty dict
         if not form.instance.config or form.instance.config == '':
             form.instance.config = {}
-        return super().form_valid(form)
+        response = super().form_valid(form)
+        
+        # Create notification
+        create_notification(
+            user=self.request.user,
+            title='Visualization Created',
+            message=f'Visualization "{form.instance.title}" has been created successfully.',
+            notification_type='success',
+            related_app='visualizations',
+            related_model='Visualization',
+            related_object_id=form.instance.id
+        )
+        
+        return response
     
     def get_context_data(self, **kwargs):
         """Add form title and chart type choices."""
@@ -145,6 +159,24 @@ class VisualizationDeleteView(LoginRequiredMixin, OwnerCheckMixin, DeleteView):
         obj = super().get_object()
         self.check_owner(obj, self.request.user)
         return obj
+    
+    def delete(self, request, *args, **kwargs):
+        """Delete the visualization and create notification."""
+        obj = self.get_object()
+        viz_title = obj.title
+        response = super().delete(request, *args, **kwargs)
+        
+        # Create notification
+        create_notification(
+            user=request.user,
+            title='Visualization Deleted',
+            message=f'Visualization "{viz_title}" has been deleted.',
+            notification_type='info',
+            related_app='visualizations',
+            related_model='Visualization'
+        )
+        
+        return response
 
 
 class VisualizationPublishView(LoginRequiredMixin, OwnerCheckMixin, DetailView):

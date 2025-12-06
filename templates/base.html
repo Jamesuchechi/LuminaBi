@@ -128,7 +128,8 @@
         <div class="glass-panel border-x-0 border-t-0">
             <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
                 
-                <a href="/" class="flex items-center gap-3 group">
+                <!-- Logo -->
+                <a href="/" class="flex items-center gap-3 group flex-shrink-0">
                     <div class="w-10 h-10 relative flex items-center justify-center bg-black rounded-lg border border-white/20 group-hover:border-neonBlue/50 transition-colors">
                         <i class="fas fa-bolt text-neonBlue group-hover:animate-pulse"></i>
                         <div class="absolute inset-0 bg-neonBlue/20 blur-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -136,29 +137,81 @@
                     <span class="text-xl font-bold tracking-wide">Lumina<span class="text-neonBlue">BI</span></span>
                 </a>
                 
-                <div class="hidden md:flex items-center gap-8">
+                <!-- Desktop Navigation -->
+                <div class="hidden lg:flex items-center gap-8">
                     {% if user.is_authenticated %}
-                        <a href="{% url 'dashboards:dashboard_list' %}" class="text-sm font-medium text-gray-300 hover:text-white hover:text-neonBlue transition-colors relative group py-2">
-                            Dashboard
+                        <a href="{% url 'dashboards:dashboard_list' %}" class="text-sm font-medium text-gray-300 hover:text-neonBlue transition-colors relative group py-2">
+                            <i class="fas fa-chart-line mr-2"></i>Dashboards
                             <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-neonBlue transition-all duration-300 group-hover:w-full"></span>
                         </a>
-                        <a href="{% url 'datasets:dataset_list' %}" class="text-sm font-medium text-gray-300 hover:text-white hover:text-neonBlue transition-colors relative group py-2">
-                            Datasets
+                        <a href="{% url 'datasets:dataset_list' %}" class="text-sm font-medium text-gray-300 hover:text-neonBlue transition-colors relative group py-2">
+                            <i class="fas fa-database mr-2"></i>Datasets
                             <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-neonBlue transition-all duration-300 group-hover:w-full"></span>
                         </a>
-                        <a href="{% url 'visualizations:visualization_list' %}" class="text-sm font-medium text-gray-300 hover:text-white hover:text-neonBlue transition-colors relative group py-2">
-                            Charts
+                        <a href="{% url 'visualizations:visualization_list' %}" class="text-sm font-medium text-gray-300 hover:text-neonBlue transition-colors relative group py-2">
+                            <i class="fas fa-chart-bar mr-2"></i>Visualizations
+                            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-neonBlue transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                        <a href="{% url 'billing:pricing' %}" class="text-sm font-medium text-gray-300 hover:text-neonBlue transition-colors relative group py-2">
+                            <i class="fas fa-tag mr-2"></i>Pricing
+                            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-neonBlue transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                        <a href="{% url 'accounts:contact' %}" class="text-sm font-medium text-gray-300 hover:text-neonBlue transition-colors relative group py-2">
+                            <i class="fas fa-envelope mr-2"></i>Contact
                             <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-neonBlue transition-all duration-300 group-hover:w-full"></span>
                         </a>
                     {% else %}
-                        <a href="#" class="text-gray-300 hover:text-white transition">Features</a>
-                        <a href="#" class="text-gray-300 hover:text-white transition">Pricing</a>
+                        <a href="#features" class="text-sm font-medium text-gray-300 hover:text-neonBlue transition-colors relative group py-2">
+                            <i class="fas fa-sparkles mr-2"></i>Features
+                            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-neonBlue transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                        <a href="#" class="text-sm font-medium text-gray-300 hover:text-neonBlue transition-colors relative group py-2">
+                            <i class="fas fa-tag mr-2"></i>Pricing
+                            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-neonBlue transition-all duration-300 group-hover:w-full"></span>
+                        </a>
+                        <a href="{% url 'accounts:contact' %}" class="text-sm font-medium text-gray-300 hover:text-neonBlue transition-colors relative group py-2">
+                            <i class="fas fa-envelope mr-2"></i>Contact
+                            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-neonBlue transition-all duration-300 group-hover:w-full"></span>
+                        </a>
                     {% endif %}
                 </div>
                 
+                <!-- Right Side: User Menu & Mobile Toggle -->
                 <div class="flex items-center gap-4">
                     {% if user.is_authenticated %}
-                        <div class="relative group" id="user-menu">
+                        <!-- Notification Bell -->
+                        <div class="hidden md:block relative group" id="notification-dropdown">
+                            <button id="notification-bell" class="relative p-2 rounded-lg hover:bg-white/10 transition text-gray-300 hover:text-neonBlue">
+                                <i class="fas fa-bell text-lg"></i>
+                                <span id="notification-badge" class="absolute top-1 right-1 w-2.5 h-2.5 bg-error rounded-full animate-pulse hidden"></span>
+                            </button>
+                            
+                            <!-- Notification Dropdown -->
+                            <div id="notification-menu" class="absolute right-0 mt-2 w-80 glass-panel rounded-xl shadow-2xl hidden group-hover:block dropdown-enter overflow-hidden z-50 max-h-96 overflow-y-auto">
+                                <div class="px-4 py-3 border-b border-white/10 flex items-center justify-between sticky top-0 bg-black/50">
+                                    <p class="text-sm font-bold text-white">Notifications</p>
+                                    <button id="clear-all-notifications" class="text-xs text-neonBlue hover:text-white transition" title="Mark all as read">
+                                        <i class="fas fa-check-double"></i>
+                                    </button>
+                                </div>
+                                
+                                <div id="notification-items" class="divide-y divide-white/10">
+                                    <div class="px-4 py-8 text-center text-gray-400 text-sm">
+                                        <i class="fas fa-inbox text-2xl mb-2 block opacity-50"></i>
+                                        Loading notifications...
+                                    </div>
+                                </div>
+                                
+                                <div class="px-4 py-3 border-t border-white/10 text-center">
+                                    <a href="{% url 'core:notifications' %}" class="text-xs text-neonBlue hover:text-white transition font-medium">
+                                        View All Notifications <i class="fas fa-arrow-right ml-1"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Desktop User Menu -->
+                        <div class="hidden md:block relative group" id="user-menu">
                             <button class="flex items-center gap-3 px-3 py-2 rounded-full hover:bg-white/5 transition border border-transparent hover:border-white/10">
                                 <span class="text-sm font-medium text-gray-300">{{ user.first_name|default:user.username }}</span>
                                 <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-neonBlue to-neonPurple p-[1px]">
@@ -173,21 +226,95 @@
                                     <p class="text-xs text-gray-500">Signed in as</p>
                                     <p class="text-sm font-bold text-white truncate">{{ user.email }}</p>
                                 </div>
-                                <a href="{% url 'accounts:profile' %}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/10 hover:text-white transition">Profile Settings</a>
-                                <a href="{% url 'core:settings_list' %}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/10 hover:text-white transition">App Configuration</a>
+                                <a href="{% url 'accounts:profile' %}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/10 hover:text-white transition">
+                                    <i class="fas fa-user-circle mr-2"></i>Profile Settings
+                                </a>
+                                <a href="{% url 'core:settings_list' %}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/10 hover:text-white transition">
+                                    <i class="fas fa-cog mr-2"></i>App Configuration
+                                </a>
                                 {% if user.is_staff %}
-                                <a href="/admin/" class="block px-4 py-2 text-sm text-neonPurple hover:bg-white/10 transition"><i class="fas fa-shield-alt mr-2"></i>Admin Panel</a>
+                                <a href="/admin/" class="block px-4 py-2 text-sm text-neonPurple hover:bg-white/10 transition">
+                                    <i class="fas fa-shield-alt mr-2"></i>Admin Panel
+                                </a>
                                 {% endif %}
                                 <div class="border-t border-white/10">
-                                    <a href="{% url 'accounts:logout' %}" class="block px-4 py-2 text-sm text-error hover:bg-error/10 transition">Sign Out</a>
+                                    <a href="{% url 'accounts:logout' %}" class="block px-4 py-2 text-sm text-error hover:bg-error/10 transition">
+                                        <i class="fas fa-sign-out-alt mr-2"></i>Sign Out
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     {% else %}
-                        <a href="#" class="text-sm text-gray-300 hover:text-white transition">Log In</a>
-                        <a href="#" class="bg-white text-black px-5 py-2 rounded-full text-sm font-bold hover:bg-neonBlue hover:shadow-[0_0_20px_rgba(0,243,255,0.5)] transition-all duration-300">
-                            Get Started
+                        <div class="hidden md:flex items-center gap-3">
+                            <a href="{% url 'accounts:login' %}" class="text-sm text-gray-300 hover:text-neonBlue transition">Log In</a>
+                            <a href="{% url 'accounts:register' %}" class="bg-white text-black px-5 py-2 rounded-full text-sm font-bold hover:bg-neonBlue hover:shadow-[0_0_20px_rgba(0,243,255,0.5)] transition-all duration-300">
+                                Get Started
+                            </a>
+                        </div>
+                    {% endif %}
+                    
+                    <!-- Mobile Hamburger Menu Toggle -->
+                    <button id="mobile-menu-toggle" class="lg:hidden p-2 rounded-lg hover:bg-white/10 transition">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden lg:hidden border-t border-white/10 bg-black/40 backdrop-blur-md">
+                <div class="px-6 py-4 space-y-3">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'dashboards:dashboard_list' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm font-medium text-gray-300 hover:text-neonBlue">
+                            <i class="fas fa-chart-line w-5"></i>Dashboards
                         </a>
+                        <a href="{% url 'datasets:dataset_list' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm font-medium text-gray-300 hover:text-neonBlue">
+                            <i class="fas fa-database w-5"></i>Datasets
+                        </a>
+                        <a href="{% url 'visualizations:visualization_list' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm font-medium text-gray-300 hover:text-neonBlue">
+                            <i class="fas fa-chart-bar w-5"></i>Visualizations
+                        </a>
+                        <a href="{% url 'billing:pricing' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm font-medium text-gray-300 hover:text-neonBlue">
+                            <i class="fas fa-tag w-5"></i>Pricing
+                        </a>
+                        <a href="{% url 'accounts:contact' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm font-medium text-gray-300 hover:text-neonBlue">
+                            <i class="fas fa-envelope w-5"></i>Contact
+                        </a>
+                        
+                        <div class="border-t border-white/10 pt-3 mt-3">
+                            <a href="{% url 'accounts:profile' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm text-gray-300 hover:text-white">
+                                <i class="fas fa-user-circle w-5"></i>Profile Settings
+                            </a>
+                            <a href="{% url 'core:settings_list' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm text-gray-300 hover:text-white">
+                                <i class="fas fa-cog w-5"></i>App Configuration
+                            </a>
+                            {% if user.is_staff %}
+                            <a href="/admin/" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm text-neonPurple">
+                                <i class="fas fa-shield-alt w-5"></i>Admin Panel
+                            </a>
+                            {% endif %}
+                            <a href="{% url 'accounts:logout' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-error/10 transition text-sm text-error">
+                                <i class="fas fa-sign-out-alt w-5"></i>Sign Out
+                            </a>
+                        </div>
+                    {% else %}
+                        <a href="#features" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm font-medium text-gray-300 hover:text-neonBlue">
+                            <i class="fas fa-sparkles w-5"></i>Features
+                        </a>
+                        <a href="{% url 'billing:pricing' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm font-medium text-gray-300 hover:text-neonBlue">
+                            <i class="fas fa-tag w-5"></i>Pricing
+                        </a>
+                        <a href="{% url 'accounts:contact' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm font-medium text-gray-300 hover:text-neonBlue">
+                            <i class="fas fa-envelope w-5"></i>Contact
+                        </a>
+                        
+                        <div class="border-t border-white/10 pt-3 mt-3 space-y-2">
+                            <a href="{% url 'accounts:login' %}" class="block px-4 py-2 rounded-lg text-center text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 transition">
+                                Log In
+                            </a>
+                            <a href="{% url 'accounts:register' %}" class="block px-4 py-2 rounded-lg text-center text-sm font-bold text-black bg-white hover:bg-neonBlue transition">
+                                Get Started
+                            </a>
+                        </div>
                     {% endif %}
                 </div>
             </div>
@@ -268,6 +395,33 @@
     </footer>
     
     <script>
+        // Mobile Menu Toggle
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (mobileMenuToggle) {
+            mobileMenuToggle.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                
+                // Animate icon
+                const icon = mobileMenuToggle.querySelector('i');
+                if (mobileMenu.classList.contains('hidden')) {
+                    icon.className = 'fas fa-bars text-xl';
+                } else {
+                    icon.className = 'fas fa-times text-xl';
+                }
+            });
+
+            // Close menu when clicking on a link
+            const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+            mobileMenuLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenuToggle.querySelector('i').className = 'fas fa-bars text-xl';
+                });
+            });
+        }
+
         // 1. Mouse Spotlight Logic
         document.addEventListener("mousemove", (e) => {
             const cards = document.querySelectorAll(".spotlight-card");
@@ -348,6 +502,159 @@
                 if (this.ws && this.ws.readyState === WebSocket.OPEN) this.ws.send(JSON.stringify(data));
             }
         }
+
+        // 4. Notification Bell System
+        class NotificationManager {
+            constructor() {
+                this.bell = document.getElementById('notification-bell');
+                this.badge = document.getElementById('notification-badge');
+                this.menu = document.getElementById('notification-menu');
+                this.itemsContainer = document.getElementById('notification-items');
+                this.clearAllBtn = document.getElementById('clear-all-notifications');
+                
+                if (this.bell && this.badge && this.menu) {
+                    this.init();
+                }
+            }
+            
+            init() {
+                // Load notifications on page load
+                this.loadNotifications();
+                
+                // Refresh notifications every 30 seconds
+                setInterval(() => this.loadNotifications(), 30000);
+                
+                // Clear all button
+                if (this.clearAllBtn) {
+                    this.clearAllBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        this.markAllAsRead();
+                    });
+                }
+            }
+            
+            async loadNotifications() {
+                try {
+                    const response = await fetch('/core/api/notifications/unread/');
+                    const data = await response.json();
+                    
+                    // Update badge
+                    if (data.unread_count > 0) {
+                        this.badge.classList.remove('hidden');
+                    } else {
+                        this.badge.classList.add('hidden');
+                    }
+                    
+                    // Render notifications
+                    this.renderNotifications(data.unread_notifications, data.unread_count);
+                } catch (error) {
+                    console.error('Error loading notifications:', error);
+                }
+            }
+            
+            renderNotifications(notifications, unreadCount) {
+                if (notifications.length === 0) {
+                    this.itemsContainer.innerHTML = `
+                        <div class="px-4 py-8 text-center text-gray-400 text-sm">
+                            <i class="fas fa-inbox text-2xl mb-2 block opacity-50"></i>
+                            No notifications
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let html = '';
+                notifications.forEach(notif => {
+                    const typeClass = {
+                        'success': 'border-l-success text-success',
+                        'error': 'border-l-error text-error',
+                        'warning': 'border-l-warning text-warning',
+                        'info': 'border-l-neonBlue text-neonBlue'
+                    }[notif.type] || 'border-l-neonBlue text-neonBlue';
+                    
+                    const typeIcon = {
+                        'success': 'fa-check-circle',
+                        'error': 'fa-exclamation-circle',
+                        'warning': 'fa-exclamation-triangle',
+                        'info': 'fa-info-circle'
+                    }[notif.type] || 'fa-info-circle';
+                    
+                    html += `
+                        <div class="px-4 py-3 hover:bg-white/5 transition cursor-pointer notification-item" data-id="${notif.id}">
+                            <div class="flex items-start gap-3">
+                                <i class="fas ${typeIcon} ${typeClass} text-lg mt-1 flex-shrink-0"></i>
+                                <div class="flex-1 min-w-0">
+                                    <p class="font-semibold text-white text-sm">${notif.title}</p>
+                                    <p class="text-gray-400 text-xs mt-1">${notif.message}</p>
+                                    <p class="text-gray-500 text-xs mt-1">${this.formatTime(notif.created_at)}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                this.itemsContainer.innerHTML = html;
+                
+                // Add click handlers to mark as read
+                document.querySelectorAll('.notification-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const notifId = item.dataset.id;
+                        this.markAsRead(notifId);
+                    });
+                });
+            }
+            
+            async markAsRead(notifId) {
+                try {
+                    await fetch(`/core/api/notifications/${notifId}/read/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': this.getCSRFToken()
+                        }
+                    });
+                    this.loadNotifications();
+                } catch (error) {
+                    console.error('Error marking notification as read:', error);
+                }
+            }
+            
+            async markAllAsRead() {
+                try {
+                    const notifications = document.querySelectorAll('.notification-item');
+                    for (let item of notifications) {
+                        await this.markAsRead(item.dataset.id);
+                    }
+                    this.loadNotifications();
+                } catch (error) {
+                    console.error('Error marking all as read:', error);
+                }
+            }
+            
+            formatTime(isoString) {
+                const date = new Date(isoString);
+                const now = new Date();
+                const diffMs = now - date;
+                const diffMins = Math.floor(diffMs / 60000);
+                const diffHours = Math.floor(diffMs / 3600000);
+                const diffDays = Math.floor(diffMs / 86400000);
+                
+                if (diffMins < 1) return 'Just now';
+                if (diffMins < 60) return `${diffMins}m ago`;
+                if (diffHours < 24) return `${diffHours}h ago`;
+                if (diffDays < 7) return `${diffDays}d ago`;
+                
+                return date.toLocaleDateString();
+            }
+            
+            getCSRFToken() {
+                return document.querySelector('[name=csrfmiddlewaretoken]')?.value || '';
+            }
+        }
+        
+        // Initialize notification manager when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            new NotificationManager();
+        });
     </script>
     
     {% block extra_js %}{% endblock %}

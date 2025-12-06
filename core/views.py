@@ -15,7 +15,7 @@ from django.utils import timezone
 from django.views.decorators.http import require_http_methods
 from django.utils.decorators import method_decorator
 
-from .models import Organization, Setting, AuditLog
+from .models import Organization, Setting, AuditLog, Notification
 from .serializers import OrganizationSerializer, SettingSerializer
 
 logger = logging.getLogger(__name__)
@@ -48,6 +48,50 @@ def get_setting(key, default=None):
 
 def set_setting(key, value):
     """Set a setting value by key."""
+    try:
+        setting, _ = Setting.objects.get_or_create(key=key)
+        setting.value = value
+        setting.save()
+        return True
+    except Exception as e:
+        logger.error(f'Error setting value: {e}')
+        return False
+
+
+def create_notification(user, title, message, notification_type='info', related_app=None, related_model=None, related_object_id=None):
+    """
+    Create a notification for a user.
+    
+    Args:
+        user: User object or user ID
+        title: Notification title
+        message: Notification message
+        notification_type: 'info', 'success', 'warning', or 'error'
+        related_app: Related app name (e.g., 'datasets')
+        related_model: Related model name (e.g., 'Dataset')
+        related_object_id: ID of related object
+    """
+    try:
+        from django.contrib.auth.models import User
+        
+        if isinstance(user, int):
+            user = User.objects.get(pk=user)
+        
+        notification = Notification.objects.create(
+            user=user,
+            title=title,
+            message=message,
+            notification_type=notification_type,
+            related_app=related_app,
+            related_model=related_model,
+            related_object_id=related_object_id,
+        )
+        
+        logger.info(f'Notification created for {user.username}: {title}')
+        return notification
+    except Exception as e:
+        logger.error(f'Error creating notification: {e}')
+        return None
     setting, created = Setting.objects.get_or_create(key=key)
     setting.value = value
     setting.save()
@@ -434,6 +478,148 @@ class SystemStatsView(LoginRequiredMixin, TemplateView):
         
         log_action('viewed_system_stats', request.user)
         return JsonResponse(stats)
+
+
+# ============================================================================
+# NOTIFICATION VIEWS
+# ============================================================================
+
+class UnreadNotificationsAPIView(LoginRequiredMixin, TemplateView):
+    """Get count of unread notifications for current user."""
+    login_url = 'accounts:login'
+    
+    def get(self, request, *args, **kwargs):
+        unread_count = Notification.objects.filter(
+            user=request.user,
+            is_read=False
+        ).count()
+        
+        unread_notifications = Notification.objects.filter(
+            user=request.user,
+            is_read=False
+        ).order_by('-created_at')[:5]
+        
+        notifications_data = []
+        for notif in unread_notifications:
+            notifications_data.append({
+                'id': notif.id,
+                'title': notif.title,
+                'message': notif.message,
+                'type': notif.notification_type,
+                'created_at': notif.created_at.isoformat(),
+                'related_app': notif.related_app,
+                'related_object_id': notif.related_object_id,
+            })
+        
+        return JsonResponse({
+            'unread_count': unread_count,
+            'unread_notifications': notifications_data
+        })
+
+
+class NotificationsListAPIView(LoginRequiredMixin, TemplateView):
+    """Get all notifications for current user with pagination."""
+    login_url = 'accounts:login'
+    
+    def get(self, request, *args, **kwargs):
+        page = int(request.GET.get('page', 1))
+        per_page = int(request.GET.get('per_page', 20))
+        
+        notifications = Notification.objects.filter(
+            user=request.user
+        ).order_by('-created_at')
+        
+        total_count = notifications.count()
+        start = (page - 1) * per_page
+        end = start + per_page
+        
+        paginated_notifications = notifications[start:end]
+        
+        notifications_data = []
+        for notif in paginated_notifications:
+            notifications_data.append({
+                'id': notif.id,
+                'title': notif.title,
+                'message': notif.message,
+                'type': notif.notification_type,
+                'is_read': notif.is_read,
+                'created_at': notif.created_at.isoformat(),
+                'read_at': notif.read_at.isoformat() if notif.read_at else None,
+                'related_app': notif.related_app,
+                'related_object_id': notif.related_object_id,
+            })
+        
+        return JsonResponse({
+            'total_count': total_count,
+            'page': page,
+            'per_page': per_page,
+            'notifications': notifications_data,
+            'has_next': end < total_count
+        })
+
+
+class NotificationMarkReadAPIView(LoginRequiredMixin, TemplateView):
+    """Mark a specific notification as read."""
+    login_url = 'accounts:login'
+    
+    def post(self, request, pk, *args, **kwargs):
+        try:
+            notification = Notification.objects.get(pk=pk, user=request.user)
+            notification.mark_as_read()
+            
+            return JsonResponse({
+                'success': True,
+                'message': 'Notification marked as read',
+                'notification': {
+                    'id': notification.id,
+                    'is_read': notification.is_read,
+                    'read_at': notification.read_at.isoformat() if notification.read_at else None,
+                }
+            })
+        except Notification.DoesNotExist:
+            return JsonResponse({'error': 'Notification not found'}, status=404)
+
+
+# ============================================================================
+# NOTIFICATIONS PAGE VIEW
+# ============================================================================
+
+class NotificationsPageView(LoginRequiredMixin, TemplateView):
+    """Display all notifications for the current user."""
+    template_name = 'core/notifications.html'
+    login_url = 'accounts:login'
+    paginate_by = 25
+    
+    def get_context_data(self, **kwargs):
+        """Add notifications and statistics to context."""
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+        
+        # Get all notifications
+        all_notifications = Notification.objects.filter(user=user).order_by('-created_at')
+        
+        # Pagination
+        from django.core.paginator import Paginator
+        page_number = self.request.GET.get('page', 1)
+        paginator = Paginator(all_notifications, self.paginate_by)
+        page_obj = paginator.get_page(page_number)
+        
+        # Statistics
+        context['page_obj'] = page_obj
+        context['notifications'] = page_obj.object_list
+        context['total_notifications'] = all_notifications.count()
+        context['unread_count'] = all_notifications.filter(is_read=False).count()
+        context['read_count'] = all_notifications.filter(is_read=True).count()
+        
+        # Group by notification type
+        context['by_type'] = {
+            'success': all_notifications.filter(notification_type='success').count(),
+            'error': all_notifications.filter(notification_type='error').count(),
+            'warning': all_notifications.filter(notification_type='warning').count(),
+            'info': all_notifications.filter(notification_type='info').count(),
+        }
+        
+        return context
 
 
 # ============================================================================
