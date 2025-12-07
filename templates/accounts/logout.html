@@ -2,31 +2,85 @@
 
 {% block title %}Logged Out - LuminaBI{% endblock %}
 
+{% block extra_css %}
+<style>
+    .logout-blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        animation: blob 12s infinite;
+        opacity: 0.6;
+    }
+    .logout-blob-1 {
+        width: 500px; height: 500px;
+        background: radial-gradient(circle, rgba(0, 243, 255, 0.12) 0%, transparent 70%);
+        top: 10%; right: 10%;
+        animation-delay: 0s;
+    }
+    .logout-blob-2 {
+        width: 400px; height: 400px;
+        background: radial-gradient(circle, rgba(189, 0, 255, 0.1) 0%, transparent 70%);
+        bottom: 20%; left: 5%;
+        animation-delay: 5s;
+    }
+    
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .logout-container {
+        animation: slideUp 0.8s ease-out;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-blue-600 to-purple-700 flex items-center justify-center p-4">
-    <div class="w-full max-w-md bg-white rounded-lg shadow-2xl overflow-hidden">
+<div class="min-h-screen relative flex items-center justify-center p-4 logout-container">
+    <!-- Ambient Background -->
+    <div class="fixed inset-0 pointer-events-none z-0">
+        <div class="logout-blob logout-blob-1"></div>
+        <div class="logout-blob logout-blob-2"></div>
+    </div>
+    
+    <!-- Main Card -->
+    <div class="spotlight-card relative w-full max-w-md glass-panel rounded-3xl p-8 shadow-2xl border-white/10 backdrop-blur-xl z-10">
         <!-- Header -->
-        <div class="bg-gradient-to-r from-green-500 to-blue-600 px-6 py-8">
-            <div class="flex justify-center mb-4">
-                <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
+        <div class="text-center mb-8 pb-8 border-b border-white/10">
+            <div class="mx-auto w-20 h-20 mb-4 relative flex items-center justify-center bg-neonBlue/10 rounded-2xl border-2 border-neonBlue/30">
+                <i class="fas fa-sign-out-alt text-3xl text-neonBlue"></i>
             </div>
-            <h1 class="text-3xl font-bold text-white text-center">Goodbye!</h1>
+            <h1 class="text-3xl font-bold text-white mb-2">
+                Goodbye!
+            </h1>
+            <p class="text-gray-400 text-sm">You've been logged out successfully</p>
         </div>
 
         <!-- Content -->
-        <div class="p-8 text-center">
-            <h2 class="text-2xl font-bold text-gray-900 mb-4">You've been logged out</h2>
-            <p class="text-gray-600 mb-6">
-                You have been successfully logged out of your LuminaBI account. For your security, please close your browser if you're on a shared computer.
-            </p>
+        <div class="space-y-6 text-center">
+            <div class="space-y-3">
+                <h2 class="text-2xl font-bold text-white">You've been logged out</h2>
+                <p class="text-gray-400 text-sm leading-relaxed">
+                    You have been successfully logged out of your LuminaBI account. For your security, please close your browser if you're on a shared computer.
+                </p>
+            </div>
 
-            <a href="{% url 'accounts:login' %}" class="w-full block bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition text-center mb-3">
-                Sign In Again
-            </a>
+            <div class="bg-warning/5 border border-warning/20 p-4 rounded-lg text-sm text-gray-300 flex items-center gap-2">
+                <i class="fas fa-lock text-warning"></i>
+                <span>Your session has been securely terminated</span>
+            </div>
 
-            <a href="{% url 'core:index' %}" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+            <!-- Actions -->
+            <div class="flex gap-3 pt-4 border-t border-white/10">
+                <a href="{% url 'accounts:login' %}" class="flex-1 bg-gradient-to-r from-neonBlue to-neonPurple hover:from-neonBlue/80 hover:to-neonPurple/80 
+                       text-white font-bold py-3 px-4 rounded-2xl transition-all flex items-center justify-center gap-2">
+                    <i class="fas fa-arrow-right text-sm"></i>
+                    Sign In Again
+                </a>
+            </div>
+
+            <a href="{% url 'core:index' %}" class="inline-flex items-center gap-2 text-neonBlue hover:text-neonPurple text-sm font-medium transition group">
+                <i class="fas fa-home"></i>
                 Back to Home
             </a>
         </div>

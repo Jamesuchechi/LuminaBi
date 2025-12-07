@@ -3,22 +3,31 @@
 {% block title %}Alerts - LuminaBI{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Back Navigation -->
+        <div class="mb-8">
+            <a href="{% url 'analytics:dashboard' %}" class="inline-flex items-center gap-2 text-neonBlue hover:text-neonPurple transition group">
+                <i class="fas fa-arrow-left group-hover:-translate-x-1 transition"></i>
+                <span class="font-mono text-sm">Back to Analytics</span>
+            </a>
+        </div>
+
         <!-- Header -->
-        <div class="flex items-center justify-between mb-8">
-            <div>
-                <h1 class="text-4xl font-bold text-gray-900">Alerts</h1>
-                <p class="mt-2 text-gray-600">Notifications and alert status</p>
+        <div class="mb-12">
+            <div class="flex items-center gap-3 mb-2">
+                <i class="fas fa-bell text-error text-2xl"></i>
+                <h1 class="text-4xl md:text-5xl font-bold text-white">Alerts</h1>
             </div>
+            <p class="text-gray-400 text-lg">Notifications and alert status</p>
         </div>
 
         <!-- Filters -->
-        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
-            <form method="get" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="glass-panel rounded-2xl p-6 border border-white/10 mb-8">
+            <form method="get" class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Alert Level</label>
-                    <select name="level" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                    <label class="block text-sm font-mono uppercase tracking-wider text-gray-400 mb-2">Alert Level</label>
+                    <select name="level" class="w-full px-4 py-2 bg-black/40 border border-white/20 rounded-lg text-white focus:border-neonBlue/50 transition">
                         <option value="">All Levels</option>
                         {% for value, label in alert_levels %}
                         <option value="{{ value }}" {% if current_level == value %}selected{% endif %}>{{ label }}</option>
@@ -26,78 +35,123 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                    <select name="status" class="w-full px-4 py-2 border border-gray-300 rounded-lg">
+                    <label class="block text-sm font-mono uppercase tracking-wider text-gray-400 mb-2">Status</label>
+                    <select name="status" class="w-full px-4 py-2 bg-black/40 border border-white/20 rounded-lg text-white focus:border-neonBlue/50 transition">
                         <option value="">All Status</option>
                         {% for value, label in statuses %}
                         <option value="{{ value }}" {% if current_status == value %}selected{% endif %}>{{ label }}</option>
                         {% endfor %}
                     </select>
                 </div>
+                <div class="flex items-end">
+                    <button type="submit" class="w-full px-4 py-2 bg-gradient-to-r from-neonBlue to-neonPurple text-white font-semibold rounded-lg hover:scale-105 transition-transform">
+                        <i class="fas fa-filter mr-2"></i>Filter
+                    </button>
+                </div>
             </form>
         </div>
 
         <!-- Statistics -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <div class="bg-white rounded-lg shadow-sm p-4 text-center">
-                <p class="text-gray-600 text-sm">Total Alerts</p>
-                <p class="text-3xl font-bold text-gray-900 mt-1">{{ total_alerts }}</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="glass-panel rounded-2xl p-6 border border-white/10">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-400 text-sm font-mono uppercase tracking-wider">Total Alerts</p>
+                        <p class="text-4xl font-bold text-white mt-2">{{ total_alerts }}</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-neonBlue/10 flex items-center justify-center text-neonBlue">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                </div>
             </div>
-            <div class="bg-white rounded-lg shadow-sm p-4 text-center">
-                <p class="text-gray-600 text-sm">Active</p>
-                <p class="text-3xl font-bold text-orange-600 mt-1">{{ active_alerts }}</p>
+            <div class="glass-panel rounded-2xl p-6 border border-warning/20 hover:border-warning/50">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-400 text-sm font-mono uppercase tracking-wider">Active</p>
+                        <p class="text-4xl font-bold text-white mt-2">{{ active_alerts }}</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-warning/10 flex items-center justify-center text-warning">
+                        <i class="fas fa-exclamation"></i>
+                    </div>
+                </div>
             </div>
-            <div class="bg-white rounded-lg shadow-sm p-4 text-center">
-                <p class="text-gray-600 text-sm">Critical</p>
-                <p class="text-3xl font-bold text-red-600 mt-1">{{ critical_alerts }}</p>
+            <div class="glass-panel rounded-2xl p-6 border border-error/20 hover:border-error/50">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-400 text-sm font-mono uppercase tracking-wider">Critical</p>
+                        <p class="text-4xl font-bold text-white mt-2">{{ critical_alerts }}</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-error/10 flex items-center justify-center text-error">
+                        <i class="fas fa-triangle-exclamation"></i>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Alerts List -->
         <div class="space-y-4">
             {% for alert in alerts %}
-            <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition overflow-hidden border-l-4 {% if alert.alert_level == 'critical' %}border-red-500{% elif alert.alert_level == 'high' %}border-orange-500{% elif alert.alert_level == 'medium' %}border-yellow-500{% else %}border-blue-500{% endif %}">
+            <div class="glass-panel rounded-2xl overflow-hidden border-l-4 transition-all hover:border-l-current group
+                {% if alert.alert_level == 'critical' %}border-l-error hover:border-error/50 border border-error/30
+                {% elif alert.alert_level == 'high' %}border-l-warning hover:border-warning/50 border border-warning/30
+                {% elif alert.alert_level == 'medium' %}border-l-warning hover:border-warning/50 border border-warning/20
+                {% else %}border-l-neonBlue hover:border-neonBlue/50 border border-neonBlue/30
+                {% endif %}">
                 <div class="p-6">
-                    <div class="flex items-start justify-between mb-3">
-                        <div>
-                            <h3 class="text-lg font-semibold text-gray-900">{{ alert.description }}</h3>
+                    <div class="flex items-start justify-between mb-3 gap-4">
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-lg font-bold text-white group-hover:text-neonBlue transition">{{ alert.description }}</h3>
                         </div>
                     </div>
                     
-                    <div class="flex items-center gap-4 flex-wrap">
+                    <div class="flex items-center gap-3 flex-wrap mb-4">
                         {% if alert.alert_level == 'critical' %}
-                        <span class="inline-block px-3 py-1 bg-red-100 text-red-800 text-sm rounded font-medium">🔴 Critical</span>
+                        <span class="inline-flex items-center gap-1 px-3 py-1 bg-error/20 border border-error/50 text-error text-xs rounded-lg font-mono">
+                            <i class="fas fa-circle text-xs"></i>Critical
+                        </span>
                         {% elif alert.alert_level == 'high' %}
-                        <span class="inline-block px-3 py-1 bg-orange-100 text-orange-800 text-sm rounded font-medium">🟠 High</span>
+                        <span class="inline-flex items-center gap-1 px-3 py-1 bg-warning/20 border border-warning/50 text-warning text-xs rounded-lg font-mono">
+                            <i class="fas fa-circle text-xs"></i>High
+                        </span>
                         {% elif alert.alert_level == 'medium' %}
-                        <span class="inline-block px-3 py-1 bg-yellow-100 text-yellow-800 text-sm rounded font-medium">🟡 Medium</span>
+                        <span class="inline-flex items-center gap-1 px-3 py-1 bg-warning/20 border border-warning/50 text-warning text-xs rounded-lg font-mono">
+                            <i class="fas fa-circle text-xs"></i>Medium
+                        </span>
                         {% else %}
-                        <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded font-medium">🔵 Low</span>
+                        <span class="inline-flex items-center gap-1 px-3 py-1 bg-neonBlue/20 border border-neonBlue/50 text-neonBlue text-xs rounded-lg font-mono">
+                            <i class="fas fa-circle text-xs"></i>Low
+                        </span>
                         {% endif %}
                         
                         {% if alert.status == 'active' %}
-                        <span class="inline-block px-3 py-1 bg-red-100 text-red-800 text-sm rounded">Active</span>
+                        <span class="inline-flex items-center gap-1 px-3 py-1 bg-error/20 border border-error/50 text-error text-xs rounded-lg font-mono">
+                            <i class="fas fa-clock text-xs"></i>Active
+                        </span>
                         {% elif alert.status == 'resolved' %}
-                        <span class="inline-block px-3 py-1 bg-green-100 text-green-800 text-sm rounded">✓ Resolved</span>
+                        <span class="inline-flex items-center gap-1 px-3 py-1 bg-success/20 border border-success/50 text-success text-xs rounded-lg font-mono">
+                            <i class="fas fa-check"></i>Resolved
+                        </span>
                         {% else %}
-                        <span class="inline-block px-3 py-1 bg-gray-100 text-gray-800 text-sm rounded">{{ alert.get_status_display }}</span>
+                        <span class="inline-flex items-center gap-1 px-3 py-1 bg-gray-600/20 border border-gray-600/50 text-gray-300 text-xs rounded-lg font-mono">
+                            {{ alert.get_status_display }}
+                        </span>
                         {% endif %}
                         
-                        <span class="text-sm text-gray-600">{{ alert.triggered_at|date:"M d, Y H:i" }}</span>
+                        <span class="text-xs text-gray-500 font-mono">{{ alert.triggered_at|date:"M d, Y H:i" }}</span>
                     </div>
 
                     {% if alert.status == 'active' %}
-                    <div class="mt-4 flex gap-2">
-                        <form method="post" action="{% url 'analytics:alert_acknowledge' alert.id %}" class="inline">
+                    <div class="flex gap-3 pt-4 border-t border-white/10">
+                        <form method="post" action="{% url 'analytics:alert_acknowledge' alert.id %}" class="flex-1">
                             {% csrf_token %}
-                            <button type="submit" class="px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition">
-                                Acknowledge
+                            <button type="submit" class="w-full px-4 py-2 bg-neonBlue/20 hover:bg-neonBlue/40 border border-neonBlue/50 text-neonBlue text-sm font-mono rounded-lg transition flex items-center justify-center gap-2">
+                                <i class="fas fa-check text-xs"></i>Acknowledge
                             </button>
                         </form>
-                        <form method="post" action="{% url 'analytics:alert_resolve' alert.id %}" class="inline">
+                        <form method="post" action="{% url 'analytics:alert_resolve' alert.id %}" class="flex-1">
                             {% csrf_token %}
-                            <button type="submit" class="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition">
-                                Resolve
+                            <button type="submit" class="w-full px-4 py-2 bg-success/20 hover:bg-success/40 border border-success/50 text-success text-sm font-mono rounded-lg transition flex items-center justify-center gap-2">
+                                <i class="fas fa-check-circle text-xs"></i>Resolve
                             </button>
                         </form>
                     </div>
@@ -105,8 +159,9 @@
                 </div>
             </div>
             {% empty %}
-            <div class="bg-white rounded-lg shadow-sm p-12 text-center">
-                <p class="text-gray-600 text-lg">No alerts. Great!</p>
+            <div class="glass-panel rounded-2xl p-16 text-center border border-white/10">
+                <i class="fas fa-inbox text-4xl text-gray-500 mb-4 opacity-50 block"></i>
+                <p class="text-gray-300 text-lg font-mono">No alerts. Great!</p>
             </div>
             {% endfor %}
         </div>

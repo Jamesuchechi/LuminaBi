@@ -2,97 +2,144 @@
 
 {% block title %}{{ organization.name }} - LuminaBI{% endblock %}
 
+{% block extra_css %}
+<style>
+    .detail-blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        animation: blob 15s infinite;
+        opacity: 0.6;
+    }
+    .detail-blob-1 {
+        width: 500px; height: 500px;
+        background: radial-gradient(circle, rgba(0, 243, 255, 0.12) 0%, transparent 70%);
+        top: 10%; right: 10%;
+        animation-delay: 0s;
+    }
+    .detail-blob-2 {
+        width: 400px; height: 400px;
+        background: radial-gradient(circle, rgba(189, 0, 255, 0.1) 0%, transparent 70%);
+        bottom: 20%; left: 5%;
+        animation-delay: 5s;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container mx-auto px-4 py-8">
-    <!-- Header -->
-    <div class="flex justify-between items-start mb-8">
-        <div>
-            <h1 class="text-4xl font-bold text-gray-900">{{ organization.name }}</h1>
-            <p class="text-gray-600 mt-2">Slug: <code class="bg-gray-100 px-2 py-1 rounded">{{ organization.slug }}</code></p>
-        </div>
-        {% if is_owner %}
-            <div class="flex gap-2">
-                <a href="{% url 'core:organization_update' organization.pk %}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
-                    Edit
-                </a>
-                <a href="{% url 'core:organization_delete' organization.pk %}" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg">
-                    Delete
-                </a>
-            </div>
-        {% endif %}
+<div class="min-h-screen relative py-12 px-4 sm:px-6 lg:px-8">
+    <!-- Ambient Background -->
+    <div class="fixed inset-0 pointer-events-none z-0">
+        <div class="detail-blob detail-blob-1"></div>
+        <div class="detail-blob detail-blob-2"></div>
     </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <!-- Main Content -->
-        <div class="md:col-span-2">
-            <!-- Organization Info -->
-            <div class="bg-white rounded-lg shadow p-6 mb-6">
-                <h2 class="text-2xl font-bold text-gray-900 mb-4">Details</h2>
-                <div class="space-y-4">
-                    <div>
-                        <p class="text-gray-600 text-sm font-semibold uppercase">Created</p>
-                        <p class="text-lg text-gray-900">{{ organization.created_at|date:"F d, Y \a\t H:i" }}</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-600 text-sm font-semibold uppercase">Last Updated</p>
-                        <p class="text-lg text-gray-900">{{ organization.updated_at|date:"F d, Y \a\t H:i" }}</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-600 text-sm font-semibold uppercase">Owner</p>
-                        <p class="text-lg text-gray-900">{{ organization.owner.get_full_name|default:organization.owner.username }}</p>
-                    </div>
-                </div>
+    
+    <div class="max-w-6xl mx-auto relative z-10">
+        <!-- Back Link -->
+        <div class="mb-8">
+            <a href="{% url 'core:organization_list' %}" class="inline-flex items-center gap-2 text-neonBlue hover:text-neonPurple transition group">
+                <i class="fas fa-arrow-left group-hover:-translate-x-1 transition"></i>
+                <span class="font-mono text-sm">Back to Organizations</span>
+            </a>
+        </div>
+        
+        <!-- Header -->
+        <div class="flex justify-between items-start mb-12">
+            <div>
+                <h1 class="text-5xl font-bold text-white mb-2">{{ organization.name }}</h1>
+                <p class="text-gray-400">Slug: <code class="bg-white/10 px-3 py-1 rounded-lg font-mono text-neonBlue border border-white/20">{{ organization.slug }}</code></p>
             </div>
-
-            <!-- Description (if available) -->
-            {% if organization.description %}
-                <div class="bg-white rounded-lg shadow p-6 mb-6">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Description</h2>
-                    <p class="text-gray-700">{{ organization.description }}</p>
+            {% if is_owner %}
+                <div class="flex gap-2">
+                    <a href="{% url 'core:organization_update' organization.pk %}" class="bg-gradient-to-r from-neonBlue to-neonPurple hover:from-neonBlue/80 hover:to-neonPurple/80 text-white font-bold py-2 px-6 rounded-2xl transition flex items-center gap-2">
+                        <i class="fas fa-pen"></i>
+                        Edit
+                    </a>
+                    <a href="{% url 'core:organization_delete' organization.pk %}" class="bg-gradient-to-r from-error to-red-600 hover:from-error/80 hover:to-red-600/80 text-white font-bold py-2 px-6 rounded-2xl transition flex items-center gap-2">
+                        <i class="fas fa-trash"></i>
+                        Delete
+                    </a>
                 </div>
             {% endif %}
         </div>
 
-        <!-- Sidebar -->
-        <div>
-            <!-- Members Card -->
-            <div class="bg-white rounded-lg shadow p-6 mb-6">
-                <h2 class="text-xl font-bold text-gray-900 mb-4">Members</h2>
-                <div class="space-y-3">
-                    {% for member in members %}
-                        <div class="flex items-center justify-between p-2 hover:bg-gray-50 rounded">
-                            <div>
-                                <p class="font-semibold text-gray-900">{{ member.get_full_name|default:member.username }}</p>
-                                <p class="text-sm text-gray-600">{{ member.email }}</p>
-                            </div>
-                            {% if member == organization.owner %}
-                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded">Owner</span>
-                            {% endif %}
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Main Content -->
+            <div class="lg:col-span-2">
+                <!-- Organization Info -->
+                <div class="glass-panel rounded-2xl p-8 border border-white/10 mb-8">
+                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+                        <i class="fas fa-info-circle text-neonBlue"></i>
+                        Details
+                    </h2>
+                    <div class="space-y-6">
+                        <div>
+                            <p class="text-gray-500 text-xs font-mono uppercase tracking-wider mb-1">Created</p>
+                            <p class="text-white font-semibold">{{ organization.created_at|date:"F d, Y \a\t H:i" }}</p>
                         </div>
-                    {% empty %}
-                        <p class="text-gray-600 text-sm">No members yet</p>
-                    {% endfor %}
+                        <div>
+                            <p class="text-gray-500 text-xs font-mono uppercase tracking-wider mb-1">Last Updated</p>
+                            <p class="text-white font-semibold">{{ organization.updated_at|date:"F d, Y \a\t H:i" }}</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-xs font-mono uppercase tracking-wider mb-1">Owner</p>
+                            <p class="text-white font-semibold">{{ organization.owner.get_full_name|default:organization.owner.username }}</p>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Description (if available) -->
+                {% if organization.description %}
+                    <div class="glass-panel rounded-2xl p-8 border border-white/10">
+                        <h2 class="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+                            <i class="fas fa-align-left text-neonPurple"></i>
+                            Description
+                        </h2>
+                        <p class="text-gray-300 leading-relaxed">{{ organization.description }}</p>
+                    </div>
+                {% endif %}
             </div>
 
-            <!-- Quick Stats -->
-            <div class="bg-white rounded-lg shadow p-6">
-                <h2 class="text-xl font-bold text-gray-900 mb-4">Stats</h2>
-                <div class="space-y-3">
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-600">Total Members</span>
-                        <span class="text-2xl font-bold text-blue-600">{{ members.count }}</span>
+            <!-- Sidebar -->
+            <div>
+                <!-- Members Card -->
+                <div class="glass-panel rounded-2xl p-6 border border-white/10 mb-6">
+                    <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fas fa-users text-neonBlue"></i>
+                        Members
+                    </h2>
+                    <div class="space-y-3">
+                        {% for member in members %}
+                            <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10">
+                                <div>
+                                    <p class="font-semibold text-white">{{ member.get_full_name|default:member.username }}</p>
+                                    <p class="text-xs text-gray-400 mt-1 break-all">{{ member.email }}</p>
+                                </div>
+                                {% if member == organization.owner %}
+                                    <span class="bg-neonBlue/20 text-neonBlue border border-neonBlue/50 text-xs font-semibold px-2 py-1 rounded-lg font-mono">Owner</span>
+                                {% endif %}
+                            </div>
+                        {% empty %}
+                            <p class="text-gray-400 text-sm text-center py-4">No members yet</p>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="glass-panel rounded-2xl p-6 border border-white/10">
+                    <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fas fa-chart-bar text-neonPurple"></i>
+                        Stats
+                    </h2>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center p-3 bg-white/5 rounded-lg border border-white/10">
+                            <span class="text-gray-400">Total Members</span>
+                            <span class="text-2xl font-bold text-neonBlue">{{ members.count }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Back Link -->
-    <div class="mt-8">
-        <a href="{% url 'core:organization_list' %}" class="text-blue-600 hover:text-blue-800 font-medium">
-            ← Back to Organizations
-        </a>
     </div>
 </div>
 {% endblock %}

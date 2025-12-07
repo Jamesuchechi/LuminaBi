@@ -3,22 +3,35 @@
 {% block title %}Insights - LuminaBI{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Back Navigation -->
+        <div class="mb-8">
+            <a href="{% url 'analytics:dashboard' %}" class="inline-flex items-center gap-2 text-neonBlue hover:text-neonPurple transition group">
+                <i class="fas fa-arrow-left group-hover:-translate-x-1 transition"></i>
+                <span class="font-mono text-sm">Back to Analytics</span>
+            </a>
+        </div>
+
         <!-- Header -->
-        <div class="flex items-center justify-between mb-8">
-            <div>
-                <h1 class="text-4xl font-bold text-gray-900">Insights</h1>
-                <p class="mt-2 text-gray-600">Data insights and analysis results</p>
+        <div class="mb-12">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                <div>
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fas fa-lightbulb text-neonPurple text-2xl"></i>
+                        <h1 class="text-4xl md:text-5xl font-bold text-white">Insights</h1>
+                    </div>
+                    <p class="text-gray-400 text-lg">Data insights and analysis results</p>
+                </div>
             </div>
         </div>
 
         <!-- Filters -->
-        <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
-            <form method="get" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="glass-panel rounded-2xl p-6 border border-white/10 mb-8">
+            <form method="get" class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Insight Type</label>
-                    <select name="type" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <label class="block text-sm font-mono uppercase tracking-wider text-gray-400 mb-2">Insight Type</label>
+                    <select name="type" class="w-full px-4 py-2 bg-black/40 border border-white/20 rounded-lg text-white focus:border-neonBlue/50 transition">
                         <option value="">All Types</option>
                         {% for value, label in insight_types %}
                         <option value="{{ value }}" {% if current_type == value %}selected{% endif %}>{{ label }}</option>
@@ -26,8 +39,8 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Dataset</label>
-                    <select name="dataset" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <label class="block text-sm font-mono uppercase tracking-wider text-gray-400 mb-2">Dataset</label>
+                    <select name="dataset" class="w-full px-4 py-2 bg-black/40 border border-white/20 rounded-lg text-white focus:border-neonBlue/50 transition">
                         <option value="">All Datasets</option>
                         {% for dataset in datasets %}
                         <option value="{{ dataset.id }}">{{ dataset.name }}</option>
@@ -35,100 +48,139 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Confidence</label>
-                    <select name="confidence" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <label class="block text-sm font-mono uppercase tracking-wider text-gray-400 mb-2">Confidence</label>
+                    <select name="confidence" class="w-full px-4 py-2 bg-black/40 border border-white/20 rounded-lg text-white focus:border-neonBlue/50 transition">
                         <option value="">All Levels</option>
                         {% for value, label in confidence_levels %}
                         <option value="{{ value }}" {% if current_confidence == value %}selected{% endif %}>{{ label }}</option>
                         {% endfor %}
                     </select>
                 </div>
+                <div class="flex items-end">
+                    <button type="submit" class="w-full px-4 py-2 bg-gradient-to-r from-neonBlue to-neonPurple text-white font-semibold rounded-lg hover:scale-105 transition-transform">
+                        <i class="fas fa-filter mr-2"></i>Filter
+                    </button>
+                </div>
             </form>
-            <div class="mt-4">
-                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Filter</button>
-            </div>
         </div>
 
         <!-- Statistics -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <div class="bg-white rounded-lg shadow-sm p-4 text-center">
-                <p class="text-gray-600 text-sm">Total Insights</p>
-                <p class="text-3xl font-bold text-gray-900 mt-1">{{ total_insights }}</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="glass-panel rounded-2xl p-6 border border-neonPurple/20">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-400 text-sm font-mono uppercase tracking-wider">Total Insights</p>
+                        <p class="text-4xl font-bold text-white mt-2">{{ total_insights }}</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-neonPurple/10 flex items-center justify-center text-neonPurple">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                </div>
             </div>
-            <div class="bg-white rounded-lg shadow-sm p-4 text-center">
-                <p class="text-gray-600 text-sm">Validated</p>
-                <p class="text-3xl font-bold text-green-600 mt-1">{{ validated_insights }}</p>
+            <div class="glass-panel rounded-2xl p-6 border border-success/20">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-400 text-sm font-mono uppercase tracking-wider">Validated</p>
+                        <p class="text-4xl font-bold text-white mt-2">{{ validated_insights }}</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-success/10 flex items-center justify-center text-success">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
             </div>
-            <div class="bg-white rounded-lg shadow-sm p-4 text-center">
-                <p class="text-gray-600 text-sm">Recent (7 days)</p>
-                <p class="text-3xl font-bold text-blue-600 mt-1">{{ recent_insights }}</p>
+            <div class="glass-panel rounded-2xl p-6 border border-neonBlue/20">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-400 text-sm font-mono uppercase tracking-wider">Recent (7 days)</p>
+                        <p class="text-4xl font-bold text-white mt-2">{{ recent_insights }}</p>
+                    </div>
+                    <div class="w-12 h-12 rounded-full bg-neonBlue/10 flex items-center justify-center text-neonBlue">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Insights List -->
         <div class="space-y-4">
             {% for insight in insights %}
-            <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition overflow-hidden">
+            <div class="glass-panel rounded-2xl overflow-hidden border border-white/10 hover:border-neonPurple/50 transition-all group">
                 <div class="p-6">
-                    <div class="flex items-start justify-between">
-                        <div class="flex-1">
-                            <h3 class="text-lg font-semibold text-gray-900 mb-2">
-                                <a href="{% url 'analytics:insight_detail' insight.id %}" class="text-blue-600 hover:text-blue-800">
+                    <div class="flex items-start justify-between gap-4">
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-lg font-bold text-white group-hover:text-neonBlue transition mb-2">
+                                <a href="{% url 'analytics:insight_detail' insight.id %}" class="hover:text-neonPurple transition">
                                     {{ insight.title }}
                                 </a>
                             </h3>
-                            <p class="text-gray-600 mb-4">{{ insight.description }}</p>
+                            <p class="text-gray-400 mb-4">{{ insight.description }}</p>
                             
-                            <div class="flex items-center gap-4 flex-wrap">
-                                <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded">
+                            <div class="flex items-center gap-3 flex-wrap">
+                                <span class="inline-flex items-center gap-1 px-3 py-1 bg-neonPurple/20 text-neonPurple border border-neonPurple/50 text-xs rounded-lg font-mono">
+                                    <i class="fas fa-tag text-xs"></i>
                                     {{ insight.get_insight_type_display }}
                                 </span>
-                                <span class="text-sm text-gray-600">Dataset: <strong>{{ insight.dataset.name }}</strong></span>
-                                <span class="text-sm text-gray-600">Created: {{ insight.created_at|date:"M d, Y" }}</span>
+                                <span class="text-sm text-gray-500 font-mono">Dataset: <strong class="text-gray-300">{{ insight.dataset.name }}</strong></span>
+                                <span class="text-sm text-gray-500 font-mono">{{ insight.created_at|date:"M d, Y" }}</span>
                                 
                                 {% if insight.is_validated %}
-                                <span class="inline-block px-3 py-1 bg-green-100 text-green-800 text-sm rounded">✓ Validated</span>
+                                <span class="inline-flex items-center gap-1 px-3 py-1 bg-success/20 text-success border border-success/50 text-xs rounded-lg font-mono">
+                                    <i class="fas fa-check"></i>Validated
+                                </span>
                                 {% else %}
-                                <span class="inline-block px-3 py-1 bg-gray-100 text-gray-800 text-sm rounded">Unvalidated</span>
+                                <span class="inline-flex items-center gap-1 px-3 py-1 bg-gray-600/20 text-gray-300 border border-gray-600/50 text-xs rounded-lg font-mono">
+                                    Unvalidated
+                                </span>
                                 {% endif %}
                             </div>
                         </div>
                         
-                        <div class="text-right ml-4">
-                            <div class="text-xl font-bold">
+                        <div class="text-right flex-shrink-0">
+                            <div class="text-2xl mb-2">
                                 {% if insight.confidence_level == 'high' %}
-                                <span class="text-green-600">●</span>
+                                <span class="text-success">●</span>
                                 {% elif insight.confidence_level == 'medium' %}
-                                <span class="text-yellow-600">●</span>
+                                <span class="text-warning">●</span>
                                 {% else %}
-                                <span class="text-orange-600">●</span>
+                                <span class="text-error">●</span>
                                 {% endif %}
                             </div>
-                            <p class="text-sm text-gray-600 mt-1">{{ insight.get_confidence_level_display }}</p>
+                            <p class="text-sm text-gray-500 font-mono">{{ insight.get_confidence_level_display }}</p>
                         </div>
                     </div>
                 </div>
             </div>
             {% empty %}
-            <div class="bg-white rounded-lg shadow-sm p-12 text-center">
-                <p class="text-gray-600 text-lg">No insights found. Try adjusting your filters.</p>
+            <div class="glass-panel rounded-2xl p-16 text-center border border-white/10">
+                <i class="fas fa-inbox text-4xl text-gray-500 mb-4 opacity-50 block"></i>
+                <p class="text-gray-300 text-lg font-mono">No insights found. Try adjusting your filters.</p>
             </div>
             {% endfor %}
         </div>
 
         <!-- Pagination -->
         {% if is_paginated %}
-        <div class="mt-8 flex justify-center gap-2">
+        <div class="mt-12 flex justify-center gap-3">
             {% if page_obj.has_previous %}
-            <a href="?page=1" class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">First</a>
-            <a href="?page={{ page_obj.previous_page_number }}" class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">Previous</a>
+            <a href="?page=1" class="px-4 py-2 glass-panel border border-neonBlue/20 hover:border-neonBlue/50 text-neonBlue rounded-lg hover:scale-105 transition font-mono text-sm">
+                <i class="fas fa-chevron-left mr-1"></i>First
+            </a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="px-4 py-2 glass-panel border border-neonBlue/20 hover:border-neonBlue/50 text-neonBlue rounded-lg hover:scale-105 transition font-mono text-sm">
+                <i class="fas fa-chevron-left"></i>Prev
+            </a>
             {% endif %}
             
-            <span class="px-4 py-2">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            <span class="px-4 py-2 text-gray-400 font-mono text-sm">
+                Page <span class="text-neonBlue">{{ page_obj.number }}</span> of <span class="text-neonPurple">{{ page_obj.paginator.num_pages }}</span>
+            </span>
             
             {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}" class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">Next</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}" class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">Last</a>
+            <a href="?page={{ page_obj.next_page_number }}" class="px-4 py-2 glass-panel border border-neonPurple/20 hover:border-neonPurple/50 text-neonPurple rounded-lg hover:scale-105 transition font-mono text-sm">
+                Next <i class="fas fa-chevron-right"></i>
+            </a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="px-4 py-2 glass-panel border border-neonPurple/20 hover:border-neonPurple/50 text-neonPurple rounded-lg hover:scale-105 transition font-mono text-sm">
+                Last <i class="fas fa-chevron-right ml-1"></i>
+            </a>
             {% endif %}
         </div>
         {% endif %}

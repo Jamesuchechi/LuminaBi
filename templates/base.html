@@ -112,6 +112,68 @@
             opacity: 0; transition: opacity 0.5s; pointer-events: none;
         }
         .spotlight-card:hover::before { opacity: 1; }
+
+        /* Global Input Styling */
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"],
+        input[type="date"],
+        input[type="datetime-local"],
+        input[type="time"],
+        input[type="search"],
+        input[type="url"],
+        input[type="tel"],
+        select,
+        textarea {
+            background-color: rgba(255, 255, 255, 0.12) !important;
+            border-color: rgba(255, 255, 255, 0.2) !important;
+            color: white !important;
+        }
+
+        input[type="text"]::placeholder,
+        input[type="email"]::placeholder,
+        input[type="password"]::placeholder,
+        input[type="number"]::placeholder,
+        input[type="date"]::placeholder,
+        input[type="datetime-local"]::placeholder,
+        input[type="time"]::placeholder,
+        input[type="search"]::placeholder,
+        input[type="url"]::placeholder,
+        input[type="tel"]::placeholder,
+        textarea::placeholder,
+        select {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus,
+        input[type="datetime-local"]:focus,
+        input[type="time"]:focus,
+        input[type="search"]:focus,
+        input[type="url"]:focus,
+        input[type="tel"]:focus,
+        select:focus,
+        textarea:focus {
+            background-color: rgba(255, 255, 255, 0.15) !important;
+            border-color: rgba(0, 243, 255, 0.6) !important;
+            box-shadow: 0 0 0 3px rgba(0, 243, 255, 0.1) !important;
+            outline: none !important;
+        }
+
+        /* Select dropdown styling */
+        select {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23ffffff' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+            background-repeat: no-repeat !important;
+            background-position: right 12px center !important;
+            padding-right: 36px !important;
+            appearance: none !important;
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+        }
     </style>
     
     {% block extra_css %}{% endblock %}
@@ -229,7 +291,7 @@
                                 <a href="{% url 'accounts:profile' %}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/10 hover:text-white transition">
                                     <i class="fas fa-user-circle mr-2"></i>Profile Settings
                                 </a>
-                                <a href="{% url 'core:settings_list' %}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/10 hover:text-white transition">
+                                <a href="{% url 'core:user_settings' %}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/10 hover:text-white transition">
                                     <i class="fas fa-cog mr-2"></i>App Configuration
                                 </a>
                                 {% if user.is_staff %}
@@ -284,7 +346,7 @@
                             <a href="{% url 'accounts:profile' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm text-gray-300 hover:text-white">
                                 <i class="fas fa-user-circle w-5"></i>Profile Settings
                             </a>
-                            <a href="{% url 'core:settings_list' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm text-gray-300 hover:text-white">
+                            <a href="{% url 'core:user_settings' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm text-gray-300 hover:text-white">
                                 <i class="fas fa-cog w-5"></i>App Configuration
                             </a>
                             {% if user.is_staff %}

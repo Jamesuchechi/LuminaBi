@@ -1,0 +1,2001 @@
+PassengerId,Survived,Pclass,Sex,Age,SibSp,Parch,Ticket,Fare,Cabin,Embarked,Nationality,Occupation,TravelPurpose,LuggageCount,HasLifeboatAccess,Name
+1,1,1,male,37.5,0,0,TICK995047,69.84,,C,British,Aristocrat,Migration,4,0,Dr. William Taylor
+2,0,3,male,27.9,3,2,TICK592246,17.11,,S,British,Farmer,Business,4,0,Dr. James Davis
+3,0,2,male,26.5,0,0,TICK949252,40.86,D65,S,American,Teacher,Leisure,1,0,Dr. John Johnson
+4,0,3,male,26.5,0,0,TICK640633,18.73,,S,American,Laborer,Migration,10,0,Mr. James Lewis
+5,1,1,female,53.7,0,0,TICK738244,431.62,,Q,American,Aristocrat,Leisure,4,1,Mrs. Alice Taylor
+6,1,3,female,,3,2,TICK876564,15.25,C69,S,Irish,Servant,Migration,1,1,Miss. Sarah Taylor
+7,1,3,female,23.0,0,0,TICK803762,5.78,,C,French,Factory Worker,Migration,3,1,Mrs. Elizabeth Davis
+8,0,3,male,38.1,1,0,TICK847712,16.74,,S,American,Farmer,Migration,0,0,Mr. Thomas Taylor
+9,0,3,male,33.6,0,0,TICK38079,17.68,,S,British,Factory Worker,Migration,1,0,Mr. William Walker
+10,0,3,male,1.3,0,0,TICK363645,16.99,,S,British,Laborer,Business,1,0,Rev. Thomas Clark
+11,0,3,male,14.8,1,0,TICK75200,12.63,,Q,French,Laborer,Leisure,0,0,Dr. Thomas Johnson
+12,0,3,male,34.7,0,0,TICK997050,8.49,,S,Other,Factory Worker,Migration,0,1,Dr. John Harris
+13,0,3,male,52.0,2,0,TICK437459,17.68,,S,French,Farmer,Leisure,0,0,Dr. William Clark
+14,0,3,female,26.6,2,0,TICK628203,15.91,B66,S,American,Laborer,Leisure,1,1,Mrs. Mary Smith
+15,1,3,female,21.8,1,0,TICK776201,19.71,,S,British,Laborer,Migration,4,1,Miss. Elizabeth Lewis
+16,0,3,male,31.7,0,0,TICK643182,7.34,,C,British,Servant,Migration,5,0,Master. James Taylor
+17,0,3,male,21.0,1,1,TICK975508,8.38,A60,S,American,Laborer,Leisure,2,1,Dr. John Smith
+18,0,1,female,25.6,1,0,TICK85508,129.55,,S,British,Lawyer,Business,1,0,Mrs. Alice Brown
+19,1,3,female,29.8,0,0,TICK931630,16.89,A63,S,American,Laborer,Migration,1,1,Mrs. Elizabeth Lewis
+20,0,3,female,,0,4,TICK579211,7.8,,S,British,Farmer,Migration,0,0,Miss. Elizabeth Smith
+21,1,3,male,42.3,2,0,TICK503028,6.0,A77,S,British,Laborer,Migration,0,0,Mr. George Lewis
+22,1,3,male,11.7,0,0,TICK993582,19.98,,S,British,Factory Worker,Migration,2,1,Rev. George Wilson
+23,0,3,male,,0,0,TICK136753,5.37,D44,S,Irish,Factory Worker,Migration,1,0,Rev. Thomas Smith
+24,0,3,male,33.0,0,0,TICK284648,17.53,C99,S,British,Laborer,Migration,4,0,Mr. George Clark
+25,1,3,female,41.1,0,4,TICK759466,10.48,,S,American,Laborer,Business,1,1,Miss. Sarah Johnson
+26,0,3,male,32.6,0,1,TICK44768,17.62,,S,British,Farmer,Migration,2,0,Master. George Harris
+27,0,3,female,28.3,3,2,TICK110116,13.32,,C,British,Farmer,Leisure,9,1,Mrs. Margaret Walker
+28,0,3,male,25.5,0,0,TICK38329,18.52,,S,Irish,Farmer,Leisure,6,0,Mr. George Harris
+29,1,3,male,23.1,0,0,TICK521719,18.89,,S,British,Farmer,Business,0,0,Rev. George Johnson
+30,0,1,female,45.9,0,0,TICK533261,34.28,,C,French,Lawyer,Migration,2,1,Mrs. Alice Johnson
+31,1,2,female,34.9,0,0,TICK237186,13.02,,S,British,Nurse,Leisure,1,0,Mrs. Margaret Smith
+32,1,2,male,,2,2,TICK682927,20.01,,S,American,Clerk,Migration,0,0,Rev. John Lewis
+33,0,3,male,19.8,1,5,TICK368271,15.04,,S,British,Laborer,Migration,1,0,Dr. Thomas Johnson
+34,1,3,male,39.2,2,1,TICK453476,18.32,,C,American,Servant,Migration,0,0,Rev. William Walker
+35,0,3,female,45.5,0,2,TICK501792,11.9,,S,American,Factory Worker,Leisure,0,0,Mrs. Elizabeth Taylor
+36,0,1,female,44.0,0,0,TICK319157,315.28,,C,British,Merchant,Migration,3,0,Miss. Margaret Wilson
+37,1,3,male,17.4,0,0,TICK820506,7.83,,S,American,Farmer,Business,1,0,Rev. Thomas Wilson
+38,0,2,male,25.4,1,0,TICK892115,42.2,,Q,American,Nurse,Business,0,1,Rev. James Harris
+39,1,2,male,22.8,0,0,TICK920024,48.69,,S,British,Nurse,Leisure,1,0,Mr. Thomas Walker
+40,0,3,female,27.2,0,0,TICK239818,9.03,,S,British,Laborer,Leisure,0,1,Mrs. Mary Clark
+41,1,3,male,42.2,0,0,TICK23484,12.42,,S,British,Farmer,Migration,5,1,Dr. Thomas Taylor
+42,0,3,female,50.3,2,0,TICK977482,6.29,E32,S,British,Servant,Leisure,0,1,Lady. Alice Smith
+43,0,2,male,35.4,3,0,TICK59045,32.37,,S,British,Teacher,Leisure,1,0,Dr. John Walker
+44,0,3,male,20.3,0,1,TICK28633,12.54,,S,French,Servant,Business,3,0,Rev. William Smith
+45,0,3,male,29.5,0,2,TICK812192,7.17,,S,Irish,Laborer,Business,7,0,Dr. James Brown
+46,0,3,female,53.5,0,0,TICK820800,11.63,C5,S,British,Laborer,Leisure,1,1,Lady. Sarah Johnson
+47,0,3,female,31.3,2,0,TICK851775,10.01,B78,S,American,Farmer,Migration,1,1,Miss. Mary Smith
+48,0,3,male,25.5,2,2,TICK206703,12.83,,S,Irish,Servant,Business,0,0,Mr. Thomas Davis
+49,1,3,female,26.7,0,0,TICK561134,13.78,,S,Other,Servant,Business,2,1,Lady. Elizabeth Johnson
+50,0,3,male,35.4,1,0,TICK638679,5.13,A44,S,American,Farmer,Leisure,0,1,Rev. William Lewis
+51,0,1,male,,0,1,TICK903084,387.67,,C,British,Aristocrat,Business,2,1,Rev. John Harris
+52,0,3,male,22.5,1,0,TICK398817,15.7,,S,American,Servant,Migration,3,0,Rev. William Wilson
+53,0,3,male,43.7,0,0,TICK716067,10.49,,S,British,Laborer,Migration,5,0,Mr. William Davis
+54,1,1,male,34.9,2,0,TICK717801,54.88,,C,Irish,Aristocrat,Migration,2,1,Mr. William Walker
+55,1,3,male,31.5,0,0,TICK774768,16.32,A56,S,British,Farmer,Migration,1,0,Rev. James Brown
+56,0,3,female,44.5,2,0,TICK19973,19.33,A25,S,American,Servant,Migration,3,0,Mrs. Mary Clark
+57,0,2,female,19.5,0,0,TICK580334,19.61,E34,S,American,Clerk,Migration,0,1,Mrs. Mary Brown
+58,1,3,female,25.1,0,4,TICK506595,9.85,,Q,Irish,Factory Worker,Migration,0,1,Miss. Mary Walker
+59,0,2,female,34.4,0,3,TICK55673,17.35,E70,S,French,Nurse,Migration,6,0,Lady. Alice Lewis
+60,0,3,female,33.9,0,1,TICK406929,13.65,,S,American,Laborer,Leisure,2,1,Miss. Sarah Wilson
+61,1,3,male,8.8,0,0,TICK803875,7.32,,Q,British,Factory Worker,Migration,1,0,Mr. Thomas Brown
+62,1,3,female,23.7,1,0,TICK396552,10.34,E61,S,Other,Factory Worker,Business,3,1,Mrs. Margaret Taylor
+63,0,3,male,27.6,1,0,TICK730222,15.46,,S,American,Laborer,Migration,0,0,Master. James Lewis
+64,1,3,male,36.1,0,1,TICK132320,13.4,,S,American,Farmer,Migration,3,0,Master. John Walker
+65,1,3,male,,1,0,TICK451592,10.8,,S,British,Servant,Business,4,0,Mr. James Clark
+66,1,2,male,28.9,1,0,TICK736405,26.81,E86,S,British,Engineer,Migration,4,0,Rev. James Taylor
+67,0,3,male,1.2,0,0,TICK448567,13.43,,S,American,Servant,Leisure,0,0,Mr. James Harris
+68,0,3,female,29.6,0,0,TICK577239,5.09,,S,Irish,Factory Worker,Migration,1,1,Miss. Alice Wilson
+69,0,1,female,30.9,1,0,TICK145462,66.9,,C,Irish,Doctor,Business,0,1,Lady. Margaret Taylor
+70,0,3,male,66.9,0,0,TICK122197,18.22,A53,S,British,Farmer,Migration,2,0,Mr. William Smith
+71,0,3,female,27.1,0,0,TICK460226,6.17,B3,S,American,Factory Worker,Migration,5,1,Lady. Margaret Johnson
+72,1,3,male,34.5,0,2,TICK124724,15.6,,S,French,Factory Worker,Migration,4,0,Mr. William Johnson
+73,1,3,male,47.1,0,2,TICK941726,18.8,,S,British,Laborer,Migration,1,1,Master. John Taylor
+74,0,3,male,41.3,0,4,TICK646559,9.06,,S,British,Farmer,Leisure,2,0,Dr. Thomas Davis
+75,1,3,female,51.0,1,2,TICK948442,10.56,E82,C,British,Servant,Migration,3,1,Lady. Alice Walker
+76,0,3,male,9.0,1,2,TICK386570,13.53,,S,French,Factory Worker,Migration,7,0,Mr. James Taylor
+77,1,2,male,15.1,1,1,TICK369877,45.27,B29,S,American,Clerk,Migration,1,0,Rev. George Johnson
+78,0,1,male,21.5,3,0,TICK204052,472.7,,S,American,Doctor,Leisure,5,1,Rev. George Johnson
+79,0,2,male,6.7,0,0,TICK360793,39.58,C29,Q,Other,Nurse,Leisure,1,0,Mr. John Taylor
+80,0,3,male,31.0,3,0,TICK458729,6.3,A79,S,British,Farmer,Leisure,0,0,Dr. Thomas Clark
+81,0,3,male,,0,0,TICK963664,15.04,,S,French,Farmer,Business,0,0,Rev. Thomas Smith
+82,0,3,female,53.2,0,0,TICK61736,11.15,E59,Q,Irish,Farmer,Migration,0,1,Miss. Elizabeth Johnson
+83,0,2,male,,0,2,TICK250739,28.83,,S,Irish,Nurse,Business,3,0,Dr. John Clark
+84,1,3,male,25.2,2,0,TICK244304,5.74,,S,French,Farmer,Business,1,0,Dr. George Johnson
+85,0,3,female,42.2,3,0,TICK97459,7.87,,S,British,Farmer,Migration,1,1,Miss. Elizabeth Lewis
+86,0,3,male,11.5,3,1,TICK618210,16.86,D72,C,British,Laborer,Leisure,3,0,Dr. William Taylor
+87,1,3,female,5.9,0,0,TICK11537,11.81,,Q,British,Servant,Business,2,0,Miss. Sarah Clark
+88,0,3,female,32.8,0,0,TICK239158,9.52,,S,Other,Servant,Leisure,5,1,Miss. Sarah Johnson
+89,0,3,male,33.9,0,0,TICK434130,10.76,,S,British,Farmer,Leisure,2,0,Rev. George Clark
+90,0,2,male,41.7,1,2,TICK784785,44.18,,Q,Irish,Engineer,Business,1,1,Rev. John Clark
+91,0,3,male,37.8,0,0,TICK790125,16.23,,S,British,Servant,Leisure,0,1,Mr. James Clark
+92,1,3,female,34.5,0,0,TICK932487,9.08,,C,French,Servant,Migration,1,1,Mrs. Margaret Wilson
+93,1,3,female,19.8,0,0,TICK847971,6.76,B87,S,American,Servant,Leisure,0,1,Lady. Alice Walker
+94,0,3,male,33.5,0,0,TICK832710,8.78,,S,Irish,Factory Worker,Business,3,0,Master. George Johnson
+95,0,2,male,34.4,0,0,TICK563264,46.83,,Q,British,Teacher,Migration,0,0,Master. William Smith
+96,0,3,male,19.3,0,0,TICK596642,13.72,,Q,Irish,Farmer,Business,5,0,Master. James Brown
+97,1,2,male,58.0,0,1,TICK49003,31.34,,C,Irish,Nurse,Migration,2,0,Rev. James Harris
+98,0,3,male,37.1,0,0,TICK841713,13.95,C11,S,Other,Servant,Leisure,0,0,Rev. James Wilson
+99,1,3,male,15.4,3,0,TICK16622,10.49,B96,C,British,Laborer,Migration,0,0,Mr. James Smith
+100,1,3,male,41.8,0,0,TICK916675,17.11,,S,French,Servant,Business,0,0,Dr. John Lewis
+101,0,3,male,44.5,4,1,TICK755793,12.85,C38,C,Other,Laborer,Migration,1,0,Dr. William Harris
+102,1,3,male,36.2,0,0,TICK263062,6.75,C58,C,French,Factory Worker,Migration,5,0,Mr. John Lewis
+103,1,1,male,26.3,0,2,TICK853095,90.66,D4,S,French,Aristocrat,Business,1,1,Dr. John Clark
+104,0,1,female,18.7,0,2,TICK60646,282.32,,S,British,Lawyer,Migration,0,1,Miss. Elizabeth Wilson
+105,0,3,female,28.8,1,1,TICK81333,19.05,E22,S,American,Laborer,Business,0,0,Miss. Alice Smith
+106,1,3,male,35.1,0,0,TICK60406,9.63,,C,French,Farmer,Migration,0,1,Dr. James Walker
+107,0,3,male,30.2,0,0,TICK133871,18.04,,S,Irish,Laborer,Migration,7,0,Rev. John Clark
+108,0,3,male,51.8,0,0,TICK460859,16.46,,S,British,Laborer,Leisure,0,0,Mr. John Johnson
+109,0,3,male,39.4,4,2,TICK190365,8.72,,S,American,Servant,Business,0,0,Rev. George Walker
+110,1,3,female,17.1,0,0,TICK297323,5.55,,S,British,Laborer,Business,4,1,Miss. Alice Wilson
+111,1,2,male,,0,0,TICK46843,14.07,,C,American,Engineer,Migration,5,0,Dr. James Wilson
+112,0,3,male,,0,0,TICK330384,15.93,,S,British,Factory Worker,Business,5,0,Rev. George Davis
+113,0,1,male,26.6,0,1,TICK367652,123.84,B49,S,British,Aristocrat,Leisure,3,1,Master. Thomas Lewis
+114,0,3,female,,0,0,TICK632678,10.57,E16,C,British,Servant,Migration,1,0,Miss. Elizabeth Brown
+115,1,3,female,,0,0,TICK688036,12.53,,Q,British,Farmer,Migration,2,1,Miss. Elizabeth Walker
+116,1,3,male,28.9,5,2,TICK934677,15.88,B28,S,British,Factory Worker,Migration,7,0,Dr. James Lewis
+117,0,3,female,17.3,0,2,TICK257108,6.7,A74,S,American,Farmer,Leisure,0,1,Miss. Elizabeth Smith
+118,1,3,male,7.3,0,1,TICK307616,11.1,C23,S,British,Farmer,Leisure,0,0,Mr. Thomas Walker
+119,0,3,male,,0,0,TICK137017,12.28,,Q,British,Servant,Leisure,4,0,Dr. Thomas Clark
+120,0,3,male,11.3,1,0,TICK636566,13.11,,C,British,Farmer,Leisure,0,0,Dr. John Clark
+121,1,1,female,16.7,1,0,TICK418143,414.63,D46,S,British,Aristocrat,Migration,5,0,Miss. Sarah Clark
+122,0,3,male,,0,1,TICK502954,7.58,,C,British,Factory Worker,Migration,1,0,Master. John Clark
+123,1,1,male,30.9,0,1,TICK690525,409.68,,S,French,Doctor,Business,0,0,Master. William Lewis
+124,0,3,male,12.9,0,0,TICK129320,15.39,,S,Other,Laborer,Leisure,5,0,Rev. George Lewis
+125,0,2,male,46.2,0,0,TICK689484,32.23,,C,French,Nurse,Migration,1,0,Mr. George Walker
+126,0,3,male,45.8,0,0,TICK81534,15.49,,S,American,Farmer,Migration,2,1,Rev. George Harris
+127,0,1,male,37.7,1,2,TICK81088,223.65,,S,American,Merchant,Migration,0,1,Dr. John Harris
+128,1,3,female,,0,1,TICK263352,7.08,,S,Other,Factory Worker,Migration,0,1,Lady. Sarah Taylor
+129,1,3,female,37.7,4,0,TICK984952,14.99,D29,S,Other,Factory Worker,Business,0,0,Lady. Elizabeth Clark
+130,1,3,female,87.8,0,0,TICK571054,12.87,D64,C,American,Factory Worker,Migration,1,1,Miss. Alice Taylor
+131,0,3,female,44.3,0,0,TICK216860,14.59,,S,British,Laborer,Business,2,1,Miss. Elizabeth Walker
+132,0,1,female,39.8,0,0,TICK519970,188.86,D21,C,French,Doctor,Migration,0,1,Lady. Mary Harris
+133,1,1,male,18.4,2,1,TICK740513,456.23,,Q,Other,Merchant,Migration,5,1,Mr. George Smith
+134,1,1,female,26.4,0,2,TICK771932,306.06,,Q,British,Aristocrat,Migration,0,1,Mrs. Mary Davis
+135,0,2,female,64.7,0,1,TICK853937,13.42,E43,S,American,Clerk,Migration,0,1,Mrs. Sarah Lewis
+136,0,3,male,2.0,2,0,TICK375297,11.75,D84,S,Other,Farmer,Migration,0,0,Rev. William Brown
+137,0,3,female,22.9,0,0,TICK942243,16.35,B88,S,French,Laborer,Leisure,1,1,Lady. Alice Smith
+138,1,2,female,46.3,1,2,TICK960552,41.77,,S,British,Clerk,Leisure,7,1,Lady. Margaret Brown
+139,1,3,female,19.3,0,3,TICK901475,12.42,E84,S,American,Factory Worker,Migration,2,1,Mrs. Elizabeth Brown
+140,0,3,male,40.2,5,0,TICK231987,18.42,,S,American,Factory Worker,Migration,2,0,Master. John Taylor
+141,0,3,male,30.7,0,0,TICK466087,9.02,D25,S,Irish,Laborer,Business,0,1,Master. Thomas Taylor
+142,0,3,male,20.2,0,0,TICK748775,11.16,A80,S,American,Factory Worker,Migration,8,0,Master. James Wilson
+143,0,3,male,-0.4,0,0,TICK318423,18.48,,S,British,Servant,Business,0,1,Rev. George Smith
+144,1,2,male,32.8,1,1,TICK988157,45.85,,Q,British,Engineer,Migration,3,0,Mr. Thomas Clark
+145,0,3,male,18.1,0,3,TICK385757,15.29,E11,S,British,Factory Worker,Migration,0,1,Dr. John Taylor
+146,0,3,male,,0,0,TICK819107,17.88,,S,British,Servant,Leisure,5,1,Rev. James Walker
+147,0,3,female,37.6,0,0,TICK579190,6.33,,S,French,Farmer,Leisure,0,1,Lady. Elizabeth Brown
+148,1,3,female,43.0,0,0,TICK307900,17.97,C79,S,British,Servant,Migration,2,1,Miss. Sarah Harris
+149,0,3,male,22.9,0,1,TICK912182,9.81,,Q,Irish,Servant,Business,5,0,Rev. William Davis
+150,0,1,male,20.2,3,0,TICK686395,113.82,E81,S,French,Doctor,Migration,1,1,Dr. William Johnson
+151,1,3,female,,4,0,TICK257068,8.59,,S,British,Servant,Migration,5,1,Lady. Elizabeth Davis
+152,1,3,male,43.8,0,0,TICK553436,11.27,,S,Other,Factory Worker,Migration,4,0,Rev. John Smith
+153,0,1,male,61.8,4,0,TICK937355,148.06,A96,Q,Other,Aristocrat,Migration,6,1,Rev. James Wilson
+154,0,1,female,45.5,0,0,TICK281531,180.67,,C,Other,Merchant,Business,4,1,Lady. Margaret Lewis
+155,0,2,male,49.0,0,0,TICK335347,15.4,,S,Irish,Clerk,Migration,0,0,Dr. George Lewis
+156,0,3,male,19.4,5,0,TICK732666,9.44,E25,C,British,Laborer,Migration,6,0,Dr. John Taylor
+157,0,3,female,36.7,0,2,TICK568719,13.58,,S,French,Servant,Leisure,1,1,Mrs. Sarah Walker
+158,0,3,female,41.6,2,1,TICK528900,11.63,,S,Irish,Factory Worker,Leisure,4,0,Mrs. Elizabeth Wilson
+159,0,3,male,-18.6,1,0,TICK110448,10.2,,S,American,Servant,Business,5,0,Dr. James Davis
+160,0,3,female,14.6,0,0,TICK57620,16.2,D92,Q,American,Farmer,Migration,3,1,Mrs. Mary Lewis
+161,0,1,male,54.5,1,0,TICK364473,449.95,B42,C,Irish,Lawyer,Migration,7,1,Dr. George Taylor
+162,1,3,male,8.5,0,0,TICK945164,16.35,B38,S,Irish,Factory Worker,Migration,0,0,Rev. William Wilson
+163,0,1,female,51.6,0,0,TICK431790,186.04,,S,American,Doctor,Business,0,0,Miss. Mary Davis
+164,1,2,male,8.5,1,1,TICK740772,39.78,B74,S,British,Engineer,Leisure,0,0,Rev. George Lewis
+165,1,3,female,15.3,1,1,TICK997738,7.28,,S,British,Laborer,Migration,5,1,Lady. Alice Lewis
+166,0,3,female,36.9,0,0,TICK653079,6.95,,Q,Other,Servant,Leisure,0,1,Lady. Mary Clark
+167,0,3,female,,0,0,TICK510825,10.18,,S,Other,Farmer,Migration,6,1,Lady. Mary Brown
+168,1,1,male,24.2,1,5,TICK294374,409.62,B23,S,French,Doctor,Business,1,1,Master. William Walker
+169,0,1,male,53.8,0,0,TICK83256,145.78,D65,S,American,Merchant,Leisure,0,0,Master. William Johnson
+170,0,3,female,11.4,0,5,TICK214442,5.95,,S,French,Servant,Business,0,1,Mrs. Mary Harris
+171,1,3,female,,0,1,TICK957352,6.98,,S,Other,Servant,Leisure,4,0,Mrs. Margaret Walker
+172,0,3,male,,1,0,TICK144792,17.88,B60,Q,Other,Factory Worker,Business,0,0,Rev. William Clark
+173,0,1,male,34.2,0,1,TICK883298,327.88,,S,American,Merchant,Migration,0,1,Master. George Lewis
+174,1,3,male,20.7,0,0,TICK547302,8.8,A88,S,Irish,Farmer,Migration,1,0,Rev. Thomas Brown
+175,1,3,male,21.2,0,1,TICK242734,13.33,,S,Irish,Servant,Migration,8,0,Rev. John Taylor
+176,0,3,male,42.7,1,0,TICK320751,12.91,,S,Other,Farmer,Migration,6,0,Dr. James Brown
+177,0,3,male,43.5,0,4,TICK778947,14.83,,S,Other,Laborer,Leisure,0,0,Dr. William Clark
+178,0,3,female,34.6,0,0,TICK580826,8.5,,S,Irish,Servant,Migration,0,1,Lady. Alice Johnson
+179,0,3,female,17.6,0,1,TICK222007,17.97,E16,S,British,Laborer,Business,2,1,Lady. Alice Walker
+180,0,3,female,21.6,0,0,TICK129710,9.64,,Q,British,Factory Worker,Migration,3,1,Miss. Mary Wilson
+181,1,1,male,29.7,1,1,TICK391479,356.24,E92,S,Irish,Merchant,Business,4,1,Rev. William Smith
+182,1,2,female,31.8,4,1,TICK761124,10.64,,S,American,Teacher,Leisure,1,1,Mrs. Sarah Brown
+183,1,2,male,38.2,0,1,TICK857036,24.91,,C,Irish,Nurse,Business,0,0,Mr. John Harris
+184,0,3,male,27.0,1,0,TICK827215,10.28,,S,British,Factory Worker,Migration,5,0,Mr. John Davis
+185,0,3,male,42.4,0,2,TICK149857,13.15,,S,American,Servant,Business,2,0,Mr. Thomas Brown
+186,0,3,male,,1,0,TICK38609,6.09,A47,S,Other,Farmer,Migration,2,0,Rev. James Wilson
+187,1,3,male,49.6,0,0,TICK247525,16.85,,S,American,Laborer,Leisure,9,0,Mr. John Brown
+188,0,3,female,30.3,0,0,TICK733264,8.27,,Q,American,Servant,Migration,1,1,Mrs. Mary Brown
+189,0,1,female,,1,4,TICK462664,348.21,,S,American,Lawyer,Business,3,1,Mrs. Margaret Harris
+190,0,3,female,28.0,1,0,TICK682478,17.05,,S,American,Factory Worker,Leisure,0,1,Miss. Margaret Davis
+191,0,3,male,17.7,1,1,TICK802313,13.43,,S,British,Farmer,Leisure,2,1,Mr. James Clark
+192,0,3,female,61.4,0,5,TICK476804,16.11,E97,Q,British,Servant,Migration,0,1,Lady. Sarah Harris
+193,0,3,female,47.4,1,0,TICK120787,14.93,,S,Irish,Laborer,Migration,3,1,Mrs. Mary Johnson
+194,1,1,male,41.9,0,0,TICK23323,197.1,,S,British,Lawyer,Migration,10,0,Dr. George Clark
+195,0,3,male,29.8,0,0,TICK524142,17.13,,S,British,Laborer,Leisure,1,0,Master. James Harris
+196,1,3,male,16.5,0,5,TICK877950,9.42,C19,S,American,Laborer,Leisure,2,0,Mr. James Johnson
+197,0,3,male,44.6,2,1,TICK36395,13.57,,Q,American,Laborer,Business,0,0,Master. Thomas Clark
+198,0,3,female,27.8,0,0,TICK284428,16.18,,C,British,Factory Worker,Business,6,1,Miss. Margaret Wilson
+199,1,3,male,36.2,4,0,TICK292469,10.68,,C,Irish,Factory Worker,Migration,0,1,Master. William Smith
+200,1,3,male,21.5,0,0,TICK617814,9.54,,S,Irish,Laborer,Migration,1,0,Rev. George Smith
+201,1,3,male,33.7,0,0,TICK403838,11.89,,S,British,Laborer,Leisure,1,0,Dr. Thomas Wilson
+202,1,1,male,22.4,3,0,TICK316005,414.44,,C,British,Aristocrat,Leisure,0,1,Master. John Taylor
+203,1,2,female,22.9,0,2,TICK868359,47.2,C44,C,American,Teacher,Business,8,1,Lady. Sarah Davis
+204,0,3,male,,0,0,TICK89597,13.18,,Q,British,Factory Worker,Migration,2,0,Rev. William Brown
+205,0,3,female,8.3,0,0,TICK63621,14.92,D43,Q,French,Servant,Leisure,1,1,Lady. Elizabeth Lewis
+206,0,3,female,,0,1,TICK293649,18.55,,S,British,Farmer,Leisure,0,1,Miss. Mary Lewis
+207,0,3,male,19.2,0,0,TICK897086,6.48,,S,British,Factory Worker,Migration,1,0,Rev. John Smith
+208,0,3,female,26.8,0,1,TICK640366,8.48,,S,Irish,Factory Worker,Business,1,1,Miss. Alice Davis
+209,0,3,male,42.9,2,1,TICK403586,15.63,,C,French,Laborer,Migration,1,1,Master. William Taylor
+210,1,3,male,27.6,0,1,TICK520419,17.36,B19,C,American,Factory Worker,Migration,1,0,Rev. John Harris
+211,0,1,male,29.7,1,0,TICK20764,432.8,,S,Irish,Merchant,Leisure,0,1,Dr. James Lewis
+212,1,3,male,25.7,0,0,TICK905682,11.23,,S,American,Laborer,Business,5,0,Mr. George Walker
+213,0,3,male,34.8,0,0,TICK402172,6.34,,S,American,Servant,Leisure,2,1,Mr. James Johnson
+214,0,3,male,17.6,1,0,TICK404348,11.57,C92,S,Other,Farmer,Leisure,1,1,Mr. Thomas Johnson
+215,1,1,male,28.4,0,0,TICK466588,138.45,,S,British,Aristocrat,Migration,8,1,Rev. Thomas Harris
+216,1,2,male,36.0,0,0,TICK47573,21.65,B73,C,French,Clerk,Leisure,2,1,Rev. John Brown
+217,0,3,male,33.4,1,0,TICK236351,16.58,,S,British,Factory Worker,Migration,0,0,Master. John Davis
+218,1,3,male,30.2,1,1,TICK216723,6.13,,S,Other,Servant,Migration,4,0,Master. John Smith
+219,0,3,male,30.4,1,1,TICK398753,17.41,,S,French,Laborer,Leisure,2,0,Master. James Lewis
+220,0,3,male,37.5,0,0,TICK194385,11.42,,Q,Irish,Farmer,Leisure,0,1,Master. William Taylor
+221,1,1,male,62.3,0,1,TICK692982,310.15,,C,French,Aristocrat,Business,3,1,Master. George Walker
+222,0,1,female,,2,0,TICK453025,72.14,,Q,British,Merchant,Migration,2,1,Mrs. Sarah Wilson
+223,0,3,male,62.8,0,0,TICK559358,10.06,B4,S,British,Factory Worker,Leisure,2,0,Master. Thomas Harris
+224,1,3,female,17.9,0,4,TICK55798,6.35,B75,Q,British,Laborer,Migration,1,1,Miss. Elizabeth Lewis
+225,0,2,male,-1.9,0,0,TICK693482,48.46,C19,C,French,Engineer,Leisure,0,0,Mr. Thomas Davis
+226,0,1,male,22.1,4,3,TICK320970,409.41,,Q,British,Merchant,Migration,4,1,Dr. John Davis
+227,0,2,male,35.1,1,0,TICK33826,28.39,,S,Irish,Nurse,Migration,10,0,Mr. William Clark
+228,1,3,male,58.1,0,1,TICK568855,8.35,,S,Irish,Farmer,Migration,4,0,Rev. James Johnson
+229,0,3,male,,4,2,TICK801059,19.0,E52,S,American,Farmer,Migration,5,1,Master. George Smith
+230,1,3,male,37.4,0,0,TICK365699,10.17,D80,S,British,Farmer,Migration,0,0,Dr. James Harris
+231,0,1,male,,0,3,TICK983750,105.66,,S,British,Aristocrat,Leisure,0,0,Mr. William Wilson
+232,0,3,male,57.5,0,0,TICK28254,13.45,,Q,Irish,Farmer,Business,0,0,Dr. George Lewis
+233,0,1,male,,2,0,TICK955260,473.57,,C,French,Merchant,Migration,3,1,Master. George Walker
+234,1,3,male,23.0,0,4,TICK639309,5.06,,S,British,Farmer,Leisure,0,1,Master. William Clark
+235,0,3,male,,1,0,TICK792127,8.57,,S,British,Factory Worker,Business,7,1,Dr. John Walker
+236,0,3,female,50.3,0,0,TICK937555,19.08,,S,Irish,Laborer,Leisure,5,1,Lady. Elizabeth Lewis
+237,1,2,male,28.3,2,3,TICK353550,16.84,D23,C,French,Teacher,Business,2,0,Mr. James Brown
+238,0,3,female,48.6,0,0,TICK968519,6.7,,S,American,Laborer,Leisure,0,1,Lady. Alice Walker
+239,0,1,male,30.1,0,0,TICK869386,297.99,,S,British,Doctor,Migration,4,1,Rev. George Taylor
+240,0,3,male,,0,0,TICK952529,17.93,A44,C,British,Farmer,Business,6,0,Rev. William Harris
+241,0,3,female,23.2,0,0,TICK276285,12.16,,S,British,Laborer,Business,4,1,Miss. Elizabeth Wilson
+242,0,3,female,39.3,0,0,TICK850602,19.92,,S,Other,Farmer,Migration,7,1,Lady. Elizabeth Wilson
+243,0,3,male,31.8,1,0,TICK790911,15.19,,S,American,Factory Worker,Business,5,0,Dr. Thomas Wilson
+244,1,2,female,37.7,0,3,TICK620665,12.96,,C,Irish,Teacher,Business,0,1,Miss. Alice Lewis
+245,0,3,female,7.0,1,0,TICK228062,19.89,,C,French,Farmer,Migration,0,1,Mrs. Alice Walker
+246,1,1,male,49.2,0,0,TICK795036,221.71,B46,S,French,Doctor,Leisure,0,1,Dr. John Harris
+247,0,3,male,53.3,3,0,TICK29673,9.31,,Q,British,Factory Worker,Leisure,2,0,Dr. James Clark
+248,0,3,male,31.7,0,1,TICK358506,13.37,,S,French,Servant,Business,0,1,Master. John Lewis
+249,1,1,male,60.9,0,0,TICK762042,173.02,,S,Irish,Doctor,Leisure,0,1,Master. Thomas Walker
+250,0,3,female,56.3,0,1,TICK870520,6.3,,Q,Other,Factory Worker,Migration,6,1,Mrs. Margaret Taylor
+251,0,3,male,39.7,0,2,TICK652721,5.02,B47,S,French,Servant,Leisure,1,0,Mr. William Wilson
+252,1,3,female,50.5,0,0,TICK456161,11.74,A52,C,British,Factory Worker,Leisure,0,1,Miss. Sarah Harris
+253,0,1,male,45.9,0,0,TICK908796,423.33,,S,French,Merchant,Migration,0,1,Rev. John Smith
+254,0,2,male,3.6,2,0,TICK449317,32.89,E9,S,British,Nurse,Migration,0,0,Mr. James Walker
+255,1,2,male,26.0,0,0,TICK821628,49.97,,S,British,Engineer,Leisure,0,1,Mr. John Walker
+256,1,3,male,40.8,3,0,TICK765649,9.3,E95,S,British,Laborer,Leisure,1,0,Rev. George Davis
+257,0,3,male,54.4,0,0,TICK974672,9.21,,S,French,Servant,Business,0,0,Master. George Harris
+258,0,2,male,,1,0,TICK772137,16.39,A58,S,British,Nurse,Migration,4,0,Master. William Wilson
+259,0,1,female,4.4,0,0,TICK789949,107.11,E67,S,American,Lawyer,Migration,6,1,Miss. Elizabeth Clark
+260,1,3,male,,5,0,TICK60893,9.28,,Q,British,Farmer,Migration,4,0,Master. James Davis
+261,1,3,male,-1.0,0,0,TICK847616,16.89,,Q,British,Servant,Business,1,1,Master. William Smith
+262,1,3,male,28.7,0,0,TICK115515,18.59,B89,S,British,Factory Worker,Business,8,0,Rev. William Walker
+263,0,3,female,35.5,0,0,TICK581170,19.63,B30,S,American,Servant,Leisure,0,1,Mrs. Mary Walker
+264,0,3,female,15.9,2,0,TICK407963,8.48,,C,British,Laborer,Migration,5,1,Lady. Mary Wilson
+265,1,3,male,29.1,0,1,TICK999740,18.22,A78,Q,British,Farmer,Leisure,0,0,Mr. William Davis
+266,1,3,male,44.3,1,1,TICK757334,9.92,,C,Other,Factory Worker,Migration,1,0,Rev. John Taylor
+267,0,3,male,22.0,0,0,TICK978768,6.69,,S,British,Servant,Migration,1,0,Mr. William Harris
+268,1,3,male,18.1,0,0,TICK711902,18.05,,C,Irish,Laborer,Business,3,0,Master. James Clark
+269,1,3,female,28.4,1,0,TICK302380,14.54,,S,Irish,Factory Worker,Migration,6,0,Mrs. Alice Wilson
+270,0,1,male,14.5,0,0,TICK901217,107.42,E39,S,American,Doctor,Migration,0,1,Dr. Thomas Clark
+271,1,3,female,59.5,1,0,TICK984539,11.45,,S,American,Laborer,Migration,1,1,Mrs. Mary Smith
+272,0,3,male,30.5,0,0,TICK561737,9.31,B32,S,British,Factory Worker,Leisure,2,0,Dr. Thomas Brown
+273,1,2,female,19.5,0,0,TICK487017,39.47,,S,American,Teacher,Leisure,2,1,Mrs. Margaret Taylor
+274,1,3,female,,0,2,TICK445423,11.8,,Q,American,Servant,Migration,2,1,Lady. Margaret Lewis
+275,0,3,male,28.3,2,1,TICK601417,19.84,,C,Irish,Factory Worker,Business,3,0,Rev. William Wilson
+276,0,3,male,26.7,1,0,TICK755157,5.82,,S,British,Servant,Migration,0,1,Master. Thomas Walker
+277,0,2,male,22.0,2,1,TICK596908,24.2,,S,American,Nurse,Business,0,0,Master. Thomas Davis
+278,0,3,male,21.4,0,0,TICK807367,12.23,,S,American,Servant,Business,4,0,Rev. George Clark
+279,0,3,male,7.3,0,0,TICK545119,12.55,,C,American,Factory Worker,Leisure,0,0,Rev. James Johnson
+280,0,3,female,50.5,0,0,TICK273735,9.74,,S,French,Servant,Migration,0,1,Mrs. Mary Walker
+281,1,2,male,38.6,5,1,TICK171444,39.17,,S,Irish,Engineer,Leisure,5,0,Master. George Brown
+282,0,3,male,34.7,0,0,TICK400812,18.12,,C,British,Factory Worker,Migration,1,1,Master. George Wilson
+283,1,3,male,28.1,0,0,TICK491033,19.08,E28,S,British,Servant,Business,0,0,Master. James Clark
+284,0,3,female,15.7,1,0,TICK782853,17.08,E63,C,American,Farmer,Migration,1,1,Mrs. Elizabeth Smith
+285,0,1,male,18.7,0,1,TICK970577,429.77,,S,Other,Lawyer,Migration,0,1,Master. Thomas Walker
+286,1,3,male,8.7,2,1,TICK250799,13.26,,S,Irish,Farmer,Business,2,0,Mr. John Walker
+287,1,3,male,20.3,0,0,TICK139278,17.39,,Q,American,Servant,Migration,1,0,Mr. James Clark
+288,0,3,male,13.8,0,1,TICK952805,9.55,D100,S,American,Farmer,Leisure,4,0,Rev. John Clark
+289,0,3,male,55.3,0,3,TICK16920,10.98,,S,American,Factory Worker,Leisure,2,0,Dr. William Wilson
+290,0,3,male,43.2,2,2,TICK295335,9.75,,S,French,Farmer,Leisure,3,0,Rev. George Lewis
+291,0,3,male,31.2,0,0,TICK839429,12.01,,S,British,Farmer,Leisure,0,0,Master. James Davis
+292,1,3,male,17.1,0,0,TICK716756,9.28,,S,British,Servant,Migration,5,0,Dr. James Smith
+293,1,3,male,14.4,1,0,TICK998161,19.42,,S,British,Servant,Migration,4,0,Master. John Taylor
+294,0,3,female,27.1,1,0,TICK288721,9.69,C64,S,Irish,Factory Worker,Migration,4,1,Miss. Alice Walker
+295,1,2,male,43.9,0,1,TICK90691,13.92,,S,American,Teacher,Migration,0,0,Master. George Smith
+296,0,3,male,,2,0,TICK263073,12.9,,S,Irish,Laborer,Business,5,0,Rev. James Davis
+297,0,3,female,9.0,0,0,TICK809807,5.86,,S,French,Farmer,Leisure,0,1,Lady. Sarah Taylor
+298,0,3,male,38.4,0,0,TICK570171,6.66,,S,British,Factory Worker,Migration,4,0,Master. William Wilson
+299,0,3,male,20.2,0,0,TICK311194,8.29,E32,S,Irish,Farmer,Leisure,4,0,Rev. John Walker
+300,1,3,male,22.7,0,0,TICK354928,11.97,,Q,American,Laborer,Migration,1,0,Dr. William Davis
+301,1,3,female,30.7,1,2,TICK599823,11.5,E65,S,Irish,Servant,Leisure,6,0,Lady. Elizabeth Walker
+302,0,2,female,,0,0,TICK414769,41.99,,C,Other,Teacher,Business,2,1,Lady. Elizabeth Davis
+303,1,3,female,,1,3,TICK41481,16.09,,C,Irish,Farmer,Migration,2,1,Lady. Sarah Harris
+304,0,3,female,16.4,0,0,TICK646448,11.39,B63,Q,French,Laborer,Leisure,7,1,Lady. Margaret Taylor
+305,0,3,male,21.3,0,0,TICK288592,10.01,,S,British,Laborer,Migration,0,0,Rev. William Taylor
+306,0,1,male,41.3,1,0,TICK380264,178.74,E61,C,British,Merchant,Leisure,0,1,Mr. William Taylor
+307,0,3,male,31.5,2,0,TICK282802,16.61,,S,French,Factory Worker,Business,2,1,Mr. William Harris
+308,1,3,male,41.3,0,2,TICK692252,5.78,B9,S,Irish,Farmer,Migration,0,0,Dr. William Davis
+309,1,3,female,20.1,0,0,TICK263682,5.19,,S,British,Laborer,Leisure,1,0,Lady. Mary Taylor
+310,1,3,male,38.6,4,0,TICK821433,16.93,,S,Other,Servant,Migration,1,0,Master. George Taylor
+311,1,3,male,5.6,1,2,TICK685752,12.16,D44,C,British,Factory Worker,Business,1,0,Dr. William Johnson
+312,0,3,male,30.7,0,0,TICK850618,6.96,E24,S,British,Laborer,Leisure,0,0,Master. George Wilson
+313,0,3,female,39.6,3,1,TICK810043,8.53,B100,S,American,Farmer,Migration,6,1,Miss. Sarah Smith
+314,0,3,male,5.1,0,0,TICK638533,18.99,A98,C,British,Servant,Migration,1,0,Dr. George Taylor
+315,1,3,male,20.2,1,0,TICK13938,17.89,B28,S,British,Laborer,Migration,2,1,Master. William Smith
+316,1,3,male,30.7,1,0,TICK131344,15.65,,S,Irish,Laborer,Business,5,0,Master. John Davis
+317,0,3,female,45.1,0,0,TICK322802,12.23,,C,British,Factory Worker,Migration,2,1,Miss. Alice Johnson
+318,1,3,female,21.3,0,0,TICK597053,12.8,,S,British,Servant,Leisure,2,1,Mrs. Elizabeth Brown
+319,0,1,male,37.9,1,4,TICK693874,488.36,,S,Other,Lawyer,Migration,6,1,Master. John Davis
+320,1,3,male,51.6,0,0,TICK337581,19.49,,C,British,Servant,Migration,1,0,Mr. John Harris
+321,1,3,male,38.7,0,0,TICK877609,8.23,,C,British,Farmer,Migration,9,0,Dr. James Davis
+322,1,3,male,,0,0,TICK278366,17.17,,S,British,Farmer,Migration,0,0,Rev. Thomas Smith
+323,1,3,male,,0,0,TICK889765,7.96,,S,British,Servant,Business,0,0,Dr. James Smith
+324,1,1,female,20.9,1,1,TICK188469,130.36,,S,British,Lawyer,Migration,1,1,Mrs. Margaret Brown
+325,0,3,male,31.3,0,0,TICK466367,15.14,,S,British,Farmer,Migration,0,0,Dr. James Clark
+326,1,3,female,27.7,0,0,TICK486201,11.08,,S,British,Factory Worker,Business,0,1,Mrs. Sarah Johnson
+327,0,3,female,35.1,0,0,TICK19105,18.97,E61,S,British,Servant,Migration,1,1,Lady. Margaret Brown
+328,1,3,male,23.8,2,1,TICK462278,6.34,E54,C,British,Factory Worker,Leisure,0,0,Dr. William Johnson
+329,1,3,male,35.9,0,3,TICK10301,12.67,,C,British,Servant,Leisure,1,0,Dr. Thomas Taylor
+330,1,3,female,23.7,0,0,TICK490097,18.78,,S,American,Laborer,Business,7,0,Mrs. Sarah Harris
+331,1,1,male,43.1,0,0,TICK39801,454.93,,Q,American,Aristocrat,Migration,5,1,Mr. John Walker
+332,0,2,male,25.1,2,0,TICK377149,16.26,,S,British,Nurse,Migration,0,0,Master. John Davis
+333,1,3,male,-0.6,1,0,TICK504534,10.5,,S,Irish,Factory Worker,Migration,1,0,Dr. James Taylor
+334,0,3,female,14.9,0,0,TICK669722,14.29,,S,American,Factory Worker,Business,3,1,Lady. Mary Wilson
+335,1,3,female,30.3,1,0,TICK886339,7.39,,S,Other,Factory Worker,Business,2,1,Lady. Mary Harris
+336,1,3,male,55.1,0,0,TICK584646,19.52,,S,French,Laborer,Leisure,6,0,Dr. James Harris
+337,0,3,male,,0,0,TICK229424,18.72,E51,Q,Irish,Farmer,Migration,0,0,Dr. John Harris
+338,1,3,male,-3.2,0,2,TICK429459,7.5,D1,S,British,Farmer,Migration,0,0,Rev. William Clark
+339,0,3,male,7.8,0,0,TICK62430,6.82,,S,British,Laborer,Migration,6,1,Master. William Lewis
+340,0,3,male,47.2,2,0,TICK608723,6.28,,S,American,Factory Worker,Leisure,3,1,Dr. William Clark
+341,1,3,male,39.5,0,0,TICK985439,18.64,,S,Irish,Servant,Leisure,5,0,Mr. John Clark
+342,0,3,male,64.1,0,0,TICK84410,7.9,,S,French,Laborer,Migration,1,1,Rev. John Brown
+343,0,1,male,23.1,0,0,TICK290874,225.65,B27,S,American,Merchant,Migration,1,1,Dr. William Clark
+344,0,1,male,17.3,1,0,TICK941619,240.96,,S,Other,Doctor,Migration,4,1,Dr. John Brown
+345,0,3,male,31.1,0,0,TICK640975,13.99,C4,S,French,Laborer,Leisure,0,0,Mr. George Harris
+346,1,3,female,22.8,0,1,TICK579235,6.08,,S,Irish,Laborer,Migration,2,1,Mrs. Mary Davis
+347,1,1,male,45.6,0,5,TICK330280,136.58,D42,C,American,Merchant,Migration,0,1,Dr. John Brown
+348,0,3,male,22.3,0,0,TICK68154,18.97,,S,American,Servant,Business,3,0,Dr. Thomas Walker
+349,1,1,male,26.0,2,0,TICK462834,456.95,B28,S,British,Lawyer,Leisure,2,0,Rev. James Lewis
+350,0,3,male,15.3,1,0,TICK189538,16.72,,S,British,Farmer,Leisure,0,0,Rev. George Walker
+351,1,3,male,41.4,0,0,TICK271539,5.29,,S,British,Servant,Business,5,0,Rev. James Johnson
+352,0,2,female,16.2,2,1,TICK804184,23.08,,C,American,Teacher,Migration,0,1,Mrs. Alice Taylor
+353,1,3,female,36.2,4,0,TICK825952,14.42,,S,Other,Servant,Migration,0,1,Mrs. Mary Lewis
+354,0,3,male,58.2,0,0,TICK290558,9.13,C93,S,Irish,Laborer,Migration,3,0,Mr. John Johnson
+355,1,3,male,3.3,0,0,TICK273148,18.64,D93,S,Irish,Factory Worker,Migration,0,0,Mr. George Wilson
+356,0,3,male,,2,5,TICK912270,14.51,E61,C,French,Farmer,Leisure,3,1,Mr. William Smith
+357,1,3,female,34.2,0,0,TICK519970,6.08,,S,Other,Servant,Leisure,5,0,Lady. Alice Brown
+358,0,3,female,13.1,1,0,TICK134402,18.64,D89,Q,French,Laborer,Leisure,1,1,Lady. Sarah Lewis
+359,0,3,male,31.6,2,0,TICK239466,19.37,,C,Other,Laborer,Migration,1,0,Mr. Thomas Lewis
+360,0,1,male,,3,0,TICK661957,66.52,,S,American,Aristocrat,Migration,0,1,Master. James Smith
+361,1,3,male,18.1,0,0,TICK183971,12.99,,Q,French,Laborer,Migration,3,0,Rev. George Johnson
+362,0,3,male,37.1,0,0,TICK155037,9.55,,S,American,Farmer,Leisure,0,0,Master. Thomas Lewis
+363,0,3,male,,1,0,TICK914560,10.89,,S,Irish,Laborer,Leisure,2,1,Mr. Thomas Clark
+364,0,2,male,,0,0,TICK648966,17.19,,S,British,Nurse,Migration,0,0,Rev. James Lewis
+365,0,3,male,,3,0,TICK688842,13.67,,C,Other,Laborer,Migration,0,0,Mr. James Lewis
+366,0,2,male,28.1,1,0,TICK52988,48.32,D37,C,British,Teacher,Leisure,5,0,Rev. John Walker
+367,0,2,male,30.8,0,0,TICK244974,30.12,,S,French,Teacher,Business,2,0,Dr. Thomas Smith
+368,1,2,male,46.4,0,0,TICK121005,13.32,,S,American,Teacher,Leisure,1,0,Rev. George Davis
+369,0,3,male,27.6,1,2,TICK687398,14.3,,S,Other,Farmer,Migration,6,1,Master. George Clark
+370,1,3,female,23.6,3,0,TICK41372,10.1,,S,British,Farmer,Business,1,1,Mrs. Mary Lewis
+371,0,2,male,14.8,0,0,TICK194205,44.24,,S,British,Engineer,Migration,0,0,Mr. William Harris
+372,1,3,male,,2,0,TICK718688,11.52,,S,Irish,Servant,Business,1,0,Rev. John Brown
+373,1,2,male,10.7,3,3,TICK532333,17.71,,S,British,Teacher,Migration,8,0,Mr. George Wilson
+374,1,3,male,10.6,3,0,TICK903373,7.87,,S,British,Farmer,Business,1,1,Master. George Taylor
+375,0,3,male,26.1,0,0,TICK462697,16.53,,S,British,Laborer,Leisure,3,0,Master. George Davis
+376,0,1,female,7.5,2,2,TICK609059,154.83,E70,S,British,Aristocrat,Migration,5,1,Miss. Alice Smith
+377,1,3,female,,0,0,TICK333749,16.51,,Q,French,Laborer,Migration,0,1,Lady. Mary Taylor
+378,0,2,female,29.2,0,1,TICK44993,18.24,,S,British,Nurse,Leisure,0,1,Lady. Mary Taylor
+379,0,3,female,57.7,2,0,TICK581290,9.83,A18,S,French,Servant,Business,2,1,Miss. Alice Walker
+380,1,3,male,46.9,0,1,TICK753204,11.98,,C,French,Laborer,Leisure,3,0,Dr. James Johnson
+381,1,3,female,26.0,0,0,TICK240025,19.15,,S,French,Laborer,Leisure,0,1,Miss. Sarah Wilson
+382,0,2,female,,0,0,TICK64766,47.27,D96,S,British,Teacher,Business,4,1,Lady. Alice Taylor
+383,0,3,male,68.6,1,1,TICK998933,8.1,,S,French,Farmer,Leisure,1,0,Rev. James Johnson
+384,0,3,female,30.9,0,2,TICK750259,10.37,,S,American,Laborer,Leisure,6,1,Miss. Margaret Harris
+385,0,1,male,33.0,0,0,TICK272638,100.22,,Q,British,Doctor,Business,4,0,Mr. George Clark
+386,0,1,male,27.8,0,0,TICK270950,269.69,,S,French,Aristocrat,Migration,2,0,Rev. James Harris
+387,0,3,male,29.5,0,2,TICK17901,11.91,,S,British,Servant,Migration,3,0,Mr. James Lewis
+388,0,2,male,21.8,4,0,TICK712341,46.03,,S,French,Teacher,Leisure,7,1,Rev. John Johnson
+389,1,3,male,26.2,0,2,TICK886974,18.95,,S,British,Laborer,Migration,1,0,Rev. James Wilson
+390,1,3,male,52.6,0,0,TICK900143,10.75,,S,British,Laborer,Migration,2,1,Rev. James Smith
+391,1,2,male,48.7,0,0,TICK891668,29.67,,S,British,Nurse,Leisure,1,0,Dr. William Clark
+392,0,3,male,-1.1,0,1,TICK371498,18.44,,S,French,Servant,Migration,1,0,Dr. John Taylor
+393,0,3,male,8.9,0,3,TICK567693,17.1,,S,British,Factory Worker,Migration,2,0,Mr. William Harris
+394,0,3,male,18.3,3,0,TICK754212,5.05,,S,Irish,Laborer,Migration,5,0,Master. John Smith
+395,0,3,male,44.0,0,0,TICK47906,9.8,,S,American,Farmer,Migration,0,0,Master. Thomas Davis
+396,0,3,male,49.1,0,1,TICK630752,11.33,C3,Q,Irish,Factory Worker,Business,0,0,Dr. James Clark
+397,0,3,male,40.8,1,0,TICK247097,8.45,,C,Irish,Servant,Migration,0,0,Master. George Taylor
+398,0,3,female,13.1,4,0,TICK367718,7.99,,C,British,Servant,Leisure,0,0,Lady. Alice Harris
+399,1,3,female,22.1,2,0,TICK115466,5.57,,S,British,Farmer,Migration,2,1,Mrs. Elizabeth Smith
+400,0,3,male,37.3,3,0,TICK82242,14.65,,S,American,Farmer,Business,2,0,Mr. George Clark
+401,0,3,male,26.4,0,0,TICK532562,8.94,E43,S,French,Laborer,Business,1,1,Rev. Thomas Johnson
+402,0,3,male,24.4,1,0,TICK466371,5.79,,Q,British,Factory Worker,Migration,1,0,Master. John Clark
+403,0,2,male,24.6,2,0,TICK119680,19.24,A73,S,American,Teacher,Leisure,2,0,Dr. Thomas Wilson
+404,1,3,male,47.4,0,1,TICK536859,17.03,,S,British,Factory Worker,Migration,0,1,Rev. John Brown
+405,1,1,female,38.9,4,0,TICK82212,430.2,A69,C,British,Doctor,Business,1,1,Mrs. Margaret Brown
+406,0,1,female,25.4,1,1,TICK249490,257.04,,C,British,Merchant,Leisure,3,1,Lady. Elizabeth Smith
+407,0,1,male,34.9,2,3,TICK214953,225.55,A74,S,American,Doctor,Leisure,3,0,Dr. James Wilson
+408,0,3,female,11.2,1,1,TICK342614,19.67,,S,British,Laborer,Business,7,1,Miss. Mary Smith
+409,1,2,male,22.2,3,0,TICK599071,18.02,,S,American,Teacher,Leisure,0,0,Dr. Thomas Wilson
+410,0,3,female,45.7,1,0,TICK390398,8.23,,S,French,Farmer,Migration,5,1,Mrs. Mary Lewis
+411,1,3,female,6.7,1,1,TICK870414,9.38,,C,British,Factory Worker,Business,1,1,Lady. Sarah Walker
+412,1,3,male,39.1,0,0,TICK863656,7.59,D58,C,British,Factory Worker,Leisure,2,0,Master. George Walker
+413,1,1,female,-1.2,0,4,TICK715097,208.3,,C,American,Merchant,Leisure,4,1,Miss. Elizabeth Harris
+414,0,3,male,,0,1,TICK437175,18.66,,S,American,Factory Worker,Migration,3,0,Rev. James Brown
+415,0,2,male,21.8,4,0,TICK75861,34.61,B83,S,British,Engineer,Migration,2,0,Rev. George Johnson
+416,0,3,male,36.0,0,0,TICK674067,11.18,,S,British,Servant,Migration,5,1,Master. William Smith
+417,0,3,female,31.7,2,0,TICK448191,19.02,D68,S,British,Factory Worker,Migration,2,1,Miss. Sarah Taylor
+418,0,3,female,32.3,0,2,TICK919398,5.73,D3,S,British,Laborer,Migration,8,1,Mrs. Mary Smith
+419,1,3,female,34.6,2,2,TICK297835,8.15,,S,Irish,Servant,Leisure,1,1,Mrs. Mary Walker
+420,0,3,male,4.3,2,1,TICK151029,13.49,C1,S,Irish,Laborer,Leisure,1,0,Dr. James Taylor
+421,0,3,female,,0,0,TICK26894,14.23,,S,French,Factory Worker,Migration,4,1,Mrs. Margaret Walker
+422,1,1,male,27.2,3,2,TICK343402,48.59,,S,American,Doctor,Migration,0,1,Master. George Smith
+423,0,3,female,21.9,0,2,TICK637450,11.05,,C,American,Servant,Migration,4,1,Lady. Mary Wilson
+424,1,3,male,,4,0,TICK827450,14.74,,C,American,Servant,Migration,0,0,Rev. Thomas Walker
+425,0,1,female,32.9,0,0,TICK378788,358.09,C29,S,British,Merchant,Migration,2,0,Lady. Margaret Clark
+426,0,3,male,15.3,0,0,TICK352258,14.57,E87,S,Irish,Laborer,Migration,1,0,Dr. George Clark
+427,1,1,male,45.4,2,0,TICK428963,180.66,,Q,British,Doctor,Migration,0,1,Master. Thomas Lewis
+428,0,1,female,37.1,0,1,TICK941983,73.95,,S,British,Doctor,Leisure,2,0,Miss. Margaret Taylor
+429,1,3,male,33.8,0,2,TICK684648,11.41,B99,S,Irish,Factory Worker,Leisure,0,0,Mr. Thomas Lewis
+430,1,3,female,44.7,2,0,TICK393917,6.93,,S,British,Servant,Leisure,1,1,Miss. Elizabeth Brown
+431,0,3,male,2.4,3,0,TICK494549,19.21,,S,American,Servant,Migration,0,0,Dr. George Brown
+432,0,3,female,10.8,1,1,TICK989261,12.13,,C,British,Farmer,Leisure,4,1,Miss. Mary Clark
+433,0,3,male,37.8,2,0,TICK309347,9.76,B27,C,Irish,Laborer,Business,5,0,Mr. William Brown
+434,1,3,male,19.1,1,0,TICK653126,16.49,,C,British,Factory Worker,Business,3,0,Master. William Smith
+435,0,3,male,20.8,0,2,TICK33670,12.47,A4,S,Irish,Servant,Leisure,0,0,Master. John Wilson
+436,0,3,male,8.9,0,3,TICK169100,9.65,E78,S,American,Laborer,Business,2,0,Dr. George Clark
+437,0,1,female,15.4,2,0,TICK387192,411.62,,S,Irish,Aristocrat,Business,0,1,Miss. Elizabeth Johnson
+438,1,1,male,45.8,2,0,TICK47777,437.56,,S,British,Aristocrat,Migration,0,1,Dr. James Johnson
+439,0,3,male,37.4,3,1,TICK306002,15.1,C9,S,British,Servant,Business,0,1,Mr. John Wilson
+440,1,2,male,32.8,0,0,TICK976499,11.88,,S,British,Clerk,Migration,1,1,Master. John Lewis
+441,1,2,male,21.4,0,0,TICK158352,32.65,B85,C,Irish,Nurse,Business,4,0,Dr. George Johnson
+442,1,3,female,31.8,2,5,TICK957167,16.45,B26,S,Irish,Factory Worker,Migration,2,0,Miss. Mary Clark
+443,0,2,female,47.2,1,2,TICK620946,15.46,,C,British,Engineer,Leisure,1,1,Lady. Mary Lewis
+444,1,3,male,19.5,2,0,TICK27775,8.43,D35,S,British,Factory Worker,Business,4,0,Master. Thomas Taylor
+445,1,3,male,29.5,2,0,TICK112392,18.24,B28,S,Irish,Laborer,Migration,6,0,Master. Thomas Harris
+446,0,3,male,56.6,2,0,TICK639622,5.3,C4,S,British,Laborer,Leisure,1,0,Dr. George Wilson
+447,1,3,male,40.6,1,2,TICK222752,16.29,,S,Irish,Factory Worker,Migration,4,0,Mr. Thomas Walker
+448,0,1,male,21.6,0,1,TICK848285,252.67,,S,Irish,Aristocrat,Migration,9,1,Rev. George Taylor
+449,1,1,male,39.3,0,1,TICK329315,239.98,,C,Irish,Aristocrat,Leisure,1,1,Mr. William Davis
+450,0,3,male,6.4,1,1,TICK536608,5.11,,C,Irish,Farmer,Migration,2,1,Rev. Thomas Clark
+451,1,3,female,28.9,2,1,TICK751537,17.29,,Q,British,Factory Worker,Leisure,0,1,Miss. Margaret Lewis
+452,1,3,male,39.3,1,0,TICK819805,10.4,D52,S,American,Laborer,Migration,4,1,Dr. William Wilson
+453,0,3,male,35.7,0,1,TICK779088,13.11,,S,French,Farmer,Business,5,1,Mr. William Brown
+454,0,1,female,39.2,0,3,TICK533867,348.33,,S,British,Merchant,Migration,3,1,Miss. Elizabeth Lewis
+455,0,3,male,42.5,0,1,TICK822524,15.54,,S,British,Farmer,Migration,0,1,Dr. Thomas Lewis
+456,1,3,male,36.9,1,2,TICK610732,19.34,B65,C,British,Farmer,Leisure,7,0,Rev. John Taylor
+457,1,3,male,36.4,1,0,TICK748467,12.97,,S,French,Servant,Migration,4,0,Master. William Harris
+458,0,1,male,33.1,1,0,TICK361765,217.87,,S,British,Merchant,Migration,0,1,Rev. James Johnson
+459,1,3,male,,0,0,TICK986598,19.31,,Q,British,Servant,Migration,0,0,Dr. William Smith
+460,0,3,male,,0,3,TICK226306,14.63,B16,S,French,Servant,Business,0,1,Mr. Thomas Johnson
+461,0,2,male,29.4,1,0,TICK398242,21.93,,S,French,Engineer,Leisure,2,1,Mr. George Brown
+462,0,3,female,40.2,0,2,TICK872080,6.9,,S,British,Servant,Leisure,2,1,Lady. Sarah Clark
+463,0,3,female,44.1,0,0,TICK611990,17.64,C54,S,British,Laborer,Migration,4,1,Mrs. Mary Wilson
+464,0,3,male,22.3,0,0,TICK35183,10.43,B27,S,British,Laborer,Migration,2,0,Master. George Walker
+465,0,3,male,23.5,0,0,TICK689976,14.91,A65,S,British,Farmer,Business,3,0,Mr. John Clark
+466,0,3,male,25.4,4,1,TICK762538,12.06,,S,Other,Laborer,Migration,1,0,Mr. George Wilson
+467,0,3,female,48.8,2,0,TICK158364,7.98,,C,Irish,Servant,Leisure,5,1,Mrs. Sarah Lewis
+468,1,3,female,16.6,1,3,TICK400601,14.03,A59,S,American,Factory Worker,Migration,1,0,Lady. Mary Johnson
+469,1,2,male,51.7,2,0,TICK800656,12.43,,S,Irish,Clerk,Migration,0,0,Master. George Davis
+470,0,3,male,32.9,1,0,TICK681748,11.2,D54,S,French,Farmer,Migration,1,0,Master. George Wilson
+471,0,3,female,34.0,1,0,TICK83255,13.2,,S,American,Laborer,Leisure,0,1,Miss. Sarah Lewis
+472,0,3,female,43.3,0,0,TICK82066,11.54,,Q,American,Factory Worker,Migration,5,1,Lady. Margaret Taylor
+473,0,3,female,,0,2,TICK981961,16.23,,S,Irish,Servant,Leisure,1,0,Mrs. Elizabeth Smith
+474,0,3,female,46.0,1,0,TICK236490,17.42,,C,French,Laborer,Business,5,1,Miss. Margaret Johnson
+475,0,2,male,22.2,0,0,TICK593867,40.85,,S,British,Nurse,Leisure,7,0,Mr. John Taylor
+476,1,1,male,51.1,1,1,TICK528953,48.24,,S,British,Aristocrat,Migration,1,1,Mr. Thomas Johnson
+477,0,2,female,23.3,2,0,TICK603343,17.77,D61,Q,British,Teacher,Migration,0,0,Lady. Margaret Johnson
+478,1,2,male,51.8,1,0,TICK661943,31.46,,Q,French,Teacher,Business,0,0,Mr. John Davis
+479,1,1,male,23.7,0,0,TICK575863,469.37,,C,British,Aristocrat,Migration,5,1,Master. James Brown
+480,1,3,female,25.8,0,0,TICK770603,17.52,B32,S,British,Servant,Leisure,3,1,Lady. Alice Johnson
+481,0,2,male,14.9,0,1,TICK439388,43.7,,Q,Other,Teacher,Leisure,0,0,Mr. James Wilson
+482,0,3,male,18.5,2,0,TICK566148,9.55,,Q,American,Farmer,Migration,0,0,Rev. Thomas Smith
+483,0,3,male,29.5,3,0,TICK769654,11.44,E20,S,Other,Laborer,Migration,0,0,Dr. John Clark
+484,1,3,female,33.5,2,0,TICK128131,12.06,,Q,American,Servant,Leisure,3,1,Lady. Mary Wilson
+485,1,2,male,,0,2,TICK889767,16.29,D98,S,American,Nurse,Migration,0,0,Rev. John Harris
+486,1,2,male,26.8,3,0,TICK922152,11.24,A8,Q,British,Engineer,Business,0,0,Dr. George Lewis
+487,0,3,male,,3,1,TICK554392,19.2,E27,S,British,Farmer,Leisure,1,0,Master. John Johnson
+488,1,3,female,35.7,1,0,TICK837979,8.61,,S,Irish,Farmer,Business,0,1,Mrs. Margaret Johnson
+489,0,3,male,32.5,1,0,TICK54929,8.6,,S,Other,Farmer,Business,2,1,Dr. James Clark
+490,0,1,female,37.4,3,0,TICK637592,69.19,,S,British,Merchant,Migration,0,1,Miss. Elizabeth Harris
+491,0,3,female,20.4,4,0,TICK496273,18.93,,S,American,Factory Worker,Leisure,1,0,Mrs. Margaret Harris
+492,0,3,male,22.0,0,0,TICK692218,13.7,E20,S,American,Laborer,Business,1,0,Rev. James Walker
+493,0,3,male,20.4,1,0,TICK550923,15.01,,S,British,Farmer,Business,0,0,Mr. James Harris
+494,0,3,male,,0,0,TICK546611,18.67,,S,French,Laborer,Leisure,2,0,Mr. William Taylor
+495,0,3,male,51.3,0,0,TICK463440,10.18,A64,C,Other,Laborer,Business,1,0,Rev. James Wilson
+496,1,1,male,21.4,0,0,TICK333335,322.11,,S,British,Lawyer,Leisure,0,1,Rev. Thomas Smith
+497,0,3,male,21.7,0,2,TICK283258,5.58,,C,Irish,Farmer,Business,0,0,Master. Thomas Taylor
+498,0,2,male,39.5,0,0,TICK205497,17.47,,S,British,Nurse,Migration,7,0,Mr. George Taylor
+499,0,3,male,53.2,0,0,TICK877618,17.47,E42,S,American,Laborer,Business,6,0,Dr. William Johnson
+500,0,3,male,56.9,3,0,TICK604186,16.5,,S,Other,Servant,Migration,0,0,Rev. John Wilson
+501,1,3,male,20.8,0,0,TICK308301,10.26,C4,Q,American,Servant,Leisure,1,0,Mr. John Clark
+502,0,3,male,,1,0,TICK956325,10.65,,S,Irish,Servant,Leisure,0,0,Master. George Brown
+503,0,3,female,34.3,0,0,TICK256882,13.0,B53,S,British,Servant,Leisure,1,1,Miss. Elizabeth Davis
+504,0,3,female,35.0,3,0,TICK345650,5.0,A70,S,Irish,Laborer,Business,1,1,Mrs. Mary Lewis
+505,0,2,male,27.3,0,0,TICK255880,19.65,,S,American,Engineer,Business,6,1,Dr. George Harris
+506,1,3,female,18.0,1,0,TICK838818,8.12,,C,Other,Laborer,Business,4,0,Mrs. Mary Johnson
+507,0,3,female,29.5,0,0,TICK805932,8.76,,S,American,Factory Worker,Leisure,5,1,Mrs. Sarah Smith
+508,0,3,male,56.9,1,0,TICK380547,17.09,B13,C,British,Laborer,Leisure,0,0,Rev. James Davis
+509,0,3,male,22.2,0,0,TICK243106,9.2,,S,British,Servant,Migration,8,0,Rev. William Johnson
+510,0,1,male,33.4,2,0,TICK478963,120.02,,C,Irish,Lawyer,Migration,5,1,Dr. George Taylor
+511,0,3,male,67.9,1,0,TICK331108,12.56,,S,British,Laborer,Migration,1,0,Mr. James Clark
+512,0,2,male,22.0,0,0,TICK785532,44.63,,S,French,Nurse,Leisure,0,0,Mr. James Smith
+513,1,3,male,40.2,0,0,TICK122023,8.62,,S,Other,Factory Worker,Business,2,0,Rev. Thomas Wilson
+514,0,3,male,57.7,0,1,TICK727739,6.18,,S,British,Factory Worker,Migration,6,0,Rev. Thomas Harris
+515,1,3,male,38.9,2,0,TICK253755,10.35,,S,American,Servant,Business,0,0,Dr. George Lewis
+516,1,3,male,46.6,1,0,TICK467624,16.21,A40,S,British,Laborer,Migration,2,1,Dr. James Lewis
+517,0,1,male,42.3,5,1,TICK769394,288.82,,C,Irish,Doctor,Leisure,0,1,Mr. John Harris
+518,0,3,male,37.6,0,0,TICK923984,17.25,,S,American,Factory Worker,Leisure,0,1,Master. John Clark
+519,0,3,female,50.7,1,0,TICK430838,19.39,C85,C,British,Farmer,Migration,0,1,Mrs. Alice Smith
+520,0,3,male,39.7,0,0,TICK380459,16.89,E47,S,British,Laborer,Migration,0,0,Rev. John Smith
+521,1,3,female,27.5,0,0,TICK84561,14.06,E86,S,American,Laborer,Leisure,5,1,Miss. Elizabeth Harris
+522,0,3,male,32.2,0,2,TICK370082,12.4,,Q,British,Farmer,Migration,3,0,Rev. Thomas Davis
+523,1,3,male,35.5,0,0,TICK588681,5.6,,S,Irish,Servant,Leisure,5,1,Dr. William Walker
+524,1,1,male,24.1,0,0,TICK531205,492.63,,S,British,Lawyer,Leisure,3,1,Master. George Smith
+525,1,3,male,32.9,1,0,TICK81157,10.75,B29,Q,American,Farmer,Business,0,0,Mr. John Johnson
+526,1,2,female,30.7,3,0,TICK960064,16.09,,S,Other,Nurse,Migration,5,1,Miss. Sarah Johnson
+527,1,3,female,39.7,0,1,TICK380895,15.0,,S,French,Servant,Migration,0,1,Lady. Mary Clark
+528,0,2,male,62.4,1,2,TICK686066,21.37,,C,British,Nurse,Leisure,1,0,Mr. Thomas Wilson
+529,0,2,female,,0,0,TICK508672,33.43,,S,British,Clerk,Leisure,0,1,Mrs. Mary Brown
+530,0,3,male,53.7,0,0,TICK635617,13.8,,S,American,Laborer,Migration,6,0,Dr. James Wilson
+531,0,3,male,39.1,0,0,TICK242539,11.69,,S,British,Farmer,Migration,2,0,Mr. James Davis
+532,1,3,male,,0,0,TICK471777,17.54,,Q,British,Farmer,Leisure,0,0,Rev. James Harris
+533,0,3,male,23.3,1,0,TICK825499,8.97,,S,American,Farmer,Leisure,0,0,Master. William Taylor
+534,0,3,female,32.9,1,0,TICK440196,11.73,C43,Q,Irish,Laborer,Business,1,1,Lady. Margaret Lewis
+535,1,3,male,32.0,1,0,TICK241924,13.07,D86,S,American,Servant,Migration,0,1,Rev. James Davis
+536,1,3,male,19.5,1,1,TICK597998,14.95,E67,C,Irish,Farmer,Business,0,0,Master. Thomas Taylor
+537,0,1,female,21.6,1,1,TICK869033,398.47,E74,C,British,Doctor,Migration,0,1,Mrs. Mary Harris
+538,0,1,male,35.7,0,0,TICK867945,215.56,,S,Irish,Lawyer,Migration,1,1,Master. James Taylor
+539,1,3,female,53.5,0,1,TICK132366,14.69,,Q,Other,Servant,Leisure,6,1,Mrs. Mary Smith
+540,0,3,male,29.0,0,2,TICK971684,7.26,,S,British,Servant,Migration,0,0,Dr. Thomas Walker
+541,1,1,male,8.3,0,0,TICK564731,468.34,,S,French,Aristocrat,Leisure,6,1,Master. George Clark
+542,1,3,female,-3.0,0,2,TICK257842,10.75,,S,American,Factory Worker,Migration,0,1,Miss. Alice Taylor
+543,0,3,male,14.7,3,1,TICK815165,15.94,,S,British,Factory Worker,Leisure,0,1,Mr. George Walker
+544,0,1,male,40.6,5,0,TICK954434,39.56,,C,British,Doctor,Migration,1,1,Rev. John Taylor
+545,0,3,female,,3,0,TICK428417,8.08,,Q,French,Factory Worker,Business,6,1,Miss. Sarah Taylor
+546,1,2,female,43.1,4,0,TICK707850,29.48,,S,British,Clerk,Leisure,2,1,Miss. Elizabeth Clark
+547,1,3,male,39.8,0,0,TICK614160,18.17,,S,British,Farmer,Migration,1,0,Dr. George Lewis
+548,0,1,male,28.5,1,0,TICK699249,277.81,B51,S,British,Doctor,Leisure,1,1,Master. Thomas Taylor
+549,1,3,male,,0,0,TICK145850,18.95,,S,Irish,Servant,Migration,6,0,Dr. George Lewis
+550,0,2,male,19.6,0,1,TICK635960,29.35,,C,British,Clerk,Leisure,0,0,Dr. Thomas Taylor
+551,1,3,female,26.4,1,0,TICK273922,12.36,,C,Other,Servant,Leisure,5,1,Mrs. Alice Harris
+552,1,2,female,35.3,0,0,TICK835515,14.79,,Q,British,Clerk,Migration,0,1,Lady. Mary Harris
+553,0,3,male,11.2,0,0,TICK301820,17.04,,S,French,Farmer,Migration,0,1,Dr. William Johnson
+554,1,2,female,51.7,0,3,TICK359163,19.88,,Q,American,Teacher,Migration,0,0,Miss. Elizabeth Walker
+555,1,3,male,35.1,4,1,TICK330089,18.49,,C,Irish,Farmer,Migration,2,0,Mr. Thomas Harris
+556,0,3,male,36.9,0,0,TICK124694,18.66,,C,French,Factory Worker,Leisure,0,1,Rev. John Harris
+557,0,2,male,39.6,0,0,TICK86465,47.73,D16,S,French,Teacher,Migration,0,0,Rev. James Smith
+558,1,3,male,49.9,0,0,TICK429346,12.8,C84,S,Other,Laborer,Business,1,0,Dr. John Lewis
+559,1,3,male,32.9,0,1,TICK442474,15.16,,S,French,Farmer,Migration,0,0,Rev. James Taylor
+560,0,3,male,40.6,3,0,TICK530558,16.68,,S,French,Farmer,Business,1,1,Rev. William Walker
+561,0,2,female,19.9,2,0,TICK156607,15.24,C44,S,Irish,Teacher,Leisure,1,1,Mrs. Alice Johnson
+562,0,3,male,57.0,0,0,TICK604992,14.01,,S,British,Farmer,Leisure,2,0,Master. John Davis
+563,0,3,male,31.9,0,0,TICK519206,5.51,,Q,American,Servant,Migration,1,0,Rev. Thomas Walker
+564,0,1,male,19.8,0,1,TICK664360,263.86,,C,Irish,Merchant,Leisure,10,0,Master. James Davis
+565,1,3,male,23.3,0,2,TICK925258,7.32,C98,S,Irish,Factory Worker,Migration,5,0,Rev. George Wilson
+566,1,1,male,1.7,0,5,TICK811176,115.97,,S,British,Lawyer,Leisure,1,0,Master. Thomas Walker
+567,0,2,female,23.2,0,0,TICK208727,24.6,,C,British,Teacher,Business,2,1,Lady. Alice Walker
+568,1,3,female,-6.4,0,1,TICK944584,11.49,D83,Q,French,Farmer,Business,0,0,Mrs. Margaret Johnson
+569,1,1,male,41.8,2,0,TICK189655,322.89,,S,French,Aristocrat,Migration,1,0,Dr. George Davis
+570,1,3,male,36.4,2,1,TICK919977,6.12,,S,American,Laborer,Migration,0,0,Mr. Thomas Taylor
+571,1,3,male,15.5,1,1,TICK477126,12.56,B59,S,British,Farmer,Migration,5,0,Master. William Wilson
+572,0,3,male,,3,1,TICK17265,7.74,,C,Irish,Servant,Business,0,0,Rev. Thomas Johnson
+573,1,3,male,29.9,0,0,TICK175872,13.61,,S,American,Servant,Migration,0,1,Rev. Thomas Clark
+574,1,1,female,12.6,2,0,TICK127656,329.58,,S,British,Merchant,Migration,1,1,Mrs. Margaret Davis
+575,0,1,male,26.7,1,5,TICK439960,291.65,,S,British,Aristocrat,Migration,4,1,Master. John Walker
+576,1,3,male,30.4,1,0,TICK277169,16.07,,C,British,Laborer,Business,0,1,Dr. Thomas Smith
+577,0,3,male,26.3,0,0,TICK803694,10.03,,S,American,Farmer,Leisure,2,0,Master. John Clark
+578,0,1,female,19.8,0,0,TICK582517,389.6,,S,French,Merchant,Migration,0,1,Mrs. Mary Smith
+579,0,3,male,15.0,2,0,TICK746937,11.49,D66,S,French,Farmer,Migration,1,0,Mr. John Smith
+580,1,3,male,25.8,0,0,TICK976306,12.26,,S,British,Factory Worker,Migration,4,1,Dr. John Clark
+581,0,1,female,21.4,5,5,TICK493684,334.61,,S,Irish,Aristocrat,Leisure,4,1,Miss. Sarah Johnson
+582,1,3,male,38.6,1,2,TICK779938,5.28,,S,French,Laborer,Leisure,2,1,Rev. Thomas Taylor
+583,1,3,female,51.0,0,0,TICK106901,14.81,C68,C,British,Servant,Business,1,1,Miss. Sarah Wilson
+584,0,1,male,,2,0,TICK133537,320.74,,C,British,Lawyer,Migration,0,1,Mr. John Brown
+585,1,3,male,30.9,1,0,TICK912693,9.65,,S,British,Servant,Migration,2,0,Master. John Smith
+586,0,1,male,20.3,1,0,TICK36730,70.32,,C,British,Doctor,Leisure,10,1,Master. Thomas Taylor
+587,0,3,female,43.4,0,0,TICK875364,6.36,,C,French,Laborer,Leisure,0,1,Miss. Sarah Clark
+588,0,1,female,39.5,0,0,TICK453376,463.92,,C,British,Doctor,Leisure,5,1,Lady. Sarah Smith
+589,0,3,male,49.8,0,0,TICK26093,15.34,B89,S,French,Servant,Migration,4,1,Rev. William Harris
+590,0,3,female,33.0,0,0,TICK724566,6.91,,S,Irish,Factory Worker,Migration,1,1,Mrs. Mary Taylor
+591,1,3,male,56.0,0,0,TICK176044,10.35,,C,British,Farmer,Migration,0,0,Mr. James Wilson
+592,0,3,male,33.0,1,0,TICK77561,13.89,,S,French,Servant,Migration,5,0,Mr. George Harris
+593,0,2,female,20.2,0,0,TICK139808,43.42,B82,S,American,Engineer,Business,0,1,Lady. Alice Taylor
+594,1,3,female,22.7,5,0,TICK540908,5.65,,S,British,Farmer,Migration,2,1,Miss. Alice Davis
+595,0,3,male,37.8,3,0,TICK909989,8.55,,S,French,Farmer,Migration,0,1,Mr. William Walker
+596,1,3,male,21.4,0,0,TICK556021,18.35,,S,British,Factory Worker,Migration,3,0,Master. Thomas Johnson
+597,1,1,female,55.9,0,0,TICK964246,34.31,,C,Irish,Lawyer,Leisure,0,1,Lady. Elizabeth Brown
+598,0,1,male,,1,0,TICK407967,124.66,,S,Irish,Aristocrat,Migration,2,1,Mr. William Clark
+599,0,3,male,30.6,0,0,TICK949185,19.39,,S,British,Factory Worker,Leisure,3,0,Mr. George Lewis
+600,1,3,male,31.8,0,0,TICK443875,14.2,,S,Irish,Servant,Business,0,0,Dr. George Johnson
+601,0,3,female,26.1,2,0,TICK372581,8.93,,S,Irish,Factory Worker,Migration,3,1,Miss. Elizabeth Johnson
+602,1,3,male,5.0,2,0,TICK134644,6.0,,S,Irish,Laborer,Migration,8,0,Mr. William Brown
+603,0,3,female,22.8,0,0,TICK422860,5.42,,S,French,Servant,Leisure,0,1,Miss. Mary Wilson
+604,1,1,female,53.6,0,1,TICK731782,145.03,,S,American,Aristocrat,Migration,1,0,Lady. Sarah Clark
+605,1,2,male,33.4,2,0,TICK584994,45.26,E86,S,French,Nurse,Leisure,2,0,Master. Thomas Clark
+606,1,1,male,45.7,0,0,TICK254162,225.48,C27,C,British,Lawyer,Leisure,1,0,Master. Thomas Davis
+607,0,3,male,,0,2,TICK747568,15.81,E77,C,American,Factory Worker,Leisure,5,0,Mr. George Clark
+608,1,3,female,29.4,0,0,TICK308643,18.77,A8,C,British,Servant,Migration,1,1,Miss. Mary Wilson
+609,0,3,male,,0,0,TICK125811,11.12,,S,Other,Factory Worker,Leisure,7,0,Master. William Brown
+610,0,3,male,6.4,2,2,TICK354169,7.87,B62,Q,Irish,Factory Worker,Migration,0,1,Mr. William Walker
+611,1,3,male,52.1,0,0,TICK942019,12.76,,S,British,Laborer,Migration,1,0,Master. William Davis
+612,0,3,male,50.7,0,0,TICK865776,18.62,,Q,British,Farmer,Leisure,0,0,Master. George Clark
+613,0,3,male,37.4,4,0,TICK942992,17.07,,S,British,Servant,Leisure,1,0,Mr. George Brown
+614,0,3,male,33.9,0,0,TICK353993,5.99,,S,Other,Laborer,Migration,2,0,Master. Thomas Harris
+615,0,3,male,29.6,0,0,TICK621209,15.39,E25,S,Other,Laborer,Migration,0,0,Dr. Thomas Walker
+616,0,3,female,47.6,0,2,TICK639328,13.58,,C,British,Laborer,Leisure,4,1,Lady. Elizabeth Davis
+617,1,3,male,41.6,0,0,TICK647582,18.61,,S,American,Farmer,Business,2,1,Master. William Davis
+618,0,2,male,-12.7,1,1,TICK114006,14.9,C18,S,Irish,Teacher,Business,0,0,Rev. James Wilson
+619,1,1,female,,1,0,TICK758260,281.0,,S,British,Lawyer,Business,2,1,Miss. Margaret Lewis
+620,0,3,female,13.2,2,1,TICK48435,18.19,,S,American,Factory Worker,Migration,0,1,Mrs. Sarah Clark
+621,0,3,female,10.6,0,0,TICK78335,11.15,B27,S,British,Farmer,Migration,1,1,Miss. Mary Lewis
+622,0,3,female,47.4,1,0,TICK775633,12.23,,C,British,Farmer,Migration,1,1,Mrs. Margaret Johnson
+623,0,1,male,29.3,1,0,TICK966448,63.12,,S,French,Lawyer,Migration,5,1,Master. John Taylor
+624,0,3,female,37.2,0,0,TICK373200,9.17,,S,British,Servant,Business,2,1,Miss. Mary Wilson
+625,0,3,female,31.2,0,0,TICK997062,9.87,,S,French,Laborer,Migration,3,0,Lady. Mary Lewis
+626,1,3,male,10.8,4,2,TICK471700,19.18,C68,Q,American,Factory Worker,Migration,0,0,Dr. George Lewis
+627,0,3,female,6.7,2,0,TICK955911,9.24,,C,British,Servant,Leisure,1,1,Miss. Margaret Johnson
+628,0,3,male,23.6,0,1,TICK429736,11.91,,C,French,Servant,Business,7,0,Dr. Thomas Davis
+629,0,3,male,24.8,0,0,TICK662475,15.07,,S,Irish,Factory Worker,Migration,2,1,Mr. William Clark
+630,1,1,female,24.8,2,0,TICK472600,106.23,,S,Irish,Doctor,Migration,0,0,Miss. Alice Lewis
+631,1,3,male,25.2,1,2,TICK777677,12.3,A70,C,French,Servant,Leisure,1,1,Mr. James Brown
+632,0,3,male,61.2,0,0,TICK876356,16.08,,S,British,Laborer,Leisure,1,1,Mr. John Brown
+633,0,3,male,45.5,4,0,TICK457854,18.0,,S,American,Farmer,Migration,1,0,Dr. William Clark
+634,0,3,female,33.6,0,1,TICK304343,14.39,,S,British,Servant,Migration,2,1,Miss. Mary Brown
+635,0,3,male,28.9,0,2,TICK795464,15.04,,C,American,Farmer,Leisure,1,0,Rev. George Brown
+636,0,3,female,,4,0,TICK501281,6.89,C15,S,American,Farmer,Migration,3,0,Miss. Elizabeth Smith
+637,0,3,male,41.0,1,0,TICK735122,19.19,,S,French,Laborer,Leisure,5,0,Master. James Taylor
+638,0,1,female,28.8,4,0,TICK142144,92.31,,C,Irish,Doctor,Business,5,1,Lady. Mary Wilson
+639,0,1,female,43.7,0,1,TICK770070,394.1,,S,French,Lawyer,Business,0,1,Lady. Elizabeth Smith
+640,0,2,male,35.2,1,4,TICK193362,20.59,C29,C,Irish,Clerk,Migration,1,1,Dr. Thomas Davis
+641,1,1,female,61.3,1,0,TICK759862,468.79,,S,American,Lawyer,Migration,1,1,Lady. Alice Walker
+642,0,1,male,27.9,4,1,TICK804162,368.38,A94,S,American,Doctor,Business,3,1,Rev. George Taylor
+643,1,3,male,46.6,0,0,TICK619196,16.31,,S,American,Farmer,Business,1,0,Master. James Walker
+644,0,3,female,14.4,0,0,TICK961854,8.29,C31,C,American,Factory Worker,Migration,0,1,Miss. Margaret Walker
+645,1,3,male,20.6,0,0,TICK860943,11.65,,C,British,Laborer,Migration,2,0,Dr. Thomas Johnson
+646,0,3,male,58.7,1,0,TICK983118,14.27,,S,Irish,Servant,Migration,4,0,Master. George Wilson
+647,1,3,male,,0,2,TICK535117,16.55,,S,French,Farmer,Migration,7,1,Dr. John Johnson
+648,0,3,male,37.4,0,2,TICK88859,6.56,,C,British,Laborer,Migration,0,0,Mr. William Harris
+649,0,1,male,66.1,0,2,TICK160652,482.31,C93,C,Other,Aristocrat,Leisure,3,0,Rev. John Harris
+650,0,3,male,29.1,4,3,TICK940103,18.35,C33,S,British,Servant,Migration,5,1,Master. George Lewis
+651,0,3,male,46.6,0,2,TICK9161,9.06,,S,American,Factory Worker,Business,0,0,Master. George Davis
+652,0,2,male,47.8,0,0,TICK623385,42.91,,C,British,Clerk,Migration,1,0,Rev. John Clark
+653,1,3,female,54.5,0,1,TICK622856,12.77,,S,American,Farmer,Leisure,2,0,Mrs. Margaret Brown
+654,0,3,male,12.8,4,2,TICK388840,11.93,A2,S,British,Servant,Migration,2,1,Dr. William Brown
+655,1,2,male,29.0,2,0,TICK707642,22.58,,S,American,Clerk,Leisure,0,0,Master. John Smith
+656,0,3,male,34.9,0,0,TICK681950,13.71,,S,British,Servant,Leisure,0,0,Mr. George Davis
+657,0,3,male,54.2,2,2,TICK476557,15.95,,S,British,Servant,Migration,1,0,Master. Thomas Smith
+658,1,3,male,36.8,0,0,TICK398803,11.16,,S,British,Farmer,Business,6,0,Master. William Walker
+659,0,3,male,47.8,1,0,TICK337002,14.44,,S,British,Servant,Leisure,0,0,Dr. William Lewis
+660,0,3,male,11.6,0,0,TICK460891,15.49,,S,French,Servant,Migration,5,0,Rev. William Taylor
+661,0,3,male,25.5,1,0,TICK186306,15.67,,C,American,Factory Worker,Leisure,0,0,Mr. George Smith
+662,0,1,male,50.6,1,0,TICK534376,54.42,E73,S,French,Lawyer,Migration,2,1,Master. William Johnson
+663,1,3,male,27.4,0,0,TICK758630,17.9,,S,British,Factory Worker,Migration,1,0,Rev. George Taylor
+664,0,3,male,30.2,0,0,TICK617647,11.87,,C,British,Factory Worker,Leisure,3,1,Dr. Thomas Wilson
+665,1,3,male,53.9,0,1,TICK293866,8.94,,S,British,Servant,Leisure,3,0,Dr. William Brown
+666,0,1,male,17.3,2,0,TICK991661,143.63,E14,C,Other,Doctor,Migration,5,1,Mr. William Harris
+667,1,1,male,20.4,0,1,TICK811555,257.02,,S,Irish,Aristocrat,Leisure,1,1,Mr. Thomas Johnson
+668,0,3,female,10.2,1,0,TICK102605,18.3,,S,French,Factory Worker,Migration,0,1,Miss. Sarah Smith
+669,0,3,male,54.6,0,0,TICK244545,10.68,,S,American,Servant,Business,0,1,Dr. Thomas Brown
+670,0,3,male,45.1,1,2,TICK312792,16.25,,S,British,Factory Worker,Leisure,1,0,Rev. John Wilson
+671,0,3,male,44.7,2,3,TICK518255,6.45,,S,British,Factory Worker,Migration,5,0,Rev. George Brown
+672,1,3,male,25.1,0,0,TICK358687,12.14,E54,S,American,Servant,Migration,0,0,Rev. George Taylor
+673,1,3,female,9.2,0,1,TICK51633,19.88,D92,S,British,Farmer,Business,6,0,Miss. Elizabeth Johnson
+674,0,1,male,5.3,2,0,TICK592534,392.11,,C,Other,Aristocrat,Migration,0,0,Dr. James Davis
+675,1,3,male,50.8,0,1,TICK543824,8.16,,S,Other,Farmer,Migration,0,0,Mr. John Smith
+676,0,3,female,38.5,0,0,TICK941888,12.52,E67,S,French,Factory Worker,Business,0,1,Miss. Mary Johnson
+677,1,2,male,41.4,0,0,TICK551705,19.34,,Q,American,Clerk,Leisure,1,0,Mr. James Walker
+678,1,3,male,,1,0,TICK608993,11.14,D86,S,British,Farmer,Business,2,0,Dr. William Brown
+679,0,3,female,18.7,2,0,TICK533915,16.7,,S,Irish,Laborer,Migration,0,1,Miss. Elizabeth Brown
+680,0,3,male,25.8,1,0,TICK886066,16.57,E24,S,Other,Farmer,Migration,1,0,Mr. William Smith
+681,1,3,female,15.2,0,0,TICK974124,8.42,A81,S,American,Servant,Leisure,3,0,Miss. Alice Smith
+682,0,2,male,13.4,0,2,TICK448416,46.89,C13,S,Other,Teacher,Leisure,3,1,Master. William Brown
+683,0,1,female,43.8,0,1,TICK300113,308.51,,S,American,Aristocrat,Leisure,0,1,Miss. Elizabeth Smith
+684,0,3,male,6.4,0,0,TICK339480,10.7,,C,American,Servant,Migration,1,0,Master. William Smith
+685,0,2,male,15.3,0,1,TICK403724,30.08,D33,S,British,Clerk,Leisure,3,1,Dr. James Brown
+686,0,3,male,26.6,0,0,TICK335053,14.08,,S,American,Farmer,Business,5,0,Master. James Harris
+687,0,3,male,31.6,1,0,TICK795086,13.4,,C,Other,Factory Worker,Leisure,0,0,Master. John Walker
+688,0,1,male,10.0,0,0,TICK188082,258.61,B36,C,British,Aristocrat,Leisure,6,1,Rev. William Walker
+689,0,3,male,,0,1,TICK151152,12.57,D7,S,British,Servant,Migration,0,0,Mr. John Walker
+690,1,2,female,36.6,1,0,TICK44971,17.06,C59,S,Irish,Nurse,Business,0,0,Miss. Elizabeth Clark
+691,1,1,male,33.4,0,0,TICK854527,411.98,,S,British,Merchant,Migration,1,1,Mr. George Clark
+692,0,3,female,50.5,0,0,TICK991959,13.13,B27,Q,British,Servant,Migration,5,1,Lady. Sarah Clark
+693,1,3,male,31.8,0,0,TICK771310,6.97,E99,S,Irish,Laborer,Leisure,6,0,Rev. John Wilson
+694,1,1,male,38.1,3,0,TICK926246,390.09,,C,British,Merchant,Leisure,2,1,Master. John Taylor
+695,1,3,male,19.5,0,0,TICK767493,18.99,,S,French,Farmer,Migration,4,1,Dr. James Davis
+696,1,3,female,20.1,0,2,TICK221914,19.21,,S,British,Factory Worker,Migration,2,1,Miss. Mary Johnson
+697,1,3,male,11.3,0,2,TICK452451,10.54,,C,American,Farmer,Leisure,4,0,Rev. George Johnson
+698,1,3,male,19.6,3,0,TICK545352,7.03,B64,C,British,Farmer,Business,1,0,Rev. Thomas Wilson
+699,0,3,female,25.6,2,1,TICK292772,12.78,,S,Other,Farmer,Business,3,1,Miss. Mary Smith
+700,0,2,female,48.7,0,0,TICK604075,14.5,C79,C,American,Engineer,Migration,1,1,Lady. Margaret Lewis
+701,1,1,male,17.5,0,0,TICK923310,468.97,E95,Q,French,Lawyer,Leisure,0,1,Dr. Thomas Davis
+702,1,3,male,62.2,0,1,TICK646374,7.75,,S,French,Factory Worker,Leisure,4,1,Mr. James Johnson
+703,1,3,female,39.5,0,0,TICK330638,8.79,C13,S,American,Farmer,Migration,3,1,Lady. Alice Johnson
+704,0,2,female,36.2,0,0,TICK105298,26.27,,C,Irish,Clerk,Leisure,4,1,Miss. Elizabeth Wilson
+705,0,3,female,30.7,0,0,TICK365218,10.75,D41,S,American,Factory Worker,Migration,0,1,Lady. Elizabeth Clark
+706,0,1,female,27.8,0,0,TICK299624,403.49,,S,British,Aristocrat,Migration,1,1,Lady. Sarah Smith
+707,1,3,male,21.6,0,0,TICK174636,11.84,B97,S,British,Farmer,Migration,0,0,Master. John Wilson
+708,0,2,female,9.5,1,0,TICK125309,16.83,,S,British,Clerk,Migration,1,1,Mrs. Mary Davis
+709,0,3,male,17.9,0,1,TICK302825,9.01,,S,British,Laborer,Leisure,1,0,Dr. Thomas Smith
+710,0,3,male,54.6,0,0,TICK288150,12.64,D45,S,British,Servant,Migration,4,0,Rev. Thomas Walker
+711,1,2,male,38.5,0,1,TICK511274,15.9,,S,Irish,Engineer,Migration,3,1,Rev. William Johnson
+712,1,3,male,54.4,0,0,TICK461237,14.17,,S,British,Servant,Leisure,3,0,Mr. William Davis
+713,1,3,male,21.3,0,0,TICK235496,13.49,,S,Other,Farmer,Migration,5,0,Dr. William Davis
+714,0,3,male,14.8,0,0,TICK929355,15.72,C3,S,British,Farmer,Business,2,0,Master. William Brown
+715,0,3,male,30.5,1,0,TICK178545,19.07,,C,American,Factory Worker,Migration,1,0,Mr. Thomas Davis
+716,0,3,male,18.5,0,1,TICK303491,18.68,,S,Other,Factory Worker,Migration,1,1,Master. George Harris
+717,0,3,male,33.5,0,1,TICK985827,19.19,,C,French,Farmer,Business,3,0,Dr. James Taylor
+718,0,3,female,6.7,0,0,TICK963270,8.67,,S,French,Factory Worker,Migration,1,1,Miss. Margaret Smith
+719,0,3,male,0.1,0,3,TICK273031,6.97,,S,British,Laborer,Business,10,0,Rev. William Clark
+720,0,3,female,35.6,2,0,TICK636615,9.53,,S,American,Factory Worker,Migration,1,1,Miss. Sarah Taylor
+721,0,2,male,55.1,0,3,TICK791069,45.8,,S,British,Engineer,Leisure,0,0,Dr. John Smith
+722,1,1,male,36.3,0,0,TICK112274,486.87,,S,American,Doctor,Migration,3,1,Mr. James Johnson
+723,1,3,female,38.4,0,3,TICK970425,17.89,,S,American,Servant,Migration,1,0,Mrs. Margaret Davis
+724,0,3,male,31.1,1,1,TICK243928,6.65,E85,S,Irish,Farmer,Leisure,0,1,Rev. George Brown
+725,1,3,male,32.5,1,1,TICK699806,19.21,,S,Irish,Servant,Business,5,0,Rev. Thomas Lewis
+726,1,2,male,8.8,0,0,TICK293163,26.93,,S,French,Engineer,Leisure,3,0,Master. John Clark
+727,1,3,female,19.0,4,1,TICK148852,5.14,,S,British,Laborer,Business,0,1,Mrs. Alice Johnson
+728,0,3,male,48.5,2,0,TICK101638,11.64,,S,British,Farmer,Business,3,1,Dr. Thomas Lewis
+729,0,3,male,,0,0,TICK217890,5.69,B50,S,Irish,Servant,Migration,2,0,Mr. John Taylor
+730,1,1,female,,0,2,TICK579985,285.62,,S,American,Aristocrat,Migration,4,0,Miss. Sarah Davis
+731,0,3,male,48.2,1,0,TICK880535,10.08,,S,Irish,Farmer,Migration,4,0,Mr. George Walker
+732,1,2,male,32.1,1,0,TICK534408,28.94,,S,Irish,Teacher,Migration,2,1,Mr. George Lewis
+733,1,3,male,32.9,2,1,TICK792533,14.2,,S,British,Servant,Leisure,1,0,Mr. William Wilson
+734,0,3,female,25.4,0,0,TICK178054,18.03,,S,British,Laborer,Migration,3,1,Mrs. Elizabeth Walker
+735,0,3,female,40.6,0,0,TICK29678,14.93,,S,Irish,Laborer,Business,0,1,Miss. Margaret Davis
+736,1,1,female,44.4,0,0,TICK628459,234.0,,S,British,Aristocrat,Leisure,1,1,Lady. Sarah Davis
+737,0,2,male,18.2,0,1,TICK947383,42.78,C4,S,Irish,Teacher,Migration,0,0,Master. James Smith
+738,0,3,female,,0,1,TICK42675,18.58,,S,American,Laborer,Migration,0,1,Lady. Sarah Davis
+739,0,3,male,2.5,0,0,TICK934908,6.8,,S,British,Laborer,Migration,0,0,Rev. James Harris
+740,0,3,male,37.6,1,0,TICK567052,12.98,B57,S,British,Laborer,Migration,4,0,Rev. Thomas Harris
+741,1,3,male,,2,1,TICK565045,9.27,B19,S,Irish,Factory Worker,Migration,2,0,Mr. William Johnson
+742,1,3,female,67.4,4,0,TICK838803,5.71,,S,Other,Servant,Business,7,1,Miss. Sarah Walker
+743,0,3,male,31.2,1,2,TICK205611,15.03,B3,C,Other,Farmer,Migration,6,0,Master. James Smith
+744,1,3,male,28.5,0,0,TICK7988,17.94,E62,C,American,Farmer,Leisure,0,0,Dr. George Harris
+745,0,2,female,34.0,1,0,TICK513088,16.52,,S,American,Teacher,Migration,0,1,Mrs. Margaret Harris
+746,1,3,male,34.8,4,0,TICK873944,17.19,,S,British,Farmer,Migration,4,0,Dr. John Johnson
+747,1,3,male,27.4,0,2,TICK863347,17.8,,C,British,Factory Worker,Leisure,2,0,Rev. Thomas Smith
+748,0,2,male,18.7,1,0,TICK28029,46.57,D24,S,French,Teacher,Leisure,4,1,Dr. Thomas Lewis
+749,0,1,male,30.4,1,0,TICK388491,154.68,,S,American,Aristocrat,Migration,2,1,Rev. John Smith
+750,0,3,female,29.9,0,1,TICK214008,18.56,,S,Other,Factory Worker,Migration,2,1,Miss. Elizabeth Brown
+751,0,2,male,29.6,0,0,TICK296528,22.83,E50,S,French,Engineer,Migration,3,0,Mr. William Taylor
+752,1,3,male,42.3,0,0,TICK988555,13.29,,C,American,Factory Worker,Migration,2,1,Rev. Thomas Lewis
+753,0,3,male,30.2,0,0,TICK994923,5.76,,S,British,Factory Worker,Migration,2,0,Rev. John Smith
+754,0,3,male,10.3,0,0,TICK599910,5.66,,S,British,Laborer,Leisure,0,1,Master. George Wilson
+755,1,3,male,20.9,0,0,TICK448220,15.81,,C,French,Laborer,Leisure,0,1,Rev. William Johnson
+756,1,1,male,27.2,4,0,TICK768651,238.91,C70,S,Other,Lawyer,Migration,0,1,Master. George Smith
+757,0,3,male,,2,0,TICK467432,8.84,,S,British,Laborer,Leisure,3,0,Dr. John Clark
+758,0,3,male,37.9,0,0,TICK547196,7.86,B42,S,British,Farmer,Leisure,7,0,Mr. Thomas Taylor
+759,0,3,male,31.0,1,0,TICK133307,15.05,,Q,British,Laborer,Migration,4,0,Rev. Thomas Walker
+760,0,1,male,0.4,1,2,TICK872406,30.19,,Q,Irish,Aristocrat,Migration,4,1,Master. John Harris
+761,1,3,female,11.9,0,3,TICK476895,17.09,A65,S,Other,Factory Worker,Business,0,1,Lady. Alice Davis
+762,1,2,male,39.0,1,0,TICK310268,13.17,,S,British,Nurse,Migration,0,1,Mr. William Taylor
+763,1,3,female,26.8,1,0,TICK963587,7.87,,S,British,Factory Worker,Migration,3,0,Lady. Sarah Harris
+764,0,1,male,,0,1,TICK115939,211.53,,S,Irish,Lawyer,Migration,6,1,Dr. Thomas Brown
+765,0,3,female,,0,1,TICK752043,12.27,C92,S,American,Farmer,Business,2,1,Miss. Sarah Lewis
+766,1,3,female,24.9,0,0,TICK741632,10.32,,S,British,Farmer,Business,5,1,Lady. Sarah Clark
+767,0,1,female,20.8,0,0,TICK964833,180.73,,C,French,Lawyer,Migration,1,0,Lady. Sarah Johnson
+768,1,3,male,25.5,0,0,TICK886778,19.46,,S,Other,Servant,Leisure,0,0,Dr. Thomas Taylor
+769,0,3,male,32.4,0,1,TICK126766,14.62,,S,American,Servant,Migration,1,0,Rev. William Clark
+770,1,3,male,30.0,0,1,TICK466992,5.35,D64,S,Irish,Farmer,Migration,0,0,Mr. John Walker
+771,0,3,male,44.2,1,0,TICK933057,11.45,,S,American,Servant,Business,0,0,Mr. William Harris
+772,0,3,female,7.7,4,0,TICK454263,18.13,,S,American,Laborer,Business,3,1,Miss. Margaret Walker
+773,0,3,female,9.5,0,0,TICK518215,9.52,,S,British,Factory Worker,Migration,2,1,Lady. Sarah Walker
+774,0,1,male,26.6,2,0,TICK276834,74.44,,C,Irish,Merchant,Leisure,3,1,Dr. James Wilson
+775,0,1,male,38.1,0,0,TICK92083,386.44,A45,S,Irish,Merchant,Migration,3,1,Rev. James Wilson
+776,0,1,female,41.4,0,0,TICK907496,314.83,,Q,American,Merchant,Leisure,8,0,Miss. Mary Johnson
+777,1,3,male,21.4,0,0,TICK144464,13.55,B9,S,American,Farmer,Business,0,0,Rev. Thomas Clark
+778,1,1,male,-8.9,2,3,TICK292979,55.18,,Q,British,Lawyer,Business,4,1,Master. William Clark
+779,0,3,male,21.8,0,3,TICK768173,7.11,,S,British,Farmer,Migration,7,1,Rev. James Davis
+780,0,3,male,35.9,0,0,TICK702199,14.34,C94,S,American,Factory Worker,Leisure,1,0,Master. George Wilson
+781,1,3,male,29.8,1,1,TICK123119,8.12,,C,American,Laborer,Migration,9,1,Dr. John Walker
+782,0,2,female,38.7,1,0,TICK371903,30.16,E63,S,French,Engineer,Business,2,1,Lady. Mary Clark
+783,1,2,female,47.9,4,1,TICK843678,31.8,D91,S,British,Engineer,Leisure,0,0,Lady. Elizabeth Wilson
+784,0,3,male,27.6,2,0,TICK83907,9.25,,S,French,Factory Worker,Leisure,0,0,Dr. Thomas Walker
+785,0,3,male,23.4,1,0,TICK781431,19.23,,S,Irish,Farmer,Migration,4,1,Master. Thomas Walker
+786,1,3,male,16.7,0,0,TICK832856,17.64,D40,S,American,Farmer,Migration,2,1,Dr. John Walker
+787,1,3,male,9.4,0,0,TICK234247,15.84,,S,American,Servant,Leisure,1,0,Rev. Thomas Walker
+788,0,3,male,5.8,0,0,TICK763693,6.17,,S,American,Factory Worker,Leisure,0,1,Rev. Thomas Davis
+789,0,2,female,20.0,0,0,TICK78961,14.25,,S,American,Nurse,Leisure,1,1,Miss. Sarah Harris
+790,0,1,female,45.6,0,0,TICK344005,261.61,,S,French,Merchant,Migration,0,1,Mrs. Margaret Harris
+791,1,2,male,40.2,0,0,TICK165340,16.43,B99,S,British,Teacher,Migration,2,0,Rev. John Lewis
+792,0,3,female,,1,0,TICK532691,19.67,,S,American,Laborer,Migration,4,1,Miss. Sarah Harris
+793,1,3,male,62.4,1,0,TICK352626,7.38,,C,French,Farmer,Leisure,1,0,Dr. James Taylor
+794,1,2,male,20.9,2,0,TICK290520,29.5,,S,French,Engineer,Leisure,0,0,Mr. William Harris
+795,0,2,female,49.5,0,1,TICK476491,24.56,,S,Irish,Nurse,Migration,0,1,Mrs. Mary Harris
+796,1,3,female,53.4,1,0,TICK662257,14.59,,S,British,Farmer,Leisure,2,1,Lady. Alice Harris
+797,0,3,male,36.9,0,0,TICK772250,6.94,A100,S,British,Factory Worker,Migration,0,0,Rev. William Johnson
+798,1,3,female,19.8,0,0,TICK538756,11.45,,C,Irish,Laborer,Leisure,10,1,Miss. Mary Smith
+799,0,3,female,24.5,0,1,TICK705728,9.12,A68,S,American,Factory Worker,Migration,0,1,Miss. Sarah Lewis
+800,1,2,male,32.8,0,0,TICK815791,45.51,D94,C,British,Teacher,Leisure,6,0,Master. Thomas Clark
+801,0,3,male,9.8,2,2,TICK78687,5.61,,S,Irish,Farmer,Migration,3,0,Master. William Brown
+802,0,2,female,15.4,0,0,TICK742143,46.55,,S,American,Clerk,Migration,0,0,Mrs. Margaret Lewis
+803,0,1,male,14.3,0,0,TICK722354,421.51,,S,Irish,Lawyer,Business,4,1,Dr. William Smith
+804,1,2,male,38.0,0,0,TICK331102,21.9,,C,British,Teacher,Migration,4,1,Master. Thomas Clark
+805,0,3,female,47.8,3,0,TICK936615,16.84,A84,S,American,Servant,Migration,3,1,Lady. Margaret Walker
+806,0,3,female,40.8,0,0,TICK970649,5.47,D94,C,British,Farmer,Migration,4,1,Mrs. Margaret Lewis
+807,0,3,female,44.9,1,2,TICK41220,19.5,,C,Other,Factory Worker,Migration,3,1,Lady. Elizabeth Smith
+808,0,1,female,18.6,0,0,TICK455429,277.5,,S,British,Lawyer,Migration,5,1,Mrs. Elizabeth Johnson
+809,0,3,male,25.2,0,2,TICK106317,9.55,D74,Q,Irish,Laborer,Migration,0,1,Rev. William Davis
+810,0,3,male,26.2,0,1,TICK978658,10.44,D53,S,Irish,Laborer,Business,3,1,Master. William Harris
+811,0,1,male,36.8,0,0,TICK740354,61.21,,S,British,Aristocrat,Migration,0,0,Dr. John Davis
+812,0,2,female,,0,0,TICK833776,49.57,,C,Irish,Engineer,Migration,1,1,Miss. Alice Walker
+813,0,3,female,,0,0,TICK547619,5.59,,C,French,Servant,Migration,5,1,Mrs. Sarah Wilson
+814,1,3,female,43.9,3,0,TICK333951,14.82,A40,C,American,Factory Worker,Migration,0,1,Lady. Elizabeth Smith
+815,0,3,male,52.9,0,3,TICK200647,11.64,,S,Irish,Laborer,Migration,2,0,Master. William Brown
+816,0,2,female,37.6,1,0,TICK883304,47.96,,S,British,Nurse,Migration,7,0,Miss. Alice Harris
+817,1,3,male,,2,0,TICK586283,8.69,,S,British,Factory Worker,Leisure,0,0,Mr. George Wilson
+818,0,1,male,17.4,1,0,TICK694245,280.08,,S,Other,Aristocrat,Leisure,0,1,Dr. Thomas Smith
+819,1,3,female,14.3,0,2,TICK879323,12.24,,S,American,Factory Worker,Migration,0,0,Mrs. Margaret Davis
+820,1,3,male,0.5,0,2,TICK921202,15.54,B45,S,British,Factory Worker,Migration,5,1,Dr. George Davis
+821,1,3,male,26.7,1,2,TICK657493,6.02,,S,Other,Servant,Migration,2,0,Mr. John Brown
+822,0,2,male,25.8,4,0,TICK38367,17.75,,Q,Irish,Nurse,Leisure,5,0,Mr. John Clark
+823,1,3,male,42.9,2,0,TICK996290,8.22,,Q,British,Factory Worker,Leisure,4,0,Rev. John Wilson
+824,1,3,male,21.3,1,0,TICK666318,16.07,,S,British,Factory Worker,Leisure,6,0,Master. James Clark
+825,1,1,female,27.5,1,0,TICK658756,118.9,,S,British,Aristocrat,Migration,0,1,Miss. Sarah Davis
+826,0,1,male,34.2,1,0,TICK9357,299.54,,S,American,Lawyer,Leisure,3,1,Dr. George Harris
+827,0,3,female,37.4,1,0,TICK258859,8.23,,S,British,Farmer,Migration,0,1,Mrs. Mary Brown
+828,0,3,male,41.0,2,0,TICK144523,17.92,,S,British,Servant,Migration,4,1,Master. John Walker
+829,0,1,male,,1,0,TICK615825,472.83,,S,Other,Doctor,Migration,6,1,Master. John Harris
+830,1,3,male,,0,1,TICK395483,12.78,,S,American,Servant,Business,3,0,Rev. John Davis
+831,1,3,female,36.0,1,0,TICK915478,10.28,D40,C,American,Factory Worker,Leisure,6,1,Miss. Mary Clark
+832,0,3,male,20.2,1,0,TICK989977,8.51,A73,S,French,Servant,Migration,3,1,Master. William Brown
+833,0,3,female,48.6,0,2,TICK231906,5.75,,Q,French,Factory Worker,Migration,0,1,Lady. Mary Taylor
+834,0,3,male,30.3,0,0,TICK707056,9.03,,C,British,Farmer,Business,0,1,Dr. James Clark
+835,1,2,male,33.6,1,2,TICK206183,36.17,B82,C,British,Teacher,Migration,6,0,Dr. Thomas Clark
+836,0,3,male,69.0,0,1,TICK279172,13.0,,S,French,Servant,Migration,4,0,Dr. John Taylor
+837,1,1,male,41.3,0,1,TICK493951,473.7,B69,S,Irish,Aristocrat,Migration,0,1,Dr. James Davis
+838,0,1,female,35.7,5,0,TICK159789,216.25,B45,S,British,Doctor,Leisure,0,1,Miss. Sarah Davis
+839,0,3,male,27.9,0,0,TICK509042,15.41,,S,French,Factory Worker,Migration,2,0,Dr. William Smith
+840,1,3,male,11.6,0,2,TICK854403,12.34,,Q,Irish,Factory Worker,Migration,0,1,Rev. James Taylor
+841,0,1,male,26.9,0,0,TICK197193,270.91,C74,S,American,Aristocrat,Migration,2,1,Rev. George Smith
+842,1,3,female,17.2,0,0,TICK770194,9.02,,Q,British,Laborer,Migration,0,1,Miss. Sarah Harris
+843,1,3,female,55.0,2,0,TICK521855,11.82,,S,French,Servant,Leisure,5,1,Lady. Elizabeth Wilson
+844,1,3,female,35.9,0,0,TICK297327,12.06,,C,American,Laborer,Leisure,0,1,Mrs. Alice Brown
+845,1,1,male,47.9,0,1,TICK139193,362.12,,S,Other,Lawyer,Migration,2,1,Rev. Thomas Taylor
+846,1,3,female,20.9,2,1,TICK209218,19.11,,S,American,Farmer,Leisure,2,1,Lady. Mary Walker
+847,0,2,female,,2,0,TICK666607,23.17,A40,S,British,Teacher,Business,2,1,Miss. Mary Clark
+848,0,3,female,39.7,0,0,TICK919409,5.63,C14,S,British,Farmer,Business,6,1,Mrs. Elizabeth Lewis
+849,1,3,male,16.7,0,0,TICK94020,12.44,,S,Other,Farmer,Migration,7,0,Master. Thomas Clark
+850,1,3,male,23.4,0,3,TICK998020,13.17,,C,British,Factory Worker,Migration,0,0,Rev. George Brown
+851,1,1,male,55.9,1,0,TICK542386,109.17,,S,American,Lawyer,Migration,0,0,Mr. William Brown
+852,0,3,male,24.0,0,0,TICK899794,16.41,,Q,American,Farmer,Leisure,0,0,Master. Thomas Smith
+853,0,2,male,8.7,0,5,TICK759417,49.4,,S,Irish,Engineer,Migration,0,0,Rev. James Davis
+854,1,2,male,3.6,0,0,TICK786851,47.83,B79,C,Irish,Clerk,Business,7,0,Mr. John Clark
+855,1,2,female,7.1,0,0,TICK225593,17.88,C59,S,Other,Teacher,Migration,2,1,Miss. Mary Walker
+856,1,2,male,48.9,0,0,TICK4353,45.01,,C,British,Teacher,Leisure,3,0,Rev. John Harris
+857,1,3,male,21.7,0,0,TICK456416,15.57,,S,French,Factory Worker,Migration,4,0,Mr. John Davis
+858,0,1,male,68.4,2,0,TICK71528,243.31,,S,British,Aristocrat,Migration,5,0,Master. John Smith
+859,0,3,female,53.1,0,0,TICK515526,13.11,,C,British,Factory Worker,Migration,5,1,Mrs. Elizabeth Walker
+860,1,2,male,60.1,0,1,TICK585829,43.98,,S,Irish,Nurse,Business,1,0,Dr. Thomas Wilson
+861,1,2,male,45.4,1,0,TICK641907,29.21,,S,British,Nurse,Migration,7,0,Mr. George Harris
+862,0,3,female,38.9,0,1,TICK219677,10.6,B52,S,British,Farmer,Migration,3,0,Lady. Elizabeth Harris
+863,1,3,female,17.7,1,0,TICK745479,12.4,,S,American,Laborer,Migration,0,0,Mrs. Elizabeth Clark
+864,1,1,male,29.9,1,0,TICK187767,302.19,,S,Irish,Aristocrat,Migration,0,0,Mr. William Lewis
+865,0,2,male,40.4,3,0,TICK41698,17.56,E13,S,British,Nurse,Migration,2,0,Master. Thomas Taylor
+866,1,1,female,44.3,0,0,TICK439471,453.43,,S,Irish,Lawyer,Migration,2,1,Lady. Sarah Johnson
+867,0,2,male,12.9,0,0,TICK722401,36.97,,C,British,Clerk,Migration,1,0,Master. George Walker
+868,0,3,female,27.1,2,0,TICK276852,14.5,,C,Irish,Farmer,Leisure,2,1,Lady. Elizabeth Walker
+869,0,3,male,28.8,0,1,TICK644173,6.49,,S,British,Servant,Business,2,0,Mr. James Smith
+870,0,3,male,28.2,0,0,TICK399763,14.06,D97,S,Irish,Farmer,Leisure,1,0,Master. George Smith
+871,0,3,female,14.6,1,0,TICK662679,6.81,,S,British,Factory Worker,Migration,0,1,Mrs. Elizabeth Brown
+872,1,3,male,57.8,1,0,TICK613262,6.18,B37,S,Irish,Servant,Business,0,1,Rev. John Smith
+873,0,3,male,26.6,3,0,TICK247117,12.91,,S,French,Laborer,Leisure,2,0,Master. Thomas Brown
+874,0,3,male,15.6,2,0,TICK669692,11.04,,S,British,Farmer,Migration,1,1,Master. George Harris
+875,1,3,male,58.3,0,1,TICK366642,13.83,B38,S,French,Factory Worker,Leisure,2,0,Dr. George Brown
+876,0,3,male,53.1,0,1,TICK508755,6.34,,S,British,Laborer,Migration,0,0,Mr. James Davis
+877,0,3,male,32.1,1,0,TICK557228,11.46,,S,British,Factory Worker,Migration,2,0,Dr. Thomas Harris
+878,1,3,male,,2,0,TICK689852,7.62,,S,Other,Servant,Migration,6,1,Rev. Thomas Brown
+879,0,3,female,23.0,3,5,TICK189811,19.81,,C,Irish,Laborer,Migration,5,1,Mrs. Alice Smith
+880,0,3,male,6.1,0,0,TICK921534,13.42,,C,American,Servant,Business,0,0,Master. William Brown
+881,0,2,male,37.7,0,0,TICK315678,37.5,,C,Other,Clerk,Migration,1,0,Mr. William Johnson
+882,0,3,male,22.0,0,3,TICK882529,9.88,,Q,American,Laborer,Leisure,1,0,Rev. Thomas Walker
+883,0,2,male,29.6,0,2,TICK244157,13.79,,Q,British,Clerk,Migration,0,0,Mr. James Wilson
+884,1,3,male,56.6,1,0,TICK918544,19.64,C99,S,British,Farmer,Migration,0,0,Rev. James Clark
+885,1,3,male,21.0,0,0,TICK307305,9.29,,S,Irish,Servant,Migration,0,0,Dr. James Brown
+886,1,1,female,37.0,1,1,TICK701423,229.19,A25,C,American,Merchant,Business,0,1,Miss. Mary Clark
+887,0,3,male,,0,2,TICK509622,14.75,,S,British,Farmer,Leisure,2,0,Rev. George Smith
+888,0,3,female,48.4,0,1,TICK515034,5.37,,S,British,Laborer,Migration,1,0,Miss. Elizabeth Harris
+889,0,3,male,28.5,2,0,TICK836448,17.15,E70,S,American,Laborer,Migration,2,0,Dr. William Davis
+890,0,3,female,26.9,0,0,TICK661631,13.05,,S,British,Laborer,Migration,4,1,Miss. Elizabeth Harris
+891,1,3,female,26.6,0,2,TICK412262,9.17,C95,S,French,Farmer,Migration,10,1,Miss. Alice Lewis
+892,0,1,female,35.5,1,3,TICK627882,58.96,,S,Irish,Lawyer,Leisure,1,1,Lady. Alice Wilson
+893,0,3,male,52.4,0,2,TICK375475,7.44,,C,British,Laborer,Leisure,3,0,Rev. Thomas Lewis
+894,1,2,male,25.9,2,0,TICK570810,45.8,,C,British,Engineer,Business,5,0,Dr. George Smith
+895,0,3,male,-6.4,0,1,TICK505322,15.29,,S,American,Laborer,Leisure,0,1,Mr. James Walker
+896,0,3,male,43.3,0,0,TICK310767,8.75,E7,S,Other,Farmer,Migration,0,0,Rev. George Davis
+897,0,1,male,,0,0,TICK102222,60.83,,C,Irish,Doctor,Business,4,1,Rev. John Harris
+898,0,3,female,37.7,0,3,TICK230565,15.36,E68,Q,British,Farmer,Migration,1,1,Miss. Elizabeth Johnson
+899,0,2,male,6.6,1,1,TICK118825,32.9,B66,S,French,Teacher,Leisure,3,0,Rev. Thomas Brown
+900,0,3,male,,0,0,TICK924685,11.07,,S,French,Farmer,Leisure,2,1,Dr. George Brown
+901,1,3,male,41.9,1,0,TICK941382,10.45,,C,British,Servant,Leisure,1,0,Mr. William Walker
+902,0,3,female,11.2,0,3,TICK792634,8.25,A59,S,British,Factory Worker,Leisure,2,1,Lady. Alice Brown
+903,1,3,female,37.0,1,0,TICK802045,15.04,B29,S,American,Laborer,Migration,4,1,Lady. Alice Johnson
+904,1,3,female,29.5,0,1,TICK302225,19.56,,S,British,Factory Worker,Leisure,1,1,Miss. Alice Johnson
+905,0,2,female,19.0,0,0,TICK440976,17.03,,Q,Other,Teacher,Leisure,0,1,Mrs. Margaret Smith
+906,0,3,male,17.8,2,0,TICK469894,13.96,,S,Other,Laborer,Migration,0,1,Master. John Harris
+907,1,3,male,14.8,0,1,TICK342203,11.36,,S,Irish,Farmer,Leisure,3,0,Rev. James Smith
+908,1,3,male,30.9,0,2,TICK260413,11.7,,S,British,Factory Worker,Leisure,0,0,Rev. Thomas Clark
+909,0,3,male,32.6,0,0,TICK695595,8.81,B89,C,American,Servant,Migration,3,0,Mr. John Taylor
+910,0,1,male,24.5,2,0,TICK446503,417.81,,S,British,Doctor,Business,3,1,Rev. James Clark
+911,0,3,male,13.9,1,0,TICK122445,12.28,,S,British,Servant,Leisure,1,0,Rev. James Walker
+912,1,3,female,,0,0,TICK185753,13.15,,Q,American,Laborer,Migration,3,0,Lady. Elizabeth Johnson
+913,0,3,male,36.5,0,0,TICK488310,9.57,,S,French,Farmer,Leisure,1,1,Rev. Thomas Walker
+914,1,3,female,43.6,0,1,TICK335397,7.73,,C,Other,Laborer,Leisure,1,1,Mrs. Elizabeth Johnson
+915,0,2,male,39.3,0,0,TICK693702,13.44,,S,British,Engineer,Migration,0,0,Dr. Thomas Brown
+916,0,3,male,60.9,2,0,TICK120051,15.71,,S,American,Farmer,Leisure,0,0,Dr. James Taylor
+917,1,3,female,27.3,3,1,TICK365462,7.94,,S,Other,Farmer,Business,6,1,Lady. Mary Wilson
+918,1,3,female,50.6,0,1,TICK731824,15.35,,S,French,Factory Worker,Migration,7,1,Miss. Mary Smith
+919,1,3,male,20.3,0,0,TICK418426,10.86,E91,S,Irish,Farmer,Migration,1,0,Mr. Thomas Walker
+920,1,3,female,18.0,5,0,TICK740056,11.24,,C,Irish,Servant,Migration,0,0,Lady. Sarah Wilson
+921,1,1,male,31.8,0,0,TICK135278,250.51,,S,British,Aristocrat,Business,0,1,Mr. George Lewis
+922,1,2,female,54.4,0,0,TICK812264,24.71,,S,Irish,Teacher,Leisure,6,1,Mrs. Alice Johnson
+923,1,2,male,,1,1,TICK926023,14.02,D49,S,British,Clerk,Migration,2,0,Mr. George Lewis
+924,1,3,female,6.6,1,0,TICK508236,9.64,,S,British,Farmer,Leisure,1,1,Miss. Margaret Johnson
+925,1,1,male,43.2,1,0,TICK881930,341.96,,S,British,Lawyer,Business,4,1,Master. George Smith
+926,0,3,male,28.8,3,0,TICK844811,14.99,E2,S,Irish,Servant,Leisure,3,0,Rev. John Johnson
+927,0,2,female,34.5,0,2,TICK906979,21.45,,C,French,Teacher,Leisure,0,1,Miss. Mary Wilson
+928,0,1,male,18.7,1,0,TICK513936,246.25,,S,British,Lawyer,Leisure,1,1,Dr. William Taylor
+929,1,3,male,31.7,1,1,TICK631255,7.9,,S,Irish,Laborer,Migration,4,0,Rev. Thomas Lewis
+930,0,3,male,8.4,1,0,TICK433016,8.16,,S,Irish,Factory Worker,Leisure,0,0,Dr. Thomas Harris
+931,0,3,male,58.1,0,0,TICK721604,5.35,,S,British,Farmer,Business,6,0,Rev. William Harris
+932,1,3,male,46.2,0,1,TICK247268,18.45,A24,S,American,Farmer,Business,0,0,Dr. John Clark
+933,0,1,male,31.0,0,0,TICK31369,129.03,,C,British,Merchant,Business,1,1,Mr. John Davis
+934,0,3,male,42.8,1,2,TICK306062,8.41,B95,S,British,Servant,Migration,0,1,Mr. Thomas Smith
+935,0,3,male,20.3,0,0,TICK281938,9.19,,C,British,Factory Worker,Leisure,4,0,Mr. George Smith
+936,1,3,female,,0,1,TICK533139,6.91,D37,S,American,Farmer,Migration,3,1,Mrs. Alice Johnson
+937,0,3,male,25.0,1,2,TICK226555,14.59,,S,British,Factory Worker,Leisure,0,1,Dr. William Smith
+938,1,3,male,23.9,3,0,TICK934034,6.13,,C,British,Farmer,Business,1,1,Mr. John Davis
+939,1,3,female,15.7,0,1,TICK893325,7.01,,Q,Other,Factory Worker,Leisure,3,1,Mrs. Margaret Davis
+940,0,3,male,36.4,0,0,TICK821854,14.67,A51,S,British,Laborer,Business,1,0,Rev. William Brown
+941,1,3,male,,0,0,TICK429873,10.09,,S,French,Farmer,Migration,2,0,Master. John Smith
+942,0,3,male,51.2,3,3,TICK64756,15.62,,S,Other,Factory Worker,Migration,0,1,Mr. Thomas Brown
+943,1,1,male,14.1,1,0,TICK590569,291.99,,S,British,Lawyer,Migration,2,0,Rev. Thomas Davis
+944,1,3,male,36.4,0,3,TICK810289,8.84,,S,American,Servant,Leisure,1,1,Rev. George Wilson
+945,0,1,male,47.8,0,0,TICK339891,335.89,,S,Irish,Aristocrat,Leisure,1,1,Dr. Thomas Taylor
+946,0,2,male,68.8,0,0,TICK275312,14.65,,S,American,Clerk,Leisure,7,0,Rev. Thomas Davis
+947,1,3,male,32.9,1,0,TICK708777,13.05,,Q,British,Laborer,Business,3,1,Rev. James Wilson
+948,0,3,male,24.7,1,0,TICK334046,11.56,,S,British,Servant,Business,8,0,Master. William Davis
+949,1,3,male,32.5,1,0,TICK432204,9.02,,C,Irish,Factory Worker,Business,5,0,Rev. James Walker
+950,1,3,female,49.8,2,1,TICK411389,14.06,,S,British,Factory Worker,Business,5,1,Lady. Mary Brown
+951,1,2,male,49.8,1,0,TICK849330,44.85,D79,S,American,Nurse,Migration,0,0,Dr. George Johnson
+952,1,3,male,28.2,0,1,TICK464419,19.98,,S,American,Laborer,Leisure,5,0,Dr. James Johnson
+953,1,3,female,49.5,0,1,TICK446853,14.12,,C,American,Farmer,Leisure,2,0,Lady. Alice Taylor
+954,1,3,male,29.7,0,0,TICK419045,11.07,,C,American,Servant,Business,0,0,Dr. James Smith
+955,0,3,female,42.6,0,0,TICK274363,8.38,A85,S,Irish,Laborer,Migration,1,1,Mrs. Elizabeth Taylor
+956,1,2,female,38.2,0,0,TICK957687,20.28,E99,C,American,Teacher,Migration,3,0,Miss. Elizabeth Walker
+957,0,3,female,24.1,1,1,TICK58287,12.19,B99,S,British,Servant,Migration,1,1,Miss. Alice Clark
+958,0,2,male,16.2,1,0,TICK282351,24.69,,S,British,Nurse,Migration,2,1,Rev. Thomas Clark
+959,0,3,female,48.3,0,1,TICK510089,18.71,,S,Other,Factory Worker,Leisure,2,1,Mrs. Mary Clark
+960,1,3,male,52.8,5,0,TICK764559,10.52,,S,Irish,Farmer,Migration,0,0,Dr. George Davis
+961,1,1,male,36.1,0,0,TICK230583,205.52,,C,American,Merchant,Business,3,1,Mr. James Harris
+962,0,3,male,29.6,0,0,TICK357349,10.75,,S,French,Servant,Business,1,0,Mr. Thomas Davis
+963,1,3,female,12.3,0,0,TICK668173,17.55,C60,S,Other,Servant,Business,10,0,Miss. Alice Walker
+964,1,3,male,47.8,0,0,TICK859285,14.76,B83,S,Irish,Factory Worker,Leisure,7,1,Mr. James Wilson
+965,0,3,female,34.2,1,1,TICK48844,14.21,A51,S,American,Laborer,Leisure,0,0,Lady. Mary Walker
+966,0,3,male,26.1,0,0,TICK324496,10.01,,C,British,Servant,Migration,0,0,Mr. James Taylor
+967,0,3,female,43.1,0,0,TICK470380,17.27,,S,American,Laborer,Migration,1,1,Lady. Elizabeth Clark
+968,1,1,male,9.8,1,0,TICK430718,48.03,,S,Irish,Doctor,Business,1,1,Dr. James Smith
+969,0,3,male,15.0,0,0,TICK233060,18.06,,S,Irish,Laborer,Leisure,4,0,Rev. James Wilson
+970,1,3,male,19.8,0,0,TICK601315,12.69,B43,Q,British,Farmer,Migration,7,0,Dr. Thomas Smith
+971,0,3,female,37.7,1,1,TICK919156,10.97,,S,Other,Farmer,Leisure,1,1,Lady. Sarah Walker
+972,0,2,male,32.7,1,0,TICK175624,29.89,,S,French,Nurse,Migration,2,0,Rev. William Taylor
+973,1,3,male,39.5,5,0,TICK563050,15.01,,S,British,Factory Worker,Leisure,0,0,Dr. William Davis
+974,1,3,male,,0,0,TICK217217,5.19,,C,British,Factory Worker,Leisure,2,0,Dr. George Brown
+975,0,1,male,40.1,0,0,TICK818419,439.63,E21,S,British,Merchant,Migration,2,1,Mr. John Johnson
+976,0,3,male,58.5,0,0,TICK656660,11.7,,C,British,Farmer,Leisure,1,0,Mr. Thomas Smith
+977,0,2,male,46.6,1,3,TICK116674,23.72,C8,S,American,Teacher,Leisure,6,1,Dr. Thomas Johnson
+978,1,3,male,28.2,0,0,TICK994921,7.07,,S,French,Farmer,Business,5,0,Dr. George Clark
+979,0,2,male,22.0,0,0,TICK644095,27.58,,S,British,Teacher,Migration,6,1,Dr. William Walker
+980,0,3,male,,1,1,TICK641419,12.44,E69,S,British,Factory Worker,Migration,0,0,Master. William Johnson
+981,0,1,female,40.6,0,0,TICK346698,219.71,,C,American,Aristocrat,Migration,0,1,Miss. Alice Walker
+982,1,3,male,,0,0,TICK136492,15.18,B93,S,British,Farmer,Business,0,0,Mr. William Lewis
+983,0,3,male,41.1,1,2,TICK635347,11.31,,S,Other,Laborer,Migration,2,0,Mr. William Harris
+984,0,3,male,,0,0,TICK566987,19.42,,S,Irish,Servant,Leisure,1,1,Dr. John Lewis
+985,1,3,female,16.0,5,0,TICK21887,13.99,,C,French,Farmer,Migration,0,1,Mrs. Elizabeth Brown
+986,1,2,male,46.3,2,0,TICK997439,42.3,B1,S,American,Clerk,Business,1,0,Rev. William Wilson
+987,1,2,male,35.5,5,0,TICK758311,14.37,,C,American,Clerk,Leisure,2,0,Dr. George Walker
+988,0,1,female,57.6,0,0,TICK23143,216.73,E8,S,Irish,Aristocrat,Business,0,1,Lady. Mary Brown
+989,1,2,male,29.7,2,1,TICK842390,23.47,,S,British,Teacher,Migration,1,1,Dr. James Davis
+990,0,1,female,25.5,1,1,TICK398607,297.66,,S,Irish,Lawyer,Leisure,0,1,Lady. Sarah Brown
+991,0,1,male,14.2,0,3,TICK95636,434.72,,S,British,Aristocrat,Leisure,1,0,Rev. John Lewis
+992,0,3,female,14.0,0,1,TICK819343,6.18,,C,American,Servant,Business,6,1,Lady. Elizabeth Walker
+993,0,3,female,44.3,0,0,TICK739963,6.09,,S,American,Factory Worker,Business,2,1,Mrs. Alice Wilson
+994,0,3,female,55.7,0,0,TICK350477,17.75,A84,S,British,Factory Worker,Leisure,0,1,Lady. Sarah Wilson
+995,1,3,male,28.4,1,1,TICK957540,8.19,,Q,American,Factory Worker,Business,6,0,Dr. James Harris
+996,0,3,male,27.5,1,0,TICK370833,15.03,,S,British,Factory Worker,Business,1,0,Rev. James Smith
+997,0,3,male,31.1,1,1,TICK805092,13.14,,Q,American,Servant,Migration,9,0,Master. William Walker
+998,0,3,male,47.4,1,0,TICK804222,17.49,,C,British,Servant,Leisure,6,0,Rev. George Johnson
+999,1,1,female,16.1,0,0,TICK580751,88.79,,S,American,Aristocrat,Migration,7,0,Lady. Margaret Lewis
+1000,1,3,male,,0,0,TICK67547,6.95,,Q,Other,Servant,Migration,3,0,Rev. John Brown
+1001,0,3,male,44.6,0,0,TICK687745,13.35,,S,Other,Servant,Business,0,0,Dr. John Clark
+1002,1,3,male,37.5,0,2,TICK52605,19.2,,S,Irish,Factory Worker,Business,6,0,Rev. George Brown
+1003,0,3,male,-10.5,2,0,TICK544842,11.22,,S,Other,Factory Worker,Leisure,2,0,Dr. John Lewis
+1004,1,2,male,40.2,0,0,TICK221686,23.08,,C,American,Nurse,Migration,7,0,Dr. William Davis
+1005,0,1,male,37.7,0,0,TICK380687,315.14,,Q,American,Doctor,Leisure,2,1,Master. George Clark
+1006,0,3,male,50.6,1,2,TICK562483,18.96,,C,Other,Servant,Migration,0,0,Rev. Thomas Walker
+1007,0,2,male,54.2,2,0,TICK209079,43.48,,S,British,Clerk,Business,4,0,Rev. Thomas Walker
+1008,0,3,female,49.7,0,1,TICK165618,19.93,C21,S,British,Laborer,Migration,3,1,Lady. Alice Harris
+1009,1,3,female,31.1,0,2,TICK879862,5.34,C95,C,Other,Factory Worker,Leisure,5,0,Miss. Margaret Wilson
+1010,0,1,male,6.0,2,1,TICK562720,83.04,A56,Q,Irish,Lawyer,Leisure,1,1,Dr. James Lewis
+1011,1,2,male,,0,0,TICK415739,34.38,,C,French,Clerk,Leisure,2,0,Rev. John Wilson
+1012,1,3,male,27.4,0,1,TICK902484,17.31,A59,S,Irish,Servant,Migration,3,0,Master. John Wilson
+1013,0,3,male,30.7,0,0,TICK753689,9.28,D91,S,American,Servant,Leisure,1,0,Mr. William Walker
+1014,0,3,female,55.4,0,3,TICK241474,8.59,E30,S,British,Farmer,Leisure,0,1,Lady. Elizabeth Walker
+1015,1,3,female,18.9,0,0,TICK305283,16.8,,S,British,Servant,Leisure,6,1,Miss. Margaret Smith
+1016,0,1,female,10.2,0,1,TICK841208,56.5,,S,British,Lawyer,Migration,1,1,Lady. Elizabeth Clark
+1017,0,3,male,,0,0,TICK170244,10.54,D54,S,American,Factory Worker,Leisure,1,0,Rev. John Davis
+1018,0,3,male,19.6,0,2,TICK955889,12.59,,S,American,Farmer,Migration,0,0,Master. George Wilson
+1019,0,3,male,8.9,0,0,TICK393041,13.41,,S,British,Factory Worker,Leisure,2,0,Master. Thomas Lewis
+1020,1,1,male,28.8,0,1,TICK348605,372.45,,S,British,Doctor,Migration,0,1,Mr. William Johnson
+1021,0,3,male,31.2,0,0,TICK434476,10.32,,S,British,Laborer,Migration,7,0,Dr. James Lewis
+1022,0,2,male,8.1,3,0,TICK227088,34.51,,C,French,Nurse,Leisure,4,0,Dr. Thomas Harris
+1023,1,3,male,25.4,0,2,TICK580811,13.78,,S,British,Factory Worker,Migration,6,1,Master. James Clark
+1024,0,2,female,18.7,4,0,TICK769956,31.9,,Q,British,Engineer,Business,4,1,Miss. Mary Johnson
+1025,0,1,male,,2,2,TICK261784,331.03,,S,British,Lawyer,Leisure,0,1,Dr. Thomas Clark
+1026,1,2,male,31.7,0,1,TICK986675,20.38,,S,British,Clerk,Business,0,0,Rev. William Brown
+1027,0,2,male,33.2,0,0,TICK15303,13.39,,S,British,Engineer,Business,2,0,Master. George Smith
+1028,1,3,male,18.7,1,0,TICK38827,6.79,,S,Irish,Factory Worker,Migration,0,0,Mr. James Clark
+1029,0,3,female,46.1,0,0,TICK887552,8.37,,Q,American,Servant,Leisure,4,0,Lady. Sarah Wilson
+1030,0,3,male,30.3,1,0,TICK22001,12.5,D48,C,American,Laborer,Migration,0,0,Mr. William Davis
+1031,0,2,female,19.4,2,0,TICK792802,43.62,,S,British,Engineer,Migration,10,1,Mrs. Mary Clark
+1032,0,2,male,7.3,0,0,TICK987033,38.05,,S,Irish,Teacher,Leisure,1,0,Master. George Brown
+1033,1,2,male,34.0,0,0,TICK553133,41.56,,C,British,Teacher,Migration,0,0,Dr. William Taylor
+1034,0,1,male,37.6,0,1,TICK108500,194.96,E84,S,American,Doctor,Migration,6,1,Mr. George Taylor
+1035,0,3,male,22.8,1,0,TICK526860,11.07,,S,French,Farmer,Leisure,0,0,Master. John Harris
+1036,1,3,male,32.2,3,2,TICK418267,10.91,,S,French,Laborer,Business,0,1,Rev. James Brown
+1037,0,2,female,54.2,0,0,TICK830783,17.67,,Q,French,Clerk,Leisure,8,1,Miss. Margaret Harris
+1038,0,3,female,43.5,4,3,TICK509454,5.92,,S,French,Farmer,Business,3,1,Miss. Mary Taylor
+1039,0,3,female,-2.3,1,1,TICK45339,13.86,E21,S,Irish,Factory Worker,Leisure,6,1,Mrs. Mary Brown
+1040,0,2,male,19.2,0,0,TICK165569,49.57,D67,C,British,Nurse,Migration,0,0,Master. John Lewis
+1041,1,3,male,28.0,0,0,TICK297841,7.5,,C,British,Servant,Migration,2,0,Rev. William Lewis
+1042,0,3,male,31.2,0,0,TICK317110,5.7,,S,British,Servant,Business,4,0,Rev. John Lewis
+1043,1,2,female,32.5,0,2,TICK26422,41.18,,C,Irish,Teacher,Migration,0,1,Miss. Mary Clark
+1044,0,1,male,36.6,0,0,TICK242177,148.72,,S,Other,Aristocrat,Leisure,4,1,Dr. James Wilson
+1045,1,2,male,28.5,0,0,TICK663233,43.19,,C,British,Clerk,Migration,3,0,Dr. George Lewis
+1046,0,2,female,,5,0,TICK810932,38.16,,C,Other,Engineer,Migration,3,1,Miss. Margaret Taylor
+1047,0,1,male,44.3,0,0,TICK722493,474.47,,S,British,Aristocrat,Migration,5,1,Rev. James Davis
+1048,0,3,female,34.3,0,0,TICK260322,11.13,,C,British,Laborer,Leisure,5,1,Mrs. Mary Lewis
+1049,1,3,female,12.8,1,1,TICK36418,14.93,B20,C,British,Servant,Leisure,3,1,Mrs. Sarah Lewis
+1050,0,3,male,31.6,0,0,TICK286693,11.97,,S,Other,Farmer,Migration,2,0,Master. William Davis
+1051,1,3,female,28.1,0,0,TICK787343,14.46,D32,S,French,Laborer,Migration,0,1,Mrs. Sarah Brown
+1052,1,3,male,1.8,0,0,TICK130648,11.74,B98,S,British,Servant,Migration,0,0,Rev. Thomas Clark
+1053,0,1,male,32.4,2,2,TICK853487,118.66,,C,French,Aristocrat,Business,0,1,Mr. Thomas Davis
+1054,0,3,male,14.6,2,0,TICK823139,12.62,E98,S,British,Factory Worker,Migration,4,0,Dr. Thomas Clark
+1055,1,2,female,44.5,0,0,TICK397211,31.14,,S,British,Clerk,Leisure,2,0,Lady. Sarah Walker
+1056,0,3,female,36.4,2,0,TICK688106,17.16,,S,French,Factory Worker,Leisure,0,1,Miss. Sarah Brown
+1057,0,3,female,12.1,0,0,TICK421217,16.03,,S,British,Servant,Leisure,2,1,Lady. Sarah Brown
+1058,0,3,male,43.8,0,0,TICK138566,14.96,A3,S,British,Laborer,Leisure,2,1,Dr. John Harris
+1059,1,2,female,50.9,0,2,TICK859045,14.54,,S,Irish,Clerk,Migration,0,1,Miss. Mary Brown
+1060,0,3,male,26.2,2,0,TICK777497,15.81,,C,Other,Laborer,Migration,2,0,Master. William Johnson
+1061,1,2,male,28.0,0,2,TICK920204,30.01,C46,C,French,Clerk,Leisure,2,0,Master. Thomas Walker
+1062,0,2,female,42.2,0,2,TICK284114,45.76,,S,British,Clerk,Leisure,3,0,Lady. Mary Harris
+1063,0,1,male,49.6,0,0,TICK904855,462.34,,C,British,Doctor,Leisure,5,1,Master. William Taylor
+1064,0,3,female,5.1,3,0,TICK90041,5.83,C9,C,British,Factory Worker,Leisure,1,0,Mrs. Alice Taylor
+1065,0,3,male,13.6,1,1,TICK81244,17.31,C80,Q,British,Factory Worker,Business,0,0,Rev. George Lewis
+1066,0,1,male,23.8,0,3,TICK78479,47.72,C75,C,British,Doctor,Business,4,1,Dr. George Brown
+1067,1,3,male,25.4,1,0,TICK530016,10.51,D61,S,American,Laborer,Business,6,0,Rev. George Lewis
+1068,0,3,female,41.7,1,0,TICK758190,13.13,,C,British,Factory Worker,Migration,0,1,Mrs. Sarah Clark
+1069,0,3,female,49.7,1,0,TICK738661,7.22,B38,C,Irish,Farmer,Migration,6,1,Lady. Elizabeth Davis
+1070,1,3,female,50.9,0,0,TICK800419,16.19,,S,American,Servant,Business,1,1,Miss. Sarah Brown
+1071,0,3,male,4.7,0,2,TICK769227,5.13,,C,Irish,Servant,Migration,7,0,Rev. John Clark
+1072,0,3,male,17.9,0,0,TICK436557,7.53,,C,British,Servant,Migration,3,0,Master. John Brown
+1073,0,3,male,,0,0,TICK22133,13.71,,S,British,Factory Worker,Leisure,0,0,Rev. Thomas Harris
+1074,0,3,male,21.1,2,0,TICK16457,15.72,E80,S,American,Laborer,Business,0,0,Master. George Wilson
+1075,1,3,male,17.9,0,1,TICK779727,18.75,D21,Q,Irish,Servant,Business,1,1,Mr. George Smith
+1076,1,3,male,36.4,1,0,TICK871581,15.58,,S,Other,Factory Worker,Migration,0,0,Master. William Lewis
+1077,1,3,female,38.2,1,1,TICK569011,15.08,,S,British,Servant,Migration,2,1,Mrs. Margaret Wilson
+1078,1,3,male,30.1,0,0,TICK635254,10.92,,S,British,Servant,Migration,1,0,Dr. William Harris
+1079,1,3,male,28.7,0,2,TICK964614,5.02,B15,S,British,Farmer,Migration,1,0,Dr. William Clark
+1080,0,1,male,24.4,0,0,TICK160223,86.47,B57,S,French,Aristocrat,Business,2,0,Master. George Brown
+1081,0,3,female,26.1,0,0,TICK101198,13.02,,S,British,Factory Worker,Migration,4,1,Miss. Mary Smith
+1082,0,3,female,,4,0,TICK772619,15.13,,S,Irish,Farmer,Migration,2,1,Miss. Elizabeth Davis
+1083,0,3,female,40.5,2,0,TICK617767,11.26,,S,Other,Laborer,Migration,0,1,Miss. Margaret Lewis
+1084,0,3,male,25.0,1,0,TICK832122,15.96,,C,French,Farmer,Leisure,6,0,Rev. John Taylor
+1085,0,3,male,28.4,1,0,TICK411123,12.83,B99,S,French,Servant,Migration,1,0,Master. William Harris
+1086,0,3,male,36.7,2,0,TICK204721,6.11,,S,British,Farmer,Migration,6,0,Master. Thomas Brown
+1087,0,3,male,12.1,1,0,TICK872861,7.88,,S,French,Servant,Leisure,2,0,Dr. John Harris
+1088,1,1,male,32.1,0,0,TICK636113,424.8,,S,French,Doctor,Migration,8,0,Dr. James Brown
+1089,0,3,female,39.6,1,2,TICK902044,15.87,,Q,British,Farmer,Migration,4,1,Mrs. Margaret Brown
+1090,0,2,female,37.5,1,0,TICK328354,45.79,A63,S,British,Engineer,Migration,6,0,Miss. Margaret Davis
+1091,1,3,male,18.2,0,0,TICK823892,6.76,,S,Other,Farmer,Business,8,0,Rev. Thomas Lewis
+1092,0,3,female,20.7,0,1,TICK340452,19.85,,S,American,Laborer,Leisure,0,1,Lady. Sarah Taylor
+1093,1,3,male,0.3,0,2,TICK446804,8.14,,S,Irish,Laborer,Migration,9,0,Rev. John Harris
+1094,0,1,female,41.2,0,2,TICK538243,35.54,,Q,French,Lawyer,Leisure,1,1,Miss. Mary Johnson
+1095,0,3,female,61.1,1,1,TICK780598,19.96,,S,Irish,Laborer,Migration,2,1,Miss. Sarah Harris
+1096,1,3,female,16.2,0,0,TICK25570,9.22,D20,C,American,Laborer,Migration,5,1,Lady. Margaret Johnson
+1097,1,3,female,46.5,0,0,TICK317831,15.02,,S,American,Farmer,Business,0,1,Lady. Margaret Clark
+1098,0,3,male,59.4,0,0,TICK288361,7.65,,S,Other,Factory Worker,Migration,3,0,Rev. William Harris
+1099,0,3,female,23.0,0,5,TICK482197,13.7,,S,French,Farmer,Leisure,0,0,Lady. Margaret Clark
+1100,0,3,male,28.4,0,0,TICK213511,18.56,,S,American,Servant,Migration,6,0,Rev. John Walker
+1101,0,2,female,33.8,2,1,TICK105521,22.81,,C,British,Nurse,Migration,1,1,Miss. Sarah Wilson
+1102,0,3,male,37.0,0,0,TICK278107,15.05,,S,British,Laborer,Migration,1,0,Dr. George Clark
+1103,0,3,male,34.6,3,0,TICK688919,7.82,E54,S,British,Laborer,Leisure,0,0,Master. William Taylor
+1104,1,1,female,24.1,0,0,TICK605190,323.65,B47,S,Irish,Merchant,Migration,2,0,Lady. Sarah Brown
+1105,1,3,female,,0,0,TICK495299,10.05,,S,British,Farmer,Migration,2,0,Mrs. Margaret Brown
+1106,1,3,male,24.5,1,0,TICK395873,8.17,,S,British,Factory Worker,Migration,8,0,Dr. Thomas Davis
+1107,1,3,male,35.7,0,0,TICK306385,9.7,,Q,British,Laborer,Business,0,0,Rev. John Harris
+1108,1,2,male,29.6,1,0,TICK451399,17.15,,Q,Other,Clerk,Migration,4,0,Mr. William Clark
+1109,0,3,male,3.4,2,0,TICK98582,18.53,B7,S,French,Farmer,Business,6,0,Master. James Walker
+1110,0,3,male,48.9,0,0,TICK234049,10.96,,S,Other,Laborer,Leisure,2,0,Dr. Thomas Walker
+1111,0,3,female,21.1,2,0,TICK427068,8.68,,S,Irish,Servant,Migration,4,0,Lady. Elizabeth Wilson
+1112,0,3,male,50.6,1,2,TICK589247,11.73,D56,C,British,Laborer,Leisure,5,0,Rev. John Wilson
+1113,1,3,male,,0,0,TICK293089,9.81,C6,C,French,Farmer,Business,0,1,Rev. John Clark
+1114,0,3,male,33.3,0,0,TICK507828,16.17,,S,American,Servant,Business,0,0,Dr. John Taylor
+1115,0,3,female,37.8,2,0,TICK299239,19.57,,C,British,Farmer,Migration,6,1,Mrs. Mary Brown
+1116,1,1,male,,0,0,TICK952756,235.88,,S,British,Doctor,Migration,1,1,Master. Thomas Taylor
+1117,0,3,male,27.0,0,2,TICK738022,17.92,,S,Other,Farmer,Business,0,0,Mr. William Johnson
+1118,1,3,male,27.7,0,3,TICK560104,13.49,B80,S,Irish,Farmer,Business,0,1,Rev. George Johnson
+1119,0,3,male,38.9,2,0,TICK532201,7.36,A95,S,American,Servant,Migration,0,1,Master. William Lewis
+1120,1,3,male,,0,0,TICK257496,15.36,E3,S,American,Servant,Leisure,0,0,Master. George Davis
+1121,1,3,male,29.7,0,0,TICK401984,12.7,,S,French,Factory Worker,Leisure,0,0,Mr. Thomas Davis
+1122,1,1,male,24.2,0,0,TICK19048,335.79,B61,S,Irish,Merchant,Migration,3,1,Mr. Thomas Smith
+1123,1,2,male,18.4,0,0,TICK522178,45.59,,S,British,Teacher,Business,1,1,Mr. James Johnson
+1124,0,3,male,36.1,0,0,TICK763899,11.61,,Q,American,Servant,Migration,1,0,Master. George Taylor
+1125,1,3,male,20.6,0,0,TICK413766,18.52,,S,French,Laborer,Migration,0,0,Dr. James Taylor
+1126,0,3,male,,0,1,TICK998675,16.26,,S,Other,Servant,Migration,2,1,Rev. John Harris
+1127,1,3,male,44.3,0,2,TICK391843,12.33,C66,C,Other,Laborer,Migration,2,0,Master. George Harris
+1128,1,3,male,37.7,0,0,TICK800749,14.05,,S,Other,Farmer,Business,2,0,Master. George Lewis
+1129,0,3,male,40.9,0,0,TICK574132,9.88,,C,British,Farmer,Leisure,0,0,Mr. George Davis
+1130,0,1,male,37.7,0,0,TICK750290,492.29,,C,French,Doctor,Migration,10,1,Dr. George Walker
+1131,1,2,female,42.0,1,1,TICK114565,36.69,,C,Irish,Teacher,Leisure,1,0,Lady. Margaret Walker
+1132,0,1,male,41.3,0,0,TICK475239,50.61,,C,Other,Merchant,Leisure,0,1,Rev. James Walker
+1133,0,3,male,35.3,0,2,TICK235944,9.9,,S,British,Factory Worker,Migration,0,0,Dr. James Harris
+1134,0,3,male,46.1,0,0,TICK606950,14.35,A58,S,Irish,Laborer,Leisure,2,0,Dr. Thomas Walker
+1135,1,1,male,27.6,0,1,TICK27101,56.48,,Q,British,Lawyer,Leisure,3,1,Dr. John Davis
+1136,0,3,male,18.8,0,0,TICK417650,5.36,,S,British,Laborer,Leisure,7,0,Dr. William Davis
+1137,0,3,male,18.1,0,0,TICK809667,11.75,,C,American,Factory Worker,Leisure,0,0,Rev. Thomas Brown
+1138,0,2,male,,0,0,TICK244390,23.31,B98,C,British,Nurse,Business,1,0,Mr. John Harris
+1139,1,3,male,1.6,0,0,TICK469802,11.57,,S,British,Servant,Leisure,2,0,Dr. James Lewis
+1140,0,3,female,33.2,2,0,TICK388786,8.94,,S,British,Factory Worker,Leisure,5,1,Miss. Sarah Johnson
+1141,1,3,male,39.9,0,0,TICK500967,7.47,,S,British,Farmer,Migration,2,0,Master. James Walker
+1142,0,1,male,44.1,0,0,TICK591509,353.9,,C,Other,Lawyer,Migration,0,1,Master. William Davis
+1143,0,3,male,5.9,1,0,TICK115240,12.72,,C,American,Laborer,Migration,0,0,Dr. John Brown
+1144,0,3,male,18.6,0,0,TICK675044,8.0,A10,S,American,Factory Worker,Leisure,1,0,Rev. Thomas Lewis
+1145,0,2,male,42.4,0,0,TICK326698,22.78,,C,French,Clerk,Business,0,1,Master. George Johnson
+1146,1,3,male,27.1,1,0,TICK349583,13.88,,C,British,Farmer,Business,0,0,Dr. John Johnson
+1147,1,3,female,,0,1,TICK151755,6.08,C80,C,American,Laborer,Leisure,1,1,Lady. Mary Brown
+1148,0,1,female,11.4,0,0,TICK850011,99.3,,S,Other,Lawyer,Leisure,0,1,Miss. Alice Davis
+1149,0,3,male,50.4,0,0,TICK661512,6.1,,C,Irish,Factory Worker,Migration,0,0,Dr. James Wilson
+1150,0,1,male,10.4,0,0,TICK88697,411.79,,S,British,Lawyer,Migration,10,1,Master. William Smith
+1151,0,3,female,-15.3,0,0,TICK101022,16.29,,S,American,Laborer,Leisure,0,1,Mrs. Alice Brown
+1152,0,3,female,32.8,0,0,TICK589130,16.3,,S,French,Factory Worker,Leisure,1,1,Lady. Sarah Clark
+1153,1,3,female,33.1,0,4,TICK178477,15.74,,S,American,Factory Worker,Migration,2,1,Miss. Elizabeth Harris
+1154,0,2,male,22.6,0,2,TICK218770,36.78,B26,Q,British,Engineer,Leisure,0,0,Mr. Thomas Lewis
+1155,1,3,female,37.1,2,1,TICK907837,12.15,A24,S,French,Laborer,Migration,0,1,Mrs. Mary Wilson
+1156,0,3,female,37.6,0,1,TICK988856,14.63,,Q,British,Farmer,Migration,1,1,Mrs. Elizabeth Davis
+1157,0,2,male,35.9,4,0,TICK514604,11.53,,S,American,Engineer,Migration,1,0,Master. William Johnson
+1158,0,2,male,22.4,1,0,TICK623234,34.86,,Q,British,Teacher,Business,7,0,Dr. John Wilson
+1159,1,3,female,19.6,0,0,TICK263111,16.67,B27,S,French,Farmer,Migration,1,1,Lady. Sarah Brown
+1160,0,3,female,23.9,0,0,TICK88963,12.51,,S,French,Factory Worker,Leisure,0,1,Mrs. Elizabeth Clark
+1161,0,3,male,17.7,1,2,TICK149195,10.36,,S,Other,Farmer,Business,0,0,Dr. Thomas Smith
+1162,0,3,male,46.8,0,0,TICK423780,9.16,C81,S,French,Laborer,Leisure,9,0,Dr. William Johnson
+1163,1,3,female,25.1,0,3,TICK647435,14.64,E25,S,American,Servant,Leisure,6,1,Lady. Sarah Johnson
+1164,0,3,female,32.3,0,0,TICK879780,15.39,D26,C,British,Laborer,Business,5,1,Mrs. Elizabeth Davis
+1165,1,2,male,42.4,1,0,TICK497516,44.84,,C,American,Engineer,Migration,3,0,Dr. Thomas Harris
+1166,0,3,male,17.0,0,0,TICK549830,10.14,B61,S,Other,Factory Worker,Migration,1,0,Dr. Thomas Walker
+1167,0,3,male,9.8,4,0,TICK759154,16.55,C94,Q,British,Laborer,Migration,1,0,Mr. James Smith
+1168,0,1,female,17.7,0,1,TICK881436,293.84,,S,British,Aristocrat,Business,4,1,Miss. Margaret Walker
+1169,0,3,male,33.9,5,0,TICK595164,18.24,,S,British,Farmer,Migration,2,0,Mr. William Brown
+1170,0,3,female,,1,0,TICK798527,12.92,,S,American,Factory Worker,Business,4,1,Mrs. Margaret Davis
+1171,0,1,male,35.9,0,3,TICK244720,273.29,A23,S,British,Doctor,Business,2,1,Rev. John Smith
+1172,0,2,female,28.5,0,0,TICK62795,33.12,,S,Irish,Clerk,Business,8,1,Lady. Mary Walker
+1173,0,3,female,-6.6,3,0,TICK805686,16.24,,S,British,Factory Worker,Business,3,1,Mrs. Margaret Taylor
+1174,0,3,female,28.0,0,3,TICK518386,19.47,,C,British,Laborer,Leisure,5,1,Lady. Margaret Taylor
+1175,0,2,female,,0,0,TICK265266,12.94,A90,S,British,Clerk,Leisure,8,0,Lady. Alice Davis
+1176,1,3,male,48.5,0,0,TICK432865,5.8,,S,French,Farmer,Business,0,0,Mr. William Taylor
+1177,0,3,male,31.3,2,0,TICK327584,19.06,,S,Irish,Laborer,Business,3,1,Rev. George Brown
+1178,0,3,male,33.0,0,0,TICK777482,12.95,,S,British,Servant,Leisure,7,1,Rev. George Lewis
+1179,1,2,male,39.2,4,0,TICK355280,34.6,D82,S,British,Clerk,Leisure,0,0,Mr. George Brown
+1180,0,3,male,48.1,0,3,TICK875851,12.24,,S,British,Laborer,Migration,2,1,Master. William Wilson
+1181,1,3,male,30.0,3,3,TICK158928,6.4,,S,British,Servant,Migration,1,1,Mr. William Johnson
+1182,1,3,female,39.0,0,0,TICK39283,16.52,E82,S,Irish,Laborer,Migration,0,1,Mrs. Sarah Brown
+1183,0,1,male,21.7,0,0,TICK338057,381.2,,S,British,Merchant,Leisure,1,1,Mr. Thomas Taylor
+1184,1,1,male,11.7,2,1,TICK723466,176.5,D33,C,British,Merchant,Leisure,8,1,Mr. John Taylor
+1185,0,3,male,23.2,0,0,TICK593772,9.59,,S,American,Farmer,Migration,0,0,Mr. Thomas Wilson
+1186,0,3,female,51.8,0,2,TICK628814,17.57,,S,British,Laborer,Migration,4,0,Miss. Mary Lewis
+1187,1,2,female,39.3,1,0,TICK427282,12.89,,S,British,Nurse,Leisure,2,1,Mrs. Sarah Walker
+1188,1,3,male,12.9,0,2,TICK914758,18.22,,S,British,Factory Worker,Migration,1,0,Mr. Thomas Lewis
+1189,0,3,male,40.1,0,0,TICK6842,8.85,,S,Other,Laborer,Leisure,0,0,Mr. George Walker
+1190,0,3,female,13.9,0,0,TICK282170,13.89,,S,French,Laborer,Business,1,1,Lady. Margaret Clark
+1191,1,2,male,35.6,1,0,TICK724934,47.44,D45,S,British,Nurse,Migration,3,0,Dr. William Brown
+1192,0,3,male,16.5,0,0,TICK220387,15.17,,C,Irish,Factory Worker,Migration,3,0,Mr. John Walker
+1193,0,3,male,12.2,0,0,TICK792714,11.22,,S,British,Factory Worker,Migration,4,0,Mr. William Lewis
+1194,0,3,male,54.6,0,0,TICK590729,15.34,,S,Irish,Servant,Leisure,1,0,Mr. William Taylor
+1195,0,2,male,25.1,0,0,TICK834298,23.76,A41,S,British,Nurse,Migration,5,0,Dr. Thomas Clark
+1196,1,3,female,39.0,0,1,TICK513467,9.16,,C,French,Laborer,Business,0,1,Lady. Mary Taylor
+1197,0,2,male,30.6,0,0,TICK573091,49.87,,S,British,Engineer,Migration,3,1,Rev. William Brown
+1198,1,3,male,15.0,0,0,TICK525094,16.26,,S,British,Servant,Leisure,2,0,Rev. George Clark
+1199,1,3,female,26.6,0,0,TICK329221,14.67,,S,Irish,Laborer,Leisure,3,1,Mrs. Mary Wilson
+1200,0,3,male,15.1,1,0,TICK684680,10.33,,S,American,Factory Worker,Leisure,0,0,Rev. John Johnson
+1201,1,3,female,66.2,4,0,TICK248190,5.74,C58,S,French,Factory Worker,Migration,3,1,Lady. Sarah Taylor
+1202,0,3,male,41.8,0,0,TICK338471,5.47,,C,British,Farmer,Business,6,0,Mr. John Walker
+1203,0,2,female,30.3,1,0,TICK484783,32.17,D48,C,British,Engineer,Migration,0,0,Lady. Margaret Harris
+1204,0,3,male,38.2,0,1,TICK744302,16.43,,C,Irish,Laborer,Business,1,0,Mr. John Davis
+1205,0,1,male,40.7,0,0,TICK507458,282.57,,Q,American,Doctor,Business,1,1,Mr. William Taylor
+1206,0,3,female,,1,0,TICK540420,17.61,E96,Q,Other,Farmer,Business,0,1,Mrs. Elizabeth Smith
+1207,0,3,male,40.1,0,0,TICK582757,5.5,,Q,American,Servant,Migration,0,1,Dr. Thomas Wilson
+1208,0,1,female,38.9,0,0,TICK901362,202.37,E22,S,British,Aristocrat,Migration,0,0,Miss. Mary Clark
+1209,0,3,male,31.5,5,2,TICK776615,8.56,,Q,British,Laborer,Migration,5,0,Rev. James Johnson
+1210,0,3,male,53.2,0,2,TICK769678,11.71,C53,S,Other,Servant,Migration,0,0,Rev. James Clark
+1211,0,3,male,32.5,0,5,TICK86390,6.09,,C,British,Servant,Migration,1,0,Mr. George Harris
+1212,0,1,male,30.8,0,1,TICK966980,478.44,,S,British,Lawyer,Migration,6,1,Dr. James Brown
+1213,1,2,male,32.6,0,0,TICK111146,18.93,,Q,British,Nurse,Migration,0,0,Rev. William Brown
+1214,0,3,female,33.7,1,0,TICK447380,18.83,,S,British,Factory Worker,Leisure,0,0,Mrs. Elizabeth Clark
+1215,1,3,male,6.0,1,0,TICK734222,11.39,,S,Other,Farmer,Migration,0,0,Mr. John Clark
+1216,1,3,female,17.6,0,0,TICK82269,19.78,,Q,British,Factory Worker,Business,4,1,Mrs. Sarah Harris
+1217,1,3,male,28.5,0,0,TICK394935,13.31,,S,French,Factory Worker,Business,2,0,Mr. John Johnson
+1218,0,3,male,5.4,3,1,TICK134465,18.96,,S,Other,Laborer,Leisure,4,0,Dr. John Harris
+1219,0,3,female,,1,2,TICK794653,5.08,B52,S,Other,Factory Worker,Leisure,2,1,Mrs. Sarah Walker
+1220,0,3,female,33.5,0,0,TICK15286,16.22,,S,American,Factory Worker,Migration,0,1,Miss. Mary Taylor
+1221,0,2,male,11.1,2,0,TICK170966,46.12,,Q,Irish,Engineer,Migration,4,0,Rev. George Clark
+1222,1,3,male,20.8,1,0,TICK546195,7.1,,S,Other,Farmer,Migration,0,0,Mr. James Smith
+1223,1,3,female,49.2,1,0,TICK785490,6.44,,Q,American,Factory Worker,Leisure,0,0,Lady. Margaret Walker
+1224,0,3,male,38.4,0,0,TICK128378,11.37,,S,Other,Factory Worker,Migration,1,0,Rev. George Walker
+1225,1,3,female,37.5,1,0,TICK175270,19.01,,Q,American,Laborer,Migration,4,1,Miss. Elizabeth Walker
+1226,0,1,female,47.1,1,0,TICK207954,284.92,D20,S,Irish,Lawyer,Leisure,4,1,Lady. Elizabeth Brown
+1227,1,3,female,,0,0,TICK459858,12.91,C44,S,Irish,Laborer,Leisure,3,1,Mrs. Mary Harris
+1228,1,3,male,11.1,0,0,TICK912998,7.12,,Q,British,Factory Worker,Business,0,0,Mr. John Harris
+1229,0,3,male,44.8,2,0,TICK120185,5.01,,S,American,Laborer,Migration,2,1,Dr. John Lewis
+1230,1,3,male,28.9,1,0,TICK41959,17.15,,S,American,Farmer,Leisure,6,0,Mr. George Walker
+1231,0,3,male,17.5,1,0,TICK929517,6.31,,Q,American,Servant,Migration,2,0,Mr. John Wilson
+1232,1,3,male,,0,3,TICK445787,14.51,,Q,British,Laborer,Migration,1,0,Rev. William Taylor
+1233,1,2,male,5.9,2,2,TICK520238,46.58,,S,British,Nurse,Leisure,7,0,Master. James Taylor
+1234,1,1,male,32.8,2,0,TICK180015,128.07,,S,Other,Merchant,Business,2,1,Master. George Smith
+1235,1,1,male,27.1,0,1,TICK657581,342.68,,S,British,Merchant,Leisure,3,1,Dr. George Lewis
+1236,0,3,female,24.6,0,1,TICK843167,6.18,,S,French,Laborer,Migration,0,1,Miss. Sarah Wilson
+1237,0,3,male,-3.2,1,1,TICK551071,14.06,A46,S,Irish,Laborer,Migration,1,1,Master. William Walker
+1238,0,3,male,53.0,1,0,TICK511859,7.46,,S,Irish,Factory Worker,Leisure,2,0,Master. James Harris
+1239,0,2,female,8.6,0,0,TICK147659,39.44,C91,C,Irish,Teacher,Migration,0,1,Lady. Sarah Smith
+1240,0,3,male,26.0,0,0,TICK786376,9.52,D78,Q,British,Farmer,Leisure,1,0,Rev. William Brown
+1241,0,3,female,,3,0,TICK917680,11.95,,S,British,Laborer,Migration,2,1,Lady. Sarah Davis
+1242,0,2,male,38.8,0,2,TICK574660,33.98,,S,American,Engineer,Leisure,1,0,Master. Thomas Davis
+1243,0,1,female,6.0,0,0,TICK439459,110.5,,S,British,Aristocrat,Leisure,8,1,Miss. Margaret Wilson
+1244,0,3,male,36.9,0,1,TICK419807,16.12,D63,Q,American,Factory Worker,Migration,1,0,Dr. William Johnson
+1245,0,3,male,,0,1,TICK10708,9.54,A40,S,American,Factory Worker,Leisure,3,0,Mr. George Walker
+1246,1,3,male,20.1,3,0,TICK312166,14.94,,S,British,Laborer,Leisure,3,0,Mr. James Taylor
+1247,0,3,female,36.4,0,0,TICK124295,7.37,,S,American,Factory Worker,Migration,0,1,Lady. Elizabeth Brown
+1248,1,3,male,30.3,0,2,TICK457633,15.32,E55,C,British,Factory Worker,Leisure,0,0,Rev. Thomas Harris
+1249,1,3,male,57.1,1,0,TICK309515,6.92,,S,American,Factory Worker,Business,0,0,Master. George Lewis
+1250,0,3,male,27.1,0,0,TICK755914,11.38,E17,S,British,Farmer,Business,3,0,Master. Thomas Clark
+1251,0,3,male,15.7,1,0,TICK967755,8.71,E37,S,British,Farmer,Leisure,0,1,Master. William Brown
+1252,0,3,male,37.1,0,0,TICK923984,16.23,,C,British,Servant,Migration,0,0,Mr. James Smith
+1253,0,3,male,25.3,0,1,TICK710553,8.93,,S,French,Factory Worker,Migration,0,0,Master. James Clark
+1254,1,2,female,30.0,0,1,TICK285276,45.27,,S,American,Clerk,Migration,9,1,Miss. Sarah Davis
+1255,1,3,female,11.2,0,0,TICK548860,18.38,,S,British,Farmer,Migration,1,1,Miss. Alice Clark
+1256,0,3,male,39.1,3,0,TICK339046,7.95,,C,American,Laborer,Migration,5,0,Dr. George Lewis
+1257,1,1,female,22.9,1,3,TICK645979,318.51,D48,S,Other,Merchant,Migration,2,1,Lady. Margaret Harris
+1258,1,3,female,34.0,0,5,TICK933755,6.32,D32,S,British,Farmer,Migration,2,1,Mrs. Elizabeth Clark
+1259,0,3,male,61.5,0,0,TICK390684,10.87,B42,C,Irish,Laborer,Migration,0,0,Rev. William Johnson
+1260,0,2,female,26.3,2,3,TICK592198,38.53,,S,French,Clerk,Business,4,1,Mrs. Elizabeth Clark
+1261,0,3,male,,0,0,TICK682805,14.89,D36,S,British,Laborer,Leisure,1,0,Mr. James Harris
+1262,0,2,male,27.3,2,0,TICK175006,34.99,E44,S,British,Clerk,Migration,0,0,Dr. Thomas Brown
+1263,0,3,male,20.3,0,1,TICK149391,9.24,,S,Other,Laborer,Migration,3,0,Rev. George Harris
+1264,1,3,male,49.8,0,1,TICK305293,10.67,,S,Irish,Laborer,Migration,2,0,Mr. James Johnson
+1265,0,3,male,2.0,0,0,TICK549668,6.54,,C,American,Farmer,Business,1,0,Dr. James Lewis
+1266,1,3,female,45.1,1,0,TICK719299,15.79,E30,S,Other,Laborer,Migration,7,1,Mrs. Mary Lewis
+1267,0,3,male,0.4,0,0,TICK215393,12.56,,S,French,Farmer,Migration,2,1,Mr. James Wilson
+1268,0,3,male,43.4,1,3,TICK842811,15.63,B32,Q,French,Farmer,Migration,0,0,Mr. George Davis
+1269,0,3,male,30.2,0,0,TICK644825,8.73,,Q,American,Laborer,Migration,3,0,Master. John Lewis
+1270,0,3,female,15.7,0,2,TICK999239,9.87,D3,C,American,Laborer,Leisure,0,1,Lady. Elizabeth Wilson
+1271,0,2,female,,0,0,TICK750181,23.37,,S,Irish,Teacher,Migration,3,1,Lady. Mary Clark
+1272,0,1,male,40.3,0,0,TICK390287,42.1,,S,American,Lawyer,Migration,0,1,Mr. Thomas Clark
+1273,0,1,female,59.6,0,0,TICK545609,190.29,,Q,British,Lawyer,Migration,5,1,Miss. Mary Johnson
+1274,0,2,female,6.5,0,1,TICK634882,42.13,,S,British,Nurse,Migration,5,1,Miss. Mary Clark
+1275,0,3,male,16.5,0,0,TICK264443,18.46,E63,C,American,Servant,Leisure,2,0,Master. John Clark
+1276,0,3,male,,0,0,TICK496043,12.77,,S,British,Factory Worker,Migration,8,0,Mr. Thomas Lewis
+1277,0,2,male,27.2,1,1,TICK486365,28.22,,C,American,Nurse,Business,5,0,Master. John Clark
+1278,0,3,female,43.8,0,1,TICK221848,5.46,,C,British,Laborer,Migration,0,1,Miss. Margaret Davis
+1279,1,3,male,8.2,1,0,TICK982679,18.19,,S,French,Farmer,Migration,0,1,Dr. James Clark
+1280,1,1,male,29.8,5,0,TICK347215,36.11,,C,French,Aristocrat,Leisure,5,1,Dr. George Brown
+1281,0,3,female,43.3,1,0,TICK973113,19.17,,S,American,Factory Worker,Leisure,0,1,Lady. Alice Taylor
+1282,0,3,male,23.7,0,2,TICK784039,12.34,A61,S,French,Factory Worker,Migration,1,0,Dr. George Taylor
+1283,1,3,male,-9.1,0,0,TICK756111,10.13,,S,British,Laborer,Business,0,0,Rev. James Johnson
+1284,0,3,male,33.0,0,0,TICK894802,18.86,A42,Q,American,Laborer,Migration,1,0,Mr. James Taylor
+1285,1,3,male,48.5,0,0,TICK973912,5.37,C80,S,British,Laborer,Migration,0,0,Dr. James Davis
+1286,1,2,female,13.9,3,0,TICK142913,33.26,,S,British,Nurse,Leisure,1,1,Miss. Margaret Walker
+1287,1,2,male,3.3,1,0,TICK173216,31.96,,C,Other,Engineer,Migration,0,0,Rev. John Clark
+1288,1,3,male,34.8,3,0,TICK550850,8.29,,S,British,Farmer,Business,0,1,Mr. John Taylor
+1289,0,3,male,35.2,0,1,TICK750817,11.43,C78,C,British,Factory Worker,Leisure,1,0,Mr. Thomas Johnson
+1290,0,3,male,22.7,3,2,TICK870697,14.78,E26,S,American,Laborer,Migration,0,1,Rev. William Brown
+1291,0,3,male,,0,0,TICK497889,15.91,,S,Irish,Factory Worker,Migration,0,0,Rev. William Brown
+1292,0,3,male,30.5,5,0,TICK11298,5.01,E16,S,French,Servant,Leisure,2,0,Rev. George Walker
+1293,1,1,male,13.7,0,1,TICK334120,470.32,,C,British,Lawyer,Migration,1,0,Dr. John Brown
+1294,1,3,male,13.7,1,0,TICK437525,7.47,A95,C,American,Factory Worker,Migration,0,1,Rev. George Taylor
+1295,0,3,male,40.2,0,0,TICK188931,8.5,B68,S,British,Servant,Migration,1,0,Master. James Lewis
+1296,0,3,male,12.8,0,0,TICK158652,8.95,,C,Other,Farmer,Migration,3,0,Mr. James Walker
+1297,1,3,female,4.1,1,0,TICK494348,5.57,,C,American,Laborer,Leisure,9,1,Lady. Mary Harris
+1298,0,2,male,19.8,2,0,TICK71304,14.92,,S,American,Clerk,Business,0,0,Master. John Wilson
+1299,0,1,male,23.0,0,2,TICK6874,493.58,,S,Irish,Aristocrat,Migration,1,1,Mr. James Clark
+1300,1,3,male,,0,0,TICK327988,9.73,C27,S,Irish,Farmer,Migration,2,0,Mr. John Lewis
+1301,1,1,male,21.0,0,0,TICK736538,84.19,,S,British,Aristocrat,Leisure,1,1,Mr. George Taylor
+1302,1,2,male,51.3,0,0,TICK197790,14.28,,S,Other,Teacher,Migration,0,0,Dr. William Smith
+1303,1,3,female,31.3,0,1,TICK209947,15.79,,C,British,Factory Worker,Leisure,1,0,Miss. Margaret Lewis
+1304,1,3,male,17.9,0,1,TICK728759,17.82,C60,Q,British,Servant,Migration,0,1,Dr. George Taylor
+1305,1,3,female,,0,1,TICK99406,8.85,,S,British,Farmer,Migration,3,1,Miss. Mary Smith
+1306,0,3,male,51.0,0,0,TICK564852,5.31,,C,American,Farmer,Migration,0,0,Rev. George Brown
+1307,1,3,male,39.8,0,0,TICK481870,8.35,,S,British,Farmer,Migration,3,0,Dr. James Walker
+1308,0,3,female,7.5,1,2,TICK348115,5.85,D98,C,Irish,Laborer,Leisure,7,0,Lady. Margaret Johnson
+1309,0,3,male,24.2,4,0,TICK100315,6.55,C14,S,British,Farmer,Migration,0,1,Master. James Walker
+1310,0,3,female,33.8,0,0,TICK65076,11.47,,S,British,Servant,Migration,2,1,Miss. Sarah Wilson
+1311,0,3,female,39.1,0,0,TICK656331,8.45,,Q,American,Laborer,Leisure,6,1,Lady. Alice Clark
+1312,0,2,female,27.3,0,0,TICK492461,30.64,,S,French,Teacher,Business,4,1,Lady. Margaret Davis
+1313,1,3,female,,0,0,TICK624330,8.8,,C,American,Laborer,Leisure,6,1,Mrs. Alice Johnson
+1314,0,1,male,56.9,0,0,TICK165052,472.05,,S,French,Merchant,Migration,6,1,Dr. William Clark
+1315,0,2,male,40.0,1,0,TICK71015,46.24,C3,Q,Irish,Engineer,Migration,0,0,Rev. William Davis
+1316,0,3,female,36.3,0,0,TICK368476,13.5,,S,British,Servant,Migration,4,1,Lady. Mary Smith
+1317,0,2,male,21.6,0,2,TICK668254,24.18,C71,S,French,Engineer,Business,0,0,Mr. John Clark
+1318,1,3,male,,2,0,TICK587317,10.72,,C,British,Farmer,Migration,4,0,Rev. James Taylor
+1319,0,3,female,36.6,0,0,TICK927252,11.18,B41,S,British,Laborer,Business,5,1,Miss. Sarah Harris
+1320,1,3,female,41.7,1,0,TICK238009,15.91,D71,C,British,Servant,Leisure,2,0,Lady. Margaret Wilson
+1321,1,1,male,29.9,0,1,TICK362714,242.27,,S,American,Merchant,Leisure,3,1,Master. James Taylor
+1322,1,3,male,40.0,0,0,TICK660367,17.85,,S,British,Farmer,Leisure,2,1,Mr. William Clark
+1323,0,3,female,40.4,0,0,TICK15815,19.16,,S,British,Servant,Business,1,1,Lady. Elizabeth Taylor
+1324,0,3,male,42.7,0,0,TICK973952,10.04,,S,British,Servant,Migration,4,1,Rev. Thomas Wilson
+1325,1,3,male,7.2,0,0,TICK202998,13.41,,C,French,Servant,Migration,4,1,Rev. John Johnson
+1326,0,3,male,24.6,0,3,TICK288918,6.43,,S,American,Farmer,Business,10,0,Mr. George Johnson
+1327,0,1,female,37.5,0,0,TICK298992,124.22,C42,S,British,Aristocrat,Business,0,1,Mrs. Sarah Harris
+1328,0,2,male,30.7,1,0,TICK861623,26.54,,S,American,Engineer,Migration,1,0,Mr. Thomas Brown
+1329,1,3,male,40.5,3,0,TICK956788,8.09,E6,S,Other,Factory Worker,Migration,0,0,Dr. George Davis
+1330,1,1,male,36.3,1,0,TICK911261,441.98,,Q,British,Aristocrat,Migration,3,0,Rev. William Johnson
+1331,1,3,female,-2.3,1,2,TICK447867,7.37,B64,S,French,Farmer,Migration,2,1,Mrs. Sarah Wilson
+1332,0,3,male,46.5,1,1,TICK613859,11.83,,S,British,Factory Worker,Migration,6,0,Dr. James Lewis
+1333,0,2,female,22.8,1,0,TICK765750,34.23,B20,S,British,Teacher,Business,1,1,Mrs. Elizabeth Wilson
+1334,0,3,female,17.1,0,0,TICK321602,15.38,,S,British,Factory Worker,Business,8,1,Lady. Margaret Taylor
+1335,1,3,male,45.9,0,0,TICK386115,10.75,,Q,French,Servant,Leisure,0,0,Dr. Thomas Brown
+1336,0,2,male,39.3,0,0,TICK655836,44.76,,Q,British,Teacher,Migration,1,0,Master. George Taylor
+1337,0,3,female,,0,0,TICK805246,13.52,,S,British,Servant,Leisure,3,1,Mrs. Alice Lewis
+1338,0,3,female,33.9,0,0,TICK423857,11.59,,S,British,Laborer,Business,1,1,Lady. Alice Davis
+1339,1,1,female,24.5,2,3,TICK980692,61.6,,S,British,Merchant,Migration,0,1,Lady. Sarah Harris
+1340,0,3,male,32.2,0,5,TICK268124,11.97,,S,Other,Farmer,Migration,1,1,Mr. John Taylor
+1341,0,3,male,14.6,0,0,TICK589368,17.31,D70,S,French,Factory Worker,Leisure,2,0,Master. James Clark
+1342,0,2,male,9.7,3,0,TICK568297,34.58,,Q,British,Engineer,Migration,1,0,Rev. George Wilson
+1343,1,3,male,20.6,0,0,TICK673765,17.48,,S,British,Laborer,Migration,0,0,Rev. John Johnson
+1344,0,2,male,53.0,0,0,TICK692397,29.76,D89,S,French,Nurse,Migration,1,0,Dr. Thomas Lewis
+1345,1,2,female,22.0,1,1,TICK213429,14.74,,S,American,Engineer,Leisure,1,1,Mrs. Sarah Johnson
+1346,0,3,female,4.4,0,2,TICK82239,5.2,,S,Irish,Factory Worker,Leisure,1,1,Miss. Sarah Smith
+1347,1,3,male,,1,0,TICK622427,9.55,,S,British,Servant,Migration,4,0,Dr. John Johnson
+1348,1,3,male,21.8,0,0,TICK160825,15.47,A98,S,Irish,Laborer,Leisure,1,0,Rev. John Walker
+1349,0,3,male,46.8,0,0,TICK108978,16.85,C30,S,British,Farmer,Business,0,0,Mr. John Clark
+1350,0,3,male,51.7,0,0,TICK767150,9.44,B8,S,French,Factory Worker,Leisure,1,0,Mr. George Wilson
+1351,0,3,female,23.8,0,0,TICK227955,12.43,,C,British,Farmer,Leisure,1,1,Miss. Alice Wilson
+1352,0,3,male,33.9,1,2,TICK294586,11.32,A83,S,Irish,Laborer,Migration,0,0,Mr. Thomas Johnson
+1353,1,3,male,35.2,0,0,TICK187987,11.16,,S,British,Laborer,Business,0,1,Master. Thomas Smith
+1354,1,2,male,29.3,0,0,TICK276710,19.25,,S,British,Clerk,Leisure,3,0,Rev. James Davis
+1355,1,3,female,26.5,1,0,TICK592040,7.05,,S,British,Factory Worker,Migration,5,1,Mrs. Alice Wilson
+1356,0,3,male,16.1,0,0,TICK108292,7.95,,S,British,Factory Worker,Migration,0,0,Master. Thomas Lewis
+1357,0,3,male,2.3,0,1,TICK133858,5.83,,S,British,Factory Worker,Leisure,2,0,Dr. William Brown
+1358,1,2,male,16.1,1,2,TICK836593,17.93,,S,British,Teacher,Migration,0,0,Rev. James Harris
+1359,1,3,male,28.7,2,0,TICK548689,5.14,,C,French,Farmer,Migration,0,0,Rev. John Harris
+1360,0,1,male,8.3,1,0,TICK616846,324.81,,S,Irish,Aristocrat,Leisure,2,1,Mr. Thomas Harris
+1361,0,3,male,33.1,0,3,TICK677153,9.75,E98,S,British,Farmer,Migration,0,0,Mr. James Brown
+1362,1,3,female,31.0,3,0,TICK804266,19.6,,S,Irish,Farmer,Migration,5,1,Mrs. Margaret Brown
+1363,1,2,male,21.8,1,0,TICK402548,17.75,A86,S,British,Engineer,Business,2,1,Mr. John Brown
+1364,0,3,female,25.9,0,0,TICK347198,10.19,,C,Irish,Farmer,Migration,2,0,Lady. Mary Lewis
+1365,1,3,male,10.5,0,1,TICK604618,10.37,A6,S,American,Laborer,Migration,9,0,Master. George Brown
+1366,0,1,female,,0,0,TICK810478,33.97,,S,British,Merchant,Migration,0,1,Miss. Sarah Walker
+1367,1,3,female,42.2,0,0,TICK895854,17.59,,Q,Other,Farmer,Business,3,1,Mrs. Alice Walker
+1368,0,2,male,12.8,0,0,TICK621935,11.28,,S,British,Engineer,Leisure,2,0,Rev. John Clark
+1369,0,3,male,13.2,0,0,TICK635152,19.1,,S,American,Laborer,Migration,0,0,Master. George Lewis
+1370,1,1,male,16.2,1,0,TICK291704,449.27,C90,S,British,Aristocrat,Business,0,1,Dr. Thomas Taylor
+1371,0,3,female,38.3,0,0,TICK847514,13.03,,S,British,Servant,Migration,2,1,Mrs. Margaret Walker
+1372,0,3,male,35.1,0,2,TICK774078,13.15,,S,British,Farmer,Business,1,0,Rev. George Johnson
+1373,0,3,male,45.7,1,0,TICK914662,14.81,B51,C,British,Servant,Business,3,1,Dr. Thomas Clark
+1374,0,1,female,47.5,0,0,TICK646804,211.91,,S,American,Aristocrat,Migration,4,1,Mrs. Mary Johnson
+1375,0,3,female,7.0,0,0,TICK701969,14.71,,C,American,Servant,Leisure,1,1,Mrs. Alice Taylor
+1376,0,3,male,,1,1,TICK954396,5.67,,S,Irish,Servant,Migration,1,1,Mr. John Walker
+1377,0,3,male,46.9,0,0,TICK497403,5.81,,S,French,Servant,Migration,1,0,Rev. William Smith
+1378,1,3,male,25.0,0,1,TICK220473,11.86,,S,French,Servant,Migration,2,0,Rev. John Lewis
+1379,0,3,male,29.6,1,3,TICK177264,13.24,,S,American,Laborer,Leisure,0,1,Rev. Thomas Clark
+1380,0,2,female,27.4,0,0,TICK3800,45.51,B97,S,British,Nurse,Migration,0,1,Mrs. Mary Brown
+1381,1,3,male,28.0,0,2,TICK822417,6.57,,S,French,Servant,Business,3,0,Rev. Thomas Smith
+1382,1,3,male,42.4,0,0,TICK244092,17.34,,S,Irish,Servant,Leisure,0,1,Master. Thomas Wilson
+1383,1,3,female,56.2,4,1,TICK227957,8.15,,C,British,Servant,Business,1,1,Miss. Elizabeth Walker
+1384,1,3,male,50.7,1,1,TICK96775,10.91,D16,Q,French,Factory Worker,Migration,0,0,Rev. James Harris
+1385,0,3,male,22.5,0,0,TICK975700,9.75,C58,S,American,Laborer,Business,3,0,Rev. William Clark
+1386,0,2,male,34.0,2,0,TICK843377,26.01,,S,British,Nurse,Leisure,1,1,Rev. John Davis
+1387,1,3,male,18.2,1,0,TICK645794,7.26,E84,S,Irish,Servant,Migration,0,0,Rev. James Wilson
+1388,1,1,female,19.6,0,0,TICK154607,266.68,,S,British,Merchant,Leisure,7,1,Miss. Margaret Clark
+1389,0,3,female,29.0,0,0,TICK151295,17.02,,C,Irish,Servant,Migration,1,0,Miss. Alice Brown
+1390,1,1,male,19.3,0,0,TICK173824,237.52,,S,French,Aristocrat,Leisure,4,1,Rev. James Clark
+1391,0,3,male,,0,0,TICK499560,12.36,,S,Irish,Farmer,Leisure,1,0,Dr. Thomas Johnson
+1392,0,1,female,33.6,0,0,TICK918099,428.92,,S,British,Aristocrat,Migration,0,1,Lady. Sarah Brown
+1393,0,1,male,,0,0,TICK1258,361.85,B26,C,British,Aristocrat,Migration,1,1,Mr. Thomas Harris
+1394,0,1,male,37.1,1,0,TICK340044,260.51,,S,British,Merchant,Migration,4,1,Dr. George Harris
+1395,1,2,female,37.2,0,0,TICK82566,20.31,C89,S,American,Engineer,Business,9,1,Lady. Mary Davis
+1396,0,2,male,11.4,0,0,TICK940475,45.4,,S,Irish,Clerk,Business,2,0,Mr. James Taylor
+1397,1,2,female,18.6,2,1,TICK55724,33.08,,S,British,Clerk,Leisure,0,1,Miss. Elizabeth Brown
+1398,0,3,male,,2,0,TICK144628,8.32,,C,British,Farmer,Migration,1,0,Mr. George Brown
+1399,0,2,female,46.1,0,3,TICK537561,20.76,,Q,American,Nurse,Migration,4,1,Mrs. Sarah Clark
+1400,0,3,female,65.5,0,0,TICK847446,17.05,,S,American,Factory Worker,Business,7,1,Mrs. Elizabeth Smith
+1401,0,2,female,34.6,0,0,TICK462047,11.77,,S,British,Nurse,Business,0,1,Mrs. Margaret Clark
+1402,0,1,male,40.8,3,0,TICK447070,496.28,,Q,American,Merchant,Leisure,0,1,Dr. James Brown
+1403,0,3,female,9.9,1,0,TICK698137,6.96,,S,British,Farmer,Migration,1,1,Miss. Elizabeth Taylor
+1404,1,2,male,40.4,0,1,TICK495601,41.84,C27,S,Irish,Nurse,Migration,2,1,Mr. John Walker
+1405,0,3,female,,1,0,TICK343978,10.92,,S,Irish,Servant,Migration,0,1,Miss. Mary Wilson
+1406,0,3,male,18.5,1,0,TICK318255,12.38,,S,Other,Laborer,Leisure,0,0,Rev. James Taylor
+1407,1,1,female,21.8,5,0,TICK525681,443.91,,S,American,Merchant,Migration,2,1,Mrs. Sarah Clark
+1408,0,3,female,42.9,0,0,TICK797925,11.19,D78,Q,Irish,Laborer,Leisure,3,0,Miss. Elizabeth Brown
+1409,0,3,male,30.4,0,1,TICK123994,13.06,B63,S,Irish,Farmer,Business,2,0,Dr. George Harris
+1410,0,3,male,1.2,0,0,TICK253468,5.74,,C,British,Servant,Business,1,1,Rev. John Davis
+1411,0,3,male,22.6,4,0,TICK588354,5.04,,S,French,Farmer,Migration,1,0,Master. Thomas Davis
+1412,0,1,female,51.7,1,0,TICK413349,145.06,,C,Other,Lawyer,Migration,0,1,Mrs. Sarah Harris
+1413,0,1,male,25.8,0,0,TICK396637,349.87,E14,S,British,Merchant,Migration,5,1,Mr. James Smith
+1414,0,3,female,25.8,0,0,TICK812513,6.82,,S,American,Farmer,Business,5,1,Mrs. Alice Clark
+1415,0,3,female,41.9,0,1,TICK405257,6.71,,S,British,Farmer,Migration,4,1,Lady. Elizabeth Taylor
+1416,0,1,female,35.1,1,2,TICK741551,223.15,,C,British,Doctor,Migration,1,1,Mrs. Alice Harris
+1417,1,2,male,25.0,0,0,TICK498526,35.91,,C,British,Clerk,Migration,1,0,Master. James Taylor
+1418,0,2,male,20.8,0,0,TICK373235,38.48,D49,S,British,Engineer,Migration,5,0,Master. Thomas Brown
+1419,1,3,male,74.2,0,0,TICK327905,7.68,,S,Irish,Servant,Leisure,2,1,Dr. William Clark
+1420,0,2,female,48.7,0,0,TICK880387,13.18,,S,British,Nurse,Leisure,3,1,Lady. Alice Taylor
+1421,0,3,male,37.2,0,0,TICK548341,19.11,,S,French,Servant,Business,0,0,Master. George Taylor
+1422,0,1,male,,1,0,TICK333369,152.51,B55,S,American,Lawyer,Leisure,1,1,Master. James Brown
+1423,1,2,female,28.1,0,0,TICK557464,44.13,C10,C,American,Engineer,Business,1,0,Lady. Mary Taylor
+1424,0,1,female,34.9,1,2,TICK82998,435.84,,S,Other,Merchant,Migration,1,1,Mrs. Elizabeth Taylor
+1425,0,2,male,26.6,4,2,TICK927192,40.9,,S,French,Clerk,Leisure,1,0,Rev. John Smith
+1426,0,3,male,17.2,0,0,TICK635787,7.53,A16,C,French,Farmer,Leisure,0,0,Dr. William Brown
+1427,1,3,male,35.5,1,2,TICK884101,17.33,,S,British,Servant,Migration,7,1,Dr. William Smith
+1428,1,3,male,25.3,0,0,TICK225289,16.54,,C,British,Servant,Migration,1,0,Rev. James Smith
+1429,0,1,male,36.3,0,1,TICK175185,310.46,,C,American,Aristocrat,Migration,4,1,Master. William Taylor
+1430,0,3,male,39.1,5,0,TICK992418,10.06,A61,S,British,Servant,Migration,5,1,Master. Thomas Johnson
+1431,1,1,male,37.1,0,0,TICK665555,153.38,,C,French,Doctor,Leisure,1,1,Master. James Lewis
+1432,0,3,male,16.1,0,0,TICK875098,6.83,A12,S,British,Factory Worker,Leisure,1,0,Dr. John Clark
+1433,1,3,male,23.7,0,1,TICK292228,12.65,,S,American,Laborer,Migration,1,0,Master. George Davis
+1434,1,2,female,25.6,0,0,TICK746902,33.41,,S,British,Nurse,Business,0,0,Lady. Margaret Smith
+1435,1,3,female,44.6,0,5,TICK150824,10.39,,S,British,Factory Worker,Migration,5,1,Miss. Alice Taylor
+1436,1,3,female,43.8,0,0,TICK881673,12.13,,S,British,Farmer,Migration,0,1,Mrs. Sarah Walker
+1437,0,3,female,19.4,0,0,TICK459482,10.45,,C,Irish,Laborer,Migration,1,0,Lady. Mary Davis
+1438,0,3,male,11.1,1,0,TICK588712,14.62,,S,British,Factory Worker,Business,6,0,Rev. Thomas Clark
+1439,0,1,female,66.4,0,0,TICK464100,453.59,,C,British,Aristocrat,Migration,0,1,Lady. Sarah Clark
+1440,1,3,male,36.5,0,0,TICK514900,7.46,A51,C,British,Laborer,Migration,0,0,Mr. James Clark
+1441,0,2,female,9.3,0,0,TICK729864,25.26,D4,S,British,Clerk,Migration,4,1,Miss. Margaret Davis
+1442,1,3,male,,0,0,TICK828289,7.11,,S,American,Servant,Leisure,0,0,Dr. John Brown
+1443,0,3,female,45.3,2,0,TICK263709,14.37,,S,British,Factory Worker,Migration,2,1,Miss. Sarah Harris
+1444,1,2,female,61.3,1,2,TICK719660,39.15,,S,Irish,Engineer,Migration,0,0,Mrs. Sarah Harris
+1445,1,3,male,58.1,0,4,TICK127080,18.98,,S,British,Factory Worker,Migration,1,0,Master. James Clark
+1446,1,3,female,35.8,0,2,TICK586005,9.18,A85,S,French,Factory Worker,Leisure,0,1,Mrs. Elizabeth Davis
+1447,0,3,female,-9.5,0,0,TICK944468,19.25,,C,French,Servant,Migration,0,1,Lady. Alice Brown
+1448,1,3,female,30.1,0,1,TICK457564,5.95,,S,British,Factory Worker,Business,1,1,Mrs. Alice Walker
+1449,0,3,male,14.8,2,0,TICK684768,14.05,C93,S,British,Factory Worker,Migration,3,0,Dr. William Walker
+1450,0,1,male,31.3,3,2,TICK366093,56.85,,S,French,Aristocrat,Migration,2,0,Dr. Thomas Brown
+1451,0,3,female,16.6,0,2,TICK187659,18.41,,Q,Irish,Factory Worker,Business,0,1,Lady. Sarah Taylor
+1452,0,1,male,23.9,1,0,TICK27524,279.01,,S,French,Aristocrat,Migration,2,0,Mr. Thomas Taylor
+1453,0,3,female,42.9,0,0,TICK909211,15.04,,C,Other,Factory Worker,Migration,0,0,Miss. Sarah Walker
+1454,1,2,male,26.5,1,0,TICK384450,43.26,,C,American,Teacher,Migration,1,1,Rev. William Lewis
+1455,0,3,male,25.5,0,0,TICK897922,7.25,A73,C,American,Farmer,Migration,1,0,Master. James Johnson
+1456,1,3,female,29.2,3,1,TICK489715,5.58,D72,C,Other,Servant,Migration,1,1,Mrs. Elizabeth Taylor
+1457,0,3,female,69.3,0,1,TICK809184,18.18,,S,Other,Factory Worker,Leisure,0,1,Mrs. Sarah Walker
+1458,0,3,male,13.3,0,0,TICK703586,9.72,A37,Q,French,Factory Worker,Migration,0,0,Dr. George Walker
+1459,1,2,male,34.2,2,1,TICK363798,15.16,,S,French,Engineer,Migration,0,0,Dr. John Davis
+1460,0,3,male,56.4,1,0,TICK764878,12.03,E48,Q,Other,Servant,Leisure,0,1,Mr. James Brown
+1461,0,3,female,29.2,3,0,TICK445677,13.97,,S,British,Servant,Migration,0,1,Mrs. Alice Clark
+1462,1,1,male,48.4,4,0,TICK225164,44.56,E21,S,British,Lawyer,Migration,1,0,Rev. George Lewis
+1463,1,3,male,10.2,5,0,TICK647944,9.12,C85,S,British,Laborer,Migration,1,0,Mr. George Clark
+1464,0,3,male,27.0,2,0,TICK587986,5.49,,S,Irish,Servant,Migration,0,0,Master. George Wilson
+1465,0,3,female,18.0,2,0,TICK919861,11.31,E70,S,British,Farmer,Leisure,3,1,Miss. Mary Harris
+1466,0,1,male,29.0,0,0,TICK966325,450.7,B42,Q,French,Merchant,Leisure,7,0,Dr. Thomas Walker
+1467,1,3,male,29.4,0,1,TICK986039,19.74,C53,S,French,Servant,Leisure,3,0,Rev. William Taylor
+1468,1,1,male,30.9,3,3,TICK201261,329.41,,C,British,Lawyer,Business,1,1,Dr. John Walker
+1469,1,3,female,,1,0,TICK402035,7.42,D48,C,British,Servant,Migration,0,1,Lady. Elizabeth Smith
+1470,0,1,male,-3.7,0,0,TICK393383,455.75,D45,Q,British,Doctor,Migration,4,1,Dr. James Brown
+1471,1,2,male,20.9,0,0,TICK188700,30.65,,S,British,Teacher,Leisure,3,0,Master. George Harris
+1472,0,3,male,33.2,0,0,TICK979523,7.31,D87,Q,British,Factory Worker,Migration,9,0,Master. John Brown
+1473,0,3,male,1.9,0,0,TICK784945,18.83,,S,Other,Farmer,Business,1,0,Dr. Thomas Davis
+1474,1,3,female,39.3,4,0,TICK12190,16.36,,Q,Other,Servant,Business,0,1,Miss. Alice Taylor
+1475,0,3,male,20.6,0,0,TICK206349,15.98,,S,Other,Servant,Migration,3,0,Dr. Thomas Taylor
+1476,1,3,male,27.2,0,0,TICK464555,15.64,,Q,Other,Factory Worker,Leisure,0,1,Rev. Thomas Taylor
+1477,1,3,female,43.5,1,0,TICK379526,8.01,,S,British,Farmer,Leisure,6,0,Lady. Sarah Wilson
+1478,0,3,female,49.1,0,0,TICK552553,8.17,,S,British,Factory Worker,Business,0,1,Miss. Margaret Walker
+1479,0,3,male,39.8,0,0,TICK205355,15.32,E88,S,British,Laborer,Migration,2,0,Mr. Thomas Taylor
+1480,1,3,male,12.9,1,0,TICK6887,8.3,,S,American,Servant,Migration,2,1,Dr. James Davis
+1481,0,3,male,39.0,0,2,TICK615663,11.58,,S,British,Farmer,Business,2,0,Rev. George Davis
+1482,0,3,male,40.0,0,0,TICK326468,16.73,,S,British,Factory Worker,Leisure,1,0,Dr. John Taylor
+1483,0,1,male,36.9,1,2,TICK345406,398.46,,C,British,Merchant,Leisure,7,1,Rev. Thomas Smith
+1484,1,3,female,51.8,2,4,TICK99679,11.8,B74,Q,Irish,Servant,Leisure,6,1,Miss. Mary Taylor
+1485,0,2,male,31.3,2,2,TICK956295,41.69,,S,Irish,Teacher,Leisure,5,0,Mr. John Brown
+1486,0,3,male,51.2,4,2,TICK387785,17.58,D11,C,British,Farmer,Leisure,1,0,Mr. George Brown
+1487,0,3,female,51.1,2,0,TICK961293,14.82,,S,British,Servant,Leisure,0,1,Mrs. Alice Clark
+1488,1,3,female,40.5,0,1,TICK267086,8.43,,S,Irish,Factory Worker,Leisure,1,0,Mrs. Margaret Brown
+1489,0,3,male,,0,0,TICK528217,9.11,,S,Irish,Laborer,Migration,5,0,Rev. William Harris
+1490,0,3,female,36.9,0,2,TICK967329,9.72,,S,American,Farmer,Leisure,2,1,Lady. Elizabeth Brown
+1491,1,3,female,55.5,1,0,TICK14625,6.75,,Q,American,Servant,Leisure,0,1,Lady. Margaret Taylor
+1492,0,1,male,46.1,0,0,TICK637249,158.39,,Q,British,Aristocrat,Migration,1,1,Rev. Thomas Wilson
+1493,1,3,male,14.5,0,0,TICK287290,8.14,,S,French,Laborer,Business,2,0,Master. John Walker
+1494,0,2,female,36.0,1,1,TICK36156,28.21,B88,S,British,Clerk,Business,0,1,Miss. Mary Clark
+1495,1,3,male,17.3,1,0,TICK679657,18.63,,S,American,Factory Worker,Business,3,0,Mr. John Walker
+1496,1,3,male,20.2,0,0,TICK289307,6.57,,S,French,Laborer,Business,1,0,Mr. John Walker
+1497,0,3,female,,0,0,TICK673844,15.8,,S,Other,Farmer,Leisure,2,1,Miss. Sarah Lewis
+1498,1,1,female,8.9,0,0,TICK502989,353.02,,C,American,Doctor,Migration,0,1,Miss. Mary Clark
+1499,0,3,female,16.4,0,0,TICK418641,6.44,D29,S,British,Servant,Migration,3,1,Lady. Elizabeth Harris
+1500,1,2,male,52.8,0,2,TICK47050,46.9,,S,British,Nurse,Migration,0,0,Master. James Clark
+1501,1,3,male,20.1,1,1,TICK730283,13.53,,S,American,Factory Worker,Migration,0,0,Dr. Thomas Harris
+1502,1,1,female,42.8,1,2,TICK739474,200.95,A29,S,American,Aristocrat,Business,0,0,Lady. Alice Taylor
+1503,0,2,female,32.6,0,3,TICK266329,40.26,,S,Irish,Nurse,Business,4,1,Lady. Sarah Davis
+1504,0,3,male,38.3,0,0,TICK288492,8.86,,S,Irish,Farmer,Business,1,1,Dr. John Wilson
+1505,1,3,male,39.0,0,0,TICK656643,15.4,,S,British,Farmer,Leisure,1,0,Rev. John Clark
+1506,0,2,female,15.8,3,0,TICK61006,11.59,,Q,Irish,Clerk,Leisure,3,1,Lady. Sarah Smith
+1507,0,3,male,42.7,0,0,TICK600975,17.59,B10,S,Other,Servant,Migration,2,0,Master. John Harris
+1508,1,3,female,11.5,0,0,TICK864319,11.72,C31,S,French,Servant,Migration,0,1,Miss. Margaret Wilson
+1509,0,3,male,19.5,0,0,TICK32904,14.55,D39,S,Other,Factory Worker,Migration,0,0,Mr. James Smith
+1510,0,3,male,38.7,0,3,TICK906115,8.32,,S,British,Farmer,Business,2,0,Dr. William Harris
+1511,0,3,female,14.9,2,0,TICK753908,15.16,,S,British,Laborer,Business,2,1,Lady. Alice Wilson
+1512,0,1,male,0.6,0,1,TICK973632,392.95,A3,C,British,Merchant,Migration,0,1,Rev. James Walker
+1513,1,3,male,35.2,0,0,TICK494679,12.1,,S,American,Servant,Migration,2,0,Dr. William Harris
+1514,1,3,female,6.5,2,0,TICK638058,14.27,,S,Irish,Factory Worker,Business,1,1,Lady. Sarah Taylor
+1515,0,1,male,40.2,0,0,TICK663951,244.47,,S,British,Aristocrat,Migration,0,1,Rev. John Lewis
+1516,1,3,male,25.5,3,0,TICK477557,18.41,,C,Other,Farmer,Leisure,0,0,Dr. Thomas Brown
+1517,0,3,female,35.0,0,0,TICK515117,12.47,,S,American,Factory Worker,Leisure,4,1,Lady. Margaret Smith
+1518,0,1,male,34.7,0,2,TICK183212,425.65,A55,S,American,Doctor,Migration,3,1,Rev. James Clark
+1519,0,1,male,41.4,0,0,TICK497446,406.64,C85,S,Other,Lawyer,Migration,2,1,Mr. William Lewis
+1520,1,3,male,,0,1,TICK787364,11.16,,S,British,Factory Worker,Leisure,1,0,Rev. James Lewis
+1521,0,3,male,14.7,0,0,TICK918437,8.45,,S,British,Factory Worker,Leisure,4,0,Rev. John Harris
+1522,0,3,male,26.3,0,0,TICK680003,11.09,,S,British,Factory Worker,Business,0,0,Master. James Harris
+1523,1,3,female,35.0,0,3,TICK788046,17.39,C27,S,British,Servant,Migration,2,1,Mrs. Margaret Wilson
+1524,0,2,female,51.5,0,0,TICK573089,19.11,,C,British,Nurse,Business,5,0,Mrs. Alice Walker
+1525,0,3,male,39.3,1,0,TICK847652,12.87,E76,S,British,Servant,Migration,0,0,Dr. William Walker
+1526,0,3,male,49.9,0,0,TICK109933,17.09,,C,American,Servant,Migration,0,0,Mr. William Clark
+1527,0,3,male,35.8,0,1,TICK41048,10.3,,C,Other,Servant,Business,5,0,Dr. William Smith
+1528,0,1,male,46.4,0,0,TICK388484,331.84,,S,American,Doctor,Migration,6,0,Master. Thomas Smith
+1529,0,2,female,33.7,2,0,TICK31237,19.83,D5,C,Other,Engineer,Migration,1,1,Lady. Alice Walker
+1530,1,3,male,,0,0,TICK643693,6.64,,S,Other,Servant,Migration,4,0,Dr. Thomas Clark
+1531,0,3,male,24.7,0,0,TICK938704,16.92,,S,Other,Factory Worker,Migration,4,0,Master. William Wilson
+1532,1,3,female,53.5,0,0,TICK748960,6.48,,S,British,Servant,Migration,6,0,Miss. Margaret Taylor
+1533,0,3,male,,0,2,TICK161633,9.07,D50,C,British,Laborer,Migration,6,0,Dr. George Lewis
+1534,0,3,male,,1,1,TICK740916,17.83,E99,S,British,Farmer,Migration,1,0,Dr. John Brown
+1535,1,3,male,35.5,0,0,TICK772957,10.2,,Q,Irish,Factory Worker,Business,2,0,Master. James Johnson
+1536,0,1,male,,0,0,TICK186501,487.33,E80,S,American,Lawyer,Leisure,2,1,Rev. William Smith
+1537,1,3,male,39.4,2,0,TICK914218,19.7,,C,British,Servant,Migration,0,0,Rev. John Johnson
+1538,0,2,male,43.3,0,0,TICK893278,20.73,,S,Other,Teacher,Leisure,0,0,Mr. James Taylor
+1539,0,3,female,59.3,1,2,TICK139043,5.61,,S,American,Factory Worker,Leisure,1,1,Miss. Sarah Clark
+1540,1,3,male,22.4,1,0,TICK87847,15.58,,S,British,Servant,Business,0,1,Dr. George Clark
+1541,1,3,female,59.4,3,0,TICK440953,11.76,A61,Q,Irish,Factory Worker,Migration,6,1,Mrs. Sarah Wilson
+1542,0,2,male,30.1,0,3,TICK875579,14.03,C70,C,British,Engineer,Migration,0,1,Mr. George Taylor
+1543,0,3,male,18.9,0,2,TICK887888,15.61,,S,Irish,Servant,Migration,3,0,Rev. George Wilson
+1544,0,3,female,22.7,0,0,TICK126228,5.47,,S,British,Farmer,Migration,5,1,Miss. Alice Harris
+1545,0,1,male,38.4,0,1,TICK59770,438.99,A59,S,American,Merchant,Migration,3,1,Mr. George Johnson
+1546,1,2,male,16.8,0,0,TICK465915,15.55,D96,S,Other,Teacher,Business,0,0,Mr. William Brown
+1547,1,1,female,25.0,0,0,TICK669444,89.84,,Q,British,Aristocrat,Leisure,0,1,Mrs. Mary Davis
+1548,1,3,female,35.1,0,0,TICK746108,7.64,E61,S,British,Servant,Business,0,1,Mrs. Alice Walker
+1549,1,3,male,53.3,2,0,TICK66352,19.4,,S,French,Factory Worker,Leisure,2,0,Dr. Thomas Davis
+1550,1,1,female,42.8,1,2,TICK330500,355.79,,S,Other,Doctor,Leisure,0,1,Miss. Mary Lewis
+1551,1,3,female,30.7,0,0,TICK103210,17.02,D28,S,British,Farmer,Migration,10,1,Lady. Mary Walker
+1552,0,2,male,38.4,1,0,TICK900563,25.91,,C,British,Engineer,Leisure,0,0,Mr. John Wilson
+1553,0,3,male,33.6,5,2,TICK571512,10.04,,S,Other,Servant,Business,2,0,Dr. Thomas Lewis
+1554,0,3,female,,5,1,TICK291956,8.52,,S,British,Servant,Leisure,0,1,Mrs. Elizabeth Taylor
+1555,0,3,male,56.3,1,0,TICK894990,12.21,A65,S,Other,Factory Worker,Leisure,4,0,Dr. Thomas Brown
+1556,1,3,male,53.6,1,2,TICK204614,13.28,D9,S,Other,Servant,Leisure,2,0,Rev. John Clark
+1557,0,3,female,28.9,3,0,TICK687927,14.48,,C,French,Farmer,Leisure,0,0,Mrs. Sarah Taylor
+1558,0,1,male,23.2,0,0,TICK644829,150.85,,S,American,Merchant,Business,0,0,Dr. John Davis
+1559,0,3,female,13.0,0,0,TICK774276,19.23,,C,British,Factory Worker,Migration,0,0,Mrs. Sarah Brown
+1560,1,3,male,39.3,2,0,TICK18484,7.55,,S,Irish,Laborer,Business,3,0,Dr. William Harris
+1561,0,3,female,39.4,1,0,TICK349824,19.48,,S,Other,Laborer,Migration,2,1,Lady. Mary Smith
+1562,0,3,male,17.9,0,2,TICK878944,5.22,E16,S,Irish,Laborer,Leisure,2,0,Mr. William Johnson
+1563,0,3,male,,0,0,TICK705633,12.22,,S,British,Laborer,Leisure,5,1,Dr. George Davis
+1564,0,3,male,42.3,0,0,TICK890433,10.0,,C,British,Farmer,Migration,0,0,Mr. John Lewis
+1565,1,3,male,,1,0,TICK944368,11.74,,C,British,Servant,Migration,3,0,Dr. John Lewis
+1566,1,3,female,27.1,0,0,TICK332853,13.56,,S,French,Laborer,Migration,1,1,Miss. Sarah Johnson
+1567,0,1,male,26.9,0,0,TICK942344,234.73,E43,S,British,Lawyer,Migration,1,0,Dr. Thomas Walker
+1568,1,3,male,18.8,1,0,TICK744764,11.22,,S,American,Laborer,Migration,0,1,Mr. George Taylor
+1569,1,3,male,27.3,0,0,TICK178433,15.99,,C,British,Laborer,Business,5,0,Dr. James Smith
+1570,0,1,female,6.8,0,0,TICK950721,352.36,,S,Irish,Doctor,Leisure,3,1,Miss. Sarah Johnson
+1571,1,3,male,,0,0,TICK616354,17.5,,C,British,Factory Worker,Migration,0,0,Mr. William Walker
+1572,1,3,male,26.4,1,1,TICK758213,8.75,,S,Other,Servant,Migration,1,0,Rev. George Lewis
+1573,0,3,female,29.1,0,0,TICK991171,14.14,,S,French,Laborer,Business,6,1,Mrs. Alice Lewis
+1574,1,3,male,37.2,0,0,TICK385047,13.78,,S,British,Servant,Migration,1,0,Rev. George Johnson
+1575,0,3,female,12.0,1,0,TICK542422,10.55,,S,American,Factory Worker,Business,1,0,Mrs. Mary Lewis
+1576,1,2,male,14.4,1,0,TICK15859,29.44,,S,French,Nurse,Migration,3,0,Dr. William Walker
+1577,1,3,female,18.5,1,0,TICK987233,9.71,,S,British,Laborer,Migration,2,1,Lady. Elizabeth Taylor
+1578,1,3,female,10.6,0,0,TICK697773,7.13,B92,S,Other,Factory Worker,Migration,0,1,Lady. Mary Davis
+1579,0,1,female,38.9,1,0,TICK423757,130.49,,C,Irish,Lawyer,Migration,7,1,Miss. Sarah Johnson
+1580,1,3,male,21.6,0,0,TICK437604,6.58,,S,Other,Factory Worker,Leisure,0,0,Rev. William Johnson
+1581,0,3,female,29.5,0,0,TICK879409,15.25,,S,British,Farmer,Business,0,1,Lady. Elizabeth Taylor
+1582,1,3,male,17.3,1,3,TICK701157,14.91,,S,British,Laborer,Leisure,5,0,Master. William Johnson
+1583,0,3,male,24.6,1,0,TICK703169,19.26,E73,S,British,Farmer,Migration,4,0,Dr. James Walker
+1584,0,3,female,34.5,0,0,TICK65470,15.95,,Q,American,Servant,Leisure,9,0,Mrs. Mary Brown
+1585,0,3,female,35.2,0,0,TICK69110,5.78,D47,C,British,Servant,Leisure,0,1,Lady. Mary Wilson
+1586,0,3,female,14.9,0,0,TICK203312,18.26,,S,Other,Laborer,Business,0,1,Lady. Elizabeth Smith
+1587,0,3,male,28.8,0,0,TICK866125,17.94,,C,British,Farmer,Leisure,4,0,Rev. George Johnson
+1588,1,2,male,17.5,0,0,TICK799273,27.73,C82,S,British,Clerk,Leisure,1,1,Rev. Thomas Davis
+1589,0,3,male,28.2,0,0,TICK526887,13.79,,S,British,Farmer,Business,2,0,Dr. William Clark
+1590,1,3,male,20.5,3,0,TICK155679,19.64,,S,Other,Farmer,Migration,4,0,Rev. Thomas Wilson
+1591,1,3,male,57.5,0,1,TICK765366,12.98,,Q,British,Servant,Migration,6,0,Mr. George Clark
+1592,1,1,female,42.2,2,0,TICK280588,455.5,D72,Q,Irish,Doctor,Leisure,1,1,Mrs. Elizabeth Johnson
+1593,0,3,male,35.9,2,0,TICK89047,6.25,,Q,American,Factory Worker,Business,1,0,Rev. John Brown
+1594,1,3,male,,0,1,TICK181968,7.87,A12,C,Other,Factory Worker,Migration,0,1,Master. George Smith
+1595,0,3,female,25.8,0,2,TICK465937,11.61,,S,Irish,Farmer,Migration,6,1,Lady. Mary Davis
+1596,0,2,male,42.7,1,0,TICK47670,33.39,C61,S,British,Teacher,Migration,1,0,Rev. George Davis
+1597,0,3,male,29.2,0,0,TICK289909,17.24,,S,Irish,Farmer,Migration,3,0,Mr. John Brown
+1598,0,3,female,55.6,1,1,TICK639088,19.82,B18,C,French,Factory Worker,Migration,3,1,Mrs. Alice Lewis
+1599,0,3,male,44.3,0,0,TICK209334,10.83,,C,French,Servant,Migration,0,0,Mr. Thomas Johnson
+1600,0,3,female,24.5,0,0,TICK723171,5.71,B12,S,British,Factory Worker,Migration,1,0,Mrs. Elizabeth Johnson
+1601,1,3,male,53.4,0,0,TICK531019,17.02,,C,American,Farmer,Migration,6,0,Master. Thomas Walker
+1602,0,2,male,25.9,1,1,TICK430131,34.18,,S,French,Teacher,Leisure,3,0,Master. John Taylor
+1603,1,3,male,58.6,3,0,TICK182370,7.98,,S,British,Servant,Leisure,0,1,Master. James Davis
+1604,1,2,male,54.4,0,0,TICK667160,29.79,,S,French,Nurse,Migration,4,0,Rev. William Walker
+1605,0,3,male,34.4,4,1,TICK784106,16.13,,S,Irish,Servant,Migration,0,0,Mr. William Clark
+1606,1,3,female,7.3,0,0,TICK884031,16.56,B75,Q,British,Laborer,Leisure,2,1,Mrs. Margaret Johnson
+1607,0,3,female,33.3,1,0,TICK879559,12.49,D15,S,American,Servant,Leisure,0,1,Lady. Sarah Davis
+1608,1,3,male,13.5,1,2,TICK987804,9.58,,C,Irish,Laborer,Migration,1,0,Rev. Thomas Lewis
+1609,0,3,female,20.9,1,0,TICK4381,19.61,B26,C,Irish,Farmer,Business,0,0,Lady. Mary Walker
+1610,0,3,female,21.9,2,0,TICK327279,14.95,,C,Irish,Farmer,Migration,2,1,Mrs. Alice Walker
+1611,1,3,female,13.4,5,0,TICK288061,11.12,,C,British,Factory Worker,Leisure,0,1,Lady. Sarah Johnson
+1612,0,3,male,33.3,0,0,TICK588789,9.21,D2,C,American,Servant,Business,2,0,Rev. John Lewis
+1613,1,1,male,19.2,0,2,TICK368719,373.62,,S,American,Lawyer,Migration,1,1,Dr. John Davis
+1614,1,3,male,26.5,0,0,TICK124432,8.63,E2,S,American,Factory Worker,Migration,2,0,Dr. John Brown
+1615,0,3,male,22.0,0,0,TICK359038,7.58,,S,American,Laborer,Migration,0,0,Mr. John Brown
+1616,1,3,female,37.3,0,0,TICK489900,12.95,,S,British,Farmer,Leisure,5,0,Mrs. Mary Clark
+1617,0,3,male,36.1,0,0,TICK596772,9.35,,S,British,Laborer,Migration,2,0,Mr. James Clark
+1618,1,3,male,25.4,0,0,TICK877720,14.43,,S,American,Farmer,Leisure,4,1,Mr. John Lewis
+1619,0,3,male,38.0,2,0,TICK731115,6.77,,S,British,Servant,Migration,1,0,Dr. George Wilson
+1620,1,3,male,48.4,0,0,TICK91277,14.82,D28,S,Other,Farmer,Migration,0,0,Mr. John Lewis
+1621,0,2,female,-1.3,0,0,TICK594692,21.33,B85,S,French,Nurse,Migration,6,1,Lady. Alice Walker
+1622,1,3,male,21.2,0,2,TICK976461,5.0,D62,S,British,Laborer,Leisure,0,0,Mr. John Wilson
+1623,1,3,female,16.0,0,0,TICK486496,6.9,,C,Irish,Servant,Migration,3,1,Lady. Margaret Taylor
+1624,0,3,male,,1,3,TICK93444,19.0,,S,French,Laborer,Business,5,0,Rev. James Walker
+1625,0,1,male,-3.6,0,0,TICK122909,437.66,,S,Irish,Doctor,Business,1,1,Dr. Thomas Wilson
+1626,0,1,male,-1.8,0,0,TICK963604,139.8,,S,Irish,Aristocrat,Business,4,0,Dr. George Smith
+1627,0,3,male,-11.2,0,0,TICK95960,16.68,,Q,Other,Servant,Leisure,2,0,Mr. James Walker
+1628,0,2,male,,4,0,TICK192366,34.34,B66,S,British,Teacher,Migration,1,0,Mr. William Clark
+1629,0,3,male,22.1,0,1,TICK765989,19.56,,S,Other,Factory Worker,Leisure,1,0,Rev. James Wilson
+1630,0,2,male,50.8,0,0,TICK91615,24.94,,C,British,Teacher,Business,1,0,Rev. Thomas Clark
+1631,0,2,female,32.1,1,5,TICK195677,37.26,,Q,French,Engineer,Migration,6,1,Lady. Sarah Taylor
+1632,1,2,male,,0,1,TICK333924,12.54,,S,French,Clerk,Migration,5,0,Dr. John Walker
+1633,1,3,male,37.6,0,0,TICK620864,10.94,,S,British,Farmer,Migration,1,0,Rev. William Wilson
+1634,1,3,female,88.9,0,0,TICK658063,19.46,D81,S,British,Laborer,Migration,0,1,Lady. Mary Wilson
+1635,1,2,female,-1.3,0,0,TICK22084,31.56,,S,British,Engineer,Business,5,1,Miss. Sarah Brown
+1636,0,3,male,55.9,2,0,TICK804966,9.32,C53,Q,Irish,Laborer,Business,0,0,Mr. Thomas Wilson
+1637,0,1,male,29.3,0,0,TICK178561,86.53,,S,British,Aristocrat,Migration,1,1,Dr. George Harris
+1638,0,3,female,23.6,0,1,TICK828050,15.55,,S,British,Farmer,Business,4,0,Miss. Margaret Brown
+1639,0,1,female,21.5,0,0,TICK11945,333.08,,S,British,Aristocrat,Migration,3,0,Mrs. Margaret Lewis
+1640,0,3,female,34.9,0,1,TICK229092,10.61,D4,S,British,Factory Worker,Leisure,1,1,Miss. Alice Clark
+1641,0,3,male,23.8,0,4,TICK669934,19.26,B86,S,French,Farmer,Migration,5,0,Mr. James Walker
+1642,0,3,male,13.0,0,0,TICK393722,5.33,,C,Other,Farmer,Migration,4,0,Master. John Smith
+1643,0,3,female,22.0,4,0,TICK483711,9.56,,S,British,Farmer,Migration,1,1,Miss. Alice Wilson
+1644,0,3,male,35.4,2,0,TICK86222,18.82,,S,British,Servant,Leisure,7,0,Master. George Lewis
+1645,0,2,male,,0,0,TICK920809,22.84,,S,British,Clerk,Leisure,0,0,Mr. James Harris
+1646,0,3,male,57.7,0,0,TICK760459,8.78,E66,Q,Other,Laborer,Migration,1,0,Rev. James Lewis
+1647,0,3,male,31.5,0,1,TICK990056,13.01,,S,French,Laborer,Leisure,0,1,Mr. George Brown
+1648,1,2,male,49.4,1,2,TICK259717,42.95,,C,British,Engineer,Migration,2,1,Master. George Walker
+1649,0,3,female,,0,1,TICK323733,6.55,,S,Other,Farmer,Migration,0,1,Miss. Mary Johnson
+1650,0,3,female,29.0,1,2,TICK878981,19.15,,S,Irish,Laborer,Migration,2,1,Miss. Elizabeth Clark
+1651,0,3,male,28.3,3,2,TICK714965,16.93,,C,American,Factory Worker,Leisure,3,1,Rev. John Clark
+1652,0,3,female,33.2,0,0,TICK674518,7.72,,C,French,Farmer,Migration,0,1,Mrs. Sarah Wilson
+1653,1,3,female,,0,0,TICK989447,15.68,D9,S,British,Servant,Migration,2,1,Lady. Margaret Brown
+1654,0,3,male,23.2,1,0,TICK946269,10.77,E11,S,Other,Laborer,Migration,0,0,Rev. Thomas Lewis
+1655,0,3,female,16.7,0,1,TICK907584,11.03,,S,Other,Servant,Migration,2,1,Lady. Alice Clark
+1656,0,1,male,,0,0,TICK201368,398.15,A48,S,British,Merchant,Business,4,1,Mr. George Johnson
+1657,0,2,male,,0,3,TICK784714,48.51,,C,British,Engineer,Leisure,3,0,Dr. William Clark
+1658,0,3,female,52.1,0,2,TICK793547,6.9,,S,French,Factory Worker,Leisure,4,1,Miss. Margaret Harris
+1659,1,3,female,20.9,0,0,TICK774964,11.31,,S,British,Laborer,Migration,5,1,Mrs. Mary Brown
+1660,0,3,male,26.6,2,0,TICK140182,12.21,,S,British,Laborer,Migration,3,0,Dr. William Harris
+1661,1,3,male,,0,0,TICK326569,10.64,,S,Irish,Factory Worker,Business,5,0,Master. William Johnson
+1662,0,3,male,23.0,3,0,TICK56926,10.45,,S,British,Servant,Migration,2,0,Dr. James Brown
+1663,0,3,female,39.6,2,1,TICK398735,5.78,,S,French,Servant,Business,0,1,Mrs. Margaret Taylor
+1664,0,3,male,27.1,0,3,TICK741204,15.28,E89,S,French,Factory Worker,Leisure,2,0,Master. George Davis
+1665,0,3,female,34.9,0,0,TICK302021,11.54,,S,British,Factory Worker,Business,3,1,Mrs. Sarah Smith
+1666,1,3,male,,1,1,TICK187650,7.92,,S,French,Servant,Leisure,1,0,Dr. Thomas Lewis
+1667,1,3,male,31.3,0,0,TICK293514,17.24,,C,Irish,Servant,Migration,2,1,Dr. George Walker
+1668,0,3,female,-14.9,2,3,TICK148247,17.04,,S,Irish,Farmer,Migration,2,1,Mrs. Elizabeth Harris
+1669,0,3,female,48.1,0,0,TICK593487,12.3,,S,British,Laborer,Leisure,1,1,Mrs. Mary Davis
+1670,1,2,male,41.7,1,3,TICK331868,21.94,D44,S,French,Engineer,Migration,1,0,Dr. John Brown
+1671,0,2,male,15.8,1,2,TICK435092,35.52,,S,Other,Teacher,Migration,5,0,Dr. James Taylor
+1672,1,3,male,56.2,0,0,TICK237936,9.32,,S,British,Laborer,Migration,2,0,Master. William Johnson
+1673,1,2,male,47.0,1,2,TICK876849,19.44,,S,Irish,Teacher,Business,4,1,Mr. James Lewis
+1674,1,2,female,13.4,2,0,TICK198389,39.22,,S,French,Teacher,Business,0,0,Miss. Mary Clark
+1675,0,3,male,22.1,0,3,TICK287050,5.6,,C,British,Factory Worker,Leisure,5,0,Dr. Thomas Walker
+1676,0,3,female,14.2,0,0,TICK927488,6.42,,C,British,Factory Worker,Migration,4,1,Mrs. Elizabeth Wilson
+1677,0,3,male,35.3,2,0,TICK209902,5.1,,S,British,Laborer,Business,1,1,Master. William Brown
+1678,0,3,male,21.4,1,0,TICK186715,7.29,,S,French,Farmer,Business,0,1,Mr. Thomas Smith
+1679,0,1,male,1.3,0,2,TICK310258,62.43,,C,Irish,Doctor,Migration,0,1,Mr. Thomas Brown
+1680,0,3,female,29.0,3,0,TICK272952,19.94,C25,S,American,Laborer,Business,0,1,Miss. Elizabeth Wilson
+1681,0,2,male,43.7,0,0,TICK732442,21.55,,S,French,Clerk,Migration,2,0,Mr. John Wilson
+1682,1,3,female,31.6,0,5,TICK461952,7.24,D36,S,British,Farmer,Leisure,6,1,Miss. Sarah Smith
+1683,0,3,male,38.2,0,0,TICK278395,8.61,C77,S,American,Laborer,Migration,0,0,Rev. William Lewis
+1684,1,2,male,33.0,3,0,TICK97901,47.45,,C,French,Nurse,Business,0,0,Dr. George Taylor
+1685,1,2,female,41.0,0,0,TICK514682,30.81,,Q,British,Nurse,Leisure,3,1,Miss. Sarah Walker
+1686,0,3,male,34.3,2,0,TICK373405,10.47,,S,British,Factory Worker,Leisure,2,0,Master. John Wilson
+1687,1,1,male,28.2,0,0,TICK607806,440.49,,S,American,Lawyer,Leisure,6,0,Master. John Johnson
+1688,0,3,female,31.4,1,0,TICK382276,10.92,,S,French,Laborer,Migration,2,1,Miss. Elizabeth Lewis
+1689,1,3,male,52.7,0,0,TICK366805,10.03,E71,C,Irish,Servant,Migration,3,0,Master. William Johnson
+1690,0,3,male,39.0,3,3,TICK810889,8.11,C27,S,Irish,Laborer,Business,3,0,Rev. Thomas Walker
+1691,1,3,male,15.7,1,1,TICK674003,10.67,,S,Irish,Laborer,Migration,6,0,Mr. John Lewis
+1692,1,3,female,31.2,1,0,TICK549450,9.75,,C,British,Farmer,Leisure,1,1,Lady. Mary Smith
+1693,0,3,male,35.0,0,3,TICK472516,15.16,,S,British,Servant,Leisure,0,0,Rev. James Brown
+1694,0,3,female,,0,0,TICK870793,9.34,C82,C,American,Farmer,Migration,6,1,Mrs. Margaret Clark
+1695,0,3,male,1.4,5,0,TICK662679,13.66,,S,American,Factory Worker,Migration,0,1,Rev. Thomas Lewis
+1696,0,2,male,17.1,0,0,TICK721413,12.64,,S,Other,Clerk,Migration,0,1,Rev. James Taylor
+1697,0,2,male,23.8,5,0,TICK873132,17.65,C24,S,American,Teacher,Migration,3,1,Dr. George Lewis
+1698,0,1,female,58.3,0,3,TICK179755,221.48,,S,British,Lawyer,Business,0,0,Miss. Margaret Wilson
+1699,0,3,female,37.3,0,0,TICK39515,19.05,B51,S,British,Servant,Business,1,1,Mrs. Elizabeth Clark
+1700,0,3,male,6.8,1,0,TICK996796,10.66,,S,Other,Factory Worker,Migration,3,0,Dr. Thomas Lewis
+1701,0,3,female,28.6,0,0,TICK876271,14.96,,S,British,Servant,Migration,9,0,Lady. Elizabeth Brown
+1702,0,1,male,49.9,0,0,TICK614650,149.89,D69,S,British,Lawyer,Migration,5,0,Rev. James Brown
+1703,0,2,female,21.2,0,1,TICK405415,15.08,,S,French,Clerk,Leisure,0,1,Miss. Elizabeth Wilson
+1704,0,2,male,45.6,0,0,TICK164267,12.34,,C,Irish,Teacher,Migration,0,0,Master. William Davis
+1705,0,3,female,7.2,0,0,TICK565080,9.58,,C,British,Farmer,Migration,2,0,Miss. Mary Johnson
+1706,1,3,male,-12.5,0,0,TICK597337,7.36,,Q,American,Laborer,Migration,2,0,Rev. Thomas Lewis
+1707,1,2,female,48.0,1,0,TICK221895,16.96,,S,British,Teacher,Migration,6,1,Mrs. Mary Lewis
+1708,0,3,female,23.1,1,0,TICK737296,16.41,,Q,Irish,Farmer,Leisure,6,0,Miss. Elizabeth Smith
+1709,0,3,male,,0,0,TICK455928,5.24,,Q,British,Factory Worker,Migration,1,1,Dr. James Davis
+1710,1,3,male,24.2,1,0,TICK364773,13.37,,Q,British,Factory Worker,Migration,5,1,Master. Thomas Lewis
+1711,0,3,male,32.9,2,0,TICK678388,10.69,E75,S,American,Laborer,Leisure,6,1,Master. George Lewis
+1712,1,3,female,36.7,0,0,TICK851299,12.6,C66,S,British,Farmer,Migration,0,1,Mrs. Margaret Smith
+1713,0,1,male,-7.3,0,0,TICK716147,294.53,,S,British,Lawyer,Migration,1,1,Rev. George Clark
+1714,1,3,male,20.1,0,0,TICK835951,9.7,,S,French,Servant,Leisure,1,0,Rev. George Clark
+1715,0,3,male,30.9,3,0,TICK303712,9.43,,S,Other,Servant,Migration,2,0,Mr. William Lewis
+1716,1,3,male,36.7,0,2,TICK218523,16.0,,C,Other,Factory Worker,Business,1,0,Rev. James Wilson
+1717,1,3,female,15.6,1,0,TICK359802,18.07,A61,C,British,Servant,Leisure,5,1,Lady. Alice Lewis
+1718,0,3,male,,0,1,TICK734640,7.89,D50,Q,Other,Laborer,Migration,4,0,Mr. John Brown
+1719,1,3,male,21.2,0,0,TICK529236,6.46,,C,French,Laborer,Migration,2,0,Rev. William Davis
+1720,1,3,female,33.4,0,0,TICK579406,18.47,,C,French,Servant,Business,6,1,Mrs. Alice Taylor
+1721,1,3,male,47.4,0,0,TICK871168,10.25,,S,British,Servant,Leisure,0,0,Dr. William Walker
+1722,0,3,male,25.0,4,5,TICK780230,13.27,,S,British,Laborer,Migration,1,0,Mr. William Davis
+1723,0,3,male,9.4,0,0,TICK833878,10.39,,S,Irish,Servant,Leisure,2,0,Rev. John Brown
+1724,1,3,female,19.4,2,0,TICK283014,6.89,A71,S,French,Servant,Migration,3,1,Lady. Alice Smith
+1725,1,3,female,56.0,2,0,TICK96166,13.84,E35,S,Irish,Farmer,Migration,0,1,Miss. Margaret Johnson
+1726,1,2,male,17.1,0,0,TICK539205,31.01,,S,American,Nurse,Leisure,3,0,Dr. John Taylor
+1727,0,3,male,12.0,0,0,TICK811978,8.04,,S,French,Factory Worker,Leisure,8,0,Mr. George Smith
+1728,1,3,male,24.1,0,0,TICK221958,11.78,A85,S,British,Factory Worker,Migration,0,0,Mr. James Wilson
+1729,0,3,male,28.6,0,1,TICK271756,16.95,,C,Irish,Farmer,Migration,1,1,Dr. Thomas Brown
+1730,0,3,female,22.1,0,0,TICK229856,13.86,,S,Irish,Factory Worker,Leisure,0,1,Lady. Margaret Clark
+1731,1,3,female,7.3,0,0,TICK491406,6.45,,S,American,Laborer,Migration,3,1,Miss. Margaret Harris
+1732,0,1,male,34.8,0,3,TICK274516,287.57,C37,C,British,Merchant,Migration,9,0,Dr. William Taylor
+1733,1,3,male,33.4,1,0,TICK33975,15.54,,S,Irish,Farmer,Leisure,0,0,Mr. Thomas Walker
+1734,0,2,male,40.4,1,0,TICK967702,41.71,,S,British,Teacher,Leisure,3,0,Rev. John Johnson
+1735,1,3,male,33.0,0,0,TICK121898,14.44,E78,S,British,Laborer,Leisure,2,0,Dr. William Taylor
+1736,0,3,male,54.5,0,0,TICK543145,7.29,E97,S,Other,Farmer,Business,1,0,Master. Thomas Wilson
+1737,1,2,male,41.6,0,0,TICK691311,38.41,C71,S,British,Teacher,Business,1,0,Rev. Thomas Brown
+1738,0,3,female,38.3,0,0,TICK662770,15.16,,S,French,Factory Worker,Leisure,4,0,Miss. Alice Walker
+1739,0,3,female,48.0,1,0,TICK196481,5.37,,C,British,Servant,Leisure,2,1,Mrs. Mary Johnson
+1740,0,1,female,32.1,0,0,TICK499293,223.52,E75,C,Other,Lawyer,Migration,2,0,Mrs. Margaret Taylor
+1741,0,1,male,27.2,1,0,TICK147606,186.49,C98,S,Other,Aristocrat,Business,5,1,Master. James Wilson
+1742,1,3,male,34.6,2,0,TICK490943,15.04,,C,American,Laborer,Leisure,0,0,Rev. Thomas Davis
+1743,0,3,female,0.7,2,0,TICK616326,8.24,,S,French,Laborer,Business,0,1,Lady. Sarah Davis
+1744,1,3,female,32.2,1,0,TICK339680,13.86,E79,Q,Irish,Laborer,Migration,3,1,Lady. Mary Clark
+1745,1,3,male,28.6,1,0,TICK391366,18.7,A21,S,British,Servant,Business,2,0,Mr. Thomas Harris
+1746,1,1,female,36.3,2,0,TICK592155,404.97,,S,Other,Doctor,Migration,3,1,Miss. Elizabeth Smith
+1747,1,3,male,,0,0,TICK397267,18.82,,S,British,Farmer,Business,2,0,Mr. Thomas Davis
+1748,0,3,male,38.8,0,0,TICK691282,19.68,,C,Other,Servant,Business,2,0,Master. Thomas Harris
+1749,0,3,male,,0,0,TICK617972,5.16,,C,Irish,Laborer,Business,4,0,Dr. George Taylor
+1750,0,3,female,42.8,0,0,TICK946055,14.34,,S,American,Laborer,Migration,0,0,Miss. Sarah Taylor
+1751,0,3,male,54.7,1,2,TICK36494,11.19,,C,French,Farmer,Migration,3,0,Master. James Harris
+1752,1,3,female,46.1,1,0,TICK339031,17.9,,S,French,Farmer,Business,0,1,Lady. Elizabeth Smith
+1753,0,3,male,10.6,3,0,TICK736354,8.78,,S,French,Servant,Migration,0,0,Master. William Johnson
+1754,0,2,male,38.6,0,0,TICK110694,49.24,,C,Irish,Nurse,Leisure,2,0,Master. William Brown
+1755,0,3,male,12.6,0,0,TICK661049,14.21,A31,C,British,Laborer,Migration,6,0,Dr. Thomas Wilson
+1756,1,3,male,25.8,0,2,TICK377317,16.9,,S,Other,Servant,Business,0,0,Mr. John Harris
+1757,0,1,female,35.8,0,1,TICK912557,70.23,,S,American,Merchant,Migration,1,1,Miss. Elizabeth Harris
+1758,0,1,male,33.8,5,0,TICK945792,116.23,D58,S,British,Lawyer,Business,0,1,Mr. Thomas Wilson
+1759,1,3,female,45.7,0,0,TICK9281,16.38,,S,Irish,Servant,Migration,5,0,Mrs. Sarah Clark
+1760,1,3,female,54.8,0,0,TICK167461,5.33,A11,S,French,Factory Worker,Migration,0,0,Miss. Alice Wilson
+1761,1,3,male,,1,0,TICK442878,17.25,D92,S,Other,Factory Worker,Migration,5,0,Rev. James Harris
+1762,1,2,female,24.6,0,0,TICK499593,10.56,,Q,British,Engineer,Leisure,1,1,Mrs. Mary Harris
+1763,0,2,female,1.4,2,0,TICK351971,36.28,B95,S,French,Clerk,Leisure,1,1,Mrs. Alice Clark
+1764,0,3,male,49.8,1,3,TICK354026,10.48,,S,Other,Farmer,Migration,0,0,Rev. George Davis
+1765,0,3,female,28.7,2,0,TICK680352,14.17,,S,British,Farmer,Business,0,0,Mrs. Alice Smith
+1766,0,3,female,29.4,0,1,TICK947843,15.44,,S,Irish,Farmer,Migration,1,1,Miss. Elizabeth Brown
+1767,0,1,female,30.6,0,0,TICK106075,190.96,,S,Irish,Merchant,Migration,6,1,Lady. Mary Brown
+1768,1,3,male,36.6,0,0,TICK197200,6.62,D56,C,American,Laborer,Leisure,3,0,Master. William Lewis
+1769,0,3,male,37.1,0,0,TICK958505,6.04,,S,Irish,Laborer,Business,3,0,Mr. William Walker
+1770,0,3,male,26.0,0,0,TICK376394,13.83,,S,British,Farmer,Migration,1,0,Rev. William Lewis
+1771,0,3,male,28.5,0,0,TICK322153,12.81,,S,French,Farmer,Business,0,1,Rev. James Lewis
+1772,1,3,male,21.0,0,0,TICK171651,16.13,,Q,American,Servant,Migration,2,0,Rev. George Brown
+1773,0,3,male,19.4,0,0,TICK490518,12.65,,S,British,Servant,Migration,6,0,Dr. Thomas Taylor
+1774,0,3,male,,0,0,TICK574338,11.34,,S,French,Factory Worker,Leisure,7,0,Master. John Taylor
+1775,1,1,female,28.3,3,1,TICK196203,217.1,B91,C,American,Lawyer,Migration,1,1,Miss. Sarah Davis
+1776,1,3,male,16.6,0,0,TICK789576,5.4,,C,British,Laborer,Migration,4,0,Rev. William Walker
+1777,0,1,female,-13.6,0,0,TICK23806,187.71,D22,S,British,Lawyer,Business,1,1,Lady. Alice Smith
+1778,0,3,male,24.4,0,0,TICK461333,19.64,,C,American,Farmer,Leisure,1,0,Rev. John Clark
+1779,1,3,male,11.4,0,1,TICK849530,18.1,B41,S,British,Servant,Business,0,0,Dr. James Lewis
+1780,0,1,male,31.6,0,2,TICK647564,184.81,C52,C,Irish,Doctor,Migration,7,0,Master. William Johnson
+1781,1,3,female,20.9,0,0,TICK479617,13.82,,C,Other,Factory Worker,Migration,0,1,Mrs. Margaret Wilson
+1782,1,3,male,36.8,0,0,TICK623408,17.71,,S,Irish,Laborer,Migration,1,0,Master. Thomas Davis
+1783,1,3,female,12.7,0,0,TICK604943,11.62,D77,S,French,Farmer,Business,0,1,Lady. Sarah Wilson
+1784,1,3,male,3.7,0,1,TICK729234,5.27,,C,British,Factory Worker,Migration,0,0,Mr. Thomas Johnson
+1785,0,3,female,28.6,2,0,TICK457097,6.12,E32,S,British,Servant,Business,2,1,Lady. Alice Wilson
+1786,0,3,male,23.8,1,0,TICK767461,12.66,,S,French,Servant,Migration,1,0,Dr. William Johnson
+1787,1,1,male,10.2,0,0,TICK419731,485.64,,S,British,Merchant,Migration,4,0,Dr. John Brown
+1788,0,3,male,41.6,0,0,TICK497576,15.4,,Q,British,Factory Worker,Migration,1,0,Mr. William Clark
+1789,0,3,female,15.0,0,0,TICK875613,6.06,C49,C,American,Factory Worker,Leisure,2,0,Miss. Mary Lewis
+1790,0,3,male,18.7,0,0,TICK256421,7.84,,S,British,Laborer,Leisure,0,0,Rev. James Smith
+1791,0,3,male,44.6,0,0,TICK265843,16.57,D93,S,Irish,Laborer,Leisure,3,0,Master. James Clark
+1792,0,1,male,37.7,5,1,TICK759510,425.48,D55,S,French,Doctor,Migration,1,0,Mr. George Johnson
+1793,0,3,male,13.4,0,0,TICK392344,14.27,,S,British,Factory Worker,Leisure,1,0,Dr. James Walker
+1794,1,3,male,25.0,0,1,TICK631133,14.67,,S,Irish,Farmer,Migration,1,0,Dr. James Lewis
+1795,1,3,male,12.0,5,0,TICK355291,5.43,B35,C,American,Servant,Leisure,1,0,Dr. John Brown
+1796,0,3,female,,2,0,TICK506998,17.43,,C,British,Laborer,Migration,0,1,Lady. Alice Taylor
+1797,0,3,female,43.4,0,0,TICK712517,16.82,D21,S,British,Factory Worker,Leisure,6,1,Lady. Mary Taylor
+1798,0,3,male,57.4,4,1,TICK421639,8.89,,S,French,Servant,Migration,5,0,Master. William Clark
+1799,0,3,male,64.2,0,0,TICK315754,15.63,,S,Irish,Factory Worker,Business,0,0,Rev. Thomas Davis
+1800,1,3,male,20.7,5,0,TICK43078,8.22,E77,S,British,Servant,Leisure,4,1,Rev. George Brown
+1801,0,1,female,40.7,1,0,TICK975116,48.96,,S,British,Doctor,Business,2,1,Miss. Alice Harris
+1802,1,1,female,1.8,1,2,TICK921054,124.53,,S,American,Lawyer,Leisure,1,1,Lady. Alice Harris
+1803,0,3,female,32.8,4,0,TICK246684,7.68,,C,Irish,Laborer,Leisure,0,1,Miss. Sarah Davis
+1804,0,3,female,36.4,1,0,TICK801244,10.07,,C,Other,Factory Worker,Leisure,0,1,Mrs. Sarah Davis
+1805,1,3,male,15.7,0,4,TICK981161,11.28,,Q,French,Factory Worker,Migration,5,0,Rev. William Johnson
+1806,0,3,female,19.8,1,0,TICK945625,12.63,E90,C,British,Laborer,Leisure,0,0,Miss. Alice Johnson
+1807,1,3,male,43.5,2,0,TICK972910,12.15,,S,American,Laborer,Migration,2,0,Dr. John Walker
+1808,0,3,male,36.8,0,0,TICK532586,9.06,,S,French,Farmer,Leisure,6,0,Dr. Thomas Taylor
+1809,0,3,female,55.0,2,0,TICK114094,5.44,,S,British,Farmer,Business,10,1,Mrs. Sarah Lewis
+1810,1,3,male,52.8,0,0,TICK442435,14.08,,Q,American,Laborer,Leisure,0,0,Dr. George Brown
+1811,0,3,female,5.2,0,0,TICK447582,10.94,,S,Other,Farmer,Business,4,0,Miss. Elizabeth Brown
+1812,1,3,male,22.1,1,0,TICK812673,9.48,D36,C,British,Laborer,Migration,5,0,Master. Thomas Walker
+1813,1,2,male,14.2,0,0,TICK283445,44.68,B30,C,American,Engineer,Migration,4,0,Mr. George Harris
+1814,0,2,female,41.4,0,0,TICK606540,39.87,,S,British,Clerk,Migration,5,1,Mrs. Mary Davis
+1815,0,3,male,34.3,1,0,TICK421216,17.87,,S,Other,Servant,Migration,3,1,Mr. John Johnson
+1816,1,2,female,15.2,0,1,TICK622885,29.8,,S,British,Engineer,Migration,1,1,Mrs. Sarah Taylor
+1817,0,2,male,17.3,0,0,TICK30942,15.24,,C,French,Clerk,Migration,7,0,Mr. James Davis
+1818,1,3,male,,5,0,TICK172993,15.44,,S,American,Farmer,Migration,1,0,Mr. James Wilson
+1819,1,3,male,23.7,0,0,TICK538085,8.09,,S,British,Factory Worker,Leisure,0,0,Master. George Taylor
+1820,0,3,female,-0.4,1,0,TICK175467,11.62,,C,British,Servant,Leisure,2,1,Miss. Sarah Harris
+1821,0,3,male,13.9,2,4,TICK968157,5.98,,C,American,Laborer,Migration,4,0,Master. James Johnson
+1822,0,3,male,58.7,0,1,TICK316183,17.38,,C,British,Laborer,Business,0,0,Mr. John Johnson
+1823,1,3,male,,1,1,TICK930662,6.89,B78,S,British,Farmer,Leisure,6,1,Rev. George Johnson
+1824,1,3,male,11.2,1,0,TICK626843,18.55,,S,American,Servant,Leisure,2,0,Dr. Thomas Harris
+1825,1,2,male,32.8,1,1,TICK732519,44.57,,S,British,Teacher,Business,1,0,Mr. Thomas Wilson
+1826,0,1,male,44.1,0,0,TICK989646,248.35,,C,British,Doctor,Leisure,0,0,Mr. George Davis
+1827,1,1,male,,0,2,TICK550543,379.85,,C,British,Lawyer,Migration,4,1,Master. John Lewis
+1828,0,3,female,45.9,0,0,TICK209102,14.29,D71,S,American,Servant,Migration,1,1,Miss. Sarah Harris
+1829,1,3,male,36.6,0,0,TICK998713,17.05,,S,British,Factory Worker,Migration,0,0,Rev. William Harris
+1830,1,3,female,19.0,0,0,TICK596578,11.48,,S,British,Factory Worker,Leisure,2,1,Miss. Elizabeth Harris
+1831,0,1,male,39.0,0,0,TICK789371,399.33,,S,French,Doctor,Leisure,2,1,Mr. George Walker
+1832,0,3,male,34.5,3,1,TICK147327,11.94,B2,S,French,Servant,Migration,0,0,Mr. William Smith
+1833,1,1,male,35.5,0,0,TICK137200,472.25,,S,British,Aristocrat,Business,2,1,Master. William Harris
+1834,1,3,male,32.2,3,0,TICK696632,12.3,,C,French,Farmer,Migration,5,0,Rev. William Wilson
+1835,1,3,male,16.8,1,1,TICK350330,11.94,,S,British,Laborer,Migration,4,0,Master. James Smith
+1836,1,3,male,19.3,0,0,TICK827874,16.78,,S,British,Factory Worker,Leisure,0,0,Rev. Thomas Walker
+1837,0,3,female,26.4,0,0,TICK57413,17.32,,S,Other,Servant,Migration,3,0,Miss. Margaret Brown
+1838,0,3,female,30.7,1,0,TICK95789,13.32,,S,American,Factory Worker,Leisure,0,1,Miss. Alice Walker
+1839,0,3,male,40.0,1,0,TICK325296,7.7,,S,Irish,Farmer,Business,4,0,Mr. James Davis
+1840,1,3,male,59.1,0,3,TICK832377,12.02,B31,S,American,Laborer,Migration,2,0,Rev. William Walker
+1841,0,3,male,33.5,4,0,TICK804023,19.52,,S,Other,Farmer,Business,5,0,Master. George Harris
+1842,1,3,female,39.7,1,0,TICK149332,16.29,,S,American,Servant,Leisure,1,1,Mrs. Mary Johnson
+1843,0,3,male,43.2,0,0,TICK841422,17.17,,S,American,Laborer,Business,1,1,Dr. Thomas Wilson
+1844,0,3,male,40.8,0,0,TICK363914,5.49,D23,Q,French,Farmer,Leisure,5,0,Mr. George Harris
+1845,1,1,male,16.3,2,0,TICK481995,249.89,,S,American,Doctor,Business,4,1,Master. George Brown
+1846,1,2,female,50.3,0,0,TICK416229,35.86,B21,S,American,Clerk,Migration,2,0,Mrs. Alice Walker
+1847,0,2,female,,0,0,TICK174373,43.2,,S,American,Engineer,Migration,1,1,Lady. Alice Davis
+1848,0,3,male,32.0,0,0,TICK483961,5.74,,S,British,Farmer,Migration,5,0,Rev. John Johnson
+1849,0,3,male,17.1,3,0,TICK1884,17.79,,S,British,Servant,Migration,1,0,Dr. George Walker
+1850,0,3,male,30.5,1,0,TICK691601,13.23,,S,American,Farmer,Migration,0,0,Master. Thomas Davis
+1851,0,1,male,6.6,0,0,TICK155655,122.74,D68,S,American,Aristocrat,Migration,0,1,Rev. Thomas Harris
+1852,0,3,female,52.6,1,0,TICK211141,9.76,D87,C,British,Factory Worker,Migration,0,1,Miss. Elizabeth Taylor
+1853,0,3,female,20.6,1,0,TICK926845,9.23,,S,French,Servant,Migration,1,1,Miss. Margaret Wilson
+1854,1,3,male,,1,2,TICK181426,12.96,,S,Irish,Laborer,Business,0,0,Rev. William Smith
+1855,1,3,female,51.3,0,0,TICK316917,5.78,D68,S,British,Factory Worker,Business,0,1,Miss. Elizabeth Taylor
+1856,0,3,female,,0,0,TICK323465,7.38,,S,French,Servant,Migration,1,1,Miss. Alice Clark
+1857,1,3,female,49.2,0,2,TICK85279,17.19,,S,French,Servant,Leisure,0,1,Lady. Margaret Clark
+1858,0,2,female,35.1,0,3,TICK194560,15.3,,C,British,Engineer,Leisure,0,1,Lady. Margaret Clark
+1859,1,3,male,55.1,2,0,TICK248656,8.5,,S,Other,Factory Worker,Leisure,4,1,Dr. George Lewis
+1860,1,3,male,15.8,0,1,TICK900428,11.8,,S,French,Laborer,Leisure,1,0,Rev. Thomas Clark
+1861,1,3,male,35.1,0,0,TICK214198,12.76,,S,Other,Servant,Migration,3,1,Dr. James Walker
+1862,0,1,male,15.9,1,4,TICK458754,388.9,,S,American,Aristocrat,Migration,1,1,Rev. James Johnson
+1863,0,3,male,46.5,0,0,TICK95546,11.71,,S,American,Laborer,Business,2,0,Dr. James Taylor
+1864,1,2,male,45.9,0,2,TICK760309,41.59,,S,American,Engineer,Leisure,9,0,Rev. James Wilson
+1865,0,3,male,56.4,0,0,TICK257620,14.28,,C,British,Farmer,Migration,2,0,Mr. James Brown
+1866,0,1,male,30.0,0,0,TICK162625,83.16,C15,S,Irish,Doctor,Leisure,2,1,Mr. William Davis
+1867,0,1,male,61.3,2,1,TICK718974,103.48,,C,Other,Doctor,Leisure,2,1,Rev. William Harris
+1868,0,1,male,14.8,3,0,TICK583324,235.41,,S,Other,Merchant,Migration,0,1,Mr. James Lewis
+1869,0,3,male,29.2,0,0,TICK887747,10.95,C48,Q,French,Laborer,Leisure,0,0,Rev. William Davis
+1870,0,1,male,15.3,0,0,TICK814284,379.47,A41,C,Other,Doctor,Migration,0,1,Dr. John Davis
+1871,1,3,male,32.9,1,0,TICK393437,13.71,,Q,French,Farmer,Business,1,0,Master. James Harris
+1872,1,3,male,16.4,0,1,TICK6184,10.82,,S,British,Farmer,Business,5,0,Dr. John Lewis
+1873,0,3,male,46.6,1,0,TICK501531,7.56,D100,S,British,Servant,Migration,4,0,Rev. John Lewis
+1874,1,3,female,37.1,0,1,TICK168069,8.4,B58,C,British,Factory Worker,Business,0,1,Miss. Sarah Taylor
+1875,0,3,male,13.6,0,1,TICK362456,13.63,E98,S,Irish,Factory Worker,Migration,3,0,Master. Thomas Taylor
+1876,1,3,male,42.5,0,0,TICK105766,11.35,B84,S,British,Factory Worker,Migration,1,0,Dr. Thomas Clark
+1877,1,3,male,53.8,0,1,TICK494670,12.72,,S,British,Laborer,Business,0,0,Master. Thomas Brown
+1878,0,3,male,38.6,0,0,TICK577537,7.56,,S,Other,Servant,Leisure,2,0,Mr. George Taylor
+1879,0,3,male,9.5,1,0,TICK721147,14.94,,S,French,Servant,Leisure,0,0,Rev. Thomas Wilson
+1880,0,3,male,27.8,0,2,TICK414188,17.79,,S,Irish,Farmer,Leisure,3,0,Mr. John Wilson
+1881,0,2,female,40.6,1,0,TICK733723,20.32,,S,French,Engineer,Business,4,1,Miss. Alice Taylor
+1882,0,3,female,26.4,0,0,TICK223813,12.37,,C,British,Factory Worker,Migration,0,1,Mrs. Margaret Smith
+1883,1,3,male,14.6,4,0,TICK958174,19.63,,C,British,Factory Worker,Leisure,0,1,Mr. John Davis
+1884,1,2,female,48.5,0,0,TICK496248,23.33,B60,C,British,Nurse,Migration,0,0,Lady. Elizabeth Clark
+1885,0,3,male,25.7,0,0,TICK701906,13.93,,S,British,Farmer,Business,6,0,Master. John Wilson
+1886,0,3,male,,0,2,TICK395570,6.35,,C,British,Laborer,Leisure,2,0,Dr. John Johnson
+1887,1,3,female,22.2,0,1,TICK872730,14.09,,S,Irish,Servant,Migration,4,1,Lady. Alice Brown
+1888,0,3,female,,1,0,TICK486998,6.34,,S,Irish,Laborer,Migration,1,1,Miss. Elizabeth Lewis
+1889,0,3,male,21.1,1,0,TICK741529,19.39,C7,S,American,Farmer,Leisure,0,0,Rev. George Walker
+1890,0,3,male,27.5,2,0,TICK255533,15.73,,C,British,Laborer,Migration,5,0,Master. James Taylor
+1891,0,3,male,,1,3,TICK801122,16.82,D84,S,Other,Servant,Business,0,0,Rev. James Harris
+1892,0,3,female,15.3,0,0,TICK962491,15.56,,S,American,Factory Worker,Business,0,1,Lady. Margaret Clark
+1893,1,2,male,12.7,0,0,TICK101479,33.59,,S,American,Teacher,Migration,1,0,Rev. John Clark
+1894,0,3,female,4.7,2,0,TICK407400,11.75,,S,Other,Laborer,Leisure,0,1,Mrs. Elizabeth Taylor
+1895,0,3,female,3.1,1,0,TICK135744,17.88,,S,American,Servant,Business,0,1,Miss. Sarah Taylor
+1896,0,2,female,9.7,3,2,TICK334821,48.27,A62,S,French,Nurse,Migration,4,1,Lady. Margaret Harris
+1897,0,3,male,22.1,0,0,TICK801109,12.49,,Q,British,Farmer,Migration,3,0,Mr. Thomas Davis
+1898,0,3,male,,0,0,TICK981693,18.97,C25,S,American,Servant,Leisure,1,0,Master. Thomas Smith
+1899,1,3,male,36.0,1,0,TICK141012,13.75,,S,American,Laborer,Business,2,0,Dr. John Johnson
+1900,0,3,male,32.0,0,2,TICK420308,13.08,B2,S,British,Servant,Business,1,0,Mr. William Smith
+1901,0,3,female,51.8,0,0,TICK811822,11.82,,C,British,Factory Worker,Business,2,1,Lady. Alice Harris
+1902,1,3,male,57.1,0,1,TICK344001,8.14,E35,S,French,Servant,Migration,7,0,Mr. Thomas Harris
+1903,1,2,male,25.8,0,4,TICK942643,10.15,,C,American,Nurse,Migration,0,0,Mr. James Walker
+1904,0,3,male,15.5,1,1,TICK297951,8.62,,S,American,Servant,Business,1,0,Mr. James Clark
+1905,0,1,male,62.5,0,1,TICK860613,269.57,,Q,American,Aristocrat,Migration,2,1,Dr. George Walker
+1906,1,3,male,47.9,0,0,TICK708526,10.7,A58,C,American,Servant,Migration,1,0,Rev. George Walker
+1907,0,1,male,46.6,0,2,TICK766850,240.79,,C,Other,Lawyer,Business,0,1,Master. William Lewis
+1908,0,2,female,21.5,0,0,TICK916075,49.23,,S,Irish,Nurse,Business,6,1,Mrs. Alice Smith
+1909,0,3,male,42.9,0,2,TICK446217,10.25,C80,C,British,Servant,Leisure,2,0,Mr. James Wilson
+1910,0,3,male,32.1,0,1,TICK626935,11.78,,S,Irish,Servant,Leisure,0,1,Master. George Davis
+1911,0,3,male,28.9,0,0,TICK413982,7.0,,C,British,Farmer,Business,0,0,Dr. George Wilson
+1912,0,3,male,28.9,1,0,TICK561060,5.72,,S,British,Servant,Migration,2,0,Master. John Davis
+1913,0,1,female,37.6,0,0,TICK76137,394.44,,S,French,Aristocrat,Business,3,0,Miss. Alice Brown
+1914,0,3,male,52.3,3,0,TICK364716,13.56,D56,S,British,Servant,Leisure,5,0,Mr. George Brown
+1915,0,3,male,64.1,3,1,TICK513029,16.41,E5,S,Irish,Servant,Leisure,1,0,Mr. Thomas Clark
+1916,0,3,male,23.9,4,0,TICK703416,7.25,,S,British,Servant,Leisure,2,0,Rev. George Davis
+1917,0,3,male,32.9,0,1,TICK777396,13.58,E65,S,American,Laborer,Business,5,0,Rev. George Smith
+1918,0,3,male,28.5,0,0,TICK615915,8.8,,S,British,Factory Worker,Leisure,3,1,Mr. John Lewis
+1919,0,3,female,36.5,1,1,TICK29202,8.42,,S,French,Servant,Migration,4,1,Mrs. Elizabeth Walker
+1920,0,2,female,,0,2,TICK233463,10.46,,Q,American,Teacher,Business,0,1,Mrs. Mary Clark
+1921,1,3,male,26.7,0,0,TICK929606,6.96,,S,British,Factory Worker,Leisure,2,1,Master. John Walker
+1922,0,2,male,,0,0,TICK639081,22.37,,S,French,Clerk,Migration,0,0,Master. George Taylor
+1923,0,3,female,19.9,3,0,TICK187814,6.75,B12,S,Other,Servant,Migration,3,1,Miss. Margaret Wilson
+1924,0,3,male,24.0,0,4,TICK806142,19.79,E50,S,American,Servant,Business,0,1,Dr. William Johnson
+1925,0,3,male,21.7,0,0,TICK247580,9.63,,S,French,Laborer,Leisure,8,0,Master. George Harris
+1926,0,3,male,,0,0,TICK388063,6.95,,S,Other,Factory Worker,Leisure,1,0,Rev. James Smith
+1927,1,3,male,10.6,0,0,TICK380878,7.99,A39,S,American,Laborer,Business,3,0,Mr. Thomas Harris
+1928,1,3,female,22.0,0,0,TICK357359,13.82,A18,Q,British,Factory Worker,Business,1,1,Mrs. Alice Smith
+1929,0,3,female,36.4,3,0,TICK526814,5.96,B54,S,French,Factory Worker,Migration,2,1,Lady. Mary Davis
+1930,1,3,male,36.3,1,0,TICK864227,17.94,,S,French,Farmer,Migration,3,0,Mr. James Clark
+1931,1,3,female,33.8,0,0,TICK2668,19.42,D20,Q,British,Laborer,Migration,4,1,Mrs. Mary Harris
+1932,0,3,male,50.8,0,1,TICK641225,8.7,,C,French,Servant,Migration,0,0,Rev. William Lewis
+1933,0,3,female,37.0,1,1,TICK629275,11.75,,C,British,Laborer,Migration,1,1,Lady. Alice Wilson
+1934,0,3,female,,1,0,TICK789198,5.33,,S,British,Farmer,Migration,1,1,Lady. Sarah Wilson
+1935,0,3,male,64.1,1,0,TICK418522,14.61,,Q,French,Servant,Migration,6,0,Master. William Smith
+1936,1,3,female,43.3,3,0,TICK960012,11.21,,Q,American,Factory Worker,Business,0,1,Miss. Margaret Lewis
+1937,1,1,female,10.7,1,0,TICK82023,156.93,,S,French,Lawyer,Leisure,5,1,Miss. Alice Taylor
+1938,0,2,male,34.4,0,0,TICK677936,18.27,,S,British,Nurse,Migration,1,1,Dr. John Wilson
+1939,1,1,female,32.1,0,1,TICK242249,337.39,B87,S,British,Aristocrat,Migration,3,1,Miss. Sarah Wilson
+1940,0,3,male,53.8,2,2,TICK145787,11.24,,S,British,Laborer,Leisure,1,0,Master. William Harris
+1941,0,2,male,28.3,1,0,TICK525235,17.19,,S,British,Teacher,Migration,0,0,Mr. John Walker
+1942,1,2,male,17.9,1,0,TICK198101,37.56,,S,American,Nurse,Leisure,2,0,Master. George Johnson
+1943,1,3,male,22.8,1,0,TICK47397,13.48,E94,S,British,Factory Worker,Business,3,0,Master. James Clark
+1944,1,3,male,11.2,1,0,TICK222493,17.88,,S,British,Servant,Business,2,0,Master. George Johnson
+1945,1,1,female,-13.9,0,0,TICK317604,85.21,,C,Other,Lawyer,Migration,3,1,Miss. Margaret Lewis
+1946,0,2,female,60.8,0,1,TICK457550,41.43,,Q,Irish,Clerk,Leisure,1,0,Lady. Sarah Walker
+1947,1,3,male,30.3,1,2,TICK98360,15.1,C81,S,French,Servant,Migration,9,0,Dr. James Wilson
+1948,0,3,female,12.4,0,0,TICK357082,6.73,C68,C,Other,Laborer,Migration,2,1,Mrs. Sarah Lewis
+1949,1,3,female,55.4,1,0,TICK403722,15.42,,S,French,Farmer,Business,6,1,Lady. Margaret Walker
+1950,1,3,male,58.5,4,1,TICK686815,11.62,,S,American,Servant,Business,4,0,Master. William Smith
+1951,0,2,male,32.6,2,0,TICK189613,47.8,C77,S,American,Clerk,Migration,1,0,Master. George Smith
+1952,1,2,female,9.9,0,0,TICK447390,15.66,,S,British,Nurse,Migration,2,1,Lady. Alice Davis
+1953,1,3,male,23.2,1,0,TICK159070,14.64,,S,British,Farmer,Migration,0,0,Mr. William Davis
+1954,0,1,male,26.7,1,0,TICK299806,209.53,,Q,Other,Merchant,Business,0,1,Rev. Thomas Walker
+1955,1,1,female,30.8,3,0,TICK327203,479.7,,S,American,Lawyer,Migration,1,0,Mrs. Margaret Johnson
+1956,0,3,female,14.1,0,0,TICK406605,9.95,,S,American,Servant,Business,1,0,Mrs. Mary Taylor
+1957,0,2,male,44.7,0,0,TICK709074,48.49,,C,British,Engineer,Leisure,1,0,Master. Thomas Walker
+1958,0,3,male,-1.6,3,0,TICK862169,18.52,,C,British,Factory Worker,Migration,1,1,Rev. William Clark
+1959,0,1,male,47.3,0,0,TICK505000,157.08,C14,S,British,Aristocrat,Business,2,1,Master. Thomas Smith
+1960,1,3,male,50.8,0,0,TICK37518,17.05,,S,Other,Farmer,Migration,2,0,Master. James Taylor
+1961,0,1,male,24.6,0,0,TICK274698,497.93,B29,S,Other,Merchant,Migration,0,1,Rev. James Davis
+1962,0,2,female,29.0,2,1,TICK443223,20.11,,C,French,Teacher,Migration,1,0,Mrs. Mary Taylor
+1963,0,2,female,53.0,0,0,TICK189238,27.47,,S,British,Clerk,Leisure,0,0,Miss. Sarah Walker
+1964,0,3,male,40.0,0,0,TICK172487,12.8,,S,British,Laborer,Business,0,0,Mr. James Davis
+1965,1,3,male,25.1,4,0,TICK418559,9.42,C53,S,British,Laborer,Migration,3,1,Mr. George Brown
+1966,0,3,male,26.8,1,0,TICK716485,5.23,D54,S,Irish,Farmer,Leisure,0,1,Master. John Brown
+1967,0,1,male,37.7,0,0,TICK543479,133.46,,Q,French,Lawyer,Migration,1,0,Mr. Thomas Brown
+1968,1,3,male,,0,0,TICK875756,9.23,C11,S,British,Servant,Migration,1,1,Dr. John Taylor
+1969,0,3,male,27.3,0,2,TICK112600,11.65,,S,Other,Servant,Migration,2,0,Dr. John Smith
+1970,0,2,female,24.6,2,2,TICK488506,16.84,E62,Q,American,Clerk,Business,2,1,Miss. Elizabeth Brown
+1971,0,1,female,30.7,1,0,TICK846392,440.43,A100,S,Irish,Merchant,Migration,9,1,Mrs. Elizabeth Lewis
+1972,1,3,male,30.8,0,1,TICK87654,15.57,C8,S,British,Factory Worker,Leisure,5,0,Mr. Thomas Clark
+1973,1,3,female,34.8,1,0,TICK364108,6.28,,C,French,Laborer,Leisure,0,0,Mrs. Margaret Smith
+1974,0,3,female,29.1,1,2,TICK720391,14.75,,S,Irish,Servant,Migration,3,1,Lady. Mary Johnson
+1975,1,2,male,48.3,0,3,TICK769260,36.15,,S,British,Teacher,Migration,2,1,Master. James Smith
+1976,0,3,male,16.8,0,0,TICK107330,19.34,,S,American,Laborer,Migration,0,0,Dr. James Lewis
+1977,1,3,female,36.5,1,0,TICK688728,5.05,,S,British,Factory Worker,Migration,4,1,Lady. Elizabeth Harris
+1978,1,3,male,37.1,3,2,TICK905361,8.72,,Q,Irish,Farmer,Business,4,0,Dr. George Harris
+1979,0,3,male,18.1,0,2,TICK425121,18.92,,S,Irish,Factory Worker,Leisure,1,0,Rev. Thomas Taylor
+1980,0,2,male,36.4,0,0,TICK843583,47.29,,S,British,Clerk,Leisure,5,0,Master. James Wilson
+1981,0,3,female,,5,0,TICK847112,15.81,,S,American,Laborer,Business,5,1,Lady. Elizabeth Davis
+1982,0,2,male,-7.4,2,0,TICK13818,40.63,,S,French,Engineer,Migration,3,1,Mr. John Davis
+1983,0,3,female,15.5,0,0,TICK169698,6.37,C32,S,French,Factory Worker,Migration,2,1,Lady. Alice Brown
+1984,1,3,male,54.4,0,0,TICK335522,12.71,,S,American,Factory Worker,Migration,1,0,Master. Thomas Taylor
+1985,0,3,male,21.3,1,0,TICK135993,8.47,,C,British,Servant,Migration,3,0,Master. James Clark
+1986,1,3,female,12.4,0,2,TICK603597,7.72,E42,S,British,Laborer,Leisure,2,1,Mrs. Margaret Walker
+1987,0,2,male,2.5,1,0,TICK532597,42.41,,S,British,Nurse,Migration,4,0,Mr. James Lewis
+1988,0,3,male,14.2,1,0,TICK403642,7.03,,S,American,Laborer,Leisure,9,1,Master. James Davis
+1989,0,1,female,28.4,0,0,TICK720636,250.27,,S,French,Merchant,Business,2,1,Lady. Alice Harris
+1990,1,2,male,11.4,0,0,TICK477779,47.54,,C,American,Clerk,Leisure,3,0,Mr. James Davis
+1991,0,3,male,40.2,1,0,TICK13151,7.79,E55,C,Other,Farmer,Migration,0,1,Mr. John Taylor
+1992,0,3,male,17.8,0,1,TICK510754,19.67,,S,Other,Farmer,Migration,4,0,Mr. George Walker
+1993,0,3,female,35.0,0,0,TICK686577,19.91,,S,French,Farmer,Migration,1,0,Lady. Margaret Walker
+1994,1,1,male,51.8,3,0,TICK703750,291.14,,S,American,Aristocrat,Migration,1,0,Dr. Thomas Wilson
+1995,1,1,male,50.6,0,1,TICK422216,109.97,,Q,Irish,Lawyer,Migration,0,1,Rev. John Clark
+1996,0,3,male,34.7,2,2,TICK443978,9.74,B38,C,American,Farmer,Migration,2,0,Dr. James Smith
+1997,0,3,female,13.3,0,0,TICK809829,11.37,,S,Irish,Servant,Migration,9,1,Lady. Margaret Lewis
+1998,1,1,male,29.5,0,2,TICK58159,175.38,,S,British,Doctor,Business,5,1,Mr. John Davis
+1999,0,3,male,35.2,0,0,TICK318670,9.21,,S,British,Servant,Migration,2,0,Master. James Wilson
+2000,0,3,male,67.7,1,0,TICK446625,19.58,,C,British,Servant,Migration,2,0,Rev. John Wilson

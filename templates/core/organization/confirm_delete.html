@@ -2,18 +2,60 @@
 
 {% block title %}Delete Organization - LuminaBI{% endblock %}
 
+{% block extra_css %}
+<style>
+    .delete-blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        animation: blob 15s infinite;
+        opacity: 0.6;
+    }
+    .delete-blob-1 {
+        width: 500px; height: 500px;
+        background: radial-gradient(circle, rgba(255, 0, 0, 0.1) 0%, transparent 70%);
+        top: 10%; right: 10%;
+        animation-delay: 0s;
+    }
+    .delete-blob-2 {
+        width: 400px; height: 400px;
+        background: radial-gradient(circle, rgba(189, 0, 255, 0.1) 0%, transparent 70%);
+        bottom: 20%; left: 5%;
+        animation-delay: 5s;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container mx-auto px-4 py-8">
-    <div class="max-w-2xl mx-auto">
-        <div class="bg-red-50 border-2 border-red-200 rounded-lg p-8">
-            <h1 class="text-3xl font-bold text-red-900 mb-4">Delete Organization</h1>
+<div class="min-h-screen relative py-12 px-4 sm:px-6 lg:px-8">
+    <!-- Ambient Background -->
+    <div class="fixed inset-0 pointer-events-none z-0">
+        <div class="delete-blob delete-blob-1"></div>
+        <div class="delete-blob delete-blob-2"></div>
+    </div>
+    
+    <div class="max-w-2xl mx-auto relative z-10">
+        <!-- Back Link -->
+        <div class="mb-8">
+            <a href="{% url 'core:organization_detail' object.pk %}" class="inline-flex items-center gap-2 text-neonBlue hover:text-neonPurple transition group">
+                <i class="fas fa-arrow-left group-hover:-translate-x-1 transition"></i>
+                <span class="font-mono text-sm">Back to Organization</span>
+            </a>
+        </div>
+        
+        <div class="glass-panel rounded-2xl border-2 border-error/50 bg-error/10 p-8">
+            <div class="flex items-center gap-4 mb-6">
+                <i class="fas fa-triangle-exclamation text-4xl text-error"></i>
+                <h1 class="text-3xl font-bold text-white">Delete Organization</h1>
+            </div>
             
-            <p class="text-red-800 mb-6">
-                Are you sure you want to delete <strong>{{ object.name }}</strong>? This action cannot be undone.
+            <p class="text-gray-300 mb-6 text-lg">
+                Are you sure you want to delete <strong class="text-white">{{ object.name }}</strong>? This action cannot be undone.
             </p>
 
-            <div class="bg-red-100 border border-red-300 rounded p-4 mb-8">
-                <p class="text-sm text-red-900">
+            <div class="bg-error/20 border border-error/50 rounded-lg p-4 mb-8">
+                <p class="text-sm text-gray-300 flex items-center gap-2">
+                    <i class="fas fa-exclamation-circle text-error"></i>
                     <strong>Warning:</strong> Deleting this organization will remove it and all associated data.
                 </p>
             </div>
@@ -24,14 +66,16 @@
                 <div class="flex gap-4">
                     <button 
                         type="submit"
-                        class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg transition"
+                        class="flex-1 bg-gradient-to-r from-error to-red-600 hover:from-error/80 hover:to-red-600/80 text-white font-bold py-3 px-6 rounded-2xl transition flex items-center justify-center gap-2"
                     >
+                        <i class="fas fa-trash"></i>
                         Yes, Delete Organization
                     </button>
                     <a 
                         href="{% url 'core:organization_detail' object.pk %}"
-                        class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-lg transition"
+                        class="flex-1 bg-white/10 hover:bg-white/20 text-white font-bold py-3 px-6 rounded-2xl transition border border-white/20 flex items-center justify-center gap-2"
                     >
+                        <i class="fas fa-times"></i>
                         Cancel
                     </a>
                 </div>

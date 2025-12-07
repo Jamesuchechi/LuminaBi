@@ -27,6 +27,7 @@ urlpatterns = [
     # ====================================================================
     # SETTINGS MANAGEMENT (Admin only)
     # ====================================================================
+    path('user-settings/', views.UserSettingsView.as_view(), name='user_settings'),
     path('settings/', views.SettingsListView.as_view(), name='settings_list'),
     path('settings/<int:pk>/edit/', views.SettingsUpdateView.as_view(), name='settings_update'),
     

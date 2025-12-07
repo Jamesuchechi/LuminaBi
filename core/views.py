@@ -384,6 +384,83 @@ class OrganizationDeleteView(LoginRequiredMixin, DeleteView):
 # SETTINGS VIEWS
 # ============================================================================
 
+class UserSettingsView(LoginRequiredMixin, UpdateView):
+    """
+    User preference settings (theme, language, timezone).
+    All authenticated users can access and modify their own settings.
+    """
+    model = User
+    template_name = 'core/user_settings.html'
+    fields = []
+    login_url = 'accounts:login'
+    success_url = reverse_lazy('core:user_settings')
+    
+    def get_object(self):
+        """Return the current user's profile."""
+        return self.request.user.profile
+    
+    def get_context_data(self, **kwargs):
+        """Add preference options to context."""
+        context = super().get_context_data(**kwargs)
+        profile = self.request.user.profile
+        
+        context['profile'] = profile
+        context['theme_choices'] = [
+            ('light', 'Light'),
+            ('dark', 'Dark'),
+            ('auto', 'Auto (System)'),
+        ]
+        context['language_choices'] = [
+            ('en', 'English'),
+            ('es', 'Spanish'),
+            ('fr', 'French'),
+            ('de', 'German'),
+        ]
+        context['timezones'] = [
+            'UTC', 'America/New_York', 'America/Chicago', 'America/Los_Angeles',
+            'Europe/London', 'Europe/Paris', 'Europe/Berlin',
+            'Asia/Tokyo', 'Asia/Shanghai', 'Asia/Hong_Kong',
+            'Australia/Sydney', 'Australia/Melbourne',
+        ]
+        
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        """Handle settings update via form submission."""
+        try:
+            profile = self.request.user.profile
+            
+            # Update theme if provided
+            if 'theme' in request.POST:
+                profile.theme = request.POST.get('theme')
+            
+            # Update language if provided
+            if 'language' in request.POST:
+                profile.language = request.POST.get('language')
+            
+            # Update timezone if provided
+            if 'timezone' in request.POST:
+                profile.timezone = request.POST.get('timezone')
+            
+            profile.save()
+            
+            # Log the action
+            log_action('updated_preferences', request.user)
+            
+            # Create notification
+            create_notification(
+                request.user,
+                'Settings Updated',
+                'Your preferences have been saved successfully.',
+                notification_type='success'
+            )
+            
+            return redirect('core:user_settings')
+        except Exception as e:
+            logger.error(f'Error updating user settings: {e}')
+            return redirect('core:user_settings')
+
+
 class SettingsListView(LoginRequiredMixin, ListView):
     """
     List all system settings (admin only).
