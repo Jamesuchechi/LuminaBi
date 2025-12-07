@@ -1,0 +1,315 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Analysis - {{ dataset.name }} | LuminaBI{% endblock %}
+
+{% block content %}
+<div class="min-h-screen py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-12">
+            <div class="flex items-center gap-3 mb-4">
+                <a href="{% url 'datasets:dataset_detail' dataset.pk %}" class="text-neonBlue hover:text-neonGreen transition">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+            <div class="flex items-center gap-3 mb-2">
+                <i class="fas fa-chart-line text-neonBlue text-2xl"></i>
+                <h1 class="text-4xl md:text-5xl font-bold text-white">Analysis Report</h1>
+            </div>
+            <p class="text-gray-400 text-lg">{{ dataset.name }}</p>
+        </div>
+
+        <!-- Tabs Navigation -->
+        <div class="flex gap-2 mb-8 overflow-x-auto pb-2">
+            <a href="#summary" class="tab-link active px-4 py-2 rounded-lg glass-panel border border-neonBlue/50 text-neonBlue font-mono text-sm transition">
+                <i class="fas fa-list mr-2"></i> Summary
+            </a>
+            <a href="#empty-cells" class="tab-link px-4 py-2 rounded-lg glass-panel border border-white/10 text-gray-400 hover:text-neonBlue font-mono text-sm transition">
+                <i class="fas fa-circle-notch mr-2"></i> Empty Cells
+            </a>
+            <a href="#duplicates" class="tab-link px-4 py-2 rounded-lg glass-panel border border-white/10 text-gray-400 hover:text-neonBlue font-mono text-sm transition">
+                <i class="fas fa-clone mr-2"></i> Duplicates
+            </a>
+            <a href="#columns" class="tab-link px-4 py-2 rounded-lg glass-panel border border-white/10 text-gray-400 hover:text-neonBlue font-mono text-sm transition">
+                <i class="fas fa-chart-bar mr-2"></i> Columns
+            </a>
+            <a href="#outliers" class="tab-link px-4 py-2 rounded-lg glass-panel border border-white/10 text-gray-400 hover:text-neonBlue font-mono text-sm transition">
+                <i class="fas fa-triangle-exclamation mr-2"></i> Outliers
+            </a>
+        </div>
+
+        <!-- Summary Tab -->
+        <div id="summary" class="tab-content block mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <!-- Basic Stats -->
+                <div class="glass-panel rounded-xl p-4 border border-white/10">
+                    <p class="text-xs text-gray-500 font-mono uppercase mb-2">Total Rows</p>
+                    <p class="text-3xl font-bold text-neonBlue">{{ analysis_summary.row_count|default:dataset.row_count|default:"N/A" }}</p>
+                </div>
+                <div class="glass-panel rounded-xl p-4 border border-white/10">
+                    <p class="text-xs text-gray-500 font-mono uppercase mb-2">Total Columns</p>
+                    <p class="text-3xl font-bold text-neonGreen">{{ analysis_summary.column_count|default:dataset.col_count|default:"N/A" }}</p>
+                </div>
+                <div class="glass-panel rounded-xl p-4 border border-white/10">
+                    <p class="text-xs text-gray-500 font-mono uppercase mb-2">Data Quality</p>
+                    <p class="text-3xl font-bold text-neonPurple">{{ dataset.data_quality_score|default:0 }}%</p>
+                </div>
+                <div class="glass-panel rounded-xl p-4 border border-white/10">
+                    <p class="text-xs text-gray-500 font-mono uppercase mb-2">File Size</p>
+                    <p class="text-2xl font-bold text-neonPink">{{ dataset.file_size|filesizeformat }}</p>
+                </div>
+            </div>
+
+            <!-- Analysis Summary -->
+            <div class="glass-panel rounded-2xl p-6 border border-white/10 mb-8">
+                <h2 class="text-xl font-bold text-white mb-4">Summary</h2>
+                {% if analysis.analysis_data.summary %}
+                    <p class="text-gray-300 leading-relaxed">{{ analysis.analysis_data.summary }}</p>
+                {% else %}
+                    <p class="text-gray-300 leading-relaxed">Analysis complete. No issues found.</p>
+                {% endif %}
+            </div>
+
+            <!-- Quality Issues Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Empty Cells -->
+                <div class="glass-panel rounded-2xl p-6 border border-white/10">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-white">Empty Cells</h3>
+                        <span class="text-2xl font-bold text-warning">{{ analysis.empty_cell_count|default:0 }}</span>
+                    </div>
+                    <div class="bg-warning/10 rounded-lg p-3 border border-warning/30">
+                        <p class="text-xs text-warning font-mono">
+                            {% if analysis.empty_cell_count %}
+                                {{ analysis.empty_cell_count }} cells require attention
+                            {% else %}
+                                ✓ No empty cells
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Duplicates -->
+                <div class="glass-panel rounded-2xl p-6 border border-white/10">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-white">Duplicates</h3>
+                        <span class="text-2xl font-bold text-warning">{{ analysis.duplicate_count|default:0 }}</span>
+                    </div>
+                    <div class="bg-warning/10 rounded-lg p-3 border border-warning/30">
+                        <p class="text-xs text-warning font-mono">
+                            {% if analysis.duplicate_count %}
+                                {{ analysis.duplicate_count }} duplicate rows found
+                            {% else %}
+                                ✓ No duplicates
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Outliers -->
+                <div class="glass-panel rounded-2xl p-6 border border-white/10">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-bold text-white">Outliers</h3>
+                        <span class="text-2xl font-bold text-danger">{{ analysis.outlier_count|default:0 }}</span>
+                    </div>
+                    <div class="bg-danger/10 rounded-lg p-3 border border-danger/30">
+                        <p class="text-xs text-danger font-mono">
+                            {% if analysis.outlier_count %}
+                                {{ analysis.outlier_count }} outliers detected
+                            {% else %}
+                                ✓ No outliers
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty Cells Tab -->
+        <div id="empty-cells" class="tab-content hidden mb-12">
+            {% if empty_cells %}
+            <div class="glass-panel rounded-2xl border border-white/10 overflow-hidden">
+                <div class="p-6 border-b border-white/10">
+                    <h2 class="text-xl font-bold text-white">Empty Cells Found: {{ empty_cells|length }}</h2>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-white/10 bg-white/5">
+                                <th class="px-6 py-3 text-left text-sm font-mono text-neonBlue">Cell Address</th>
+                                <th class="px-6 py-3 text-left text-sm font-mono text-neonBlue">Column</th>
+                                <th class="px-6 py-3 text-left text-sm font-mono text-neonBlue">Row</th>
+                                <th class="px-6 py-3 text-left text-sm font-mono text-neonBlue">Nearby Values</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cell in empty_cells %}
+                            <tr class="border-b border-white/10 hover:bg-white/5 transition">
+                                <td class="px-6 py-3 text-sm font-mono text-neonGreen">{{ cell.address }}</td>
+                                <td class="px-6 py-3 text-sm text-gray-300">{{ cell.column }}</td>
+                                <td class="px-6 py-3 text-sm text-gray-300">{{ cell.row }}</td>
+                                <td class="px-6 py-3 text-sm text-gray-400">{{ cell.nearby|join:", "|truncatewords:3 }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% else %}
+            <div class="glass-panel rounded-2xl p-12 border border-white/10 text-center">
+                <i class="fas fa-check-circle text-4xl text-success mb-4 block"></i>
+                <p class="text-gray-400">No empty cells detected</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Duplicates Tab -->
+        <div id="duplicates" class="tab-content hidden mb-12">
+            {% if duplicates %}
+            <div class="glass-panel rounded-2xl border border-white/10 overflow-hidden">
+                <div class="p-6 border-b border-white/10">
+                    <h2 class="text-xl font-bold text-white">Duplicate Rows Found: {{ duplicates|length }}</h2>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b border-white/10 bg-white/5">
+                                <th class="px-6 py-3 text-left text-sm font-mono text-neonBlue">Occurrence Count</th>
+                                <th class="px-6 py-3 text-left text-sm font-mono text-neonBlue">Row Indices</th>
+                                <th class="px-6 py-3 text-left text-sm font-mono text-neonBlue">Preview</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for dup in duplicates %}
+                            <tr class="border-b border-white/10 hover:bg-white/5 transition">
+                                <td class="px-6 py-3 text-sm font-mono text-warning">{{ dup.count }}</td>
+                                <td class="px-6 py-3 text-sm text-gray-300 font-mono">{{ dup.rows|join:", " }}</td>
+                                <td class="px-6 py-3 text-sm text-gray-400">{{ dup.preview|truncatewords:5 }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% else %}
+            <div class="glass-panel rounded-2xl p-12 border border-white/10 text-center">
+                <i class="fas fa-check-circle text-4xl text-success mb-4 block"></i>
+                <p class="text-gray-400">No duplicate rows detected</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Columns Tab -->
+        <div id="columns" class="tab-content hidden mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {% for col_name, col_stats in column_statistics.items %}
+                <div class="glass-panel rounded-2xl p-6 border border-white/10">
+                    <h3 class="font-bold text-neonBlue mb-4 font-mono">{{ col_name }}</h3>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex items-center justify-between p-2 bg-white/5 rounded">
+                            <span class="text-gray-400">Type</span>
+                            <span class="font-mono text-neonGreen">{{ col_stats.dtype }}</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2 bg-white/5 rounded">
+                            <span class="text-gray-400">Non-Null</span>
+                            <span class="font-mono text-neonBlue">{{ col_stats.non_null }}</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2 bg-white/5 rounded">
+                            <span class="text-gray-400">Unique</span>
+                            <span class="font-mono text-neonPurple">{{ col_stats.unique }}</span>
+                        </div>
+                        {% if col_stats.min %}
+                        <div class="flex items-center justify-between p-2 bg-white/5 rounded">
+                            <span class="text-gray-400">Min</span>
+                            <span class="font-mono text-gray-300">{{ col_stats.min }}</span>
+                        </div>
+                        {% endif %}
+                        {% if col_stats.max %}
+                        <div class="flex items-center justify-between p-2 bg-white/5 rounded">
+                            <span class="text-gray-400">Max</span>
+                            <span class="font-mono text-gray-300">{{ col_stats.max }}</span>
+                        </div>
+                        {% endif %}
+                        {% if col_stats.mean %}
+                        <div class="flex items-center justify-between p-2 bg-white/5 rounded">
+                            <span class="text-gray-400">Mean</span>
+                            <span class="font-mono text-gray-300">{{ col_stats.mean|floatformat:2 }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Outliers Tab -->
+        <div id="outliers" class="tab-content hidden mb-12">
+            {% if outliers %}
+            <div class="space-y-4">
+                {% for col_name, col_outliers in outliers.items %}
+                <div class="glass-panel rounded-2xl p-6 border border-white/10">
+                    <h3 class="font-bold text-danger mb-4 font-mono"><i class="fas fa-triangle-exclamation mr-2"></i>{{ col_name }}</h3>
+                    <div class="bg-danger/10 rounded-lg p-4 border border-danger/30">
+                        <p class="text-sm text-gray-300 font-mono">
+                            Found {{ col_outliers|length }} outlier{% if col_outliers|length != 1 %}s{% endif %}: 
+                            <span class="text-danger">{{ col_outliers|join:", " }}</span>
+                        </p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="glass-panel rounded-2xl p-12 border border-white/10 text-center">
+                <i class="fas fa-check-circle text-4xl text-success mb-4 block"></i>
+                <p class="text-gray-400">No outliers detected</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Actions -->
+        <div class="mt-12 flex gap-4 flex-wrap">
+            {% if dataset.empty_cell_count or dataset.duplicate_row_count %}
+            <a href="{% url 'datasets:remove_duplicates' dataset.pk %}" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-neonPurple to-neonPink text-white font-bold rounded-xl hover:scale-105 transition">
+                <i class="fas fa-broom"></i> Clean Data
+            </a>
+            {% endif %}
+            <a href="{% url 'datasets:visualization_create' dataset.pk %}" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-neonBlue to-neonGreen text-white font-bold rounded-xl hover:scale-105 transition">
+                <i class="fas fa-chart-bar"></i> Create Visualization
+            </a>
+            <a href="{% url 'datasets:file_viewer' dataset.pk %}" class="inline-flex items-center gap-2 px-6 py-3 glass-panel border border-neonBlue/50 text-neonBlue font-bold rounded-xl hover:scale-105 transition">
+                <i class="fas fa-table"></i> View Data
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Tab switching
+    document.querySelectorAll('.tab-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const tabId = link.getAttribute('href').substring(1);
+            
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            
+            // Remove active state from all links
+            document.querySelectorAll('.tab-link').forEach(l => {
+                l.classList.remove('border-neonBlue/50', 'text-neonBlue');
+                l.classList.add('border-white/10', 'text-gray-400', 'hover:text-neonBlue');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabId).classList.remove('hidden');
+            
+            // Add active state to clicked link
+            link.classList.remove('border-white/10', 'text-gray-400', 'hover:text-neonBlue');
+            link.classList.add('border-neonBlue/50', 'text-neonBlue');
+        });
+    });
+</script>
+{% endblock %}

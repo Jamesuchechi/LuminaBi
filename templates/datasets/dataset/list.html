@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load humanize %}
 
 {% block title %}Datasets - LuminaBI{% endblock %}
 
@@ -16,14 +17,14 @@
                     </div>
                     <p class="text-gray-400 text-lg">Upload, clean, and manage your data files</p>
                 </div>
-                <a href="{% url 'datasets:dataset_create' %}" class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-neonBlue to-neonPurple text-white font-bold rounded-xl hover:scale-105 transition-transform duration-300 shadow-lg shadow-neonBlue/30">
+                <a href="{% url 'datasets:dataset_upload' %}" class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-neonBlue to-neonPurple text-white font-bold rounded-xl hover:scale-105 transition-transform duration-300 shadow-lg shadow-neonBlue/30">
                     <i class="fas fa-plus"></i> Upload Dataset
                 </a>
             </div>
         </div>
 
         <!-- Statistics Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
             <div class="glass-panel rounded-2xl p-6 border border-neonBlue/20 hover:border-neonBlue/50 transition-all group">
                 <div class="flex items-center justify-between">
                     <div>
@@ -35,13 +36,24 @@
                     </div>
                 </div>
             </div>
-            <div class="glass-panel rounded-2xl p-6 border border-success/20 hover:border-success/50 transition-all group">
+            <div class="glass-panel rounded-2xl p-6 border border-neonGreen/20 hover:border-neonGreen/50 transition-all group">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-400 text-sm font-mono uppercase tracking-wider">Analyzed</p>
+                        <p class="text-4xl font-bold text-white mt-2">{{ statistics.analyzed_datasets }}</p>
+                    </div>
+                    <div class="w-16 h-16 rounded-full bg-neonGreen/10 flex items-center justify-center group-hover:bg-neonGreen/20 transition text-neonGreen text-2xl">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="glass-panel rounded-2xl p-6 border border-neonPink/20 hover:border-neonPink/50 transition-all group">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-gray-400 text-sm font-mono uppercase tracking-wider">Cleaned</p>
                         <p class="text-4xl font-bold text-white mt-2">{{ statistics.cleaned_datasets }}</p>
                     </div>
-                    <div class="w-16 h-16 rounded-full bg-success/10 flex items-center justify-center group-hover:bg-success/20 transition text-success text-2xl">
+                    <div class="w-16 h-16 rounded-full bg-neonPink/10 flex items-center justify-center group-hover:bg-neonPink/20 transition text-neonPink text-2xl">
                         <i class="fas fa-check-circle"></i>
                     </div>
                 </div>
@@ -49,16 +61,35 @@
             <div class="glass-panel rounded-2xl p-6 border border-neonPurple/20 hover:border-neonPurple/50 transition-all group">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-gray-400 text-sm font-mono uppercase tracking-wider">Total Size</p>
-                        <p class="text-4xl font-bold text-white mt-2">{{ statistics.total_size_mb|floatformat:1 }} MB</p>
+                        <p class="text-gray-400 text-sm font-mono uppercase tracking-wider">Avg Quality</p>
+                        <p class="text-4xl font-bold text-white mt-2">{{ statistics.avg_quality|floatformat:0 }}%</p>
                     </div>
                     <div class="w-16 h-16 rounded-full bg-neonPurple/10 flex items-center justify-center group-hover:bg-neonPurple/20 transition text-neonPurple text-2xl">
-                        <i class="fas fa-database"></i>
+                        <i class="fas fa-star"></i>
                     </div>
                 </div>
             </div>
         </div>
 
+
+        <!-- Search & Filter Bar -->
+        <div class="mb-8">
+            <form method="get" class="flex flex-col md:flex-row gap-4">
+                <div class="flex-1 relative">
+                    <input type="text" name="search" placeholder="Search datasets by name or description..." value="{{ request.GET.search }}" class="w-full px-4 py-3 bg-white/5 border border-white/10 hover:border-neonBlue/30 focus:border-neonBlue focus:outline-none text-white placeholder-gray-500 rounded-lg transition">
+                    <i class="fas fa-search absolute right-3 top-3.5 text-gray-500"></i>
+                </div>
+                <select name="status" class="px-4 py-3 bg-white/5 border border-white/10 hover:border-neonBlue/30 focus:border-neonBlue focus:outline-none text-white rounded-lg transition">
+                    <option value="">All Status</option>
+                    <option value="analyzed" {% if request.GET.status == 'analyzed' %}selected{% endif %}>Analyzed</option>
+                    <option value="cleaned" {% if request.GET.status == 'cleaned' %}selected{% endif %}>Cleaned</option>
+                    <option value="raw" {% if request.GET.status == 'raw' %}selected{% endif %}>Raw</option>
+                </select>
+                <button type="submit" class="px-6 py-3 bg-neonBlue/20 hover:bg-neonBlue/40 border border-neonBlue/50 text-neonBlue font-mono rounded-lg transition flex items-center justify-center gap-2">
+                    <i class="fas fa-filter"></i> Filter
+                </button>
+            </form>
+        </div>
 
         <!-- Datasets Grid -->
         {% if datasets %}
@@ -66,8 +97,8 @@
                 {% for dataset in datasets %}
                 <div class="glass-panel rounded-2xl overflow-hidden border border-white/10 hover:border-neonBlue/50 transition-all group">
                     <div class="p-6">
-                        <!-- Header with status badge -->
-                        <div class="flex items-start justify-between mb-4">
+                        <!-- Header with badges -->
+                        <div class="flex items-start justify-between mb-4 flex-wrap gap-2">
                             <div class="flex-1">
                                 <h3 class="text-xl font-bold text-white group-hover:text-neonBlue transition truncate">
                                     <a href="{% url 'datasets:dataset_detail' dataset.pk %}">
@@ -75,17 +106,16 @@
                                     </a>
                                 </h3>
                             </div>
-                            {% if dataset.is_cleaned %}
-                            <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-success/20 border border-success/50 ml-2">
-                                <i class="fas fa-check-circle text-success text-xs"></i>
-                                <span class="text-xs font-mono text-success">Cleaned</span>
+                            <!-- Quality Score Badge -->
+                            <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full {% if dataset.data_quality_score >= 80 %}bg-success/20 border border-success/50{% elif dataset.data_quality_score >= 60 %}bg-warning/20 border border-warning/50{% else %}bg-danger/20 border border-danger/50{% endif %}">
+                                <i class="fas fa-star text-xs"></i>
+                                <span class="text-xs font-mono">{{ dataset.data_quality_score|default:0 }}%</span>
                             </span>
-                            {% else %}
-                            <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-warning/20 border border-warning/50 ml-2">
-                                <i class="fas fa-circle text-warning text-xs"></i>
-                                <span class="text-xs font-mono text-warning">Raw</span>
+                            <!-- File Type Badge -->
+                            <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-neonPurple/20 border border-neonPurple/50">
+                                <i class="fas fa-file text-neonPurple text-xs"></i>
+                                <span class="text-xs font-mono text-neonPurple">{{ dataset.get_file_type_display|default:"Data" }}</span>
                             </span>
-                            {% endif %}
                         </div>
                         
                         <!-- Description -->
@@ -95,28 +125,47 @@
                         <div class="space-y-2 text-sm mb-6 pb-6 border-b border-white/10">
                             <div class="flex items-center gap-2 text-gray-400">
                                 <i class="fas fa-table text-neonBlue"></i>
-                                <span>{% if dataset.row_count %}{{ dataset.row_count }} rows{% else %}N/A{% endif %}</span>
+                                <span>{% if dataset.row_count %}{{ dataset.row_count|intcomma }} rows{% else %}Analyzing...{% endif %}</span>
                             </div>
                             <div class="flex items-center gap-2 text-gray-400">
                                 <i class="fas fa-columns text-neonPurple"></i>
-                                <span>{% if dataset.col_count %}{{ dataset.col_count }} columns{% else %}N/A{% endif %}</span>
+                                <span>{% if dataset.column_count %}{{ dataset.column_count }} columns{% else %}Analyzing...{% endif %}</span>
                             </div>
                             <div class="flex items-center gap-2 text-gray-400">
-                                <i class="fas fa-clock text-neonPink"></i>
-                                <span>{{ dataset.uploaded_at|date:"M d, Y" }}</span>
+                                <i class="fas fa-weight text-neonPink"></i>
+                                <span>{{ dataset.file_size|filesizeformat }}</span>
                             </div>
+                            <div class="flex items-center gap-2 text-gray-400">
+                                <i class="fas fa-clock text-neonGreen"></i>
+                                <span>{{ dataset.created_at|date:"M d, Y H:i" }}</span>
+                            </div>
+                            {% if dataset.empty_cell_count %}
+                            <div class="flex items-center gap-2 text-warning">
+                                <i class="fas fa-exclamation-circle text-xs"></i>
+                                <span class="text-xs">{{ dataset.empty_cell_count }} empty cells</span>
+                            </div>
+                            {% endif %}
+                            {% if dataset.duplicate_row_count %}
+                            <div class="flex items-center gap-2 text-warning">
+                                <i class="fas fa-clone text-xs"></i>
+                                <span class="text-xs">{{ dataset.duplicate_row_count }} duplicates</span>
+                            </div>
+                            {% endif %}
                         </div>
 
                         <!-- Action buttons -->
-                        <div class="flex gap-2">
-                            <a href="{% url 'datasets:dataset_detail' dataset.pk %}" class="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-neonBlue/20 hover:bg-neonBlue/40 border border-neonBlue/50 text-neonBlue text-sm font-mono rounded-lg transition">
+                        <div class="flex gap-2 flex-wrap">
+                            <a href="{% url 'datasets:dataset_detail' dataset.pk %}" class="flex-1 min-w-20 flex items-center justify-center gap-2 px-3 py-2 bg-neonBlue/20 hover:bg-neonBlue/40 border border-neonBlue/50 text-neonBlue text-xs font-mono rounded-lg transition">
                                 <i class="fas fa-eye text-xs"></i> View
                             </a>
-                            <a href="{% url 'datasets:dataset_edit' dataset.pk %}" class="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-neonPurple/20 hover:bg-neonPurple/40 border border-neonPurple/50 text-neonPurple text-sm font-mono rounded-lg transition">
-                                <i class="fas fa-pen text-xs"></i> Edit
+                            <a href="{% url 'datasets:dataset_analysis' dataset.pk %}" class="flex-1 min-w-20 flex items-center justify-center gap-2 px-3 py-2 bg-neonGreen/20 hover:bg-neonGreen/40 border border-neonGreen/50 text-neonGreen text-xs font-mono rounded-lg transition">
+                                <i class="fas fa-chart-bar text-xs"></i> Analysis
                             </a>
-                            <a href="{% url 'datasets:dataset_delete' dataset.pk %}" class="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-red-500/20 hover:bg-red-500/40 border border-red-500/50 text-red-400 text-sm font-mono rounded-lg transition">
-                                <i class="fas fa-trash text-xs"></i> Delete
+                            <a href="{% url 'datasets:file_viewer' dataset.pk %}" class="flex-1 min-w-20 flex items-center justify-center gap-2 px-3 py-2 bg-neonPurple/20 hover:bg-neonPurple/40 border border-neonPurple/50 text-neonPurple text-xs font-mono rounded-lg transition">
+                                <i class="fas fa-table text-xs"></i> Viewer
+                            </a>
+                            <a href="{% url 'datasets:visualization_create' dataset.pk %}" class="flex-1 min-w-20 flex items-center justify-center gap-2 px-3 py-2 bg-neonPink/20 hover:bg-neonPink/40 border border-neonPink/50 text-neonPink text-xs font-mono rounded-lg transition">
+                                <i class="fas fa-chart-line text-xs"></i> Viz
                             </a>
                         </div>
                     </div>
@@ -158,7 +207,7 @@
             </div>
             <p class="text-gray-300 text-lg font-mono mb-2">No datasets uploaded yet</p>
             <p class="text-gray-500 text-sm mb-6">Start by uploading your first CSV, Excel, or JSON file</p>
-            <a href="{% url 'datasets:dataset_create' %}" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-neonBlue to-neonPurple text-white font-bold rounded-xl hover:scale-105 transition">
+            <a href="{% url 'datasets:dataset_upload' %}" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-neonBlue to-neonPurple text-white font-bold rounded-xl hover:scale-105 transition">
                 <i class="fas fa-plus"></i> Upload Dataset
             </a>
         </div>

@@ -16,11 +16,14 @@ joblib==1.5.2
 mccabe==0.7.0
 mypy_extensions==1.1.0
 numpy==2.3.5
+openpyxl==3.11.0
 packaging==25.0
 pandas==2.3.3
 pathspec==0.12.1
+pillow==11.0.0
 platformdirs==4.5.0
 pluggy==1.6.0
+plotly==5.18.0
 psycopg==3.3.1
 psycopg-binary==3.3.1
 pycodestyle==2.14.0

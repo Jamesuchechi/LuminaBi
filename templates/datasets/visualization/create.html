@@ -1,0 +1,284 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Create Visualization - {{ dataset.name }} | LuminaBI{% endblock %}
+
+{% block content %}
+<div class="min-h-screen py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-12">
+            <div class="flex items-center gap-3 mb-4">
+                <a href="{% url 'datasets:dataset_detail' dataset.pk %}" class="text-neonBlue hover:text-neonGreen transition">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+            <div class="flex items-center gap-3 mb-2">
+                <i class="fas fa-chart-bar text-neonPurple text-2xl"></i>
+                <h1 class="text-4xl md:text-5xl font-bold text-white">Create Visualization</h1>
+            </div>
+            <p class="text-gray-400">{{ dataset.name }}</p>
+        </div>
+
+        <form id="visualization-form" method="post" class="mb-12">
+            {% csrf_token %}
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Form Section -->
+                <div class="lg:col-span-2">
+                    <!-- Basic Info -->
+                    <div class="glass-panel rounded-2xl p-6 border border-white/10 mb-6">
+                        <h2 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                            <i class="fas fa-info-circle text-neonBlue"></i> Basic Information
+                        </h2>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-mono text-gray-400 mb-2">Title</label>
+                                <input type="text" name="title" required placeholder="e.g., Sales by Region" class="w-full px-4 py-2 bg-white/5 border border-white/10 hover:border-neonBlue/30 focus:border-neonBlue focus:outline-none text-white placeholder-gray-500 rounded-lg transition">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-mono text-gray-400 mb-2">Description</label>
+                                <textarea name="description" placeholder="Optional description..." rows="3" class="w-full px-4 py-2 bg-white/5 border border-white/10 hover:border-neonBlue/30 focus:border-neonBlue focus:outline-none text-white placeholder-gray-500 rounded-lg transition"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chart Configuration -->
+                    <div class="glass-panel rounded-2xl p-6 border border-white/10 mb-6">
+                        <h2 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                            <i class="fas fa-sliders-h text-neonGreen"></i> Chart Configuration
+                        </h2>
+
+                        <div class="space-y-4">
+                            <!-- Chart Type -->
+                            <div>
+                                <label class="block text-sm font-mono text-gray-400 mb-2">Chart Type</label>
+                                <select name="chart_type" id="chart-type" required class="w-full px-4 py-2 bg-white/5 border border-white/10 hover:border-neonBlue/30 focus:border-neonBlue focus:outline-none text-white rounded-lg transition">
+                                    <option value="">Select a chart type...</option>
+                                    <option value="line">📈 Line Chart</option>
+                                    <option value="bar">📊 Bar Chart</option>
+                                    <option value="scatter">🔵 Scatter Plot</option>
+                                    <option value="histogram">📐 Histogram</option>
+                                    <option value="pie">🥧 Pie Chart</option>
+                                    <option value="heatmap">🔥 Heatmap (Correlation)</option>
+                                    <option value="boxplot">📦 Box Plot</option>
+                                    <option value="area">📈 Area Chart</option>
+                                    <option value="distribution">📊 Distribution</option>
+                                </select>
+                            </div>
+
+                            <!-- X Axis Column -->
+                            <div>
+                                <label class="block text-sm font-mono text-gray-400 mb-2">X Axis / Category Column</label>
+                                <select name="x_column" id="x-column" required class="w-full px-4 py-2 bg-white/5 border border-white/10 hover:border-neonBlue/30 focus:border-neonBlue focus:outline-none text-white rounded-lg transition">
+                                    <option value="">Select a column...</option>
+                                    {% for col in numeric_columns %}
+                                    <option value="{{ col }}">{{ col }} (numeric)</option>
+                                    {% endfor %}
+                                    {% for col in string_columns %}
+                                    <option value="{{ col }}">{{ col }} (text)</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <!-- Y Axis Column(s) -->
+                            <div>
+                                <label class="block text-sm font-mono text-gray-400 mb-2">Y Axis / Value Columns (select one or more)</label>
+                                <div class="space-y-2 max-h-48 overflow-y-auto bg-white/5 rounded-lg p-3 border border-white/10">
+                                    {% for col in numeric_columns %}
+                                    <label class="flex items-center gap-2 cursor-pointer hover:bg-white/10 p-2 rounded transition">
+                                        <input type="checkbox" name="y_columns" value="{{ col }}" class="w-4 h-4 accent-neonBlue">
+                                        <span class="text-gray-300">{{ col }}</span>
+                                    </label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <!-- Additional Options (Hidden by default) -->
+                            <div id="additional-options" class="pt-4 border-t border-white/10">
+                                <!-- For Pie Chart: Top N -->
+                                <div id="top-n-option" class="hidden mb-4">
+                                    <label class="block text-sm font-mono text-gray-400 mb-2">Top N Values</label>
+                                    <input type="number" name="top_n" min="1" max="20" value="10" class="w-full px-4 py-2 bg-white/5 border border-white/10 hover:border-neonBlue/30 focus:border-neonBlue focus:outline-none text-white rounded-lg transition">
+                                </div>
+
+                                <!-- For Histogram: Bins -->
+                                <div id="bins-option" class="hidden mb-4">
+                                    <label class="block text-sm font-mono text-gray-400 mb-2">Number of Bins</label>
+                                    <input type="number" name="nbins" min="5" max="100" value="30" class="w-full px-4 py-2 bg-white/5 border border-white/10 hover:border-neonBlue/30 focus:border-neonBlue focus:outline-none text-white rounded-lg transition">
+                                </div>
+
+                                <!-- For Bar Chart: Mode -->
+                                <div id="bar-mode-option" class="hidden mb-4">
+                                    <label class="block text-sm font-mono text-gray-400 mb-2">Bar Mode</label>
+                                    <select name="barmode" class="w-full px-4 py-2 bg-white/5 border border-white/10 hover:border-neonBlue/30 focus:border-neonBlue focus:outline-none text-white rounded-lg transition">
+                                        <option value="group">Grouped</option>
+                                        <option value="stack">Stacked</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Buttons -->
+                    <div class="flex gap-4">
+                        <button type="button" id="preview-btn" class="flex-1 px-6 py-3 bg-gradient-to-r from-neonBlue to-neonGreen text-white font-bold rounded-xl hover:scale-105 transition flex items-center justify-center gap-2">
+                            <i class="fas fa-eye"></i> Preview
+                        </button>
+                        <button type="button" id="save-btn" class="flex-1 px-6 py-3 bg-gradient-to-r from-neonPurple to-neonPink text-white font-bold rounded-xl hover:scale-105 transition flex items-center justify-center gap-2">
+                            <i class="fas fa-save"></i> Save
+                        </button>
+                        <a href="{% url 'datasets:dataset_detail' dataset.pk %}" class="flex-1 px-6 py-3 glass-panel border border-white/10 hover:border-white/30 text-gray-300 font-bold rounded-xl transition flex items-center justify-center gap-2">
+                            <i class="fas fa-times"></i> Cancel
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Preview Section -->
+                <div class="lg:col-span-1">
+                    <div class="glass-panel rounded-2xl p-6 border border-white/10 sticky top-24">
+                        <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                            <i class="fas fa-eye text-neonPurple"></i> Preview
+                        </h2>
+                        
+                        <div id="chart-preview" class="bg-white/5 rounded-lg border border-white/10 p-4 min-h-64 flex items-center justify-center">
+                            <div class="text-center">
+                                <i class="fas fa-chart-line text-4xl text-gray-500 mb-3 block"></i>
+                                <p class="text-gray-500">Configure chart and click Preview</p>
+                            </div>
+                        </div>
+
+                        <!-- Chart Info -->
+                        <div class="mt-6 pt-6 border-t border-white/10">
+                            <h3 class="font-bold text-neonGreen mb-3 text-sm">Chart Types</h3>
+                            <div class="space-y-1 text-xs text-gray-400 font-mono">
+                                <p><span class="text-neonBlue">Line</span>: Trends over time</p>
+                                <p><span class="text-neonGreen">Bar</span>: Compare categories</p>
+                                <p><span class="text-neonPurple">Pie</span>: Show proportions</p>
+                                <p><span class="text-neonPink">Scatter</span>: Find relationships</p>
+                                <p><span class="text-warning">Heatmap</span>: Correlation matrix</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const CSRF_TOKEN = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    const DATASET_ID = {{ dataset.pk }};
+
+    function getFormData() {
+        const form = document.getElementById('visualization-form');
+        const y_columns_elements = form.querySelectorAll('input[name="y_columns"]:checked');
+        const y_columns = Array.from(y_columns_elements).map(el => el.value);
+        
+        return {
+            chart_type: form.querySelector('input[name="chart_type"], select[name="chart_type"]').value || document.getElementById('chart-type').value,
+            title: form.querySelector('input[name="title"]').value,
+            x_column: form.querySelector('select[name="x_column"]').value,
+            y_columns: y_columns,
+        };
+    }
+
+    function showError(message) {
+        alert('Error: ' + message);
+        console.error(message);
+    }
+
+    function showSuccess(message) {
+        alert('Success: ' + message);
+    }
+
+    // Preview button
+    document.getElementById('preview-btn').addEventListener('click', async () => {
+        const data = getFormData();
+        
+        if (!data.chart_type) {
+            showError('Please select a chart type');
+            return;
+        }
+        
+        if (!data.x_column) {
+            showError('Please select an X axis column');
+            return;
+        }
+        
+        // For now, just show that preview was clicked
+        document.getElementById('chart-preview').innerHTML = `
+            <div class="text-center">
+                <i class="fas fa-spinner fa-spin text-2xl text-neonBlue mb-3 block"></i>
+                <p class="text-gray-400">Generating preview...</p>
+            </div>
+        `;
+    });
+
+    // Save button
+    document.getElementById('save-btn').addEventListener('click', async () => {
+        const data = getFormData();
+        
+        if (!data.chart_type) {
+            showError('Please select a chart type');
+            return;
+        }
+        
+        if (!data.x_column) {
+            showError('Please select an X axis column');
+            return;
+        }
+        
+        if (!data.title.trim()) {
+            showError('Please enter a title for the visualization');
+            return;
+        }
+
+        try {
+            const response = await fetch(`/datasets/${DATASET_ID}/visualization/create/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': CSRF_TOKEN,
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                showError(result.error || 'Failed to create visualization');
+                return;
+            }
+
+            showSuccess('Visualization created successfully!');
+            setTimeout(() => {
+                window.location.href = `/datasets/visualization/${result.visualization_id}/`;
+            }, 1500);
+        } catch (error) {
+            showError(error.message);
+        }
+    });
+
+    // Show/hide additional options based on chart type
+    document.getElementById('chart-type').addEventListener('change', (e) => {
+        const chartType = e.target.value;
+        
+        // Hide all options
+        document.getElementById('top-n-option').classList.add('hidden');
+        document.getElementById('bins-option').classList.add('hidden');
+        document.getElementById('bar-mode-option').classList.add('hidden');
+        
+        // Show relevant options
+        if (chartType === 'pie') {
+            document.getElementById('top-n-option').classList.remove('hidden');
+        } else if (chartType === 'histogram' || chartType === 'distribution') {
+            document.getElementById('bins-option').classList.remove('hidden');
+        } else if (chartType === 'bar') {
+            document.getElementById('bar-mode-option').classList.remove('hidden');
+        }
+    });
+</script>
+{% endblock %}

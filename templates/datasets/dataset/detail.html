@@ -105,26 +105,16 @@
                         <h2 class="text-lg font-bold text-white">Actions</h2>
                     </div>
                     <div class="space-y-3">
-                        <a href="{% url 'datasets:dataset_edit' dataset.pk %}" class="flex items-center justify-center gap-2 w-full px-4 py-2 bg-neonBlue/20 hover:bg-neonBlue/40 border border-neonBlue/50 text-neonBlue text-sm font-mono rounded-lg transition">
-                            <i class="fas fa-pen text-xs"></i> Edit Details
+                        <a href="{% url 'datasets:dataset_analysis' dataset.pk %}" class="flex items-center justify-center gap-2 w-full px-4 py-2 bg-neonBlue/20 hover:bg-neonBlue/40 border border-neonBlue/50 text-neonBlue text-sm font-mono rounded-lg transition">
+                            <i class="fas fa-chart-line text-xs"></i> View Analysis
                         </a>
                         
-                        {% if not dataset.is_cleaned %}
-                        <form method="POST" action="{% url 'datasets:dataset_clean' dataset.pk %}" class="w-full">
-                            {% csrf_token %}
-                            <input type="hidden" name="action" value="mark_cleaned">
-                            <button type="submit" class="flex items-center justify-center gap-2 w-full px-4 py-2 bg-success/20 hover:bg-success/40 border border-success/50 text-success text-sm font-mono rounded-lg transition">
-                                <i class="fas fa-check text-xs"></i> Mark as Cleaned
-                            </button>
-                        </form>
-                        {% endif %}
+                        <a href="{% url 'datasets:file_viewer' dataset.pk %}" class="flex items-center justify-center gap-2 w-full px-4 py-2 bg-neonPurple/20 hover:bg-neonPurple/40 border border-neonPurple/50 text-neonPurple text-sm font-mono rounded-lg transition">
+                            <i class="fas fa-eye text-xs"></i> View Data
+                        </a>
                         
-                        <button type="button" onclick="exportDataset({{ dataset.pk }})" class="flex items-center justify-center gap-2 w-full px-4 py-2 bg-neonPurple/20 hover:bg-neonPurple/40 border border-neonPurple/50 text-neonPurple text-sm font-mono rounded-lg transition">
-                            <i class="fas fa-download text-xs"></i> Export
-                        </button>
-                        
-                        <a href="{% url 'datasets:dataset_delete' dataset.pk %}" class="flex items-center justify-center gap-2 w-full px-4 py-2 bg-red-500/20 hover:bg-red-500/40 border border-red-500/50 text-red-400 text-sm font-mono rounded-lg transition">
-                            <i class="fas fa-trash text-xs"></i> Delete
+                        <a href="{% url 'datasets:visualization_create' dataset.pk %}" class="flex items-center justify-center gap-2 w-full px-4 py-2 bg-neonGreen/20 hover:bg-neonGreen/40 border border-neonGreen/50 text-neonGreen text-sm font-mono rounded-lg transition">
+                            <i class="fas fa-chart-bar text-xs"></i> Create Visualization
                         </a>
                     </div>
                 </div>
@@ -174,12 +164,4 @@
     </div>
 </div>
 
-<script>
-function exportDataset(datasetId) {
-    const format = prompt('Export format (csv, json, xlsx):', 'csv');
-    if (format) {
-        window.location.href = `{% url 'datasets:dataset_export' 0 %}`.replace('0', datasetId) + `?format=${format}`;
-    }
-}
-</script>
 {% endblock %}

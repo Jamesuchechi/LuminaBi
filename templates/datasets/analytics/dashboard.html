@@ -1,0 +1,269 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Analytics Dashboard - LuminaBI{% endblock %}
+
+{% block content %}
+<div class="min-h-screen py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-12">
+            <div class="flex items-center gap-3 mb-2">
+                <i class="fas fa-chart-line text-neonBlue text-2xl"></i>
+                <h1 class="text-4xl md:text-5xl font-bold text-white">Analytics Dashboard</h1>
+            </div>
+            <p class="text-gray-400 text-lg">Your data at a glance</p>
+        </div>
+
+        <!-- Top Statistics -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+            <div class="glass-panel rounded-2xl p-6 border border-neonBlue/20 hover:border-neonBlue/50 transition-all group">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-400 text-sm font-mono uppercase tracking-wider">Total Datasets</p>
+                        <p class="text-4xl font-bold text-white mt-2">{{ stats.total_datasets }}</p>
+                    </div>
+                    <div class="w-16 h-16 rounded-full bg-neonBlue/10 flex items-center justify-center group-hover:bg-neonBlue/20 transition text-neonBlue text-2xl">
+                        <i class="fas fa-database"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-2xl p-6 border border-neonGreen/20 hover:border-neonGreen/50 transition-all group">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-400 text-sm font-mono uppercase tracking-wider">Total Rows</p>
+                        <p class="text-4xl font-bold text-white mt-2">{{ stats.total_rows|default:0 }}</p>
+                    </div>
+                    <div class="w-16 h-16 rounded-full bg-neonGreen/10 flex items-center justify-center group-hover:bg-neonGreen/20 transition text-neonGreen text-2xl">
+                        <i class="fas fa-list"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-2xl p-6 border border-neonPurple/20 hover:border-neonPurple/50 transition-all group">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-400 text-sm font-mono uppercase tracking-wider">Visualizations</p>
+                        <p class="text-4xl font-bold text-white mt-2">{{ stats.total_visualizations }}</p>
+                    </div>
+                    <div class="w-16 h-16 rounded-full bg-neonPurple/10 flex items-center justify-center group-hover:bg-neonPurple/20 transition text-neonPurple text-2xl">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-2xl p-6 border border-neonPink/20 hover:border-neonPink/50 transition-all group">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-400 text-sm font-mono uppercase tracking-wider">Avg Quality</p>
+                        <p class="text-4xl font-bold text-white mt-2">{{ stats.avg_quality|floatformat:0 }}%</p>
+                    </div>
+                    <div class="w-16 h-16 rounded-full bg-neonPink/10 flex items-center justify-center group-hover:bg-neonPink/20 transition text-neonPink text-2xl">
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts & Breakdowns Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
+            <!-- Operations Breakdown -->
+            <div class="glass-panel rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                    <i class="fas fa-cogs text-neonPurple"></i> Operations Breakdown
+                </h2>
+                <div class="space-y-3">
+                    {% for op_type, count in stats.operations_by_type.items %}
+                    <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10">
+                        <span class="flex items-center gap-2 text-gray-300">
+                            <div class="w-2 h-2 rounded-full bg-neonBlue"></div>
+                            {{ op_type }}
+                        </span>
+                        <span class="font-bold text-neonBlue">{{ count }}</span>
+                    </div>
+                    {% empty %}
+                    <p class="text-gray-500 text-center py-4">No operations yet</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Visualization Types -->
+            <div class="glass-panel rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                    <i class="fas fa-palette text-neonGreen"></i> Visualization Types
+                </h2>
+                <div class="space-y-3">
+                    {% for viz_type, count in stats.visualizations_by_type.items %}
+                    <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10">
+                        <span class="flex items-center gap-2 text-gray-300">
+                            <div class="w-2 h-2 rounded-full bg-neonGreen"></div>
+                            {{ viz_type }}
+                        </span>
+                        <span class="font-bold text-neonGreen">{{ count }}</span>
+                    </div>
+                    {% empty %}
+                    <p class="text-gray-500 text-center py-4">No visualizations yet</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- File Type Distribution -->
+        <div class="glass-panel rounded-2xl p-6 border border-white/10 mb-12">
+            <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                <i class="fas fa-file text-neonBlue"></i> File Type Distribution
+            </h2>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                {% for file_type, count in stats.files_by_type.items %}
+                <div class="p-4 bg-gradient-to-br from-white/10 to-white/5 rounded-lg border border-white/10 text-center">
+                    <p class="text-2xl font-bold text-neonPurple">{{ count }}</p>
+                    <p class="text-xs text-gray-400 font-mono mt-1">{{ file_type }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Data Quality Issues -->
+        <div class="glass-panel rounded-2xl p-6 border border-white/10 mb-12">
+            <h2 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                <i class="fas fa-triangle-exclamation text-warning"></i> Data Quality Issues Summary
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Empty Cells -->
+                <div class="p-4 bg-warning/10 rounded-xl border border-warning/30">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-warning font-mono text-sm">Empty Cells</span>
+                        <i class="fas fa-circle-notch text-warning"></i>
+                    </div>
+                    <p class="text-2xl font-bold text-white">{{ stats.total_empty_cells|default:0 }}</p>
+                    <p class="text-xs text-gray-400 mt-2">Across {{ stats.datasets_with_empty_cells }} datasets</p>
+                </div>
+
+                <!-- Duplicates -->
+                <div class="p-4 bg-warning/10 rounded-xl border border-warning/30">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-warning font-mono text-sm">Duplicate Rows</span>
+                        <i class="fas fa-clone text-warning"></i>
+                    </div>
+                    <p class="text-2xl font-bold text-white">{{ stats.total_duplicates|default:0 }}</p>
+                    <p class="text-xs text-gray-400 mt-2">Across {{ stats.datasets_with_duplicates }} datasets</p>
+                </div>
+
+                <!-- Outliers -->
+                <div class="p-4 bg-danger/10 rounded-xl border border-danger/30">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-danger font-mono text-sm">Outliers</span>
+                        <i class="fas fa-triangle-exclamation text-danger"></i>
+                    </div>
+                    <p class="text-2xl font-bold text-white">{{ stats.total_outliers|default:0 }}</p>
+                    <p class="text-xs text-gray-400 mt-2">Across {{ stats.datasets_with_outliers }} datasets</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity Tabs -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Recent Datasets -->
+            <div class="glass-panel rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                    <i class="fas fa-clock text-neonBlue"></i> Recent Datasets
+                </h2>
+                <div class="space-y-3">
+                    {% for dataset in recent_datasets %}
+                    <a href="{% url 'datasets:dataset_detail' dataset.pk %}" class="block p-4 bg-white/5 hover:bg-white/10 rounded-lg border border-white/10 hover:border-neonBlue/30 transition group">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="font-bold text-neonBlue group-hover:text-neonGreen transition">{{ dataset.name }}</h4>
+                            <span class="text-xs font-mono text-gray-500">{{ dataset.created_at|date:"M d" }}</span>
+                        </div>
+                        <p class="text-xs text-gray-400">
+                            <i class="fas fa-table mr-1"></i>{{ dataset.row_count }} rows 
+                            <i class="fas fa-columns mr-1 ml-2"></i>{{ dataset.column_count }} cols
+                            <span class="float-right text-neonPurple">{{ dataset.data_quality_score }}%</span>
+                        </p>
+                    </a>
+                    {% empty %}
+                    <p class="text-gray-500 text-center py-8">No datasets yet</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Recent Operations -->
+            <div class="glass-panel rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                    <i class="fas fa-history text-neonGreen"></i> Recent Operations
+                </h2>
+                <div class="space-y-3">
+                    {% for op in recent_operations %}
+                    <div class="p-4 bg-white/5 rounded-lg border border-white/10">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="flex items-center gap-2">
+                                {% if op.status == 'success' %}
+                                <i class="fas fa-check-circle text-success"></i>
+                                {% elif op.status == 'failed' %}
+                                <i class="fas fa-exclamation-circle text-danger"></i>
+                                {% else %}
+                                <i class="fas fa-clock text-warning"></i>
+                                {% endif %}
+                                <span class="font-mono text-sm text-gray-300">{{ op.get_operation_type_display }}</span>
+                            </span>
+                            <span class="text-xs text-gray-500">{{ op.created_at|date:"M d H:i" }}</span>
+                        </div>
+                        <p class="text-xs text-gray-400">On: <a href="{% url 'datasets:dataset_detail' op.dataset.pk %}" class="text-neonBlue hover:underline">{{ op.dataset.name }}</a></p>
+                    </div>
+                    {% empty %}
+                    <p class="text-gray-500 text-center py-8">No operations yet</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Visualizations -->
+        <div class="glass-panel rounded-2xl p-6 border border-white/10 mt-6">
+            <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                <i class="fas fa-chart-bar text-neonPurple"></i> Recent Visualizations
+            </h2>
+            {% if recent_visualizations %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {% for viz in recent_visualizations %}
+                <a href="{% url 'datasets:visualization_detail' viz.pk %}" class="p-4 bg-gradient-to-br from-white/10 to-white/5 hover:from-white/15 hover:to-white/10 rounded-lg border border-white/10 hover:border-neonPurple/30 transition group">
+                    <h4 class="font-bold text-neonPurple group-hover:text-neonGreen transition truncate">{{ viz.title }}</h4>
+                    <p class="text-xs text-gray-400 mt-1">
+                        <i class="fas fa-chart-pie mr-1"></i>{{ viz.get_chart_type_display }}
+                    </p>
+                    <p class="text-xs text-gray-500 mt-2">
+                        <i class="fas fa-database mr-1"></i>{{ viz.dataset.name }}
+                    </p>
+                </a>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-gray-500 text-center py-8">No visualizations yet</p>
+            {% endif %}
+        </div>
+
+        <!-- Quick Links -->
+        <div class="mt-12 pt-8 border-t border-white/10">
+            <h2 class="text-lg font-bold text-white mb-4">Quick Links</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <a href="{% url 'datasets:dataset_upload' %}" class="p-4 glass-panel border border-neonBlue/20 hover:border-neonBlue/50 rounded-lg transition group">
+                    <i class="fas fa-cloud-arrow-up text-2xl text-neonBlue mb-3 group-hover:scale-110 transition block"></i>
+                    <h3 class="font-bold text-white group-hover:text-neonBlue transition">Upload Dataset</h3>
+                </a>
+                <a href="{% url 'datasets:dataset_list' %}" class="p-4 glass-panel border border-neonGreen/20 hover:border-neonGreen/50 rounded-lg transition group">
+                    <i class="fas fa-list text-2xl text-neonGreen mb-3 group-hover:scale-110 transition block"></i>
+                    <h3 class="font-bold text-white group-hover:text-neonGreen transition">View Datasets</h3>
+                </a>
+                <a href="{% url 'datasets:analytics_dashboard' %}" class="p-4 glass-panel border border-neonPurple/20 hover:border-neonPurple/50 rounded-lg transition group">
+                    <i class="fas fa-chart-line text-2xl text-neonPurple mb-3 group-hover:scale-110 transition block"></i>
+                    <h3 class="font-bold text-white group-hover:text-neonPurple transition">Dashboard</h3>
+                </a>
+                <a href="{% url 'core:help' %}" class="p-4 glass-panel border border-neonPink/20 hover:border-neonPink/50 rounded-lg transition group">
+                    <i class="fas fa-question-circle text-2xl text-neonPink mb-3 group-hover:scale-110 transition block"></i>
+                    <h3 class="font-bold text-white group-hover:text-neonPink transition">Get Help</h3>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+{% load dataset_filters %}
+
+{% block title %}{{ visualization.title }} | LuminaBI{% endblock %}
+
+{% block content %}
+<div class="min-h-screen py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-12">
+            <div class="flex items-center gap-3 mb-4">
+                <a href="{% url 'datasets:dataset_detail' visualization.dataset.pk %}" class="text-neonBlue hover:text-neonGreen transition">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+            <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+                <div>
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fas fa-chart-bar text-neonPurple text-2xl"></i>
+                        <h1 class="text-4xl md:text-5xl font-bold text-white">{{ visualization.title }}</h1>
+                    </div>
+                    <p class="text-gray-400">{{ visualization.description|default:"Interactive visualization" }}</p>
+                </div>
+                <div class="flex gap-2 flex-wrap">
+                    <a href="{% url 'datasets:dataset_detail' visualization.dataset.pk %}" class="px-4 py-2 glass-panel border border-white/10 hover:border-neonBlue/30 text-gray-300 hover:text-neonBlue font-mono text-sm rounded-lg transition">
+                        <i class="fas fa-database mr-2"></i>{{ visualization.dataset.name }}
+                    </a>
+                    <span class="px-4 py-2 glass-panel border border-neonPurple/30 text-neonPurple font-mono text-sm rounded-lg">
+                        <i class="fas fa-chart-pie mr-2"></i>{{ visualization.get_chart_type_display }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Visualization -->
+        <div class="glass-panel rounded-2xl p-8 border border-white/10 mb-8 bg-gradient-to-br from-white/5 to-white/2">
+            <div id="chart-container" class="min-h-96 flex items-center justify-center">
+                {% if visualization.html_content %}
+                    <div class="w-full">
+                        {{ visualization.html_content|safe }}
+                    </div>
+                {% elif visualization.image_file %}
+                    <img src="{{ visualization.image_file.url }}" alt="{{ visualization.title }}" class="max-w-full h-auto rounded-lg">
+                {% else %}
+                    <div class="text-center py-12">
+                        <i class="fas fa-chart-line text-4xl text-gray-500 mb-3 block"></i>
+                        <p class="text-gray-400">Visualization not yet generated</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Info & Actions Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Details -->
+            <div class="lg:col-span-2">
+                <div class="glass-panel rounded-2xl p-6 border border-white/10 mb-6">
+                    <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fas fa-info-circle text-neonBlue"></i> Visualization Details
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-xs text-gray-500 font-mono uppercase mb-2">Chart Type</p>
+                            <p class="text-lg font-bold text-neonPurple">{{ visualization.get_chart_type_display }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 font-mono uppercase mb-2">Created</p>
+                            <p class="text-lg font-bold text-neonBlue">{{ visualization.created_at|date:"M d, Y H:i" }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 font-mono uppercase mb-2">Dataset</p>
+                            <a href="{% url 'datasets:dataset_detail' visualization.dataset.pk %}" class="text-lg font-bold text-neonGreen hover:underline">
+                                {{ visualization.dataset.name }}
+                            </a>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-500 font-mono uppercase mb-2">Status</p>
+                            <p class="text-lg font-bold {% if visualization.html_content or visualization.image_file %}text-success{% else %}text-warning{% endif %}">
+                                {% if visualization.html_content or visualization.image_file %}
+                                    <i class="fas fa-check-circle mr-1"></i> Ready
+                                {% else %}
+                                    <i class="fas fa-clock mr-1"></i> Pending
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visualization Config -->
+                <div class="glass-panel rounded-2xl p-6 border border-white/10">
+                    <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fas fa-sliders-h text-neonGreen"></i> Configuration
+                    </h2>
+                    
+                    <div class="space-y-3 text-sm">
+                        {% if visualization.config %}
+                            {% for key, value in visualization.config.items %}
+                            <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                                <span class="text-gray-400 font-mono capitalize">{{ key|replace_char:"_" }}</span>
+                                <span class="text-neonBlue font-mono">{{ value }}</span>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-gray-500">No additional configuration</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div>
+                <div class="glass-panel rounded-2xl p-6 border border-white/10 sticky top-24">
+                    <h2 class="text-xl font-bold text-white mb-4 flex items-center gap-2">
+                        <i class="fas fa-cogs text-neonPurple"></i> Actions
+                    </h2>
+                    
+                    <div class="space-y-3">
+                        {% if visualization.html_content %}
+                        <a href="{{ visualization.html_content|safe }}" download class="flex items-center justify-center gap-2 w-full px-4 py-2 bg-neonBlue/20 hover:bg-neonBlue/40 border border-neonBlue/50 text-neonBlue font-mono text-sm rounded-lg transition">
+                            <i class="fas fa-download"></i> HTML
+                        </a>
+                        {% endif %}
+
+                        {% if visualization.image_file %}
+                        <a href="{{ visualization.image_file.url }}" download class="flex items-center justify-center gap-2 w-full px-4 py-2 bg-neonPurple/20 hover:bg-neonPurple/40 border border-neonPurple/50 text-neonPurple font-mono text-sm rounded-lg transition">
+                            <i class="fas fa-image"></i> PNG
+                        </a>
+                        {% endif %}
+
+                        <a href="{% url 'datasets:visualization_create' visualization.dataset.pk %}" class="flex items-center justify-center gap-2 w-full px-4 py-2 bg-neonGreen/20 hover:bg-neonGreen/40 border border-neonGreen/50 text-neonGreen font-mono text-sm rounded-lg transition">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+
+                        <form method="post" action="{% url 'datasets:visualization_delete' visualization.pk %}" style="display:inline;" onsubmit="return confirm('Delete this visualization?');">
+                            {% csrf_token %}
+                            <button type="submit" class="flex items-center justify-center gap-2 w-full px-4 py-2 bg-danger/20 hover:bg-danger/40 border border-danger/50 text-danger font-mono text-sm rounded-lg transition">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="mt-6 pt-6 border-t border-white/10">
+                        <h3 class="font-bold text-neonGreen mb-3 text-sm">Stats</h3>
+                        <div class="space-y-2 text-xs">
+                            <div class="flex justify-between text-gray-400">
+                                <span>Views</span>
+                                <span class="font-mono text-neonBlue">{{ visualization.view_count }}</span>
+                            </div>
+                            <div class="flex justify-between text-gray-400">
+                                <span>File Size</span>
+                                <span class="font-mono text-neonPurple">{% if visualization.html_content %}{{ visualization.html_content|length|filesizeformat }}{% else %}N/A{% endif %}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Related -->
+                    <div class="mt-6 pt-6 border-t border-white/10">
+                        <h3 class="font-bold text-neonPink mb-3 text-sm">Related</h3>
+                        <div class="space-y-2 text-sm">
+                            <a href="{% url 'datasets:dataset_detail' visualization.dataset.pk %}" class="flex items-center gap-2 text-neonBlue hover:text-neonGreen transition">
+                                <i class="fas fa-database text-xs"></i> View Dataset
+                            </a>
+                            <a href="{% url 'datasets:dataset_analysis' visualization.dataset.pk %}" class="flex items-center gap-2 text-neonBlue hover:text-neonGreen transition">
+                                <i class="fas fa-chart-bar text-xs"></i> View Analysis
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

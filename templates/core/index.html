@@ -101,7 +101,7 @@
                     </p>
                 </div>
                 
-                <a href="{% url 'datasets:dataset_create' %}" class="group relative px-6 py-3 bg-white text-black font-bold rounded-xl overflow-hidden hover:scale-105 transition-transform">
+                <a href="{% url 'datasets:dataset_upload' %}" class="group relative px-6 py-3 bg-white text-black font-bold rounded-xl overflow-hidden hover:scale-105 transition-transform">
                     <span class="relative z-10 flex items-center gap-2">
                         <i class="fas fa-plus"></i> New Project
                     </span>
@@ -256,7 +256,7 @@
                     </h2>
                     
                     <div class="grid gap-4">
-                        <a href="{% url 'datasets:dataset_create' %}" class="spotlight-card glass-panel p-6 rounded-2xl group border border-white/5 hover:border-neonBlue/30 transition-all">
+                        <a href="{% url 'datasets:dataset_upload' %}" class="spotlight-card glass-panel p-6 rounded-2xl group border border-white/5 hover:border-neonBlue/30 transition-all">
                             <div class="flex items-center gap-4 relative z-10">
                                 <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 group-hover:text-white group-hover:bg-blue-500 transition-all">
                                     <i class="fas fa-upload"></i>
@@ -359,7 +359,7 @@
                                     <i class="fas fa-inbox text-2xl"></i>
                                 </div>
                                 <p class="text-gray-400 mb-4">No datasets uploaded yet.</p>
-                                <a href="{% url 'datasets:dataset_create' %}" class="text-neonBlue hover:underline text-sm">Upload your first dataset →</a>
+                                <a href="{% url 'datasets:dataset_upload' %}" class="text-neonBlue hover:underline text-sm">Upload your first dataset →</a>
                             </div>
                         {% endif %}
                     </div>

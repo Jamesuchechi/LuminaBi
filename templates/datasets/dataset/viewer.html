@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+{% load static %}
+{% load dataset_filters %}
+
+{% block title %}File Viewer - {{ dataset.name }} | LuminaBI{% endblock %}
+
+{% block content %}
+<div class="min-h-screen py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <div class="flex items-center gap-3 mb-4">
+                <a href="{% url 'datasets:dataset_detail' dataset.pk %}" class="text-neonBlue hover:text-neonGreen transition">
+                    <i class="fas fa-arrow-left"></i> Back
+                </a>
+            </div>
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                    <div class="flex items-center gap-3 mb-2">
+                        <i class="fas fa-table text-neonBlue text-2xl"></i>
+                        <h1 class="text-4xl md:text-5xl font-bold text-white">File Viewer</h1>
+                    </div>
+                    <p class="text-gray-400">{{ dataset.name }}</p>
+                </div>
+                <div class="flex gap-2 flex-wrap">
+                    {% if dataset.row_count %}
+                    <div class="glass-panel rounded-xl px-4 py-2 border border-white/10">
+                        <span class="text-xs text-gray-500">Total Rows:</span>
+                        <span class="text-lg font-bold text-neonBlue">{{ dataset.row_count }}</span>
+                    </div>
+                    {% endif %}
+                    {% if dataset.column_count %}
+                    <div class="glass-panel rounded-xl px-4 py-2 border border-white/10">
+                        <span class="text-xs text-gray-500">Columns:</span>
+                        <span class="text-lg font-bold text-neonGreen">{{ dataset.column_count }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="glass-panel rounded-2xl p-4 border border-white/10 mb-8">
+            <div class="flex flex-wrap gap-4 items-center">
+                <!-- Version Selector -->
+                {% if versions %}
+                <div>
+                    <label class="text-xs text-gray-500 font-mono uppercase block mb-2">Version</label>
+                    <select id="version-select" class="px-3 py-2 bg-white/5 border border-white/10 hover:border-neonBlue/30 focus:border-neonBlue focus:outline-none text-white rounded-lg transition">
+                        {% for version in versions %}
+                        <option value="{{ version.version_number }}" {% if request.GET.version == version.version_number|stringformat:"s" %}selected{% endif %}>
+                            Version {{ version.version_number }} - {{ version.get_operation_type_display }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% endif %}
+
+                <!-- Rows Per Page -->
+                <div>
+                    <label class="text-xs text-gray-500 font-mono uppercase block mb-2">Rows/Page</label>
+                    <select id="rows-per-page" class="px-3 py-2 bg-white/5 border border-white/10 hover:border-neonBlue/30 focus:border-neonBlue focus:outline-none text-white rounded-lg transition">
+                        <option value="10">10</option>
+                        <option value="25" selected>25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="all">All Rows</option>
+                    </select>
+                </div>
+
+                <!-- Search -->
+                <div class="flex-1 min-w-48">
+                    <label class="text-xs text-gray-500 font-mono uppercase block mb-2">Search</label>
+                    <input type="text" id="search-input" placeholder="Search in current view..." class="w-full px-3 py-2 bg-white/5 border border-white/10 hover:border-neonBlue/30 focus:border-neonBlue focus:outline-none text-white placeholder-gray-500 rounded-lg transition">
+                </div>
+
+                <!-- Export -->
+                <div>
+                    <label class="text-xs text-gray-500 font-mono uppercase block mb-2">Export</label>
+                    <select id="export-format" class="px-3 py-2 bg-white/5 border border-white/10 hover:border-neonBlue/30 focus:border-neonBlue focus:outline-none text-white rounded-lg transition">
+                        <option value="">Select format...</option>
+                        <option value="csv">CSV</option>
+                        <option value="json">JSON</option>
+                        <option value="excel">Excel</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Table -->
+        <div class="glass-panel rounded-2xl border border-white/10 overflow-hidden mb-8">
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="border-b border-white/10 bg-white/5">
+                            <th class="px-6 py-3 text-left text-neonBlue font-mono text-xs">#</th>
+                            {% for col in columns %}
+                            <th class="px-6 py-3 text-left text-neonBlue font-mono text-xs">{{ col }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in rows %}
+                        <tr class="border-b border-white/10 hover:bg-white/5 transition">
+                            <td class="px-6 py-3 font-mono text-gray-500">{{ forloop.counter }}</td>
+                            {% for col in columns %}
+                            <td class="px-6 py-3 text-gray-300 font-mono text-xs">
+                                {% with row|dict_lookup:col as value %}
+                                    {% if value == '' or value == None %}
+                                        <span class="text-warning italic">empty</span>
+                                    {% elif value|stringformat:"s"|length > 50 %}
+                                        <span title="{{ value }}">{{ value|truncatewords:5 }}</span>
+                                    {% else %}
+                                        {{ value }}
+                                    {% endif %}
+                                {% endwith %}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="100" class="px-6 py-8 text-center text-gray-500">
+                                <i class="fas fa-inbox text-2xl mb-2 block"></i>
+                                No data to display
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        {% if page %}
+        <div class="glass-panel rounded-2xl p-6 border border-white/10">
+            <div class="flex justify-between items-center flex-wrap gap-4">
+                <div class="text-sm text-gray-400 font-mono">
+                    Showing <span class="text-neonBlue">{{ page.start_index }}</span> to 
+                    <span class="text-neonBlue">{{ page.end_index }}</span> of 
+                    <span class="text-neonPurple">{{ all_rows_count }}</span> rows
+                </div>
+                
+                <div class="flex gap-2">
+                    {% if page.has_previous %}
+                    <a href="?page=1&rows_per_page={{ rows_per_page }}" class="px-4 py-2 glass-panel border border-neonBlue/20 hover:border-neonBlue/50 text-neonBlue rounded-lg hover:scale-105 transition font-mono text-sm">
+                        <i class="fas fa-chevron-double-left"></i>
+                    </a>
+                    <a href="?page={{ page.previous_page_number }}&rows_per_page={{ rows_per_page }}" class="px-4 py-2 glass-panel border border-neonBlue/20 hover:border-neonBlue/50 text-neonBlue rounded-lg hover:scale-105 transition font-mono text-sm">
+                        <i class="fas fa-chevron-left"></i> Prev
+                    </a>
+                    {% endif %}
+                    
+                    <span class="px-4 py-2 text-gray-400 font-mono text-sm">
+                        Page <span class="text-neonBlue">{{ page.number }}</span> of <span class="text-neonPurple">{{ page.paginator.num_pages }}</span>
+                    </span>
+                    
+                    {% if page.has_next %}
+                    <a href="?page={{ page.next_page_number }}&rows_per_page={{ rows_per_page }}" class="px-4 py-2 glass-panel border border-neonPurple/20 hover:border-neonPurple/50 text-neonPurple rounded-lg hover:scale-105 transition font-mono text-sm">
+                        Next <i class="fas fa-chevron-right"></i>
+                    </a>
+                    <a href="?page={{ page.paginator.num_pages }}&rows_per_page={{ rows_per_page }}" class="px-4 py-2 glass-panel border border-neonPurple/20 hover:border-neonPurple/50 text-neonPurple rounded-lg hover:scale-105 transition font-mono text-sm">
+                        <i class="fas fa-chevron-double-right"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    // Version selector
+    document.getElementById('version-select')?.addEventListener('change', (e) => {
+        const version = e.target.value;
+        window.location.href = `?version=${version}`;
+    });
+
+    // Export format
+    document.getElementById('export-format')?.addEventListener('change', (e) => {
+        const format = e.target.value;
+        if (format) {
+            const datasetId = {{ dataset.pk }};
+            window.location.href = `/datasets/${datasetId}/export/?format=${format}`;
+        }
+    });
+
+    // Search in table
+    document.getElementById('search-input')?.addEventListener('keyup', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const rows = document.querySelectorAll('tbody tr');
+        
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(searchTerm) ? '' : 'none';
+        });
+    });
+
+    // Rows per page
+    document.getElementById('rows-per-page')?.addEventListener('change', (e) => {
+        const rowsPerPage = e.target.value;
+        window.location.href = `?rows_per_page=${rowsPerPage}`;
+    });
+</script>
+{% endblock %}
