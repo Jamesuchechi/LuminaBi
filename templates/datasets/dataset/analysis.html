@@ -54,7 +54,17 @@
                 </div>
                 <div class="glass-panel rounded-xl p-4 border border-white/10">
                     <p class="text-xs text-gray-500 font-mono uppercase mb-2">Data Quality</p>
-                    <p class="text-3xl font-bold text-neonPurple">{{ dataset.data_quality_score|default:0 }}%</p>
+                    <p class="text-3xl font-bold text-neonPurple">
+                        {% if data_quality_score %}
+                            {{ data_quality_score|floatformat:1 }}%
+                        {% elif analysis.analysis_data.data_quality_score %}
+                            {{ analysis.analysis_data.data_quality_score|floatformat:1 }}%
+                        {% elif dataset.data_quality_score %}
+                            {{ dataset.data_quality_score|floatformat:1 }}%
+                        {% else %}
+                            0%
+                        {% endif %}
+                    </p>
                 </div>
                 <div class="glass-panel rounded-xl p-4 border border-white/10">
                     <p class="text-xs text-gray-500 font-mono uppercase mb-2">File Size</p>
@@ -65,7 +75,9 @@
             <!-- Analysis Summary -->
             <div class="glass-panel rounded-2xl p-6 border border-white/10 mb-8">
                 <h2 class="text-xl font-bold text-white mb-4">Summary</h2>
-                {% if analysis.analysis_data.summary %}
+                {% if summary_text %}
+                    <p class="text-gray-300 leading-relaxed">{{ summary_text }}</p>
+                {% elif analysis.analysis_data.summary %}
                     <p class="text-gray-300 leading-relaxed">{{ analysis.analysis_data.summary }}</p>
                 {% else %}
                     <p class="text-gray-300 leading-relaxed">Analysis complete. No issues found.</p>
@@ -78,7 +90,13 @@
                 <div class="glass-panel rounded-2xl p-6 border border-white/10">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="font-bold text-white">Empty Cells</h3>
-                        <span class="text-2xl font-bold text-warning">{{ analysis.empty_cell_count|default:0 }}</span>
+                        <span class="text-2xl font-bold text-warning">
+                            {% if analysis.empty_cell_count %}
+                                {{ analysis.empty_cell_count }}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </span>
                     </div>
                     <div class="bg-warning/10 rounded-lg p-3 border border-warning/30">
                         <p class="text-xs text-warning font-mono">
@@ -95,7 +113,13 @@
                 <div class="glass-panel rounded-2xl p-6 border border-white/10">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="font-bold text-white">Duplicates</h3>
-                        <span class="text-2xl font-bold text-warning">{{ analysis.duplicate_count|default:0 }}</span>
+                        <span class="text-2xl font-bold text-warning">
+                            {% if analysis.duplicate_count %}
+                                {{ analysis.duplicate_count }}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </span>
                     </div>
                     <div class="bg-warning/10 rounded-lg p-3 border border-warning/30">
                         <p class="text-xs text-warning font-mono">
@@ -112,7 +136,13 @@
                 <div class="glass-panel rounded-2xl p-6 border border-white/10">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="font-bold text-white">Outliers</h3>
-                        <span class="text-2xl font-bold text-danger">{{ analysis.outlier_count|default:0 }}</span>
+                        <span class="text-2xl font-bold text-danger">
+                            {% if analysis.outlier_count %}
+                                {{ analysis.outlier_count }}
+                            {% else %}
+                                0
+                            {% endif %}
+                        </span>
                     </div>
                     <div class="bg-danger/10 rounded-lg p-3 border border-danger/30">
                         <p class="text-xs text-danger font-mono">
@@ -140,17 +170,15 @@
                             <tr class="border-b border-white/10 bg-white/5">
                                 <th class="px-6 py-3 text-left text-sm font-mono text-neonBlue">Cell Address</th>
                                 <th class="px-6 py-3 text-left text-sm font-mono text-neonBlue">Column</th>
-                                <th class="px-6 py-3 text-left text-sm font-mono text-neonBlue">Row</th>
-                                <th class="px-6 py-3 text-left text-sm font-mono text-neonBlue">Nearby Values</th>
+                                <th class="px-6 py-3 text-left text-sm font-mono text-neonBlue">Row Index</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for cell in empty_cells %}
                             <tr class="border-b border-white/10 hover:bg-white/5 transition">
-                                <td class="px-6 py-3 text-sm font-mono text-neonGreen">{{ cell.address }}</td>
-                                <td class="px-6 py-3 text-sm text-gray-300">{{ cell.column }}</td>
-                                <td class="px-6 py-3 text-sm text-gray-300">{{ cell.row }}</td>
-                                <td class="px-6 py-3 text-sm text-gray-400">{{ cell.nearby|join:", "|truncatewords:3 }}</td>
+                                <td class="px-6 py-3 text-sm font-mono text-neonGreen">{{ cell.cell|default:"-" }}</td>
+                                <td class="px-6 py-3 text-sm text-gray-300">{{ cell.column|default:"-" }}</td>
+                                <td class="px-6 py-3 text-sm text-gray-300">{{ cell.row|default:"-" }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -170,23 +198,19 @@
             {% if duplicates %}
             <div class="glass-panel rounded-2xl border border-white/10 overflow-hidden">
                 <div class="p-6 border-b border-white/10">
-                    <h2 class="text-xl font-bold text-white">Duplicate Rows Found: {{ duplicates|length }}</h2>
+                    <h2 class="text-xl font-bold text-white">Duplicate Row Indices Found: {{ duplicates|length }}</h2>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full">
                         <thead>
                             <tr class="border-b border-white/10 bg-white/5">
-                                <th class="px-6 py-3 text-left text-sm font-mono text-neonBlue">Occurrence Count</th>
-                                <th class="px-6 py-3 text-left text-sm font-mono text-neonBlue">Row Indices</th>
-                                <th class="px-6 py-3 text-left text-sm font-mono text-neonBlue">Preview</th>
+                                <th class="px-6 py-3 text-left text-sm font-mono text-neonBlue">Row Index</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for dup in duplicates %}
+                            {% for row_idx in duplicates %}
                             <tr class="border-b border-white/10 hover:bg-white/5 transition">
-                                <td class="px-6 py-3 text-sm font-mono text-warning">{{ dup.count }}</td>
-                                <td class="px-6 py-3 text-sm text-gray-300 font-mono">{{ dup.rows|join:", " }}</td>
-                                <td class="px-6 py-3 text-sm text-gray-400">{{ dup.preview|truncatewords:5 }}</td>
+                                <td class="px-6 py-3 text-sm font-mono text-warning">{{ row_idx }}</td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -248,14 +272,43 @@
         <div id="outliers" class="tab-content hidden mb-12">
             {% if outliers %}
             <div class="space-y-4">
-                {% for col_name, col_outliers in outliers.items %}
+                {% for col_name, outlier_info in outliers.items %}
                 <div class="glass-panel rounded-2xl p-6 border border-white/10">
                     <h3 class="font-bold text-danger mb-4 font-mono"><i class="fas fa-triangle-exclamation mr-2"></i>{{ col_name }}</h3>
-                    <div class="bg-danger/10 rounded-lg p-4 border border-danger/30">
-                        <p class="text-sm text-gray-300 font-mono">
-                            Found {{ col_outliers|length }} outlier{% if col_outliers|length != 1 %}s{% endif %}: 
-                            <span class="text-danger">{{ col_outliers|join:", " }}</span>
-                        </p>
+                    <div class="space-y-3">
+                        <div class="bg-danger/10 rounded-lg p-3 border border-danger/30">
+                            <p class="text-sm text-gray-300 font-mono">
+                                <span class="text-danger font-bold">{{ outlier_info.count }}</span> 
+                                {% if outlier_info.count == 1 %}outlier{% else %}outliers{% endif %} detected
+                            </p>
+                        </div>
+                        
+                        {% if outlier_info.bounds %}
+                        <div class="bg-white/5 rounded-lg p-3 border border-white/10">
+                            <p class="text-xs text-gray-500 font-mono uppercase mb-2">Bounds (IQR Method)</p>
+                            <div class="grid grid-cols-2 gap-2">
+                                <div>
+                                    <p class="text-xs text-gray-400">Lower Bound</p>
+                                    <p class="text-sm font-mono text-neonBlue">{{ outlier_info.bounds.lower|floatformat:2 }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-400">Upper Bound</p>
+                                    <p class="text-sm font-mono text-neonPink">{{ outlier_info.bounds.upper|floatformat:2 }}</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        
+                        {% if outlier_info.sample_values %}
+                        <div class="bg-white/5 rounded-lg p-3 border border-white/10">
+                            <p class="text-xs text-gray-500 font-mono uppercase mb-2">Sample Values</p>
+                            <div class="font-mono text-sm text-gray-300 space-y-1">
+                                {% for val in outlier_info.sample_values %}
+                                <span class="inline-block px-2 py-1 bg-danger/20 border border-danger/30 rounded text-danger mr-2 mb-1">{{ val|floatformat:2 }}</span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
                 {% endfor %}
