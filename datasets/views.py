@@ -65,98 +65,129 @@ class DatasetUploadView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         """Process uploaded file and analyze it"""
-        form.instance.owner = self.request.user
-        
-        # Detect file type
-        file_name = form.instance.file.name
-        file_type = FileParser.detect_file_type(file_name)
-        form.instance.file_type = file_type
-        form.instance.file_size = form.instance.file.size
-        
-        response = super().form_valid(form)
-        dataset = self.object
-        
-        # Analyze the file
         try:
-            self._analyze_dataset(dataset)
-            message = f'Dataset "{dataset.name}" uploaded and analyzed successfully.'
-            msg_type = 'success'
+            form.instance.owner = self.request.user
+            
+            # Detect file type
+            file_name = form.instance.file.name
+            file_type = FileParser.detect_file_type(file_name)
+            form.instance.file_type = file_type
+            form.instance.file_size = form.instance.file.size
+            
+            # Save the dataset first to get file path
+            response = super().form_valid(form)
+            dataset = self.object
+            
+            logger.info(f"Dataset {dataset.id} saved. Starting analysis...")
+            
+            # Analyze the file
+            try:
+                self._analyze_dataset(dataset)
+                message = f'Dataset "{dataset.name}" uploaded and analyzed successfully.'
+                msg_type = 'success'
+                logger.info(f"Analysis completed for dataset {dataset.id}")
+            except Exception as e:
+                logger.error(f"Error analyzing dataset {dataset.id}: {str(e)}", exc_info=True)
+                message = f'Dataset uploaded but analysis failed: {str(e)}'
+                msg_type = 'warning'
+            
+            # Create notification
+            create_notification(
+                user=self.request.user,
+                title='Dataset Uploaded',
+                message=message,
+                notification_type=msg_type,
+                related_app='datasets',
+                related_model='Dataset',
+                related_object_id=dataset.id
+            )
+            
+            return response
+            
         except Exception as e:
-            logger.error(f"Error analyzing dataset {dataset.id}: {str(e)}")
-            message = f'Dataset uploaded but analysis failed: {str(e)}'
-            msg_type = 'warning'
-        
-        # Create notification
-        create_notification(
-            user=self.request.user,
-            title='Dataset Uploaded',
-            message=message,
-            notification_type=msg_type,
-            related_app='datasets',
-            related_model='Dataset',
-            related_object_id=dataset.id
-        )
-        
-        return response
+            logger.error(f"Error in form_valid: {str(e)}", exc_info=True)
+            raise
 
     def _analyze_dataset(self, dataset: Dataset):
         """Analyze uploaded dataset"""
-        file_path = dataset.file.path
-        
-        # Parse file
-        df = FileParser.parse_file(file_path, dataset.file_type)
-        
-        # Run analysis
-        analyzer = FileAnalyzer(df)
-        analysis = analyzer.analyze()
-        
-        # Store results in dataset
-        dataset.row_count = len(df)
-        dataset.col_count = len(df.columns)
-        dataset.column_names = list(df.columns)
-        dataset.is_analyzed = True
-        dataset.data_quality_score = analysis['data_quality_score']
-        dataset.summary = analysis['summary']
-        
-        # Store empty cells info
-        empty_cells_data = analysis['empty_cells']
-        dataset.empty_rows_count = empty_cells_data['total_empty_rows']
-        dataset.empty_cols_count = empty_cells_data['total_empty_columns']
-        dataset.empty_cells = empty_cells_data['empty_cells']
-        
-        # Store duplicates info
-        duplicates_data = analysis['duplicates']
-        dataset.duplicate_rows = duplicates_data['duplicate_row_indices']
-        dataset.duplicate_values = duplicates_data['duplicate_values_by_column']
-        
-        dataset.analysis_metadata = analysis
-        dataset.save()
-        
-        # Create FileAnalysis record
-        FileAnalysis.objects.update_or_create(
-            dataset=dataset,
-            defaults={
-                'analysis_data': analysis,
-                'empty_cells_detail': empty_cells_data['empty_cells'],
-                'column_stats': analysis['column_stats'],
-                'data_types': analysis['data_types'],
-                'missing_values': analysis['missing_values'],
-                'outliers': analysis['outliers'],
-            }
-        )
-        
-        # Create initial version
-        DatasetVersion.objects.create(
-            dataset=dataset,
-            file=dataset.file,
-            version_number=1,
-            operation_type='upload',
-            operation_description=f'Initial upload: {dataset.file_type}',
-            metadata={'file_size': dataset.file_size, 'file_type': dataset.file_type},
-            rows_before=0,
-            rows_after=len(df),
-            is_current=True,
-        )
+        try:
+            file_path = dataset.file.path
+            logger.info(f"Analyzing file: {file_path}")
+            
+            # Check if file exists
+            if not os.path.exists(file_path):
+                raise FileNotFoundError(f"File not found: {file_path}")
+            
+            # Parse file
+            logger.info(f"Parsing file as {dataset.file_type}")
+            df = FileParser.parse_file(file_path, dataset.file_type)
+            logger.info(f"File parsed successfully. Shape: {df.shape}")
+            
+            # Run analysis
+            logger.info("Starting FileAnalyzer...")
+            analyzer = FileAnalyzer(df)
+            analysis = analyzer.analyze()
+            logger.info(f"Analysis completed. Keys: {list(analysis.keys())}")
+            
+            # Store results in dataset
+            dataset.row_count = len(df)
+            dataset.col_count = len(df.columns)
+            dataset.column_names = list(df.columns)
+            dataset.is_analyzed = True
+            dataset.data_quality_score = analysis.get('data_quality_score', 0)
+            dataset.summary = analysis.get('summary', '')
+            
+            # Store empty cells info
+            empty_cells_data = analysis.get('empty_cells', {})
+            dataset.empty_rows_count = empty_cells_data.get('total_empty_rows', 0)
+            dataset.empty_cols_count = empty_cells_data.get('total_empty_columns', 0)
+            dataset.empty_cells = empty_cells_data.get('empty_cells', [])
+            
+            # Store duplicates info
+            duplicates_data = analysis.get('duplicates', {})
+            dataset.duplicate_rows = duplicates_data.get('duplicate_row_indices', [])
+            dataset.duplicate_values = duplicates_data.get('duplicate_values_by_column', {})
+            
+            dataset.analysis_metadata = analysis
+            dataset.save()
+            
+            logger.info(f"Dataset {dataset.id} updated with analysis results")
+            logger.info(f"Row count: {dataset.row_count}, Col count: {dataset.col_count}")
+            logger.info(f"Empty cells: {dataset.empty_rows_count}, Duplicates: {len(dataset.duplicate_rows)}")
+            
+            # Create FileAnalysis record
+            file_analysis, created = FileAnalysis.objects.update_or_create(
+                dataset=dataset,
+                defaults={
+                    'analysis_data': analysis,
+                    'empty_cells_detail': empty_cells_data.get('empty_cells', []),
+                    'column_stats': analysis.get('column_stats', {}),
+                    'data_types': analysis.get('data_types', {}),
+                    'missing_values': analysis.get('missing_values', {}),
+                    'outliers': analysis.get('outliers', []),
+                }
+            )
+            
+            logger.info(f"FileAnalysis {'created' if created else 'updated'} for dataset {dataset.id}")
+            
+            # Create initial version
+            version = DatasetVersion.objects.create(
+                dataset=dataset,
+                file=dataset.file,
+                version_number=1,
+                operation_type='upload',
+                operation_description=f'Initial upload: {dataset.file_type}',
+                metadata={'file_size': dataset.file_size, 'file_type': dataset.file_type},
+                rows_before=0,
+                rows_after=len(df),
+                is_current=True,
+            )
+            
+            logger.info(f"DatasetVersion {version.id} created for dataset {dataset.id}")
+            
+        except Exception as e:
+            logger.error(f"Error in _analyze_dataset: {str(e)}", exc_info=True)
+            raise
 
     def get_context_data(self, **kwargs):
         """Add upload info to context"""

@@ -14,7 +14,6 @@ from io import StringIO, BytesIO
 
 logger = logging.getLogger(__name__)
 
-
 class FileParser:
     """Parse different file types"""
 
@@ -39,13 +38,29 @@ class FileParser:
         """
         try:
             if file_type == 'csv' or file_type == 'text':
-                df = pd.read_csv(file_path)
+                # Handle various representations of missing data
+                # Including 'N/A', 'NA', 'n/a', empty strings, etc.
+                df = pd.read_csv(
+                    file_path,
+                    na_values=['N/A', 'n/a', 'NA', 'na', 'null', 'NULL', 'None', '', ' '],
+                    keep_default_na=True
+                )
             elif file_type == 'excel':
-                df = pd.read_excel(file_path)
+                df = pd.read_excel(
+                    file_path,
+                    na_values=['N/A', 'n/a', 'NA', 'na', 'null', 'NULL', 'None', '', ' '],
+                    keep_default_na=True
+                )
             elif file_type == 'json':
                 df = pd.read_json(file_path)
+                # Replace string 'N/A' with actual NaN in JSON
+                df = df.replace(['N/A', 'n/a', 'NA', 'na', 'null', 'NULL', 'None'], np.nan)
             else:
                 raise ValueError(f"Unsupported file type: {file_type}")
+            
+            logger.info(f"Parsed {file_type} file: {df.shape[0]} rows, {df.shape[1]} columns")
+            logger.info(f"Columns: {list(df.columns)}")
+            logger.info(f"Missing values per column:\n{df.isna().sum()}")
             
             return df
         except Exception as e:
