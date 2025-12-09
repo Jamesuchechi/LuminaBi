@@ -14,6 +14,33 @@ from io import StringIO, BytesIO
 
 logger = logging.getLogger(__name__)
 
+
+def convert_pandas_types(obj):
+    """
+    Recursively convert pandas/numpy types to native Python types for JSON serialization.
+    
+    Args:
+        obj: Object potentially containing pandas/numpy types
+        
+    Returns:
+        Object with all pandas/numpy types converted to native Python types
+    """
+    if isinstance(obj, dict):
+        return {k: convert_pandas_types(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_pandas_types(item) for item in obj]
+    elif isinstance(obj, (np.integer, np.int64, np.int32)):
+        return int(obj)
+    elif isinstance(obj, (np.floating, np.float64, np.float32)):
+        return float(obj)
+    elif isinstance(obj, np.ndarray):
+        return obj.tolist()
+    elif isinstance(obj, (np.bool_,)):
+        return bool(obj)
+    elif isinstance(obj, (pd.Timestamp,)):
+        return obj.isoformat()
+    return obj
+
 class FileParser:
     """Parse different file types"""
 

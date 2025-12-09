@@ -14,17 +14,18 @@ logger = logging.getLogger('scheduler')
 
 def scheduled_data_cleaning():
     """
-    Scheduled task to automatically clean datasets that are pending.
+    Scheduled task to automatically clean datasets that have been analyzed.
     Runs hourly by default.
     """
     try:
         logger.info('Starting scheduled data cleaning task')
         from datasets.models import Dataset
         
-        # Get datasets that need cleaning
+        # Get datasets that have been analyzed but not yet cleaned
         pending_datasets = Dataset.objects.filter(
-            status='pending',
-            created_at__lte=timezone.now() - timedelta(minutes=5)
+            is_analyzed=True,
+            is_cleaned=False,
+            uploaded_at__lte=timezone.now() - timedelta(minutes=5)
         )
         
         for dataset in pending_datasets:
@@ -42,7 +43,7 @@ def scheduled_data_cleaning():
 
 def generate_insights():
     """
-    Scheduled task to automatically generate insights for cleaned datasets.
+    Scheduled task to automatically generate insights for analyzed datasets.
     Runs every 2 hours by default.
     """
     try:
@@ -50,9 +51,9 @@ def generate_insights():
         from datasets.models import Dataset
         from visualizations.models import Visualization
         
-        # Get datasets that have been cleaned but don't have insights yet
+        # Get datasets that have been analyzed and don't have visualizations yet
         datasets_needing_insights = Dataset.objects.filter(
-            status='cleaned'
+            is_analyzed=True
         ).exclude(
             visualizations__isnull=False
         )

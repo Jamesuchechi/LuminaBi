@@ -32,7 +32,7 @@ from .models import (
     Dataset, DatasetVersion, FileAnalysis, CleaningOperation,
     FILE_TYPE_CHOICES, OPERATION_TYPE_CHOICES
 )
-from .services import FileParser, FileAnalyzer, DataCleaner, FileExporter
+from .services import FileParser, FileAnalyzer, DataCleaner, FileExporter, convert_pandas_types
 from visualizations.models import Visualization
 from api.serializers import DatasetSerializer
 from core.mixins import OwnerCheckMixin
@@ -129,26 +129,29 @@ class DatasetUploadView(LoginRequiredMixin, CreateView):
             analysis = analyzer.analyze()
             logger.info(f"Analysis completed. Keys: {list(analysis.keys())}")
             
+            # Convert pandas/numpy types to native Python types for JSON serialization
+            analysis_serializable = convert_pandas_types(analysis)
+            
             # Store results in dataset
             dataset.row_count = len(df)
             dataset.col_count = len(df.columns)
             dataset.column_names = list(df.columns)
             dataset.is_analyzed = True
-            dataset.data_quality_score = analysis.get('data_quality_score', 0)
-            dataset.summary = analysis.get('summary', '')
+            dataset.data_quality_score = analysis_serializable.get('data_quality_score', 0)
+            dataset.summary = analysis_serializable.get('summary', '')
             
             # Store empty cells info
-            empty_cells_data = analysis.get('empty_cells', {})
+            empty_cells_data = analysis_serializable.get('empty_cells', {})
             dataset.empty_rows_count = empty_cells_data.get('total_empty_rows', 0)
             dataset.empty_cols_count = empty_cells_data.get('total_empty_columns', 0)
             dataset.empty_cells = empty_cells_data.get('empty_cells', [])
             
             # Store duplicates info
-            duplicates_data = analysis.get('duplicates', {})
+            duplicates_data = analysis_serializable.get('duplicates', {})
             dataset.duplicate_rows = duplicates_data.get('duplicate_row_indices', [])
             dataset.duplicate_values = duplicates_data.get('duplicate_values_by_column', {})
             
-            dataset.analysis_metadata = analysis
+            dataset.analysis_metadata = analysis_serializable
             dataset.save()
             
             logger.info(f"Dataset {dataset.id} updated with analysis results")
@@ -159,12 +162,12 @@ class DatasetUploadView(LoginRequiredMixin, CreateView):
             file_analysis, created = FileAnalysis.objects.update_or_create(
                 dataset=dataset,
                 defaults={
-                    'analysis_data': analysis,
+                    'analysis_data': analysis_serializable,
                     'empty_cells_detail': empty_cells_data.get('empty_cells', []),
-                    'column_stats': analysis.get('column_stats', {}),
-                    'data_types': analysis.get('data_types', {}),
-                    'missing_values': analysis.get('missing_values', {}),
-                    'outliers': analysis.get('outliers', []),
+                    'column_stats': analysis_serializable.get('column_stats', {}),
+                    'data_types': analysis_serializable.get('data_types', {}),
+                    'missing_values': analysis_serializable.get('missing_values', {}),
+                    'outliers': analysis_serializable.get('outliers', []),
                 }
             )
             
@@ -939,17 +942,21 @@ class DatasetViewSet(viewsets.ModelViewSet):
             analyzer = FileAnalyzer(df)
             analysis = analyzer.analyze()
             
+            # Convert pandas types
+            analysis_serializable = convert_pandas_types(analysis)
+            
             dataset.row_count = len(df)
             dataset.col_count = len(df.columns)
             dataset.column_names = list(df.columns)
             dataset.is_analyzed = True
-            dataset.data_quality_score = analysis['data_quality_score']
-            dataset.summary = analysis['summary']
+            dataset.data_quality_score = analysis_serializable['data_quality_score']
+            dataset.summary = analysis_serializable['summary']
+            dataset.analysis_metadata = analysis_serializable
             dataset.save()
             
-            FileAnalysis.objects.create(dataset=dataset, analysis_data=analysis)
+            FileAnalysis.objects.create(dataset=dataset, analysis_data=analysis_serializable)
         except Exception as e:
-            logger.error(f"Error in auto-analysis: {str(e)}")
+            logger.error(f"Error in auto-analysis: {str(e)}", exc_info=True)
     
     @action(detail=True, methods=['get'])
     def analysis(self, request, pk=None):
