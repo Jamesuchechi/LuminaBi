@@ -39,115 +39,87 @@
                 <i class="fas fa-triangle-exclamation mr-2"></i> Outliers
             </a>
         </div>
-
-        <!-- Summary Tab -->
+        
+        <!-- Summary Tab - Fixed Version -->
         <div id="summary" class="tab-content block mb-12">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                 <!-- Basic Stats -->
                 <div class="glass-panel rounded-xl p-4 border border-white/10">
                     <p class="text-xs text-gray-500 font-mono uppercase mb-2">Total Rows</p>
-                    <p class="text-3xl font-bold text-neonBlue">{{ analysis_summary.row_count|default:dataset.row_count|default:"N/A" }}</p>
+                    <p class="text-3xl font-bold text-neonBlue">{{ analysis_summary.row_count|default:0 }}</p>
                 </div>
                 <div class="glass-panel rounded-xl p-4 border border-white/10">
                     <p class="text-xs text-gray-500 font-mono uppercase mb-2">Total Columns</p>
-                    <p class="text-3xl font-bold text-neonGreen">{{ analysis_summary.column_count|default:dataset.col_count|default:"N/A" }}</p>
+                    <p class="text-3xl font-bold text-neonGreen">{{ analysis_summary.column_count|default:0 }}</p>
                 </div>
                 <div class="glass-panel rounded-xl p-4 border border-white/10">
                     <p class="text-xs text-gray-500 font-mono uppercase mb-2">Data Quality</p>
-                    <p class="text-3xl font-bold text-neonPurple">
-                        {% if data_quality_score %}
-                            {{ data_quality_score|floatformat:1 }}%
-                        {% elif analysis.analysis_data.data_quality_score %}
-                            {{ analysis.analysis_data.data_quality_score|floatformat:1 }}%
-                        {% elif dataset.data_quality_score %}
-                            {{ dataset.data_quality_score|floatformat:1 }}%
-                        {% else %}
-                            0%
-                        {% endif %}
-                    </p>
+                    <p class="text-3xl font-bold text-neonPurple">{{ data_quality_score|floatformat:1 }}%</p>
                 </div>
                 <div class="glass-panel rounded-xl p-4 border border-white/10">
                     <p class="text-xs text-gray-500 font-mono uppercase mb-2">File Size</p>
-                    <p class="text-2xl font-bold text-neonPink">{{ dataset.file_size|filesizeformat }}</p>
+                    <p class="text-2xl font-bold text-neonPink">
+                        {% if file_size_mb %}
+                            {{ file_size_mb|floatformat:2 }} MB
+                        {% else %}
+                            {{ dataset.file_size|filesizeformat }}
+                        {% endif %}
+                    </p>
                 </div>
             </div>
-
+        
             <!-- Analysis Summary -->
             <div class="glass-panel rounded-2xl p-6 border border-white/10 mb-8">
                 <h2 class="text-xl font-bold text-white mb-4">Summary</h2>
-                {% if summary_text %}
-                    <p class="text-gray-300 leading-relaxed">{{ summary_text }}</p>
-                {% elif analysis.analysis_data.summary %}
-                    <p class="text-gray-300 leading-relaxed">{{ analysis.analysis_data.summary }}</p>
-                {% else %}
-                    <p class="text-gray-300 leading-relaxed">Analysis complete. No issues found.</p>
-                {% endif %}
+                <p class="text-gray-300 leading-relaxed">{{ summary_text }}</p>
             </div>
-
-            <!-- Quality Issues Grid -->
+        
+            <!-- Quality Issues Grid - FIXED -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Empty Cells -->
                 <div class="glass-panel rounded-2xl p-6 border border-white/10">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="font-bold text-white">Empty Cells</h3>
-                        <span class="text-2xl font-bold text-warning">
-                            {% if analysis.empty_cell_count %}
-                                {{ analysis.empty_cell_count }}
-                            {% else %}
-                                0
-                            {% endif %}
-                        </span>
+                        <span class="text-2xl font-bold text-warning">{{ empty_cell_count }}</span>
                     </div>
                     <div class="bg-warning/10 rounded-lg p-3 border border-warning/30">
                         <p class="text-xs text-warning font-mono">
-                            {% if analysis.empty_cell_count %}
-                                {{ analysis.empty_cell_count }} cells require attention
+                            {% if empty_cell_count > 0 %}
+                                {{ empty_cell_count }} cells require attention
                             {% else %}
                                 ✓ No empty cells
                             {% endif %}
                         </p>
                     </div>
                 </div>
-
+        
                 <!-- Duplicates -->
                 <div class="glass-panel rounded-2xl p-6 border border-white/10">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="font-bold text-white">Duplicates</h3>
-                        <span class="text-2xl font-bold text-warning">
-                            {% if analysis.duplicate_count %}
-                                {{ analysis.duplicate_count }}
-                            {% else %}
-                                0
-                            {% endif %}
-                        </span>
+                        <span class="text-2xl font-bold text-warning">{{ duplicate_count }}</span>
                     </div>
                     <div class="bg-warning/10 rounded-lg p-3 border border-warning/30">
                         <p class="text-xs text-warning font-mono">
-                            {% if analysis.duplicate_count %}
-                                {{ analysis.duplicate_count }} duplicate rows found
+                            {% if duplicate_count > 0 %}
+                                {{ duplicate_count }} duplicate rows found
                             {% else %}
                                 ✓ No duplicates
                             {% endif %}
                         </p>
                     </div>
                 </div>
-
+        
                 <!-- Outliers -->
                 <div class="glass-panel rounded-2xl p-6 border border-white/10">
                     <div class="flex items-center justify-between mb-4">
                         <h3 class="font-bold text-white">Outliers</h3>
-                        <span class="text-2xl font-bold text-danger">
-                            {% if analysis.outlier_count %}
-                                {{ analysis.outlier_count }}
-                            {% else %}
-                                0
-                            {% endif %}
-                        </span>
+                        <span class="text-2xl font-bold text-danger">{{ outlier_count }}</span>
                     </div>
                     <div class="bg-danger/10 rounded-lg p-3 border border-danger/30">
                         <p class="text-xs text-danger font-mono">
-                            {% if analysis.outlier_count %}
-                                {{ analysis.outlier_count }} outliers detected
+                            {% if outlier_count > 0 %}
+                                {{ outlier_count }} outliers detected
                             {% else %}
                                 ✓ No outliers
                             {% endif %}

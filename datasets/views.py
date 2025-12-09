@@ -297,7 +297,6 @@ class DatasetDetailView(LoginRequiredMixin, OwnerCheckMixin, DetailView):
         
         return context
 
-
 class DatasetAnalysisView(LoginRequiredMixin, OwnerCheckMixin, DetailView):
     """
     Display detailed analysis results with tabs for:
@@ -330,7 +329,7 @@ class DatasetAnalysisView(LoginRequiredMixin, OwnerCheckMixin, DetailView):
             # Parse analysis data for template
             analysis_data = analysis.analysis_data or {}
             
-            # Add basic stats with correct field names
+            # Add basic stats
             basic_stats = analysis_data.get('basic_stats', {})
             context['analysis_summary'] = {
                 'row_count': basic_stats.get('rows', dataset.row_count or 0),
@@ -339,61 +338,72 @@ class DatasetAnalysisView(LoginRequiredMixin, OwnerCheckMixin, DetailView):
             
             # Add data quality score
             context['data_quality_score'] = analysis_data.get('data_quality_score', dataset.data_quality_score or 0)
-            context['summary_text'] = analysis_data.get('summary', '')
+            context['summary_text'] = analysis_data.get('summary', dataset.summary or '')
             
-            # Add empty cells info
+            # FIXED: Add empty cells info with proper counts
             empty_cells_data = analysis_data.get('empty_cells', {})
-            empty_cell_count = empty_cells_data.get('total_empty_cells', 0)
-            context['analysis'].empty_cell_count = empty_cell_count
-            context['empty_cells'] = empty_cells_data.get('empty_cells', [])[:100]  # Show first 100
+            context['empty_cell_count'] = empty_cells_data.get('total_empty_cells', 0)
+            context['empty_cells'] = empty_cells_data.get('empty_cells', [])[:100]
             
-            # Add duplicates info
+            # FIXED: Add duplicates info with proper counts
             duplicates_data = analysis_data.get('duplicates', {})
-            duplicate_count = duplicates_data.get('total_duplicate_rows', 0)
-            context['analysis'].duplicate_count = duplicate_count
+            context['duplicate_count'] = duplicates_data.get('total_duplicate_rows', 0)
             context['duplicates'] = duplicates_data.get('duplicate_row_indices', [])[:100]
             
-            # Add outliers - properly format for template display
+            # FIXED: Add outliers with proper formatting
             outliers_list = analysis_data.get('outliers', [])
-            context['analysis'].outlier_count = len(outliers_list)
-            context['outliers'] = {}
-            if outliers_list:
-                for outlier in outliers_list:
-                    if isinstance(outlier, dict) and 'column' in outlier:
-                        col = outlier['column']
-                        context['outliers'][col] = {
-                            'count': outlier.get('count', 0),
-                            'bounds': outlier.get('bounds', {}),
-                            'sample_values': outlier.get('sample_values', [])[:5]  # Show first 5
-                        }
+            context['outlier_count'] = sum(outlier.get('count', 0) for outlier in outliers_list if isinstance(outlier, dict))
             
-            # Add column statistics with correct field names
-            context['column_statistics'] = {}
-            column_stats = analysis_data.get('column_stats', analysis.column_stats or {})
-            if column_stats:
-                for col_name, stats in column_stats.items():
-                    context['column_statistics'][col_name] = {
-                        'dtype': stats.get('dtype', 'Unknown'),
-                        'non_null': stats.get('non_null_count', 0),
-                        'unique': stats.get('unique_count', 0),
-                        'min': stats.get('min'),
-                        'max': stats.get('max'),
-                        'mean': stats.get('mean'),
-                        'median': stats.get('median'),
-                        'std': stats.get('std'),
+            # Format outliers for template
+            context['outliers'] = {}
+            for outlier in outliers_list:
+                if isinstance(outlier, dict) and 'column' in outlier:
+                    col = outlier['column']
+                    context['outliers'][col] = {
+                        'count': outlier.get('count', 0),
+                        'bounds': outlier.get('bounds', {}),
+                        'sample_values': outlier.get('sample_values', [])[:5]
                     }
+            
+            # Add column statistics
+            column_stats = analysis_data.get('column_stats', analysis.column_stats or {})
+            context['column_statistics'] = {}
+            for col_name, stats in column_stats.items():
+                context['column_statistics'][col_name] = {
+                    'dtype': stats.get('dtype', 'Unknown'),
+                    'non_null': stats.get('non_null_count', 0),
+                    'unique': stats.get('unique_count', 0),
+                    'min': stats.get('min'),
+                    'max': stats.get('max'),
+                    'mean': stats.get('mean'),
+                    'median': stats.get('median'),
+                    'std': stats.get('std'),
+                }
             
             # Add missing values per column
             context['missing_values'] = analysis_data.get('missing_values', analysis.missing_values or {})
             
+            # Add file size in MB for display
+            if dataset.file_size:
+                context['file_size_mb'] = dataset.file_size / (1024 * 1024)
+            
         except FileAnalysis.DoesNotExist:
+            # If no analysis exists, provide defaults
             context['has_analysis'] = False
             context['analysis_summary'] = {
                 'row_count': dataset.row_count or 0,
                 'column_count': dataset.col_count or 0,
             }
             context['data_quality_score'] = dataset.data_quality_score or 0
-            return context
+            context['summary_text'] = dataset.summary or 'No analysis available yet.'
+            context['empty_cell_count'] = 0
+            context['empty_cells'] = []
+            context['duplicate_count'] = 0
+            context['duplicates'] = []
+            context['outlier_count'] = 0
+            context['outliers'] = {}
+            context['column_statistics'] = {}
+            context['missing_values'] = {}
         
         return context
 
