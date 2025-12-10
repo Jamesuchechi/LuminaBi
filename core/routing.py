@@ -15,6 +15,7 @@ websocket_urlpatterns = [
     
     # Dashboard updates and notifications
     path('ws/dashboard/<int:dashboard_id>/', consumers.DashboardConsumer.as_asgi()),
+    path('ws/dashboard-hub/', consumers.DashboardHubConsumer.as_asgi()),
     
     # File upload progress
     path('ws/upload-progress/<int:upload_id>/', consumers.UploadProgressConsumer.as_asgi()),

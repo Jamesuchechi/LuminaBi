@@ -165,6 +165,29 @@ class DashboardConsumer(BaseConsumer):
             })
 
 
+class DashboardHubConsumer(BaseConsumer):
+    """
+    Lightweight consumer for user-level dashboard notifications.
+    This joins a per-user group so we can push dataset/insight updates without Redis.
+    """
+
+    async def connect(self):
+        self.user_group = f'dashboard_user_{self.scope["user"].id}'
+        await self.channel_layer.group_add(self.user_group, self.channel_name)
+        await super().connect()
+
+    async def disconnect(self, close_code):
+        await self.channel_layer.group_discard(self.user_group, self.channel_name)
+        await super().disconnect(close_code)
+
+    async def dashboard_push(self, event):
+        """Forward broadcast payloads to the client."""
+        await self.send_json({
+            'type': 'dashboard_push',
+            'payload': event.get('payload', {}),
+        })
+
+
 class UploadProgressConsumer(BaseConsumer):
     """
     WebSocket consumer for real-time file upload progress.

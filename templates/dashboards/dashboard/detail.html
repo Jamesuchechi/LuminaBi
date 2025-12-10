@@ -77,6 +77,85 @@
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
             <!-- Main Content Area -->
             <div class="lg:col-span-3 space-y-6">
+                <!-- Dataset summaries (auto-linked from uploads/analytics) -->
+                <div class="glass-panel rounded-2xl p-6 border border-white/10">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i class="fas fa-database text-neonBlue"></i>
+                            Connected Datasets
+                        </h3>
+                        <a href="{% url 'datasets:dataset_list' %}" class="text-xs text-neonBlue hover:text-neonPurple transition">View datasets →</a>
+                    </div>
+                    {% if dataset_summaries %}
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {% for ds in dataset_summaries %}
+                                <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <p class="text-white font-semibold truncate">{{ ds.name }}</p>
+                                        <span class="px-2 py-1 rounded-full text-[11px] font-bold {% if ds.is_cleaned %}bg-emerald-500/10 text-emerald-400 border border-emerald-500/30{% else %}bg-blue-500/10 text-blue-400 border border-blue-500/30{% endif %}">
+                                            {% if ds.is_cleaned %}Cleaned{% else %}Raw{% endif %}
+                                        </span>
+                                    </div>
+                                    <p class="text-xs text-gray-500 mb-2">{{ ds.rows }} rows · {{ ds.cols }} cols · {{ ds.uploaded_at|date:"M d, Y" }}</p>
+                                    {% if ds.quality %}
+                                        <div class="flex items-center gap-2 text-xs text-gray-400 mb-2">
+                                            <i class="fas fa-heartbeat text-neonPink"></i>
+                                            Data Quality: <span class="text-white font-semibold">{{ ds.quality }}%</span>
+                                        </div>
+                                    {% endif %}
+                                    {% if ds.summary %}
+                                        <p class="text-xs text-gray-400 leading-relaxed">{{ ds.summary }}</p>
+                                    {% else %}
+                                        <p class="text-xs text-gray-500">No summary available yet.</p>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <p class="text-gray-500 text-sm">No datasets connected to this dashboard.</p>
+                    {% endif %}
+                </div>
+
+                <!-- Insights & anomalies feed -->
+                <div class="glass-panel rounded-2xl p-6 border border-white/10">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i class="fas fa-lightbulb text-neonPurple"></i>
+                            Insights & Alerts
+                        </h3>
+                        <a href="{% url 'analytics:insight_list' %}" class="text-xs text-neonPurple hover:text-white transition">Analytics hub →</a>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                        <div class="space-y-3">
+                            <p class="text-xs text-gray-400 uppercase tracking-wider">Insights</p>
+                            {% for insight in dataset_insights %}
+                                <div class="p-3 rounded-xl bg-white/5 border border-white/10">
+                                    <p class="text-white text-sm font-semibold">{{ insight.title }}</p>
+                                    <p class="text-xs text-gray-500">{{ insight.get_insight_type_display }} · {{ insight.created_at|timesince }} ago</p>
+                                </div>
+                            {% empty %}
+                                <p class="text-gray-500 text-sm">No insights yet.</p>
+                            {% endfor %}
+                        </div>
+
+                        <div class="space-y-3">
+                            <p class="text-xs text-gray-400 uppercase tracking-wider">Anomalies</p>
+                            {% for anomaly in anomalies %}
+                                <div class="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-between">
+                                    <div class="pr-3">
+                                        <p class="text-white text-sm font-semibold">{{ anomaly.description|truncatewords:10 }}</p>
+                                        <p class="text-xs text-gray-500">{{ anomaly.dataset.name }} · {{ anomaly.detected_at|timesince }} ago</p>
+                                    </div>
+                                    <span class="px-2 py-1 rounded-full text-[11px] font-bold bg-red-500/10 text-red-400 border border-red-500/30">{{ anomaly.severity|upper }}</span>
+                                </div>
+                            {% empty %}
+                                <p class="text-gray-500 text-sm">No anomalies.</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
                 {% if visualizations %}
                     <!-- Visualizations Grid -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -106,7 +185,7 @@
                             <!-- Chart Type Badge -->
                             <div class="mt-4 flex items-center justify-between">
                                 <span class="inline-block px-3 py-1 rounded-full bg-neonBlue/20 border border-neonBlue/50 text-neonBlue text-xs font-mono">
-                                    {{ vis.visualization_type|upper }}
+                                    {{ vis.chart_type|upper }}
                                 </span>
                                 <a href="#" class="text-gray-500 hover:text-neonBlue transition text-xs font-mono">View Full →</a>
                             </div>
@@ -174,6 +253,24 @@
                         </a>
                     </div>
                 </div>
+
+                {% if interpretability_analyses %}
+                <!-- Interpretability summaries -->
+                <div class="glass-panel rounded-2xl p-6 border border-white/10">
+                    <div class="flex items-center gap-2 mb-4 pb-4 border-b border-white/10">
+                        <i class="fas fa-brain text-neonBlue"></i>
+                        <h2 class="text-lg font-bold text-white">Explainability (SHAP/LIME)</h2>
+                    </div>
+                    <div class="space-y-3">
+                        {% for analysis in interpretability_analyses %}
+                            <div class="p-3 rounded-xl bg-white/5 border border-white/10">
+                                <p class="text-white text-sm font-semibold">{{ analysis.title }}</p>
+                                <p class="text-xs text-gray-500">{{ analysis.get_analysis_type_display }} · {{ analysis.created_at|date:"M d, Y" }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -193,7 +290,7 @@
     };
 
     // Parse visualization data
-    const visData = {{ vis_data|safe }};
+    const visData = {{ visualization_data|safe }};
 
     // Initialize charts for each visualization
     {% for vis in visualizations %}
@@ -232,5 +329,33 @@
         }
     })();
     {% endfor %}
+
+    // Dashboard hub websocket: notify when new datasets/insights/anomalies arrive
+    (function() {
+        const banner = document.createElement('div');
+        banner.className = 'fixed bottom-6 right-6 bg-neonBlue/20 border border-neonBlue/50 text-white px-4 py-3 rounded-xl shadow-lg hidden z-50';
+        banner.innerHTML = '<div class="flex items-center gap-2"><i class="fas fa-bolt"></i><span>New activity detected. Refresh to update widgets.</span></div>';
+        document.body.appendChild(banner);
+
+        function showBanner() {
+            banner.classList.remove('hidden');
+        }
+
+        const loc = window.location;
+        const protocol = loc.protocol === 'https:' ? 'wss' : 'ws';
+        const socketUrl = `${protocol}://${loc.host}/ws/dashboard-hub/`;
+        let socket;
+        try {
+            socket = new WebSocket(socketUrl);
+            socket.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                if (data.type === 'dashboard_push') {
+                    showBanner();
+                }
+            };
+        } catch (e) {
+            console.warn('Dashboard hub websocket unavailable', e);
+        }
+    })();
 </script>
 {% endblock %}

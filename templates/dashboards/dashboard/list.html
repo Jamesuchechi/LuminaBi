@@ -47,6 +47,68 @@
             </div>
         </div>
 
+        <!-- Live Data Feed -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
+            <div class="glass-panel rounded-2xl p-6 border border-white/10">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fas fa-database text-neonBlue"></i>
+                        Latest Datasets
+                    </h3>
+                    <a href="{% url 'datasets:dataset_list' %}" class="text-xs text-neonBlue hover:text-neonPurple transition">View all →</a>
+                </div>
+                {% if recent_datasets %}
+                    <div class="divide-y divide-white/5">
+                        {% for ds in recent_datasets %}
+                            <div class="py-3 flex items-center justify-between">
+                                <div>
+                                    <p class="text-white font-semibold">{{ ds.name }}</p>
+                                    <p class="text-xs text-gray-500">{{ ds.uploaded_at|date:"M d, Y" }} · {{ ds.row_count }} rows</p>
+                                </div>
+                                <span class="px-3 py-1 rounded-full text-xs font-bold {% if ds.is_cleaned %}bg-emerald-500/10 text-emerald-400 border border-emerald-500/30{% else %}bg-blue-500/10 text-blue-400 border border-blue-500/30{% endif %}">
+                                    {% if ds.is_cleaned %}Cleaned{% else %}Raw{% endif %}
+                                </span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-gray-500 text-sm">No datasets yet.</p>
+                {% endif %}
+            </div>
+
+            <div class="glass-panel rounded-2xl p-6 border border-white/10">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i class="fas fa-lightbulb text-neonPurple"></i>
+                        Live Insights & Anomalies
+                    </h3>
+                    <a href="{% url 'analytics:insight_list' %}" class="text-xs text-neonPurple hover:text-white transition">Insights →</a>
+                </div>
+                <div class="space-y-3">
+                    {% for insight in recent_insights %}
+                        <div class="p-3 rounded-xl bg-white/5 border border-white/10">
+                            <p class="text-white text-sm font-semibold">{{ insight.title }}</p>
+                            <p class="text-xs text-gray-500">{{ insight.get_insight_type_display }} · {{ insight.created_at|timesince }} ago</p>
+                        </div>
+                    {% empty %}
+                        <p class="text-gray-500 text-sm">No insights yet.</p>
+                    {% endfor %}
+
+                    {% if recent_anomalies %}
+                        <div class="pt-3 border-t border-white/5">
+                            <p class="text-xs text-gray-400 mb-2">Anomalies</p>
+                            {% for anomaly in recent_anomalies %}
+                                <div class="flex items-center justify-between text-xs text-gray-300 mb-2">
+                                    <span class="truncate">{{ anomaly.description|truncatewords:10 }}</span>
+                                    <span class="px-2 py-1 rounded-full bg-red-500/10 text-red-400 border border-red-500/30">{{ anomaly.severity|upper }}</span>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
         <!-- Dashboards Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for dashboard in dashboards %}
@@ -146,4 +208,34 @@
         {% endif %}
     </div>
 </div>
+
+<script>
+    // Lightweight websocket to surface new datasets/insights/anomalies without Redis
+    (function() {
+        const banner = document.createElement('div');
+        banner.className = 'fixed bottom-6 right-6 bg-neonBlue/20 border border-neonBlue/50 text-white px-4 py-3 rounded-xl shadow-lg hidden z-50';
+        banner.innerHTML = '<div class="flex items-center gap-2"><i class="fas fa-bolt"></i><span>New activity detected. Refresh to see latest.</span></div>';
+        document.body.appendChild(banner);
+
+        function showBanner() {
+            banner.classList.remove('hidden');
+        }
+
+        const loc = window.location;
+        const protocol = loc.protocol === 'https:' ? 'wss' : 'ws';
+        const socketUrl = `${protocol}://${loc.host}/ws/dashboard-hub/`;
+        let socket;
+        try {
+            socket = new WebSocket(socketUrl);
+            socket.onmessage = (event) => {
+                const data = JSON.parse(event.data);
+                if (data.type === 'dashboard_push') {
+                    showBanner();
+                }
+            };
+        } catch (e) {
+            console.warn('Dashboard hub websocket unavailable', e);
+        }
+    })();
+</script>
 {% endblock %}

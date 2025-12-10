@@ -4,7 +4,7 @@ Handles visualization creation, management, and display.
 """
 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.http import JsonResponse
@@ -13,7 +13,7 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import Visualization
+from .models import Visualization, VisualizationAccessLog, VisualizationTag, VisualizationComment, VisualizationFavorite
 from api.serializers import VisualizationSerializer
 from core.mixins import OwnerCheckMixin
 from core.views import create_notification
@@ -76,6 +76,28 @@ class VisualizationDetailView(LoginRequiredMixin, DetailView):
         
         context['is_owner'] = viz.owner == self.request.user
         context['can_edit'] = context['is_owner']
+        
+        # Add comments
+        context['comments'] = viz.comments.all()
+        
+        # Add tags
+        context['tags'] = viz.tags.all()
+        
+        # Check if current user has favorited this visualization
+        context['is_favorited'] = VisualizationFavorite.objects.filter(
+            visualization=viz,
+            user=self.request.user
+        ).exists()
+        
+        # Add favorite count
+        context['favorite_count'] = viz.favorites.count()
+        
+        # Log access
+        VisualizationAccessLog.objects.create(
+            visualization=viz,
+            user=self.request.user if self.request.user.is_authenticated else None,
+            ip_address=self.request.META.get('REMOTE_ADDR')
+        )
         
         return context
 
@@ -320,4 +342,153 @@ class VisualizationViewSet(viewsets.ModelViewSet):
             'public_visualizations': user_viz.filter(is_public=True).count(),
             'by_chart_type': chart_type_counts,
         })
+
+
+# ============================================================================
+# COMMENT MANAGEMENT VIEWS
+# ============================================================================
+
+class CommentCreateView(LoginRequiredMixin, View):
+    """Create a comment on a visualization."""
+    
+    def post(self, request, pk):
+        """Create a new comment."""
+        visualization = get_object_or_404(Visualization, pk=pk)
+        
+        # Check if user can view this visualization
+        if visualization.owner != request.user and not visualization.is_public:
+            return JsonResponse({'error': 'Permission denied'}, status=403)
+        
+        content = request.POST.get('content', '').strip()
+        if not content:
+            return JsonResponse({'error': 'Comment content is required'}, status=400)
+        
+        comment = VisualizationComment.objects.create(
+            visualization=visualization,
+            user=request.user,
+            content=content
+        )
+        
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({
+                'status': 'success',
+                'comment': {
+                    'id': comment.id,
+                    'content': comment.content,
+                    'user': comment.user.username,
+                    'user_full_name': comment.user.get_full_name() or comment.user.username,
+                    'created_at': comment.created_at.strftime('%B %d, %Y at %I:%M %p'),
+                }
+            })
+        
+        return redirect('visualizations:visualization_detail', pk=visualization.pk)
+
+
+class CommentDeleteView(LoginRequiredMixin, View):
+    """Delete a comment."""
+    
+    def post(self, request, pk, comment_id):
+        """Delete a comment."""
+        comment = get_object_or_404(VisualizationComment, pk=comment_id)
+        
+        # Only comment owner or visualization owner can delete
+        if comment.user != request.user and comment.visualization.owner != request.user:
+            return JsonResponse({'error': 'Permission denied'}, status=403)
+        
+        visualization_pk = comment.visualization.pk
+        comment.delete()
+        
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'status': 'success', 'message': 'Comment deleted'})
+        
+        return redirect('visualizations:visualization_detail', pk=visualization_pk)
+
+
+# ============================================================================
+# TAG MANAGEMENT VIEWS
+# ============================================================================
+
+class TagAddView(LoginRequiredMixin, OwnerCheckMixin, View):
+    """Add a tag to a visualization."""
+    
+    def post(self, request, pk):
+        """Add a tag."""
+        visualization = get_object_or_404(Visualization, pk=pk)
+        self.check_owner(visualization, request.user)
+        
+        tag_name = request.POST.get('name', '').strip().lower()
+        if not tag_name:
+            return JsonResponse({'error': 'Tag name is required'}, status=400)
+        
+        # Create or get tag
+        tag, created = VisualizationTag.objects.get_or_create(
+            visualization=visualization,
+            name=tag_name
+        )
+        
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({
+                'status': 'success',
+                'tag': {
+                    'id': tag.id,
+                    'name': tag.name,
+                },
+                'created': created
+            })
+        
+        return redirect('visualizations:visualization_detail', pk=visualization.pk)
+
+
+class TagRemoveView(LoginRequiredMixin, OwnerCheckMixin, View):
+    """Remove a tag from a visualization."""
+    
+    def post(self, request, pk, tag_id):
+        """Remove a tag."""
+        tag = get_object_or_404(VisualizationTag, pk=tag_id)
+        visualization = tag.visualization
+        self.check_owner(visualization, request.user)
+        
+        tag.delete()
+        
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'status': 'success', 'message': 'Tag removed'})
+        
+        return redirect('visualizations:visualization_detail', pk=visualization.pk)
+
+
+# ============================================================================
+# FAVORITE MANAGEMENT VIEWS
+# ============================================================================
+
+class FavoriteToggleView(LoginRequiredMixin, View):
+    """Toggle favorite status for a visualization."""
+    
+    def post(self, request, pk):
+        """Toggle favorite."""
+        visualization = get_object_or_404(Visualization, pk=pk)
+        
+        # Check if user can view this visualization
+        if visualization.owner != request.user and not visualization.is_public:
+            return JsonResponse({'error': 'Permission denied'}, status=403)
+        
+        favorite, created = VisualizationFavorite.objects.get_or_create(
+            visualization=visualization,
+            user=request.user
+        )
+        
+        if not created:
+            # Already favorited, remove it
+            favorite.delete()
+            is_favorited = False
+        else:
+            is_favorited = True
+        
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({
+                'status': 'success',
+                'is_favorited': is_favorited,
+                'message': 'Added to favorites' if is_favorited else 'Removed from favorites'
+            })
+        
+        return redirect('visualizations:visualization_detail', pk=visualization.pk)
 

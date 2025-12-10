@@ -3,6 +3,11 @@
 
 {% block title %}{{ visualization.title }} - LuminaBI{% endblock %}
 
+{% block extra_head %}
+<!-- Chart.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+{% endblock %}
+
 {% block content %}
 <div class="min-h-screen py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -25,13 +30,23 @@
                     </div>
 
                     <!-- Chart Preview -->
-                    <div class="px-6 py-8 bg-gradient-to-br from-neonBlue/5 to-neonPurple/5 min-h-96 flex items-center justify-center">
-                        <div class="text-center">
+                    <div class="px-6 py-8 bg-gradient-to-br from-neonBlue/5 to-neonPurple/5">
+                        <div id="chart-container" class="bg-white/5 rounded-xl p-6 backdrop-blur-sm border border-white/10">
+                            <canvas id="visualization-chart" class="w-full" style="max-height: 500px;"></canvas>
+                        </div>
+                        
+                        <!-- Fallback message if no data -->
+                        <div id="no-data-message" class="hidden text-center py-12">
                             <div class="text-6xl text-neonBlue mb-4">
                                 {% if visualization.chart_type == 'bar' %}<i class="fas fa-chart-bar"></i>
                                 {% elif visualization.chart_type == 'line' %}<i class="fas fa-chart-line"></i>
                                 {% elif visualization.chart_type == 'pie' %}<i class="fas fa-chart-pie"></i>
                                 {% elif visualization.chart_type == 'scatter' %}<i class="fas fa-circle"></i>
+                                {% elif visualization.chart_type == 'area' %}<i class="fas fa-chart-area"></i>
+                                {% elif visualization.chart_type == 'radar' %}<i class="fas fa-bullseye"></i>
+                                {% elif visualization.chart_type == 'bubble' %}<i class="fas fa-circle-dot"></i>
+                                {% elif visualization.chart_type == 'donut' %}<i class="fas fa-circle-notch"></i>
+                                {% elif visualization.chart_type == 'treemap' %}<i class="fas fa-sitemap"></i>
                                 {% else %}<i class="fas fa-chart-area"></i>{% endif %}
                             </div>
                             <p class="text-gray-300 text-lg font-semibold">
@@ -39,9 +54,9 @@
                             </p>
                             <p class="text-gray-500 text-sm mt-2">
                                 {% if visualization.dataset %}
-                                    Using: {{ visualization.dataset.name }}
+                                    Waiting for configuration or dataset has no data
                                 {% else %}
-                                    No dataset linked
+                                    No dataset linked. Please link a dataset and configure the chart.
                                 {% endif %}
                             </p>
                         </div>
@@ -54,8 +69,54 @@
                             Configuration
                         </h3>
                         <div class="bg-black/40 p-4 rounded-lg font-mono text-sm text-gray-300 overflow-x-auto border border-white/10">
-                            <pre>{{ visualization.config|safe }}</pre>
+                            <pre id="config-display">{{ visualization.config|safe }}</pre>
                         </div>
+                    </div>
+
+                    <!-- Tags Section -->
+                    <div class="px-6 py-6 border-t border-white/10">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                                <i class="fas fa-tags text-neonPurple"></i>
+                                Tags
+                            </h3>
+                            {% if can_edit %}
+                                <button onclick="showAddTagForm()" class="text-xs px-3 py-1 bg-neonPurple/20 hover:bg-neonPurple/40 border border-neonPurple/50 text-neonPurple rounded-lg transition flex items-center gap-1">
+                                    <i class="fas fa-plus text-xs"></i>Add Tag
+                                </button>
+                            {% endif %}
+                        </div>
+                        <div id="tags-container" class="flex flex-wrap gap-2 mb-3">
+                            {% for tag in tags %}
+                                <span class="inline-flex items-center gap-1 px-3 py-1 bg-neonBlue/20 text-neonBlue border border-neonBlue/50 text-xs rounded-lg font-mono">
+                                    {{ tag.name }}
+                                    {% if can_edit %}
+                                        <form method="POST" action="{% url 'visualizations:tag_remove' visualization.pk tag.pk %}" class="inline" onsubmit="return confirm('Remove this tag?');">
+                                            {% csrf_token %}
+                                            <button type="submit" class="text-neonBlue hover:text-error transition">
+                                                <i class="fas fa-times text-xs"></i>
+                                            </button>
+                                        </form>
+                                    {% endif %}
+                                </span>
+                            {% empty %}
+                                <p class="text-gray-500 text-sm">No tags yet</p>
+                            {% endfor %}
+                        </div>
+                        {% if can_edit %}
+                            <form id="add-tag-form" method="POST" action="{% url 'visualizations:tag_add' visualization.pk %}" class="hidden">
+                                {% csrf_token %}
+                                <div class="flex gap-2">
+                                    <input type="text" name="name" placeholder="Enter tag name" class="flex-1 px-3 py-2 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-600 focus:outline-none focus:border-neonBlue" required>
+                                    <button type="submit" class="px-4 py-2 bg-neonBlue/20 hover:bg-neonBlue/40 border border-neonBlue/50 text-neonBlue rounded-lg transition">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button type="button" onclick="hideAddTagForm()" class="px-4 py-2 bg-white/10 hover:bg-white/20 border border-white/30 text-white rounded-lg transition">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        {% endif %}
                     </div>
 
                     <!-- Metadata -->
@@ -83,6 +144,61 @@
                             </p>
                         </div>
                     </div>
+
+                    <!-- Comments Section -->
+                    <div class="px-6 py-6 border-t border-white/10">
+                        <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                            <i class="fas fa-comments text-neonBlue"></i>
+                            Comments
+                            <span class="text-sm text-gray-500 font-normal">({{ comments|length }})</span>
+                        </h3>
+                        
+                        <!-- Add Comment Form -->
+                        {% if visualization.is_public or is_owner %}
+                            <form id="comment-form" method="POST" action="{% url 'visualizations:comment_create' visualization.pk %}" class="mb-6">
+                                {% csrf_token %}
+                                <div class="flex gap-2">
+                                    <textarea name="content" rows="3" placeholder="Add a comment..." class="flex-1 px-4 py-3 rounded-lg bg-black/40 border border-white/10 text-white placeholder-gray-600 focus:outline-none focus:border-neonBlue resize-none" required></textarea>
+                                    <button type="submit" class="px-6 py-3 bg-neonBlue/20 hover:bg-neonBlue/40 border border-neonBlue/50 text-neonBlue rounded-lg transition flex items-center gap-2 font-semibold">
+                                        <i class="fas fa-paper-plane"></i>Post
+                                    </button>
+                                </div>
+                            </form>
+                        {% endif %}
+
+                        <!-- Comments List -->
+                        <div id="comments-container" class="space-y-4">
+                            {% for comment in comments %}
+                                <div class="bg-black/40 border border-white/10 rounded-lg p-4" data-comment-id="{{ comment.id }}">
+                                    <div class="flex items-start justify-between mb-2">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-8 h-8 rounded-full bg-neonBlue/20 flex items-center justify-center text-neonBlue font-bold text-sm">
+                                                {{ comment.user.username|first|upper }}
+                                            </div>
+                                            <div>
+                                                <p class="text-white font-semibold text-sm">{{ comment.user.get_full_name|default:comment.user.username }}</p>
+                                                <p class="text-gray-500 text-xs">{{ comment.created_at|date:"M d, Y at g:i A" }}</p>
+                                            </div>
+                                        </div>
+                                        {% if comment.user == request.user or is_owner %}
+                                            <form method="POST" action="{% url 'visualizations:comment_delete' visualization.pk comment.pk %}" class="inline" onsubmit="return confirm('Delete this comment?');">
+                                                {% csrf_token %}
+                                                <button type="submit" class="text-gray-500 hover:text-error transition text-sm">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    </div>
+                                    <p class="text-gray-300 text-sm whitespace-pre-wrap">{{ comment.content }}</p>
+                                </div>
+                            {% empty %}
+                                <div class="text-center py-8 text-gray-500">
+                                    <i class="fas fa-comments text-3xl mb-2"></i>
+                                    <p>No comments yet. Be the first to comment!</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -93,6 +209,18 @@
                         <i class="fas fa-info-circle text-neonBlue"></i>
                         Information
                     </h3>
+                    
+                    <!-- Favorite Button -->
+                    <div class="mb-6 pb-6 border-b border-white/10">
+                        <form method="POST" action="{% url 'visualizations:favorite_toggle' visualization.pk %}" id="favorite-form">
+                            {% csrf_token %}
+                            <button type="submit" class="w-full {% if is_favorited %}bg-error/20 hover:bg-error/40 border border-error/50 text-error{% else %}bg-white/10 hover:bg-white/20 border border-white/30 text-white{% endif %} py-2 rounded-lg font-semibold text-sm transition flex items-center justify-center gap-2">
+                                <i class="fas fa-heart {% if is_favorited %}fas{% else %}far{% endif %}"></i>
+                                {% if is_favorited %}Remove from Favorites{% else %}Add to Favorites{% endif %}
+                            </button>
+                        </form>
+                        <p class="text-xs text-gray-500 text-center mt-2">{{ favorite_count }} favorite{{ favorite_count|pluralize }}</p>
+                    </div>
                     
                     <div class="mb-6 pb-6 border-b border-white/10">
                         <p class="text-sm text-gray-500 font-mono uppercase tracking-wider mb-1">Owner</p>
@@ -152,4 +280,348 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Visualization data from Django
+    const visualizationData = {
+        id: {{ visualization.id }},
+        chartType: '{{ visualization.chart_type }}',
+        config: {{ visualization.config|safe }},
+        datasetId: {{ visualization.dataset.id|default:"null" }}
+    };
+
+    // Chart instance
+    let chartInstance = null;
+
+    // Initialize chart when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeChart();
+    });
+
+    function initializeChart() {
+        const canvas = document.getElementById('visualization-chart');
+        const noDataMessage = document.getElementById('no-data-message');
+        const chartContainer = document.getElementById('chart-container');
+        const ctx = canvas.getContext('2d');
+
+        // Check if we have configuration
+        if (!visualizationData.config || Object.keys(visualizationData.config).length === 0) {
+            // No configuration, show placeholder
+            chartContainer.classList.add('hidden');
+            noDataMessage.classList.remove('hidden');
+            return;
+        }
+
+        try {
+            // If config has Chart.js format, use it directly
+            let chartConfig = visualizationData.config;
+
+            // Map chart types
+            let chartType = visualizationData.chartType;
+            if (chartType === 'donut') chartType = 'doughnut';
+            if (chartType === 'area') chartType = 'line';
+
+            // Create default configuration if needed
+            if (!chartConfig.type) {
+                chartConfig = {
+                    type: chartType,
+                    data: chartConfig.data || generateSampleData(chartType),
+                    options: chartConfig.options || getDefaultOptions(chartType)
+                };
+            }
+
+            // Ensure dark theme styling
+            if (!chartConfig.options) chartConfig.options = {};
+            chartConfig.options = {
+                ...chartConfig.options,
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    ...chartConfig.options.plugins,
+                    legend: {
+                        ...chartConfig.options.plugins?.legend,
+                        labels: {
+                            color: '#ffffff',
+                            font: {
+                                size: 12,
+                                family: "'Inter', sans-serif"
+                            }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleColor: '#ffffff',
+                        bodyColor: '#ffffff',
+                        borderColor: 'rgba(0, 255, 255, 0.3)',
+                        borderWidth: 1
+                    }
+                },
+                scales: chartConfig.options.scales || (needsScales(chartType) ? {
+                    x: {
+                        ticks: { color: '#9ca3af' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    },
+                    y: {
+                        ticks: { color: '#9ca3af' },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                    }
+                } : undefined)
+            };
+
+            // Create chart
+            chartInstance = new Chart(ctx, chartConfig);
+            chartContainer.classList.remove('hidden');
+            noDataMessage.classList.add('hidden');
+
+        } catch (error) {
+            console.error('Error rendering chart:', error);
+            chartContainer.classList.add('hidden');
+            noDataMessage.classList.remove('hidden');
+        }
+    }
+
+    function needsScales(chartType) {
+        return ['bar', 'line', 'scatter', 'bubble'].includes(chartType);
+    }
+
+    function generateSampleData(chartType) {
+        const labels = ['January', 'February', 'March', 'April', 'May', 'June'];
+        const data = [65, 59, 80, 81, 56, 55];
+
+        switch(chartType) {
+            case 'pie':
+            case 'doughnut':
+                return {
+                    labels: labels.slice(0, 4),
+                    datasets: [{
+                        data: data.slice(0, 4),
+                        backgroundColor: [
+                            'rgba(0, 255, 255, 0.7)',
+                            'rgba(168, 85, 247, 0.7)',
+                            'rgba(34, 197, 94, 0.7)',
+                            'rgba(251, 191, 36, 0.7)'
+                        ]
+                    }]
+                };
+            case 'scatter':
+            case 'bubble':
+                return {
+                    datasets: [{
+                        label: 'Sample Data',
+                        data: data.map((v, i) => ({x: i * 10, y: v, r: chartType === 'bubble' ? 10 : undefined})),
+                        backgroundColor: 'rgba(0, 255, 255, 0.7)'
+                    }]
+                };
+            case 'radar':
+                return {
+                    labels: ['Speed', 'Strength', 'Intelligence', 'Agility', 'Defense'],
+                    datasets: [{
+                        label: 'Sample',
+                        data: [80, 90, 70, 85, 75],
+                        backgroundColor: 'rgba(0, 255, 255, 0.2)',
+                        borderColor: 'rgba(0, 255, 255, 1)',
+                        pointBackgroundColor: 'rgba(0, 255, 255, 1)'
+                    }]
+                };
+            default:
+                return {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Sample Data',
+                        data: data,
+                        backgroundColor: 'rgba(0, 255, 255, 0.7)',
+                        borderColor: 'rgba(0, 255, 255, 1)',
+                        fill: chartType === 'line'
+                    }]
+                };
+        }
+    }
+
+    function getDefaultOptions(chartType) {
+        return {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                }
+            }
+        };
+    }
+
+   // Tag management
+   function showAddTagForm() {
+        document.getElementById('add-tag-form').classList.remove('hidden');
+    }
+    
+    function hideAddTagForm() {
+        document.getElementById('add-tag-form').classList.add('hidden');
+        document.querySelector('#add-tag-form input[name="name"]').value = '';
+    }
+
+    // Get CSRF token
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+
+    // AJAX form submissions
+    document.addEventListener('DOMContentLoaded', function() {
+        // Comment form
+        const commentForm = document.getElementById('comment-form');
+        if (commentForm) {
+            commentForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                const content = formData.get('content');
+                
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': csrftoken,
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        // Add comment to DOM
+                        const commentsContainer = document.getElementById('comments-container');
+                        const commentHtml = `
+                            <div class="bg-black/40 border border-white/10 rounded-lg p-4" data-comment-id="${data.comment.id}">
+                                <div class="flex items-start justify-between mb-2">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-8 h-8 rounded-full bg-neonBlue/20 flex items-center justify-center text-neonBlue font-bold text-sm">
+                                            ${data.comment.user.charAt(0).toUpperCase()}
+                                        </div>
+                                        <div>
+                                            <p class="text-white font-semibold text-sm">${data.comment.user_full_name}</p>
+                                            <p class="text-gray-500 text-xs">${data.comment.created_at}</p>
+                                        </div>
+                                    </div>
+                                    <form method="POST" action="/visualizations/{{ visualization.pk }}/comments/${data.comment.id}/delete/" class="inline delete-comment-form" onsubmit="event.preventDefault(); if(confirm('Delete this comment?')) { const form = this; const formData = new FormData(form); fetch(form.action, {method: 'POST', body: formData, headers: {'X-Requested-With': 'XMLHttpRequest', 'X-CSRFToken': csrftoken}}).then(r => r.json()).then(d => { if(d.status === 'success') form.closest('[data-comment-id]').remove(); }); }">
+                                        <input type="hidden" name="csrfmiddlewaretoken" value="${csrftoken}">
+                                        <button type="submit" class="text-gray-500 hover:text-error transition text-sm">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                                <p class="text-gray-300 text-sm whitespace-pre-wrap">${data.comment.content}</p>
+                            </div>
+                        `;
+                        commentsContainer.insertAdjacentHTML('beforeend', commentHtml);
+                        this.reset();
+                        
+                        // Update comment count
+                        const commentCount = document.querySelector('h3 .text-gray-500');
+                        if (commentCount) {
+                            const currentCount = parseInt(commentCount.textContent.match(/\d+/)[0]) || 0;
+                            commentCount.textContent = `(${currentCount + 1})`;
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to post comment. Please try again.');
+                });
+            });
+        }
+
+        // Tag form
+        const tagForm = document.getElementById('add-tag-form');
+        if (tagForm) {
+            tagForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': csrftoken,
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        // Add tag to DOM
+                        const tagsContainer = document.getElementById('tags-container');
+                        const tagHtml = `
+                            <span class="inline-flex items-center gap-1 px-3 py-1 bg-neonBlue/20 text-neonBlue border border-neonBlue/50 text-xs rounded-lg font-mono">
+                                ${data.tag.name}
+                                    <form method="POST" action="/visualizations/{{ visualization.pk }}/tags/${data.tag.id}/remove/" class="inline delete-tag-form" onsubmit="event.preventDefault(); if(confirm('Remove this tag?')) { const form = this; const formData = new FormData(form); fetch(form.action, {method: 'POST', body: formData, headers: {'X-Requested-With': 'XMLHttpRequest', 'X-CSRFToken': csrftoken}}).then(r => r.json()).then(d => { if(d.status === 'success') form.closest('span').remove(); }); }">
+                                        <input type="hidden" name="csrfmiddlewaretoken" value="${csrftoken}">
+                                        <button type="submit" class="text-neonBlue hover:text-error transition">
+                                            <i class="fas fa-times text-xs"></i>
+                                        </button>
+                                    </form>
+                            </span>
+                        `;
+                        tagsContainer.insertAdjacentHTML('beforeend', tagHtml);
+                        hideAddTagForm();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to add tag. Please try again.');
+                });
+            });
+        }
+
+        // Favorite form
+        const favoriteForm = document.getElementById('favorite-form');
+        if (favoriteForm) {
+            favoriteForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': csrftoken,
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        const button = this.querySelector('button');
+                        const icon = button.querySelector('i');
+                        const countElement = this.nextElementSibling;
+                        
+                        if (data.is_favorited) {
+                            button.className = 'w-full bg-error/20 hover:bg-error/40 border border-error/50 text-error py-2 rounded-lg font-semibold text-sm transition flex items-center justify-center gap-2';
+                            icon.className = 'fas fa-heart';
+                            button.innerHTML = '<i class="fas fa-heart"></i>Remove from Favorites';
+                        } else {
+                            button.className = 'w-full bg-white/10 hover:bg-white/20 border border-white/30 text-white py-2 rounded-lg font-semibold text-sm transition flex items-center justify-center gap-2';
+                            icon.className = 'far fa-heart';
+                            button.innerHTML = '<i class="far fa-heart"></i>Add to Favorites';
+                        }
+                        
+                        // Update count (would need to track this from response)
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+        }
+    });
+</script>
 {% endblock %}

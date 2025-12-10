@@ -4,7 +4,7 @@ Admin configuration for visualizations application.
 
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Visualization
+from .models import Visualization, VisualizationAccessLog, VisualizationTag, VisualizationComment, VisualizationFavorite
 
 
 @admin.register(Visualization)
@@ -42,6 +42,11 @@ class VisualizationAdmin(admin.ModelAdmin):
             'pie': '🥧',
             'scatter': '🔵',
             'heatmap': '🔥',
+            'area': '📉',
+            'radar': '🎯',
+            'bubble': '🫧',
+            'donut': '🍩',
+            'treemap': '🌳',
         }
         icon = icons.get(obj.chart_type, '📉')
         return format_html(
@@ -87,5 +92,98 @@ class VisualizationAdmin(admin.ModelAdmin):
             return '—'
     config_preview.short_description = 'Configuration Preview'
 
+class VisualizationAccessLogAdmin(admin.ModelAdmin):
+    """Admin interface for VisualizationAccessLog model."""
+    
+    list_display = ('visualization', 'user_display', 'accessed_at', 'ip_address')
+    list_filter = ('accessed_at', 'visualization__owner')
+    search_fields = ('visualization__title', 'user__username', 'ip_address')
+    date_hierarchy = 'accessed_at'
+    
+    def user_display(self, obj):
+        """Display user or anonymous."""
+        if obj.user:
+            return format_html(
+                '<a href="/admin/auth/user/{}/change/">{}</a>',
+                obj.user.id,
+                obj.user.username
+            )
+        return 'Anonymous'
+    user_display.short_description = 'User'
+    
+class VisualizationTagAdmin(admin.ModelAdmin):
+    """Admin interface for VisualizationTag model."""
+    
+    list_display = ('name', 'visualization_link')
+    search_fields = ('name', 'visualization__title')
+    
+    def visualization_link(self, obj):
+        """Link to associated visualization."""
+        return format_html(
+            '<a href="/admin/visualizations/visualization/{}/change/">{}</a>',
+            obj.visualization.id,
+            obj.visualization.title
+        )
+    visualization_link.short_description = 'Visualization'
+    
+class VisualizationCommentAdmin(admin.ModelAdmin):
+    """Admin interface for VisualizationComment model."""
+    
+    list_display = ('visualization_link', 'user_link', 'created_at', 'short_content')
+    list_filter = ('created_at', 'visualization__owner')
+    search_fields = ('visualization__title', 'user__username', 'content')
+    date_hierarchy = 'created_at'
+    
+    def visualization_link(self, obj):
+        """Link to associated visualization."""
+        return format_html(
+            '<a href="/admin/visualizations/visualization/{}/change/">{}</a>',
+            obj.visualization.id,
+            obj.visualization.title
+        )
+    visualization_link.short_description = 'Visualization'
+    
+    def user_link(self, obj):
+        """Link to commenting user."""
+        return format_html(
+            '<a href="/admin/auth/user/{}/change/">{}</a>',
+            obj.user.id,
+            obj.user.username
+        )
+    user_link.short_description = 'User'
+    
+    def short_content(self, obj):
+        """Short preview of comment content."""
+        return (obj.content[:75] + '...') if len(obj.content) > 75 else obj.content
+    short_content.short_description = 'Comment Preview'
+    
+class VisualizationFavoriteAdmin(admin.ModelAdmin):
+    """Admin interface for VisualizationFavorite model."""
+    
+    list_display = ('visualization_link', 'user_link')
+    search_fields = ('visualization__title', 'user__username')
+    
+    def visualization_link(self, obj):
+        """Link to associated visualization."""
+        return format_html(
+            '<a href="/admin/visualizations/visualization/{}/change/">{}</a>',
+            obj.visualization.id,
+            obj.visualization.title
+        )
+    visualization_link.short_description = 'Visualization'
+    
+    def user_link(self, obj):
+        """Link to favoriting user."""
+        return format_html(
+            '<a href="/admin/auth/user/{}/change/">{}</a>',
+            obj.user.id,
+            obj.user.username
+        )
+    user_link.short_description = 'User'
 
-# Register your models here.
+
+# Register all admin models
+admin.site.register(VisualizationAccessLog, VisualizationAccessLogAdmin)
+admin.site.register(VisualizationTag, VisualizationTagAdmin)
+admin.site.register(VisualizationComment, VisualizationCommentAdmin)
+admin.site.register(VisualizationFavorite, VisualizationFavoriteAdmin)
