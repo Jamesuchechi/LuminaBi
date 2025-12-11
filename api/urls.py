@@ -13,6 +13,7 @@ from .views import (
     AlertViewSet, MetricViewSet, AnalyticsDashboardViewSet,
     DatasetViewSet, VisualizationViewSet, DashboardModelViewSet
 )
+from visualizations import views as viz_views
 
 app_name = 'api'
 
@@ -33,21 +34,16 @@ router.register(r'visualizations', VisualizationViewSet, basename='visualization
 router.register(r'dashboard-models', DashboardModelViewSet, basename='dashboard_model')
 
 urlpatterns = [
+    # API Routes (router)
+    path('', include(router.urls)),
+
     # Health check
-    path('health/', views.health_check, name='health_check'),
-    path('', views.api_root, name='api_root'),
-    
+    path('health/', views.health_check, name='health'),
+
     # JWT Authentication
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    
-    # API Routes
-    path('', include(router.urls)),
-]
 
-urlpatterns = [
-    path('', include(router.urls)),
-    path('health/', views.health_check, name='health'),
-    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    # Direct preview-config endpoint (fallback) to avoid routing issues
+    path('visualizations/preview-config/', viz_views.preview_config_direct, name='visualization_preview_config'),
 ]

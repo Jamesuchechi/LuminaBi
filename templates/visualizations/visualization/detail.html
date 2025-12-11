@@ -286,15 +286,45 @@
     const visualizationData = {
         id: {{ visualization.id }},
         chartType: '{{ visualization.chart_type }}',
-        config: {{ visualization.config|safe }},
+        config: null,
         datasetId: {{ visualization.dataset.id|default:"null" }}
     };
 
     // Chart instance
     let chartInstance = null;
 
-    // Initialize chart when page loads
+    // Helper: parse config text (handles JSON and Python-style dicts)
+    function parseConfigText(text) {
+        if (!text) return null;
+        try {
+            return JSON.parse(text);
+        } catch (e) {
+            // Try to convert Python-style dict to JSON-ish string
+            try {
+                let s = text
+                    .replace(/\bNone\b/g, 'null')
+                    .replace(/\bTrue\b/g, 'true')
+                    .replace(/\bFalse\b/g, 'false')
+                    .replace(/(\w+)\s*:\s*'/g, '"$1": "')
+                    .replace(/'\s*,/g, '",')
+                    .replace(/'\s*}/g, '"}')
+                    .replace(/'/g, '"');
+                return JSON.parse(s);
+            } catch (ee) {
+                console.error('Unable to parse config text:', ee);
+                return null;
+            }
+        }
+    }
+
+    // Initialize chart when page loads (single, robust path)
     document.addEventListener('DOMContentLoaded', function() {
+        // Try to read config from pre block (this reflects what's saved)
+        const configText = document.getElementById('config-display')?.textContent;
+        const parsed = parseConfigText(configText && configText.trim() ? configText : null);
+        if (parsed) {
+            visualizationData.config = parsed;
+        }
         initializeChart();
     });
 
@@ -623,5 +653,41 @@
             });
         }
     });
+
+    // (Rendering handled by initializeChart on DOMContentLoaded)
+
+    function renderChart(config) {
+        const canvas = document.getElementById('visualization-chart');
+        const container = document.getElementById('chart-container');
+        const noDataMsg = document.getElementById('no-data-message');
+        
+        if (canvas) {
+            try {
+                // Show chart container
+                container.classList.remove('hidden');
+                if (noDataMsg) noDataMsg.classList.add('hidden');
+                
+                // Destroy existing chart if any
+                if (window.vizChart) {
+                    window.vizChart.destroy();
+                }
+                
+                // Create new chart
+                const ctx = canvas.getContext('2d');
+                window.vizChart = new Chart(ctx, config);
+            } catch (e) {
+                console.error('Error rendering chart:', e);
+                showNoDataMessage();
+            }
+        }
+    }
+
+    function showNoDataMessage() {
+        const container = document.getElementById('chart-container');
+        const noDataMsg = document.getElementById('no-data-message');
+        
+        if (container) container.classList.add('hidden');
+        if (noDataMsg) noDataMsg.classList.remove('hidden');
+    }
 </script>
 {% endblock %}

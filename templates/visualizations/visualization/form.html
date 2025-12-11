@@ -3,9 +3,14 @@
 
 {% block title %}{{ form_title }}{% endblock %}
 
+{% block extra_head %}
+<!-- Chart.js Library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+{% endblock %}
+
 {% block content %}
 <div class="min-h-screen py-12">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Back Navigation -->
         <div class="mb-8">
             <a href="{% url 'visualizations:visualization_list' %}" class="inline-flex items-center gap-2 text-neonBlue hover:text-neonPurple transition group">
@@ -14,159 +19,239 @@
             </a>
         </div>
 
-        <div class="glass-panel rounded-2xl border border-white/10 overflow-hidden">
-            <!-- Header -->
-            <div class="px-6 py-6 border-b border-white/10 bg-gradient-to-r from-neonBlue/10 to-neonPurple/10">
-                <h1 class="text-3xl font-bold text-white flex items-center gap-3">
-                    <i class="fas fa-wand-magic-wand text-neonPurple"></i>
-                    {{ form_title }}
-                </h1>
-                <p class="text-gray-400 mt-2">Configure your visualization parameters and settings</p>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Form Section (Left) -->
+            <div class="lg:col-span-1">
+                <div class="glass-panel rounded-2xl border border-white/10 overflow-hidden">
+                    <!-- Header -->
+                    <div class="px-6 py-6 border-b border-white/10 bg-gradient-to-r from-neonBlue/10 to-neonPurple/10">
+                        <h1 class="text-2xl font-bold text-white flex items-center gap-3">
+                            <i class="fas fa-wand-magic-wand text-neonPurple"></i>
+                            {{ form_title }}
+                        </h1>
+                    </div>
+
+                    <!-- Form Content -->
+                    <form method="POST" class="px-6 py-6 space-y-6">
+                        {% csrf_token %}
+                        
+                        {% if form.non_field_errors %}
+                            <div class="bg-error/10 border border-error/50 text-error px-4 py-3 rounded-lg flex items-center gap-2">
+                                <i class="fas fa-circle-exclamation"></i>
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+
+                        <!-- Title Field -->
+                        <div>
+                            <label class="block text-sm font-bold text-white mb-2 flex items-center gap-2">
+                                <i class="fas fa-heading text-neonBlue text-xs"></i>
+                                {{ form.title.label }}
+                            </label>
+                            {{ form.title }}
+                            {% if form.title.errors %}
+                                <div class="text-error text-sm mt-2 flex items-center gap-1">
+                                    <i class="fas fa-circle-exclamation text-xs"></i>
+                                    {% for error in form.title.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Description Field -->
+                        <div>
+                            <label class="block text-sm font-bold text-white mb-2 flex items-center gap-2">
+                                <i class="fas fa-note text-neonBlue text-xs"></i>
+                                {{ form.description.label }}
+                            </label>
+                            {{ form.description }}
+                            {% if form.description.errors %}
+                                <div class="text-error text-sm mt-2 flex items-center gap-1">
+                                    <i class="fas fa-circle-exclamation text-xs"></i>
+                                    {% for error in form.description.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Chart Type Field -->
+                        <div>
+                            <label class="block text-sm font-bold text-white mb-2 flex items-center gap-2">
+                                <i class="fas fa-chart-line text-neonBlue text-xs"></i>
+                                {{ form.chart_type.label }}
+                            </label>
+                            {{ form.chart_type }}
+                            <p class="text-gray-500 text-xs mt-2 flex items-center gap-1">
+                                <i class="fas fa-info-circle"></i>
+                                Select the type of chart to display
+                            </p>
+                            {% if form.chart_type.errors %}
+                                <div class="text-error text-sm mt-2 flex items-center gap-1">
+                                    <i class="fas fa-circle-exclamation text-xs"></i>
+                                    {% for error in form.chart_type.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Dataset Field -->
+                        <div>
+                            <label class="block text-sm font-bold text-white mb-2 flex items-center gap-2">
+                                <i class="fas fa-database text-neonBlue text-xs"></i>
+                                {{ form.dataset.label }}
+                            </label>
+                            <div>
+                                {{ form.dataset }}
+                            </div>
+                            <p class="text-gray-500 text-xs mt-2 flex items-center gap-1">
+                                <i class="fas fa-info-circle"></i>
+                                Select a dataset first
+                            </p>
+                            {% if form.dataset.errors %}
+                                <div class="text-error text-sm mt-2 flex items-center gap-1">
+                                    <i class="fas fa-circle-exclamation text-xs"></i>
+                                    {% for error in form.dataset.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="grid grid-cols-2 gap-3">
+                            <button 
+                                type="button" 
+                                id="generate-config-btn" 
+                                class="px-4 py-3 rounded-lg bg-neonBlue/20 hover:bg-neonBlue/40 border border-neonBlue/50 text-neonBlue font-semibold transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                onclick="generateConfig()"
+                                style="display: none;"
+                                title="Generate configuration from dataset"
+                            >
+                                <i class="fas fa-cog text-sm"></i>
+                                <span class="text-xs">Generate</span>
+                            </button>
+
+                            <button 
+                                type="button" 
+                                id="preview-config-btn" 
+                                class="px-4 py-3 rounded-lg bg-neonGreen/20 hover:bg-neonGreen/40 border border-neonGreen/50 text-neonGreen font-semibold transition flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                onclick="generateAndPreviewChart()"
+                                style="display: none;"
+                                title="Preview chart with current settings"
+                                disabled
+                            >
+                                <i class="fas fa-eye text-sm"></i>
+                                <span class="text-xs">Preview</span>
+                            </button>
+                        </div>
+
+                        <!-- Configuration Field -->
+                        <div>
+                            <label class="block text-sm font-bold text-white mb-2 flex items-center gap-2">
+                                <i class="fas fa-code text-neonBlue text-xs"></i>
+                                {{ form.config.label }}
+                            </label>
+                            <div class="relative">
+                                {{ form.config }}
+                                <div id="config-status" class="text-xs mt-1"></div>
+                            </div>
+                            {% if form.config.errors %}
+                                <div class="text-error text-sm mt-2 flex items-center gap-1">
+                                    <i class="fas fa-circle-exclamation text-xs"></i>
+                                    {% for error in form.config.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Visibility Field -->
+                        <div class="bg-black/40 border border-white/10 p-4 rounded-lg">
+                            <label class="flex items-center gap-3 cursor-pointer">
+                                {{ form.is_public }}
+                                <span class="text-sm font-bold text-white flex items-center gap-2">
+                                    <i class="fas fa-globe text-neonBlue"></i>
+                                    {{ form.is_public.label }}
+                                </span>
+                            </label>
+                            <p class="text-gray-500 text-xs mt-2 flex items-center gap-1">
+                                <i class="fas fa-info-circle"></i>
+                                Others can view public visualizations
+                            </p>
+                            {% if form.is_public.errors %}
+                                <div class="text-error text-sm mt-2 flex items-center gap-1">
+                                    <i class="fas fa-circle-exclamation text-xs"></i>
+                                    {% for error in form.is_public.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="flex gap-3 pt-6 border-t border-white/10">
+                            <button type="submit" class="flex-1 bg-gradient-to-r from-neonBlue to-neonPurple hover:from-neonBlue/80 hover:to-neonPurple/80 text-white font-bold py-3 rounded-lg transition flex items-center justify-center gap-2">
+                                <i class="fas fa-save text-sm"></i>
+                                {{ button_text }}
+                            </button>
+                            <a href="{% url 'visualizations:visualization_list' %}" class="flex-1 bg-white/10 hover:bg-white/20 border border-white/30 text-white font-bold py-3 rounded-lg transition flex items-center justify-center gap-2">
+                                <i class="fas fa-times text-sm"></i>
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
             </div>
 
-            <!-- Form Content -->
-            <form method="POST" class="px-6 py-6 space-y-6">
-                {% csrf_token %}
-                
-                {% if form.non_field_errors %}
-                    <div class="bg-error/10 border border-error/50 text-error px-4 py-3 rounded-lg flex items-center gap-2">
-                        <i class="fas fa-circle-exclamation"></i>
-                        {{ form.non_field_errors }}
+            <!-- Preview Section (Right) -->
+            <div class="lg:col-span-2">
+                <div class="glass-panel rounded-2xl border border-white/10 overflow-hidden sticky top-32">
+                    <!-- Header -->
+                    <div class="px-6 py-6 border-b border-white/10 bg-gradient-to-r from-neonPurple/10 to-neonBlue/10">
+                        <h2 class="text-2xl font-bold text-white flex items-center gap-3">
+                            <i class="fas fa-eye text-neonPurple"></i>
+                            Live Preview
+                        </h2>
+                        <p class="text-gray-400 mt-2 text-sm">Preview your chart before saving</p>
                     </div>
-                {% endif %}
 
-                <!-- Title Field -->
-                <div>
-                    <label class="block text-sm font-bold text-white mb-2 flex items-center gap-2">
-                        <i class="fas fa-heading text-neonBlue text-xs"></i>
-                        {{ form.title.label }}
-                    </label>
-                    {{ form.title }}
-                    {% if form.title.errors %}
-                        <div class="text-error text-sm mt-2 flex items-center gap-1">
-                            <i class="fas fa-circle-exclamation text-xs"></i>
-                            {% for error in form.title.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
+                    <!-- Chart Preview -->
+                    <div class="px-6 py-8 min-h-96">
+                        <div id="preview-loading" class="hidden text-center py-12">
+                            <div class="inline-block">
+                                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-neonBlue"></div>
+                            </div>
+                            <p class="text-gray-400 mt-4">Generating preview...</p>
                         </div>
-                    {% endif %}
-                </div>
 
-                <!-- Description Field -->
-                <div>
-                    <label class="block text-sm font-bold text-white mb-2 flex items-center gap-2">
-                        <i class="fas fa-note text-neonBlue text-xs"></i>
-                        {{ form.description.label }}
-                    </label>
-                    {{ form.description }}
-                    {% if form.description.errors %}
-                        <div class="text-error text-sm mt-2 flex items-center gap-1">
-                            <i class="fas fa-circle-exclamation text-xs"></i>
-                            {% for error in form.description.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
+                        <div id="chart-container" class="hidden bg-white/5 rounded-xl p-6 backdrop-blur-sm border border-white/10">
+                            <canvas id="preview-chart" style="max-height: 400px;"></canvas>
                         </div>
-                    {% endif %}
-                </div>
 
-                <!-- Chart Type Field -->
-                <div>
-                    <label class="block text-sm font-bold text-white mb-2 flex items-center gap-2">
-                        <i class="fas fa-chart-line text-neonBlue text-xs"></i>
-                        {{ form.chart_type.label }}
-                    </label>
-                    {{ form.chart_type }}
-                    <p class="text-gray-500 text-xs mt-2 flex items-center gap-1">
-                        <i class="fas fa-info-circle"></i>
-                        Select the type of chart to display
-                    </p>
-                    {% if form.chart_type.errors %}
-                        <div class="text-error text-sm mt-2 flex items-center gap-1">
-                            <i class="fas fa-circle-exclamation text-xs"></i>
-                            {% for error in form.chart_type.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
+                        <div id="no-preview" class="text-center py-12">
+                            <div class="text-6xl text-neonBlue/30 mb-4">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <p class="text-gray-400 text-lg">
+                                Select a dataset and click "Preview" to generate and view your chart
+                            </p>
+                            <p class="text-gray-500 text-sm mt-2">
+                                Your chart will be displayed here in real-time
+                            </p>
                         </div>
-                    {% endif %}
-                </div>
 
-                <!-- Dataset Field -->
-                <div>
-                    <label class="block text-sm font-bold text-white mb-2 flex items-center gap-2">
-                        <i class="fas fa-database text-neonBlue text-xs"></i>
-                        {{ form.dataset.label }}
-                    </label>
-                    {{ form.dataset }}
-                    <p class="text-gray-500 text-xs mt-2 flex items-center gap-1">
-                        <i class="fas fa-info-circle"></i>
-                        Choose a dataset to visualize (optional)
-                    </p>
-                    {% if form.dataset.errors %}
-                        <div class="text-error text-sm mt-2 flex items-center gap-1">
-                            <i class="fas fa-circle-exclamation text-xs"></i>
-                            {% for error in form.dataset.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
+                        <div id="preview-error" class="hidden text-center py-12">
+                            <div class="text-6xl text-error/50 mb-4">
+                                <i class="fas fa-circle-exclamation"></i>
+                            </div>
+                            <p id="error-message" class="text-error text-lg"></p>
                         </div>
-                    {% endif %}
+                    </div>
                 </div>
-
-                <!-- Configuration Field -->
-                <div>
-                    <label class="block text-sm font-bold text-white mb-2 flex items-center gap-2">
-                        <i class="fas fa-code text-neonBlue text-xs"></i>
-                        {{ form.config.label }}
-                    </label>
-                    {{ form.config }}
-                    <p class="text-gray-500 text-xs mt-2 flex items-center gap-1">
-                        <i class="fas fa-info-circle"></i>
-                        Enter JSON configuration for Chart.js or your visualization library
-                    </p>
-                    {% if form.config.errors %}
-                        <div class="text-error text-sm mt-2 flex items-center gap-1">
-                            <i class="fas fa-circle-exclamation text-xs"></i>
-                            {% for error in form.config.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-
-                <!-- Visibility Field -->
-                <div class="bg-black/40 border border-white/10 p-4 rounded-lg">
-                    <label class="flex items-center gap-3 cursor-pointer">
-                        {{ form.is_public }}
-                        <span class="text-sm font-bold text-white flex items-center gap-2">
-                            <i class="fas fa-globe text-neonBlue"></i>
-                            {{ form.is_public.label }}
-                        </span>
-                    </label>
-                    <p class="text-gray-500 text-xs mt-2 flex items-center gap-1">
-                        <i class="fas fa-info-circle"></i>
-                        Others can view public visualizations
-                    </p>
-                    {% if form.is_public.errors %}
-                        <div class="text-error text-sm mt-2 flex items-center gap-1">
-                            <i class="fas fa-circle-exclamation text-xs"></i>
-                            {% for error in form.is_public.errors %}
-                                <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-
-                <!-- Form Actions -->
-                <div class="flex gap-3 pt-6 border-t border-white/10">
-                    <button type="submit" class="flex-1 bg-gradient-to-r from-neonBlue to-neonPurple hover:from-neonBlue/80 hover:to-neonPurple/80 text-white font-bold py-3 rounded-lg transition flex items-center justify-center gap-2">
-                        <i class="fas fa-save text-sm"></i>
-                        {{ button_text }}
-                    </button>
-                    <a href="{% url 'visualizations:visualization_list' %}" class="flex-1 bg-white/10 hover:bg-white/20 border border-white/30 text-white font-bold py-3 rounded-lg transition flex items-center justify-center gap-2">
-                        <i class="fas fa-times text-sm"></i>
-                        Cancel
-                    </a>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
@@ -175,7 +260,7 @@
     input[type="text"],
     textarea,
     select {
-        @apply w-full px-4 py-3 rounded-lg text-white placeholder-gray-600 focus:outline-none transition;
+        @apply w-full px-4 py-3 rounded-lg text-white placeholder-gray-600 focus:outline-none transition bg-black/40 border border-white/10 focus:border-neonBlue;
     }
     
     textarea {
@@ -192,5 +277,242 @@
     select option {
         @apply bg-gray-900 text-white;
     }
+
+    #config-status {
+        @apply text-neonGreen;
+    }
+
+    #config-status.error {
+        @apply text-error;
+    }
 </style>
+
+<script>
+    let currentChart = null;
+    let configGenerated = false;
+    const vizId = window.location.pathname.match(/\/(\d+)\/edit\//)?.[1];
+
+    // Show/hide buttons and manage state
+    document.addEventListener('DOMContentLoaded', function() {
+        const datasetSelect = document.querySelector('select[name="dataset"]');
+        const generateBtn = document.getElementById('generate-config-btn');
+        const previewBtn = document.getElementById('preview-config-btn');
+        
+        function updateButtonVisibility() {
+            if (datasetSelect.value) {
+                generateBtn.style.display = 'flex';
+                // Preview button only enabled after config generated
+                if (configGenerated) {
+                    previewBtn.style.display = 'flex';
+                    previewBtn.disabled = false;
+                } else {
+                    previewBtn.style.display = 'none';
+                    previewBtn.disabled = true;
+                }
+            } else {
+                generateBtn.style.display = 'none';
+                previewBtn.style.display = 'none';
+                previewBtn.disabled = true;
+            }
+        }
+        
+        datasetSelect.addEventListener('change', function() {
+            updateButtonVisibility();
+            resetPreview();
+            configGenerated = false;
+        });
+        
+        updateButtonVisibility();
+    });
+
+    // Generate config and populate the config field
+    async function generateConfig() {
+        const datasetSelect = document.querySelector('select[name="dataset"]');
+        const configField = document.querySelector('textarea[name="config"]');
+        const chartTypeSelect = document.querySelector('select[name="chart_type"]');
+        const titleInput = document.querySelector('input[name="title"]');
+        const generateBtn = document.getElementById('generate-config-btn');
+        const previewBtn = document.getElementById('preview-config-btn');
+        
+        if (!datasetSelect.value) {
+            alert('Please select a dataset first');
+            return;
+        }
+
+        showLoading();
+        const originalContent = generateBtn.innerHTML;
+        generateBtn.disabled = true;
+        generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+        try {
+            // Use preview-config endpoint
+            const response = await fetch('/api/visualizations/preview-config/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    dataset_id: parseInt(datasetSelect.value),
+                    chart_type: chartTypeSelect.value,
+                    title: titleInput.value || 'Chart'
+                })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to generate configuration');
+            }
+
+            const data = await response.json();
+            
+            // Update config field
+            configField.value = JSON.stringify(data.config, null, 2);
+            
+            // Show config status
+            const configStatus = document.getElementById('config-status');
+            configStatus.textContent = '✓ Config generated successfully';
+            configStatus.classList.remove('error');
+            
+            // Enable preview button
+            configGenerated = true;
+            previewBtn.style.display = 'flex';
+            previewBtn.disabled = false;
+            
+            // Show success message
+            resetPreview();
+            
+        } catch (error) {
+            console.error('Error:', error);
+            const configStatus = document.getElementById('config-status');
+            configStatus.textContent = '✗ ' + error.message;
+            configStatus.classList.add('error');
+            configGenerated = false;
+            previewBtn.disabled = true;
+        } finally {
+            generateBtn.disabled = false;
+            generateBtn.innerHTML = originalContent;
+        }
+    }
+
+    // Generate and preview chart
+    async function generateAndPreviewChart() {
+        const datasetSelect = document.querySelector('select[name="dataset"]');
+        const configField = document.querySelector('textarea[name="config"]');
+        const chartTypeSelect = document.querySelector('select[name="chart_type"]');
+        const titleInput = document.querySelector('input[name="title"]');
+        const previewBtn = document.getElementById('preview-config-btn');
+        
+        if (!datasetSelect.value) {
+            alert('Please select a dataset first');
+            return;
+        }
+
+        showLoading();
+        const originalContent = previewBtn.innerHTML;
+        previewBtn.disabled = true;
+        previewBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
+        try {
+            // Use preview-config endpoint
+            const response = await fetch('/api/visualizations/preview-config/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    dataset_id: parseInt(datasetSelect.value),
+                    chart_type: chartTypeSelect.value,
+                    title: titleInput.value || 'Chart'
+                })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to generate configuration');
+            }
+
+            const data = await response.json();
+            
+            // Display preview
+            displayChart(data.config);
+            
+        } catch (error) {
+            console.error('Error:', error);
+            showError('Failed to generate preview: ' + error.message);
+        } finally {
+            previewBtn.disabled = false;
+            previewBtn.innerHTML = originalContent;
+        }
+    }
+
+    function displayChart(config) {
+        const chartContainer = document.getElementById('chart-container');
+        const previewChart = document.getElementById('preview-chart');
+        const noPreview = document.getElementById('no-preview');
+        const previewError = document.getElementById('preview-error');
+        
+        // Hide other elements
+        noPreview.classList.add('hidden');
+        previewError.classList.add('hidden');
+        chartContainer.classList.remove('hidden');
+
+        // Destroy existing chart if any
+        if (currentChart) {
+            currentChart.destroy();
+        }
+
+        // Create new chart
+        try {
+            const ctx = previewChart.getContext('2d');
+            currentChart = new Chart(ctx, config);
+        } catch (e) {
+            console.error('Error creating chart:', e);
+            showError('Error rendering chart: ' + e.message);
+        }
+    }
+
+    function showLoading() {
+        document.getElementById('preview-loading').classList.remove('hidden');
+        document.getElementById('chart-container').classList.add('hidden');
+        document.getElementById('no-preview').classList.add('hidden');
+        document.getElementById('preview-error').classList.add('hidden');
+    }
+
+    function showError(message) {
+        document.getElementById('preview-loading').classList.add('hidden');
+        document.getElementById('chart-container').classList.add('hidden');
+        document.getElementById('no-preview').classList.add('hidden');
+        document.getElementById('preview-error').classList.remove('hidden');
+        document.getElementById('error-message').textContent = message;
+    }
+
+    function resetPreview() {
+        document.getElementById('preview-loading').classList.add('hidden');
+        document.getElementById('chart-container').classList.add('hidden');
+        document.getElementById('no-preview').classList.remove('hidden');
+        document.getElementById('preview-error').classList.add('hidden');
+        
+        if (currentChart) {
+            currentChart.destroy();
+            currentChart = null;
+        }
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
 {% endblock %}

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chart Builder - LuminaBI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            font-family: 'Inter', sans-serif;
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
+        }
+        .neon-blue { color: #00ffff; }
+        .neon-purple { color: #a855f7; }
+    </style>
+</head>
+<body class="min-h-screen text-white">
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold text-white mb-2 flex items-center gap-3">
+                <i class="fas fa-wand-magic-sparkles neon-blue"></i>
+                Chart Builder
+            </h1>
+            <p class="text-gray-400">Configure your visualization</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Configuration Panel -->
+            <div class="glass-panel rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                    <i class="fas fa-cog neon-purple"></i>
+                    Configuration
+                </h2>
+
+                <!-- Dataset Selection -->
+                <div class="mb-4">
+                    <label class="block text-sm font-bold mb-2">Dataset</label>
+                    <select id="datasetSelect" class="w-full px-4 py-2 rounded-lg bg-black/40 border border-white/10 text-white">
+                        <option value="">Select a dataset...</option>
+                        <option value="1">Sample Sales Data</option>
+                        <option value="2">Monthly Revenue</option>
+                        <option value="3">Customer Analytics</option>
+                    </select>
+                </div>
+
+                <!-- Chart Type -->
+                <div class="mb-4">
+                    <label class="block text-sm font-bold mb-2">Chart Type</label>
+                    <select id="chartType" class="w-full px-4 py-2 rounded-lg bg-black/40 border border-white/10 text-white">
+                        <option value="bar">Bar Chart</option>
+                        <option value="line">Line Chart</option>
+                        <option value="pie">Pie Chart</option>
+                        <option value="doughnut">Donut Chart</option>
+                        <option value="scatter">Scatter Plot</option>
+                        <option value="radar">Radar Chart</option>
+                        <option value="bubble">Bubble Chart</option>
+                    </select>
+                </div>
+
+                <!-- X Axis Column -->
+                <div class="mb-4">
+                    <label class="block text-sm font-bold mb-2">X-Axis Column</label>
+                    <select id="xColumn" class="w-full px-4 py-2 rounded-lg bg-black/40 border border-white/10 text-white">
+                        <option value="">Select column...</option>
+                    </select>
+                </div>
+
+                <!-- Y Axis Column -->
+                <div class="mb-4">
+                    <label class="block text-sm font-bold mb-2">Y-Axis Column</label>
+                    <select id="yColumn" class="w-full px-4 py-2 rounded-lg bg-black/40 border border-white/10 text-white">
+                        <option value="">Select column...</option>
+                    </select>
+                </div>
+
+                <!-- Chart Title -->
+                <div class="mb-4">
+                    <label class="block text-sm font-bold mb-2">Chart Title</label>
+                    <input type="text" id="chartTitle" value="My Chart" class="w-full px-4 py-2 rounded-lg bg-black/40 border border-white/10 text-white">
+                </div>
+
+                <!-- Show Legend -->
+                <div class="mb-4">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" id="showLegend" checked class="w-5 h-5 rounded">
+                        <span class="text-sm font-bold">Show Legend</span>
+                    </label>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="space-y-3">
+                    <button onclick="generateChart()" class="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-chart-line"></i>
+                        Generate Chart
+                    </button>
+                    
+                    <button onclick="exportConfig()" class="w-full bg-white/10 hover:bg-white/20 border border-white/30 text-white font-bold py-3 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-code"></i>
+                        Export Config
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chart Preview -->
+            <div class="lg:col-span-2 glass-panel rounded-2xl p-6 border border-white/10">
+                <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                    <i class="fas fa-eye neon-blue"></i>
+                    Preview
+                </h2>
+                <div class="bg-white/5 rounded-xl p-6 border border-white/10">
+                    <canvas id="previewChart"></canvas>
+                </div>
+
+                <!-- Configuration JSON -->
+                <div class="mt-6">
+                    <h3 class="text-sm font-bold mb-2 flex items-center gap-2">
+                        <i class="fas fa-code text-gray-400"></i>
+                        Generated Configuration
+                    </h3>
+                    <div class="bg-black/60 p-4 rounded-lg font-mono text-xs text-gray-300 overflow-x-auto border border-white/10 max-h-64 overflow-y-auto">
+                        <pre id="configOutput">{}</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let chartInstance = null;
+        let currentConfig = {};
+
+        // Sample data for demo
+        const sampleData = {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            values: [65, 59, 80, 81, 56, 55]
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Populate columns when dataset changes
+            document.getElementById('datasetSelect').addEventListener('change', loadDatasetColumns);
+            
+            // Update chart on any config change
+            ['chartType', 'xColumn', 'yColumn', 'chartTitle', 'showLegend'].forEach(id => {
+                const el = document.getElementById(id);
+                el.addEventListener('change', generateChart);
+            });
+
+            // Initial chart
+            generateChart();
+        });
+
+        function loadDatasetColumns() {
+            const datasetId = document.getElementById('datasetSelect').value;
+            
+            if (!datasetId) {
+                document.getElementById('xColumn').innerHTML = '<option value="">Select column...</option>';
+                document.getElementById('yColumn').innerHTML = '<option value="">Select column...</option>';
+                return;
+            }
+
+            // In real app, fetch from API: /visualizations/api/dataset/${datasetId}/data/
+            // For demo, use sample columns
+            const sampleColumns = ['Month', 'Sales', 'Revenue', 'Profit', 'Customers'];
+            
+            const xSelect = document.getElementById('xColumn');
+            const ySelect = document.getElementById('yColumn');
+            
+            xSelect.innerHTML = '<option value="">Select column...</option>';
+            ySelect.innerHTML = '<option value="">Select column...</option>';
+            
+            sampleColumns.forEach(col => {
+                xSelect.innerHTML += `<option value="${col}">${col}</option>`;
+                ySelect.innerHTML += `<option value="${col}">${col}</option>`;
+            });
+            
+            // Set defaults
+            xSelect.value = 'Month';
+            ySelect.value = 'Sales';
+            
+            generateChart();
+        }
+
+        function generateChart() {
+            const chartType = document.getElementById('chartType').value;
+            const chartTitle = document.getElementById('chartTitle').value;
+            const showLegend = document.getElementById('showLegend').checked;
+            const xColumn = document.getElementById('xColumn').value;
+            const yColumn = document.getElementById('yColumn').value;
+
+            // Generate colors
+            const colors = [
+                'rgba(0, 255, 255, 0.7)',
+                'rgba(168, 85, 247, 0.7)',
+                'rgba(34, 197, 94, 0.7)',
+                'rgba(251, 191, 36, 0.7)',
+                'rgba(239, 68, 68, 0.7)',
+                'rgba(236, 72, 153, 0.7)'
+            ];
+
+            // Build chart configuration
+            let chartData;
+            
+            if (chartType === 'pie' || chartType === 'doughnut') {
+                chartData = {
+                    labels: sampleData.labels,
+                    datasets: [{
+                        label: yColumn || 'Data',
+                        data: sampleData.values,
+                        backgroundColor: colors,
+                        borderWidth: 2,
+                        borderColor: '#1e293b'
+                    }]
+                };
+            } else if (chartType === 'scatter' || chartType === 'bubble') {
+                chartData = {
+                    datasets: [{
+                        label: `${xColumn} vs ${yColumn}`,
+                        data: sampleData.values.map((v, i) => ({
+                            x: i * 10,
+                            y: v,
+                            r: chartType === 'bubble' ? v / 5 : undefined
+                        })),
+                        backgroundColor: 'rgba(0, 255, 255, 0.7)',
+                        borderColor: 'rgba(0, 255, 255, 1)'
+                    }]
+                };
+            } else if (chartType === 'radar') {
+                chartData = {
+                    labels: sampleData.labels,
+                    datasets: [{
+                        label: yColumn || 'Data',
+                        data: sampleData.values,
+                        backgroundColor: 'rgba(0, 255, 255, 0.2)',
+                        borderColor: 'rgba(0, 255, 255, 1)',
+                        pointBackgroundColor: 'rgba(0, 255, 255, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(0, 255, 255, 1)'
+                    }]
+                };
+            } else {
+                chartData = {
+                    labels: sampleData.labels,
+                    datasets: [{
+                        label: yColumn || 'Data',
+                        data: sampleData.values,
+                        backgroundColor: 'rgba(0, 255, 255, 0.7)',
+                        borderColor: 'rgba(0, 255, 255, 1)',
+                        borderWidth: 2,
+                        fill: chartType === 'line' ? false : true
+                    }]
+                };
+            }
+
+            const config = {
+                type: chartType,
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        title: {
+                            display: !!chartTitle,
+                            text: chartTitle,
+                            color: '#ffffff',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        },
+                        legend: {
+                            display: showLegend,
+                            labels: {
+                                color: '#ffffff',
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#ffffff',
+                            bodyColor: '#ffffff',
+                            borderColor: 'rgba(0, 255, 255, 0.3)',
+                            borderWidth: 1
+                        }
+                    },
+                    scales: chartType !== 'pie' && chartType !== 'doughnut' && chartType !== 'radar' ? {
+                        x: {
+                            ticks: { color: '#9ca3af' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        },
+                        y: {
+                            ticks: { color: '#9ca3af' },
+                            grid: { color: 'rgba(255, 255, 255, 0.1)' }
+                        }
+                    } : undefined
+                }
+            };
+
+            // Store configuration
+            currentConfig = config;
+
+            // Display configuration
+            document.getElementById('configOutput').textContent = JSON.stringify(config, null, 2);
+
+            // Destroy previous chart
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            // Create new chart
+            const ctx = document.getElementById('previewChart').getContext('2d');
+            chartInstance = new Chart(ctx, config);
+        }
+
+        function exportConfig() {
+            const configText = JSON.stringify(currentConfig, null, 2);
+            
+            // Create downloadable file
+            const blob = new Blob([configText], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'chart-config.json';
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            // Also copy to clipboard
+            navigator.clipboard.writeText(configText).then(() => {
+                alert('Configuration copied to clipboard and downloaded!');
+            });
+        }
+    </script>
+</body>
+</html>

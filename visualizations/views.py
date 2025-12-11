@@ -12,6 +12,9 @@ from django.db.models import Q
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+import json
 
 from .models import Visualization, VisualizationAccessLog, VisualizationTag, VisualizationComment, VisualizationFavorite
 from api.serializers import VisualizationSerializer
@@ -111,18 +114,31 @@ class VisualizationCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('visualizations:visualization_list')
     
     def form_valid(self, form):
-        """Set the owner to the current user and handle empty config."""
+        """Set the owner to the current user and auto-generate config from dataset."""
         form.instance.owner = self.request.user
-        # Handle empty config field - convert empty string to empty dict
-        if not form.instance.config or form.instance.config == '':
-            form.instance.config = {}
+        
+        # Auto-generate config if dataset is selected and config is empty
+        if form.instance.dataset and (not form.instance.config or form.instance.config == ''):
+            # Generate configuration from dataset
+            if form.instance.generate_config_from_dataset():
+                message = f'Visualization "{form.instance.title}" created with auto-generated chart configuration.'
+            else:
+                # Fallback to empty config if generation fails
+                form.instance.config = {}
+                message = f'Visualization "{form.instance.title}" created. (Configuration generation failed, please configure manually)'
+        else:
+            # Handle empty config field - convert empty string to empty dict
+            if not form.instance.config or form.instance.config == '':
+                form.instance.config = {}
+            message = f'Visualization "{form.instance.title}" has been created successfully.'
+        
         response = super().form_valid(form)
         
         # Create notification
         create_notification(
             user=self.request.user,
             title='Visualization Created',
-            message=f'Visualization "{form.instance.title}" has been created successfully.',
+            message=message,
             notification_type='success',
             related_app='visualizations',
             related_model='Visualization',
@@ -155,9 +171,20 @@ class VisualizationUpdateView(LoginRequiredMixin, OwnerCheckMixin, UpdateView):
         return obj
     
     def form_valid(self, form):
-        """Handle empty config field - convert empty string to empty dict."""
-        if not form.instance.config or form.instance.config == '':
-            form.instance.config = {}
+        """Handle config update and auto-generation if dataset changed."""
+        # If dataset changed and config is empty, auto-generate
+        if form.instance.dataset:
+            if (not form.instance.config or form.instance.config == '' or 
+                'regenerate' in self.request.POST):
+                form.instance.generate_config_from_dataset()
+            # Also handle if just config field is empty
+            elif not form.instance.config or form.instance.config == '':
+                form.instance.config = {}
+        else:
+            # No dataset, ensure config is dict
+            if not form.instance.config or form.instance.config == '':
+                form.instance.config = {}
+        
         return super().form_valid(form)
     
     def get_context_data(self, **kwargs):
@@ -329,6 +356,105 @@ class VisualizationViewSet(viewsets.ModelViewSet):
             'config': visualization.config
         })
     
+    @action(detail=True, methods=['post'])
+    def generate_config(self, request, pk=None):
+        """
+        Automatically generate chart configuration from the linked dataset.
+        Called when user selects a dataset or changes chart type.
+        """
+        visualization = self.get_object()
+        if visualization.owner != request.user:
+            return Response(
+                {'error': 'Permission denied'},
+                status=status.HTTP_403_FORBIDDEN
+            )
+        
+        if not visualization.dataset:
+            return Response(
+                {'error': 'No dataset linked to this visualization'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            success = visualization.generate_config_from_dataset()
+            
+            if success:
+                visualization.save()
+                return Response({
+                    'status': 'success',
+                    'message': 'Configuration generated successfully',
+                    'config': visualization.config,
+                    'chart_type': visualization.chart_type,
+                })
+            else:
+                return Response(
+                    {'error': 'Failed to generate configuration from dataset'},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                )
+        except Exception as e:
+            return Response(
+                {'error': f'Configuration generation failed: {str(e)}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+    
+    @action(detail=False, methods=['post'], url_path='preview-config')
+    def preview_config(self, request):
+        """
+        Generate preview configuration for a dataset without saving visualization.
+        Used for live preview during chart creation.
+        """
+        dataset_id = request.data.get('dataset_id')
+        chart_type = request.data.get('chart_type', 'bar')
+        title = request.data.get('title', 'Chart')
+        
+        if not dataset_id:
+            return Response(
+                {'error': 'dataset_id is required'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            from datasets.models import Dataset
+            from .config_generator import ChartConfigGenerator
+            from datasets.services import FileParser
+            import os
+            
+            # Get dataset
+            dataset = Dataset.objects.get(id=dataset_id, owner=request.user)
+            
+            # Check if file exists
+            if not os.path.exists(dataset.file.path):
+                return Response(
+                    {'error': 'Dataset file not found'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            
+            # Parse file
+            df = FileParser.parse_file(dataset.file.path, dataset.file_type)
+            
+            # Generate config
+            generator = ChartConfigGenerator(df, dataset.column_names)
+            config = generator.generate_config(
+                chart_type=chart_type,
+                title=title
+            )
+            
+            return Response({
+                'status': 'success',
+                'config': config,
+                'chart_type': chart_type,
+            })
+        except Dataset.DoesNotExist:
+            return Response(
+                {'error': 'Dataset not found or you do not have permission to access it'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            return Response(
+                {'error': f'Failed to generate preview: {str(e)}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+    
     @action(detail=False, methods=['get'])
     def statistics(self, request):
         """Get statistics about user's visualizations."""
@@ -342,6 +468,147 @@ class VisualizationViewSet(viewsets.ModelViewSet):
             'public_visualizations': user_viz.filter(is_public=True).count(),
             'by_chart_type': chart_type_counts,
         })
+
+
+@csrf_exempt
+@login_required
+def preview_config_direct(request):
+    """Direct POST endpoint for generating preview config (fallback safe).
+
+    This view mirrors the DRF action but is registered separately to avoid
+    routing/OPTIONS issues observed in some environments. It always returns
+    a minimal Chart.js configuration so the frontend can render a chart.
+    """
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
+
+    try:
+        payload = json.loads(request.body.decode('utf-8') or '{}')
+    except Exception:
+        return JsonResponse({'error': 'Invalid JSON payload'}, status=400)
+
+    dataset_id = payload.get('dataset_id')
+    chart_type = payload.get('chart_type', 'bar')
+    title = payload.get('title', 'Chart')
+
+    if not dataset_id:
+        return JsonResponse({'error': 'dataset_id is required'}, status=400)
+
+    try:
+        from datasets.models import Dataset
+        from .config_generator import ChartConfigGenerator
+        from datasets.services import FileParser
+        import os
+
+        dataset = Dataset.objects.get(id=dataset_id, owner=request.user)
+
+        if not os.path.exists(dataset.file.path):
+            return JsonResponse({'error': 'Dataset file not found'}, status=404)
+
+        df = FileParser.parse_file(dataset.file.path, dataset.file_type)
+
+        # Attempt to use the main generator
+        generator = ChartConfigGenerator(df, getattr(dataset, 'column_names', None))
+        try:
+            config = generator.generate_config(chart_type=chart_type, title=title)
+        except Exception:
+            config = None
+
+        # If generator produced an unusable config (no datasets), create a fallback
+        def make_fallback(df, chart_type, title):
+            labels = []
+            datasets = []
+            # Prefer categorical labels + numeric values for most charts
+            numeric_cols = df.select_dtypes(include=['number']).columns.tolist()
+            categorical_cols = df.select_dtypes(include=['object', 'category']).columns.tolist()
+
+            if chart_type in ['pie', 'donut']:
+                # Need labels and single numeric
+                if categorical_cols and numeric_cols:
+                    labels = df[categorical_cols[0]].astype(str).tolist()
+                    values = df[numeric_cols[0]].fillna(0).tolist()
+                    datasets = [{
+                        'label': str(numeric_cols[0]),
+                        'data': values,
+                        'backgroundColor': ChartConfigGenerator(df).column_names if False else [],
+                    }]
+                elif numeric_cols:
+                    labels = [str(i) for i in range(len(df))]
+                    values = df[numeric_cols[0]].fillna(0).tolist()
+                    datasets = [{
+                        'label': str(numeric_cols[0]),
+                        'data': values,
+                        'backgroundColor': [],
+                    }]
+                else:
+                    labels = [str(i) for i in range(len(df))]
+                    datasets = [{
+                        'label': 'values',
+                        'data': [1 for _ in range(len(df))],
+                        'backgroundColor': [],
+                    }]
+                return {
+                    'type': 'pie',
+                    'data': {'labels': labels, 'datasets': datasets},
+                    'options': {'plugins': {'title': {'display': True, 'text': title}}}
+                }
+
+            # For bar/line/scatter/etc.
+            if numeric_cols:
+                x_labels = df.index.astype(str).tolist()
+                y_col = numeric_cols[0]
+                datasets = [{
+                    'label': str(y_col),
+                    'data': df[y_col].fillna(0).tolist(),
+                    'borderColor': '#00f3ff',
+                    'backgroundColor': 'rgba(0,243,255,0.4)'
+                }]
+                return {
+                    'type': 'line' if chart_type == 'line' else ('bar' if chart_type == 'bar' else 'line'),
+                    'data': {'labels': x_labels, 'datasets': datasets},
+                    'options': {
+                        'responsive': True,
+                        'maintainAspectRatio': False,
+                        'plugins': {'title': {'display': True, 'text': title}},
+                    }
+                }
+
+            # If no numeric columns at all, produce a simple categorical count
+            if categorical_cols:
+                col = categorical_cols[0]
+                counts = df[col].astype(str).value_counts()
+                labels = counts.index.tolist()
+                values = counts.tolist()
+                datasets = [{
+                    'label': str(col),
+                    'data': values,
+                    'backgroundColor': 'rgba(189,0,255,0.6)'
+                }]
+                return {
+                    'type': 'bar',
+                    'data': {'labels': labels, 'datasets': datasets},
+                    'options': {'responsive': True, 'maintainAspectRatio': False, 'plugins': {'title': {'display': True, 'text': title}}}
+                }
+
+            # Final fallback: tiny dataset
+            return {
+                'type': 'bar',
+                'data': {'labels': [str(i) for i in range(min(5, len(df)))], 'datasets': [{'label': 'values', 'data': [1 for _ in range(min(5, len(df)))]}]},
+                'options': {'plugins': {'title': {'display': True, 'text': title}}}
+            }
+
+        if not config or (isinstance(config, dict) and config.get('data', {}).get('datasets') == []):
+            try:
+                config = make_fallback(df, chart_type, title)
+            except Exception as e:
+                return JsonResponse({'error': f'Failed to generate preview: {str(e)}'}, status=500)
+
+        return JsonResponse({'status': 'success', 'config': config, 'chart_type': chart_type}, status=200)
+
+    except Dataset.DoesNotExist:
+        return JsonResponse({'error': 'Dataset not found or you do not have permission to access it'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': f'Failed to generate preview: {str(e)}'}, status=500)
 
 
 # ============================================================================
