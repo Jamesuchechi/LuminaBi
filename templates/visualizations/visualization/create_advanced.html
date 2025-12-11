@@ -1,0 +1,865 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Visualization - LuminaBI{% endblock %}
+
+{% block content %}
+<style>
+    .step-indicator {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 16px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .step-indicator.active {
+        background: rgba(0, 243, 255, 0.2);
+        color: #00f3ff;
+    }
+
+    .step-indicator.completed {
+        background: rgba(0, 255, 157, 0.2);
+        color: #00ff9d;
+    }
+
+    .column-tag {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 6px;
+        background: rgba(189, 0, 255, 0.2);
+        border: 1px solid #bd00ff;
+        color: #e9d5ff;
+        font-size: 12px;
+        margin: 4px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .column-tag:hover {
+        background: rgba(189, 0, 255, 0.4);
+        transform: scale(1.05);
+    }
+
+    .column-tag.selected {
+        background: #bd00ff;
+        border-color: #e9d5ff;
+    }
+
+    .error-message {
+        color: #ff0055;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px;
+        background: rgba(255, 0, 85, 0.1);
+        border-left: 3px solid #ff0055;
+        border-radius: 4px;
+    }
+
+    .success-message {
+        color: #00ff9d;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px;
+        background: rgba(0, 255, 157, 0.1);
+        border-left: 3px solid #00ff9d;
+        border-radius: 4px;
+    }
+
+    .preview-chart-container {
+        position: relative;
+        height: 400px;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .loading-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(3, 0, 20, 0.9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        border-radius: 12px;
+    }
+
+    .spinner {
+        border: 3px solid rgba(0, 243, 255, 0.1);
+        border-top: 3px solid #00f3ff;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .form-select, .form-input {
+        background: rgba(255, 255, 255, 0.12) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
+        padding: 10px 12px !important;
+        border-radius: 8px !important;
+        width: 100% !important;
+        font-size: 14px !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .form-select:focus, .form-input:focus {
+        outline: none !important;
+        border-color: #00f3ff !important;
+        box-shadow: 0 0 15px rgba(0, 243, 255, 0.3) !important;
+        background: rgba(255, 255, 255, 0.18) !important;
+    }
+
+    .form-select option {
+        background: #030014;
+        color: #ffffff;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #00f3ff 0%, #00d9ff 100%);
+        color: #000;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 243, 255, 0.3);
+    }
+
+    .btn-secondary {
+        background: rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+        padding: 12px 24px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .config-output {
+        background: rgba(0, 0, 0, 0.6);
+        border: 1px solid rgba(0, 243, 255, 0.2);
+        border-radius: 8px;
+        padding: 16px;
+        font-family: 'Monaco', 'Courier New', monospace;
+        font-size: 12px;
+        color: #a1f5ff;
+        max-height: 400px;
+        overflow-y: auto;
+        line-height: 1.5;
+    }
+
+    .checkbox-input {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        accent-color: #00f3ff;
+    }
+
+    .label-text {
+        font-size: 14px;
+        font-weight: 600;
+        color: #e2e8f0;
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .label-text .required {
+        color: #ff0055;
+    }
+
+    .data-preview {
+        background: rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(0, 243, 255, 0.1);
+        border-radius: 8px;
+        padding: 12px;
+        max-height: 300px;
+        overflow-y: auto;
+        font-size: 12px;
+    }
+
+    .data-preview table {
+        width: 100%;
+        border-collapse: collapse;
+        color: #cbd5e1;
+    }
+
+    .data-preview th {
+        background: rgba(0, 243, 255, 0.1);
+        padding: 8px;
+        text-align: left;
+        font-weight: 600;
+        color: #00f3ff;
+        border-bottom: 1px solid rgba(0, 243, 255, 0.2);
+    }
+
+    .data-preview td {
+        padding: 8px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .data-preview tr:hover {
+        background: rgba(0, 243, 255, 0.05);
+    }
+
+    @media (max-width: 1024px) {
+        .grid-2col { grid-template-columns: 1fr !important; }
+        .preview-chart-container { height: 300px; }
+    }
+</style>
+
+<!-- Main Content -->
+<div class="max-w-7xl mx-auto py-8 px-4">
+    <!-- Header -->
+    <div class="mb-8">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-5xl font-bold text-gradient flex items-center gap-3">
+                    <i class="fas fa-chart-line"></i>
+                    Create Visualization
+                </h1>
+                <p class="text-gray-400 mt-2">Build your chart step by step</p>
+            </div>
+            <a href="{% url 'visualizations:visualization_list' %}" class="btn-secondary">
+                <i class="fas fa-arrow-left"></i>
+                Back
+            </a>
+        </div>
+
+        <!-- Step Indicators -->
+        <div class="flex flex-wrap gap-3">
+            <div class="step-indicator active" id="step-1-indicator">
+                <span class="font-bold">1</span>
+                <span>Select Dataset</span>
+            </div>
+            <div class="step-indicator" id="step-2-indicator">
+                <span class="font-bold">2</span>
+                <span>Configure Chart</span>
+            </div>
+            <div class="step-indicator" id="step-3-indicator">
+                <span class="font-bold">3</span>
+                <span>Preview & Save</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Messages -->
+    <div id="messageContainer"></div>
+
+    <!-- Main Content -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 grid-2col">
+        <!-- Left Panel: Configuration -->
+        <div class="lg:col-span-1 space-y-6">
+            <!-- Step 1: Dataset Selection -->
+            <div class="glass-panel rounded-2xl p-6" id="step-1">
+                <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                    <i class="fas fa-database" style="color: #00f3ff;"></i>
+                    Select Dataset
+                </h2>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="label-text">
+                            <i class="fas fa-folder-open"></i>
+                            Dataset <span class="required">*</span>
+                        </label>
+                        <select id="datasetSelect" class="form-select" required onchange="handleDatasetChange()">
+                            <option value="">-- Select a dataset --</option>
+                        </select>
+                        <div id="datasetError" class="mt-2"></div>
+                    </div>
+
+                    <!-- Dataset Info -->
+                    <div id="datasetInfo" class="hidden">
+                        <div class="glass-panel p-4 rounded-lg border border-white/10">
+                            <p class="text-sm text-gray-400 mb-2">
+                                <strong>Columns:</strong> <span id="datasetColumns">0</span>
+                            </p>
+                            <p class="text-sm text-gray-400">
+                                <strong>Rows:</strong> <span id="datasetRows">0</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Chart Configuration -->
+            <div class="glass-panel rounded-2xl p-6 hidden" id="step-2">
+                <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                    <i class="fas fa-cog" style="color: #bd00ff;"></i>
+                    Configure Chart
+                </h2>
+
+                <div class="space-y-4">
+                    <!-- Chart Title -->
+                    <div>
+                        <label class="label-text">
+                            <i class="fas fa-heading"></i>
+                            Chart Title
+                        </label>
+                        <input type="text" id="chartTitle" class="form-input" placeholder="Enter chart title" value="My Chart">
+                    </div>
+
+                    <!-- Chart Type -->
+                    <div>
+                        <label class="label-text">
+                            <i class="fas fa-chart-bar"></i>
+                            Chart Type <span class="required">*</span>
+                        </label>
+                        <select id="chartType" class="form-select" required onchange="handleChartTypeChange()">
+                            <option value="">-- Select type --</option>
+                            <option value="bar">Bar Chart</option>
+                            <option value="line">Line Chart</option>
+                            <option value="pie">Pie Chart</option>
+                            <option value="doughnut">Donut Chart</option>
+                            <option value="scatter">Scatter Plot</option>
+                            <option value="radar">Radar Chart</option>
+                            <option value="bubble">Bubble Chart</option>
+                        </select>
+                    </div>
+
+                    <!-- X-Axis Column -->
+                    <div id="xAxisContainer" class="hidden">
+                        <label class="label-text">
+                            <i class="fas fa-arrows-alt-h"></i>
+                            X-Axis Column <span class="required">*</span>
+                        </label>
+                        <select id="xColumn" class="form-select" onchange="handleColumnChange()">
+                            <option value="">-- Select column --</option>
+                        </select>
+                    </div>
+
+                    <!-- Y-Axis Column -->
+                    <div id="yAxisContainer" class="hidden">
+                        <label class="label-text">
+                            <i class="fas fa-arrows-alt-v"></i>
+                            Y-Axis Column <span class="required">*</span>
+                        </label>
+                        <select id="yColumn" class="form-select" onchange="handleColumnChange()">
+                            <option value="">-- Select column --</option>
+                        </select>
+                    </div>
+
+                    <!-- Multi-Select for Data -->
+                    <div id="multiSelectContainer" class="hidden">
+                        <label class="label-text">
+                            <i class="fas fa-hand-pointer"></i>
+                            Select Columns to Visualize
+                        </label>
+                        <div id="columnsMultiSelect" class="space-y-2 max-h-200 overflow-y-auto">
+                        </div>
+                        <p class="text-xs text-gray-500 mt-2">Leave empty to visualize all columns</p>
+                    </div>
+
+                    <!-- Show Legend -->
+                    <div>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" id="showLegend" class="checkbox-input" checked>
+                            <span class="text-sm font-bold">Show Legend</span>
+                        </label>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="space-y-3 pt-4 border-t border-white/10">
+                        <button onclick="generateChart()" class="btn-primary w-full">
+                            <i class="fas fa-wand-magic-sparkles"></i>
+                            Generate Preview
+                        </button>
+                        <button onclick="goToStep(3)" class="btn-secondary w-full">
+                            <i class="fas fa-arrow-right"></i>
+                            Next
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel: Preview -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Chart Preview -->
+            <div class="glass-panel rounded-2xl p-6" id="previewSection">
+                <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                    <i class="fas fa-eye" style="color: #00f3ff;"></i>
+                    Live Preview
+                </h2>
+                <div class="preview-chart-container" id="previewChartContainer">
+                    <div class="loading-overlay" id="previewLoading" style="display: none;">
+                        <div class="text-center">
+                            <div class="spinner mx-auto mb-4"></div>
+                            <p>Generating preview...</p>
+                        </div>
+                    </div>
+                    <canvas id="previewChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Configuration Output -->
+            <div class="glass-panel rounded-2xl p-6" id="configSection" style="display: none;">
+                <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                    <i class="fas fa-code text-gray-400"></i>
+                    Configuration
+                </h2>
+                <div class="config-output" id="configOutput">{}</div>
+                <button onclick="copyConfig()" class="btn-secondary w-full mt-4">
+                    <i class="fas fa-copy"></i>
+                    Copy Configuration
+                </button>
+            </div>
+
+            <!-- Save Section -->
+            <div class="glass-panel rounded-2xl p-6 hidden" id="step-3">
+                <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+                    <i class="fas fa-floppy-disk" style="color: #bd00ff;"></i>
+                    Save Visualization
+                </h2>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="label-text">
+                            <i class="fas fa-heading"></i>
+                            Visualization Name <span class="required">*</span>
+                        </label>
+                        <input type="text" id="vizName" class="form-input" placeholder="Give your visualization a name" value="My Chart">
+                    </div>
+
+                    <div>
+                        <label class="label-text">
+                            <i class="fas fa-file-alt"></i>
+                            Description
+                        </label>
+                        <textarea id="vizDescription" class="form-select" placeholder="Add optional description..." rows="3"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" id="vizPublic" class="checkbox-input">
+                            <span class="text-sm font-bold">Make this visualization public</span>
+                        </label>
+                        <p class="text-xs text-gray-500 mt-2">Public visualizations can be viewed by anyone with the link</p>
+                    </div>
+
+                    <div class="flex gap-3 pt-4 border-t border-white/10">
+                        <button onclick="goToStep(2)" class="btn-secondary flex-1">
+                            <i class="fas fa-arrow-left"></i>
+                            Back
+                        </button>
+                        <button onclick="saveVisualization()" class="btn-primary flex-1" id="saveBtn">
+                            <i class="fas fa-save"></i>
+                            Save Visualization
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    <script>
+        let chartInstance = null;
+        let currentConfig = {};
+        let datasets = [];
+        let currentDataset = null;
+        let selectedColumns = [];
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDatasets();
+            document.getElementById('chartTitle').addEventListener('change', generateChart);
+            document.getElementById('showLegend').addEventListener('change', generateChart);
+        });
+
+        // ========== STEP 1: Load Datasets ==========
+        async function loadDatasets() {
+            try {
+                const response = await fetch('/api/datasets/', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    credentials: 'same-origin'
+                });
+
+                if (!response.ok) throw new Error('Failed to load datasets');
+
+                const data = await response.json();
+                datasets = Array.isArray(data) ? data : (data.results || []);
+
+                const select = document.getElementById('datasetSelect');
+                select.innerHTML = '<option value="">-- Select a dataset --</option>';
+
+                datasets.forEach(dataset => {
+                    const option = document.createElement('option');
+                    option.value = dataset.id;
+                    option.textContent = dataset.name;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                showMessage('error', 'Failed to load datasets: ' + error.message);
+            }
+        }
+
+        async function handleDatasetChange() {
+            const datasetId = document.getElementById('datasetSelect').value;
+
+            if (!datasetId) {
+                document.getElementById('datasetInfo').classList.add('hidden');
+                document.getElementById('step-2').classList.add('hidden');
+                return;
+            }
+
+            try {
+                currentDataset = datasets.find(d => d.id == datasetId);
+
+                if (!currentDataset) {
+                    throw new Error('Dataset not found');
+                }
+
+                // Update dataset info (try multiple field names for compatibility)
+                const colCount = currentDataset.col_count || currentDataset.column_count || (currentDataset.column_names && currentDataset.column_names.length) || 0;
+                const rowCount = currentDataset.row_count || 0;
+                document.getElementById('datasetColumns').textContent = colCount;
+                document.getElementById('datasetRows').textContent = rowCount;
+                document.getElementById('datasetInfo').classList.remove('hidden');
+
+                // Load columns
+                loadDatasetColumns(currentDataset.column_names || []);
+
+                // Show step 2
+                document.getElementById('step-2').classList.remove('hidden');
+                document.getElementById('step-1-indicator').classList.add('completed');
+                document.getElementById('step-2-indicator').classList.add('active');
+
+                // Clear previous chart
+                if (chartInstance) {
+                    chartInstance.destroy();
+                    chartInstance = null;
+                }
+
+            } catch (error) {
+                showMessage('error', 'Error loading dataset: ' + error.message);
+            }
+        }
+
+        function loadDatasetColumns(columnNames) {
+            const xSelect = document.getElementById('xColumn');
+            const ySelect = document.getElementById('yColumn');
+            const multiSelect = document.getElementById('columnsMultiSelect');
+
+            xSelect.innerHTML = '<option value="">-- Select column --</option>';
+            ySelect.innerHTML = '<option value="">-- Select column --</option>';
+            multiSelect.innerHTML = '';
+
+            selectedColumns = [];
+
+            columnNames.forEach(col => {
+                // X and Y selects
+                [xSelect, ySelect].forEach(select => {
+                    const option = document.createElement('option');
+                    option.value = col;
+                    option.textContent = col;
+                    select.appendChild(option);
+                });
+
+                // Multi-select checkboxes
+                const label = document.createElement('label');
+                label.className = 'flex items-center gap-2 cursor-pointer p-2 rounded hover:bg-white/5 transition';
+                label.innerHTML = `
+                    <input type="checkbox" class="checkbox-input column-checkbox" data-column="${col}" onchange="updateSelectedColumns()">
+                    <span class="text-sm">${col}</span>
+                `;
+                multiSelect.appendChild(label);
+            });
+
+            // Set defaults
+            if (columnNames.length > 0) {
+                xSelect.value = columnNames[0];
+                if (columnNames.length > 1) {
+                    ySelect.value = columnNames[1];
+                }
+            }
+        }
+
+        function updateSelectedColumns() {
+            const checkboxes = document.querySelectorAll('.column-checkbox:checked');
+            selectedColumns = Array.from(checkboxes).map(cb => cb.dataset.column);
+        }
+
+        // ========== STEP 2: Chart Configuration ==========
+        function handleChartTypeChange() {
+            const chartType = document.getElementById('chartType').value;
+            const xAxisContainer = document.getElementById('xAxisContainer');
+            const yAxisContainer = document.getElementById('yAxisContainer');
+            const multiSelectContainer = document.getElementById('multiSelectContainer');
+
+            // Hide/show based on chart type
+            const requiresXY = ['bar', 'line', 'scatter', 'bubble', 'area'].includes(chartType);
+            const isPieChart = ['pie', 'doughnut'].includes(chartType);
+            const isRadar = chartType === 'radar';
+
+            xAxisContainer.classList.toggle('hidden', !requiresXY && !isRadar);
+            yAxisContainer.classList.toggle('hidden', !requiresXY && !isRadar);
+            multiSelectContainer.classList.toggle('hidden', !isPieChart && !isRadar);
+
+            generateChart();
+        }
+
+        function handleColumnChange() {
+            generateChart();
+        }
+
+        async function generateChart() {
+            if (!currentDataset) {
+                showMessage('warning', 'Please select a dataset first');
+                return;
+            }
+
+            const chartType = document.getElementById('chartType').value;
+            const chartTitle = document.getElementById('chartTitle').value;
+            const showLegend = document.getElementById('showLegend').checked;
+
+            if (!chartType) {
+                showMessage('warning', 'Please select a chart type');
+                return;
+            }
+
+            showLoading(true);
+
+            try {
+                const payload = {
+                    dataset_id: currentDataset.id,
+                    chart_type: chartType,
+                    title: chartTitle,
+                    x_column: document.getElementById('xColumn').value || undefined,
+                    y_column: document.getElementById('yColumn').value || undefined,
+                    selected_columns: selectedColumns.length > 0 ? selectedColumns : undefined,
+                    show_legend: showLegend
+                };
+
+                const response = await fetch('/api/visualizations/preview-config/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    try {
+                        const error = JSON.parse(errorText);
+                        throw new Error(error.error || 'Failed to generate chart');
+                    } catch (e) {
+                        throw new Error(errorText || 'Failed to generate chart');
+                    }
+                }
+
+                const data = await response.json();
+                if (!data.config) {
+                    throw new Error('Invalid response: missing chart configuration');
+                }
+                
+                currentConfig = data.config;
+
+                // Display configuration
+                document.getElementById('configOutput').textContent = JSON.stringify(currentConfig, null, 2);
+                document.getElementById('configSection').style.display = 'block';
+
+                // Render chart
+                renderChart(currentConfig);
+                showMessage('success', 'Chart preview generated successfully');
+
+            } catch (error) {
+                showMessage('error', 'Error generating chart: ' + error.message);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function renderChart(config) {
+            const canvas = document.getElementById('previewChart');
+            if (!canvas) return;
+
+            if (chartInstance) {
+                chartInstance.destroy();
+            }
+
+            try {
+                // Ensure config is valid
+                if (!config || !config.type) {
+                    showMessage('error', 'Invalid chart configuration');
+                    return;
+                }
+
+                // Normalize chart type for Chart.js (donut -> doughnut)
+                const chartConfig = { ...config };
+                if (chartConfig.type === 'donut') {
+                    chartConfig.type = 'doughnut';
+                }
+
+                const ctx = canvas.getContext('2d');
+                chartInstance = new Chart(ctx, chartConfig);
+            } catch (error) {
+                console.error('Chart rendering error:', error);
+                showMessage('error', 'Error rendering chart: ' + error.message);
+            }
+        }
+
+        // ========== STEP 3: Save Visualization ==========
+        function goToStep(step) {
+            const steps = [1, 2, 3];
+            steps.forEach(s => {
+                document.getElementById(`step-${s}`).classList.toggle('hidden', s !== step);
+                document.getElementById(`step-${s}-indicator`).classList.toggle('active', s === step);
+            });
+
+            if (step === 3 && !currentConfig || Object.keys(currentConfig).length === 0) {
+                showMessage('warning', 'Please generate a chart preview first');
+                goToStep(2);
+                return;
+            }
+        }
+
+        async function saveVisualization() {
+            const name = document.getElementById('vizName').value.trim();
+            const description = document.getElementById('vizDescription').value.trim();
+            const isPublic = document.getElementById('vizPublic').checked;
+
+            if (!name) {
+                showMessage('error', 'Visualization name is required');
+                return;
+            }
+
+            if (!currentDataset) {
+                showMessage('error', 'Dataset is required');
+                return;
+            }
+
+            const btn = document.getElementById('saveBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+            try {
+                const response = await fetch('/api/visualizations/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({
+                        title: name,
+                        description: description,
+                        chart_type: document.getElementById('chartType').value,
+                        dataset: currentDataset.id,
+                        config: currentConfig,
+                        is_public: isPublic
+                    })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || error.error || 'Failed to save visualization');
+                }
+
+                const data = await response.json();
+                showMessage('success', 'Visualization saved successfully! Redirecting...');
+
+                setTimeout(() => {
+                    window.location.href = `/visualizations/${data.id}/`;
+                }, 2000);
+
+            } catch (error) {
+                showMessage('error', 'Error saving visualization: ' + error.message);
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-save"></i> Save Visualization';
+            }
+        }
+
+        // ========== Utilities ==========
+        function showLoading(show) {
+            document.getElementById('previewLoading').style.display = show ? 'flex' : 'none';
+        }
+
+        function showMessage(type, message) {
+            const container = document.getElementById('messageContainer');
+            const msgClass = type === 'error' ? 'error-message' : (type === 'success' ? 'success-message' : 'error-message');
+            const icon = type === 'error' ? 'fa-exclamation-circle' : (type === 'success' ? 'fa-check-circle' : 'fa-info-circle');
+
+            const msg = document.createElement('div');
+            msg.className = msgClass;
+            msg.innerHTML = `<i class="fas ${icon}"></i> <span>${message}</span>`;
+
+            container.appendChild(msg);
+
+            setTimeout(() => msg.remove(), 5000);
+        }
+
+        function copyConfig() {
+            const configText = JSON.stringify(currentConfig, null, 2);
+            navigator.clipboard.writeText(configText).then(() => {
+                showMessage('success', 'Configuration copied to clipboard!');
+            }).catch(() => {
+                showMessage('error', 'Failed to copy configuration');
+            });
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Allow Enter key in title input to generate chart
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && e.target.id === 'chartTitle') {
+                generateChart();
+            }
+        });
+    </script>
+{% endblock %}

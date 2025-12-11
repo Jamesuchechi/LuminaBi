@@ -22,6 +22,18 @@ from core.mixins import OwnerCheckMixin
 from core.views import create_notification
 
 
+class VisualizationCreateAdvancedView(LoginRequiredMixin, View):
+    """New advanced visualization creation view with step-by-step flow."""
+    
+    template_name = 'visualizations/visualization/create_advanced.html'
+    
+    def get(self, request):
+        """Render the advanced creation template."""
+        return render(request, self.template_name, {
+            'chart_types': Visualization.CHART_TYPES
+        })
+
+
 class VisualizationListView(LoginRequiredMixin, ListView):
     """List visualizations owned by the current user."""
     
@@ -397,63 +409,6 @@ class VisualizationViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
     
-    @action(detail=False, methods=['post'], url_path='preview-config')
-    def preview_config(self, request):
-        """
-        Generate preview configuration for a dataset without saving visualization.
-        Used for live preview during chart creation.
-        """
-        dataset_id = request.data.get('dataset_id')
-        chart_type = request.data.get('chart_type', 'bar')
-        title = request.data.get('title', 'Chart')
-        
-        if not dataset_id:
-            return Response(
-                {'error': 'dataset_id is required'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
-        try:
-            from datasets.models import Dataset
-            from .config_generator import ChartConfigGenerator
-            from datasets.services import FileParser
-            import os
-            
-            # Get dataset
-            dataset = Dataset.objects.get(id=dataset_id, owner=request.user)
-            
-            # Check if file exists
-            if not os.path.exists(dataset.file.path):
-                return Response(
-                    {'error': 'Dataset file not found'},
-                    status=status.HTTP_404_NOT_FOUND
-                )
-            
-            # Parse file
-            df = FileParser.parse_file(dataset.file.path, dataset.file_type)
-            
-            # Generate config
-            generator = ChartConfigGenerator(df, dataset.column_names)
-            config = generator.generate_config(
-                chart_type=chart_type,
-                title=title
-            )
-            
-            return Response({
-                'status': 'success',
-                'config': config,
-                'chart_type': chart_type,
-            })
-        except Dataset.DoesNotExist:
-            return Response(
-                {'error': 'Dataset not found or you do not have permission to access it'},
-                status=status.HTTP_404_NOT_FOUND
-            )
-        except Exception as e:
-            return Response(
-                {'error': f'Failed to generate preview: {str(e)}'},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
-            )
     
     @action(detail=False, methods=['get'])
     def statistics(self, request):

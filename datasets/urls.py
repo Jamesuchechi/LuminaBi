@@ -24,6 +24,7 @@ urlpatterns = [
     
     # ===== Visualizations =====
     path('<int:pk>/visualizations/create/', views.VisualizationCreateView.as_view(), name='visualization_create'),
+    path('<int:pk>/visualization/create/', views.VisualizationCreateView.as_view(), name='visualization_create_singular'),
     path('visualization/<int:pk>/', views.VisualizationDetailView.as_view(), name='visualization_detail'),
     
     # ===== Analytics =====

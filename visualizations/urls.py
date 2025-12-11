@@ -11,7 +11,8 @@ app_name = 'visualizations'
 urlpatterns = [
     # Visualization list and management
     path('', views.VisualizationListView.as_view(), name='visualization_list'),
-    path('create/', views.VisualizationCreateView.as_view(), name='visualization_create'),
+    path('create/', views.VisualizationCreateAdvancedView.as_view(), name='visualization_create'),
+    path('create-form/', views.VisualizationCreateView.as_view(), name='visualization_create_form'),
     path('<int:pk>/', views.VisualizationDetailView.as_view(), name='visualization_detail'),
     path('<int:pk>/edit/', views.VisualizationUpdateView.as_view(), name='visualization_edit'),
     path('<int:pk>/delete/', views.VisualizationDeleteView.as_view(), name='visualization_delete'),

@@ -48,6 +48,63 @@ class ChartConfigGenerator:
             return self.df.select_dtypes(include=['object']).columns.tolist()
         return []
 
+    def _normalize_chart_type(self, chart_type: str) -> str:
+        """Normalize various incoming chart type names to internal handlers."""
+        if not chart_type:
+            return 'bar'
+        t = chart_type.strip().lower()
+        # Accept common aliases
+        aliases = {
+            'doughnut': 'donut',
+            'donut': 'donut',
+            'area': 'area',
+            'timeseries': 'line',
+            'time': 'line',
+        }
+        return aliases.get(t, t)
+
+    def _sanitize_value(self, v):
+        """Return JSON-safe value: convert NaN/inf to None, convert numpy types to native types."""
+        try:
+            if v is None:
+                return None
+            if isinstance(v, (float, int)):
+                if pd.isna(v) or np.isinf(v):
+                    return None
+                # convert numpy types to Python scalar
+                if isinstance(v, (np.floating, np.integer)):
+                    return float(v) if isinstance(v, np.floating) else int(v)
+                return v
+            # numpy types
+            if isinstance(v, (np.integer, np.floating)):
+                if np.isnan(v) or np.isinf(v):
+                    return None
+                return v.item()
+            # Pandas NA
+            if pd.isna(v):
+                return None
+        except Exception:
+            pass
+        # Fallback to string for objects
+        try:
+            return str(v)
+        except Exception:
+            return None
+
+    def _sanitize_series(self, series: pd.Series) -> List[Any]:
+        """Convert a pandas Series to a JSON-safe Python list."""
+        out = []
+        for v in series.tolist():
+            out.append(self._sanitize_value(v))
+        return out
+
+    def _sanitize_point(self, x, y, r=None):
+        """Sanitize a scatter/bubble point dict."""
+        point = {'x': self._sanitize_value(x), 'y': self._sanitize_value(y)}
+        if r is not None:
+            point['r'] = self._sanitize_value(r)
+        return point
+
     def generate_config(self, chart_type: str, x_column: str = None, y_columns: List[str] = None,
                         title: str = None, **kwargs) -> Dict[str, Any]:
         """
@@ -64,14 +121,15 @@ class ChartConfigGenerator:
             Chart.js configuration dictionary
         """
         try:
-            method_name = f'_generate_{chart_type}_config'
+            chart_type_norm = self._normalize_chart_type(chart_type)
+            method_name = f'_generate_{chart_type_norm}_config'
             if not hasattr(self, method_name):
-                raise ValueError(f"Unsupported chart type: {chart_type}")
+                raise ValueError(f"Unsupported chart type: {chart_type_norm}")
             
             method = getattr(self, method_name)
             config = method(x_column=x_column, y_columns=y_columns, title=title, **kwargs)
             
-            logger.info(f"Generated {chart_type} configuration")
+            logger.info(f"Generated {chart_type_norm} configuration")
             return config
         except Exception as e:
             logger.error(f"Error generating {chart_type} config: {str(e)}")
@@ -130,7 +188,7 @@ class ChartConfigGenerator:
         for idx, y_col in enumerate(y_cols):
             datasets.append({
                 'label': str(y_col),
-                'data': self.df[y_col].tolist(),
+                'data': self._sanitize_series(self.df[y_col]),
                 'backgroundColor': COLORS['primary'][idx % len(COLORS['primary'])],
                 'borderColor': COLORS['secondary'][idx % len(COLORS['secondary'])],
                 'borderWidth': 2,
@@ -188,7 +246,7 @@ class ChartConfigGenerator:
         for idx, y_col in enumerate(y_cols):
             datasets.append({
                 'label': str(y_col),
-                'data': self.df[y_col].tolist(),
+                'data': self._sanitize_series(self.df[y_col]),
                 'borderColor': COLORS['primary'][idx % len(COLORS['primary'])],
                 'backgroundColor': COLORS['transparent'][idx % len(COLORS['transparent'])],
                 'borderWidth': 2,
@@ -246,7 +304,7 @@ class ChartConfigGenerator:
             return self._empty_pie_config(title or "Pie Chart")
 
         labels = self.df[x_col].astype(str).tolist() if x_col else [f"Slice {i}" for i in range(len(self.df))]
-        data = self.df[y_cols[0]].tolist()
+        data = self._sanitize_series(self.df[y_cols[0]])
 
         return {
             'type': 'pie',
@@ -295,10 +353,10 @@ class ChartConfigGenerator:
         for idx, y_col in enumerate(y_cols):
             data_points = []
             for i in range(len(self.df)):
-                data_points.append({
-                    'x': self.df.iloc[i][x_col] if x_col else i,
-                    'y': self.df.iloc[i][y_col],
-                })
+                data_points.append(self._sanitize_point(
+                    self.df.iloc[i][x_col] if x_col else i,
+                    self.df.iloc[i][y_col]
+                ))
             
             datasets.append({
                 'label': str(y_col),
@@ -363,7 +421,7 @@ class ChartConfigGenerator:
         for idx, y_col in enumerate(y_cols):
             datasets.append({
                 'label': str(y_col),
-                'data': self.df[y_col].tolist(),
+                'data': self._sanitize_series(self.df[y_col]),
                 'borderColor': COLORS['primary'][idx % len(COLORS['primary'])],
                 'backgroundColor': COLORS['transparent'][idx % len(COLORS['transparent'])],
                 'borderWidth': 2,
@@ -439,11 +497,12 @@ class ChartConfigGenerator:
         
         data_points = []
         for i in range(len(self.df)):
-            data_points.append({
-                'x': self.df.iloc[i][x_col],
-                'y': self.df.iloc[i][y_col],
-                'r': abs(self.df.iloc[i][r_col]) / 10,  # Scale radius
-            })
+            r_val = abs(self._sanitize_value(self.df.iloc[i][r_col]) or 1)
+            data_points.append(self._sanitize_point(
+                self.df.iloc[i][x_col],
+                self.df.iloc[i][y_col],
+                r_val / 10  # Scale radius
+            ))
         
         return {
             'type': 'bubble',
@@ -498,7 +557,7 @@ class ChartConfigGenerator:
             return self._empty_pie_config(title or "Donut Chart")
 
         labels = self.df[x_col].astype(str).tolist() if x_col else [f"Slice {i}" for i in range(len(self.df))]
-        data = self.df[y_cols[0]].tolist()
+        data = self._sanitize_series(self.df[y_cols[0]])
 
         return {
             'type': 'doughnut',

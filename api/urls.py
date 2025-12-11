@@ -34,6 +34,9 @@ router.register(r'visualizations', VisualizationViewSet, basename='visualization
 router.register(r'dashboard-models', DashboardModelViewSet, basename='dashboard_model')
 
 urlpatterns = [
+    # Direct preview-config endpoint (MUST come before router.urls to be matched first)
+    path('visualizations/preview-config/', viz_views.preview_config_direct, name='visualization_preview_config'),
+
     # API Routes (router)
     path('', include(router.urls)),
 
@@ -43,7 +46,4 @@ urlpatterns = [
     # JWT Authentication
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-
-    # Direct preview-config endpoint (fallback) to avoid routing issues
-    path('visualizations/preview-config/', viz_views.preview_config_direct, name='visualization_preview_config'),
 ]

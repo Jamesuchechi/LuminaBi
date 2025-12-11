@@ -688,137 +688,20 @@ class FillEmptyCellsView(LoginRequiredMixin, OwnerCheckMixin, View):
 # ============================================================================
 
 class VisualizationCreateView(LoginRequiredMixin, OwnerCheckMixin, View):
-    """Create new visualization from dataset"""
+    """Redirect to main visualization creation page with dataset preset"""
     
     def get(self, request, pk):
-        """Display visualization creation form"""
+        """Redirect to main visualization creation with dataset selected"""
         dataset = get_object_or_404(Dataset, pk=pk)
         self.check_owner(dataset, request.user)
-        
-        # Get sample data
-        try:
-            df = FileParser.parse_file(dataset.file.path, dataset.file_type)
-            numeric_cols = df.select_dtypes(include=['number']).columns.tolist()
-            string_cols = df.select_dtypes(include=['object']).columns.tolist()
-        except Exception as e:
-            numeric_cols = []
-            string_cols = []
-        
-        context = {
-            'dataset': dataset,
-            'visualization_types': Visualization.CHART_TYPES,
-            'numeric_columns': numeric_cols,
-            'string_columns': string_cols,
-            'all_columns': list(df.columns) if 'df' in locals() else [],
-        }
-        
-        return render(request, 'datasets/visualization/create.html', context)
+        # Redirect to main visualization creation page with dataset in URL params
+        return redirect(f'/visualizations/create/?dataset={pk}')
     
     def post(self, request, pk):
-        """Create visualization"""
+        """Redirect POST requests to main visualization creation"""
         dataset = get_object_or_404(Dataset, pk=pk)
         self.check_owner(dataset, request.user)
-        
-        try:
-            data = json.loads(request.body)
-            chart_type = data.get('chart_type')
-            title = data.get('title', f'{chart_type.title()} Chart')
-            x_column = data.get('x_column')
-            y_columns = data.get('y_columns', [])
-            
-            # Validate inputs
-            if not chart_type:
-                return JsonResponse({'error': 'chart_type is required'}, status=400)
-            
-            if not x_column:
-                return JsonResponse({'error': 'x_column is required'}, status=400)
-            
-            # Parse file
-            df = FileParser.parse_file(dataset.file.path, dataset.file_type)
-            
-            # Validate columns exist
-            if x_column not in df.columns:
-                return JsonResponse({'error': f'Column {x_column} not found in dataset'}, status=400)
-            
-            # Validate y columns if provided
-            if y_columns:
-                for col in y_columns:
-                    if col not in df.columns:
-                        return JsonResponse({'error': f'Column {col} not found in dataset'}, status=400)
-            
-            # Create visualization
-            engine = VisualizationEngine(df)
-            
-            # Build kwargs based on chart type
-            viz_kwargs = {
-                'title': title,
-                'x_column': x_column,
-            }
-            
-            # Add y_columns for types that need it
-            if chart_type in ['line', 'bar', 'scatter', 'area']:
-                if y_columns:
-                    viz_kwargs['y_columns'] = y_columns
-                else:
-                    # Use numeric columns as defaults
-                    numeric_cols = df.select_dtypes(include=['number']).columns.tolist()
-                    if numeric_cols:
-                        viz_kwargs['y_columns'] = numeric_cols[:3]  # Limit to 3 columns
-            elif chart_type in ['histogram', 'pie', 'distribution']:
-                # These only need the x column
-                viz_kwargs['column'] = x_column
-                viz_kwargs.pop('x_column', None)
-            elif chart_type == 'heatmap':
-                # Heatmap uses numeric columns
-                viz_kwargs.pop('x_column', None)
-                viz_kwargs['columns'] = df.select_dtypes(include=['number']).columns.tolist()
-            elif chart_type == 'boxplot':
-                viz_kwargs.pop('x_column', None)
-                viz_kwargs['columns'] = df.select_dtypes(include=['number']).columns.tolist()
-            
-            # Remove None values
-            viz_kwargs = {k: v for k, v in viz_kwargs.items() if v is not None}
-            
-            fig = engine.create_visualization(chart_type, **viz_kwargs)
-            chart_html = engine.to_html(fig)
-            
-            # Save visualization
-            visualization = Visualization.objects.create(
-                dataset=dataset,
-                name=title,
-                chart_type=chart_type,
-                x_column=x_column,
-                y_columns=y_columns if y_columns else [],
-                config={
-                    'x_column': x_column,
-                    'y_columns': y_columns if y_columns else [],
-                },
-                chart_html=chart_html,
-                is_published=True,
-            )
-            
-            create_notification(
-                user=request.user,
-                title='Visualization Created',
-                message=f"New {chart_type} visualization '{title}' created.",
-                notification_type='success',
-                related_app='datasets',
-                related_model='Visualization',
-                related_object_id=visualization.id
-            )
-            
-            return JsonResponse({
-                'status': 'success',
-                'visualization_id': visualization.id,
-                'redirect_url': reverse_lazy('datasets:visualization_detail', kwargs={'pk': visualization.id})
-            })
-        
-        except json.JSONDecodeError as e:
-            logger.error(f"JSON decode error: {str(e)}")
-            return JsonResponse({'error': f'Invalid JSON: {str(e)}'}, status=400)
-        except Exception as e:
-            logger.error(f"Error creating visualization: {str(e)}", exc_info=True)
-            return JsonResponse({'error': str(e)}, status=400)
+        return redirect(f'/visualizations/create/?dataset={pk}')
 
 
 class VisualizationDetailView(LoginRequiredMixin, OwnerCheckMixin, DetailView):

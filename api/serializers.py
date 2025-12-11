@@ -172,9 +172,10 @@ class DatasetSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Dataset
-        fields = ['id', 'name', 'description', 'owner', 'owner_name', 'file_path', 'file_type',
-                  'row_count', 'column_count', 'size_mb', 'is_public', 'created_at', 'updated_at']
-        read_only_fields = ['id', 'row_count', 'column_count', 'size_mb', 'created_at', 'updated_at']
+        fields = ['id', 'name', 'description', 'owner', 'owner_name', 'file_type',
+                  'row_count', 'col_count', 'column_names', 'is_analyzed', 'data_quality_score',
+                  'uploaded_at', 'updated_at']
+        read_only_fields = ['id', 'row_count', 'col_count', 'uploaded_at', 'updated_at']
 
 
 class VisualizationSerializer(serializers.ModelSerializer):
@@ -185,8 +186,8 @@ class VisualizationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Visualization
         fields = ['id', 'title', 'description', 'dataset', 'dataset_name', 'owner', 'owner_name',
-                  'visualization_type', 'chart_config', 'filters', 'is_public', 'created_at', 'updated_at']
-        read_only_fields = ['id', 'created_at', 'updated_at']
+              'chart_type', 'config', 'is_public', 'created_at', 'updated_at']
+        read_only_fields = ['id', 'owner', 'owner_name', 'dataset_name', 'created_at', 'updated_at']
 
 
 class DashboardModelSerializer(serializers.ModelSerializer):

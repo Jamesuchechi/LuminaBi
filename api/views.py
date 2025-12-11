@@ -324,9 +324,7 @@ class DatasetViewSet(viewsets.ModelViewSet):
     
     def get_queryset(self):
         """Filter datasets to user's datasets."""
-        return Dataset.objects.filter(
-            Q(owner=self.request.user) | Q(is_public=True)
-        )
+        return Dataset.objects.filter(owner=self.request.user)
     
     def perform_create(self, serializer):
         """Set owner to current user."""
