@@ -214,6 +214,10 @@
                             <i class="fas fa-chart-bar mr-2"></i>Visualizations
                             <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-neonBlue transition-all duration-300 group-hover:w-full"></span>
                         </a>
+                        <a href="{% url 'insights:insight_list' %}" class="text-sm font-medium text-gray-300 hover:text-neonBlue transition-colors relative group py-2">
+                            <i class="fas fa-lightbulb mr-2"></i>Insights
+                            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-neonBlue transition-all duration-300 group-hover:w-full"></span>
+                        </a>
                         <a href="{% url 'billing:pricing' %}" class="text-sm font-medium text-gray-300 hover:text-neonBlue transition-colors relative group py-2">
                             <i class="fas fa-tag mr-2"></i>Pricing
                             <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-neonBlue transition-all duration-300 group-hover:w-full"></span>
@@ -334,6 +338,9 @@
                         </a>
                         <a href="{% url 'visualizations:visualization_list' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm font-medium text-gray-300 hover:text-neonBlue">
                             <i class="fas fa-chart-bar w-5"></i>Visualizations
+                        </a>
+                        <a href="{% url 'insights:insight_list' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm font-medium text-gray-300 hover:text-neonBlue">
+                            <i class="fas fa-lightbulb w-5"></i>Insights
                         </a>
                         <a href="{% url 'billing:pricing' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm font-medium text-gray-300 hover:text-neonBlue">
                             <i class="fas fa-tag w-5"></i>Pricing

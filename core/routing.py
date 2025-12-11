@@ -3,8 +3,9 @@ WebSocket URL routing for real-time features.
 Maps WebSocket endpoints to their corresponding consumers.
 """
 
-from django.urls import path
+from django.urls import path, include
 from . import consumers
+from insights.routing import websocket_urlpatterns as insights_patterns
 
 websocket_urlpatterns = [
     # Data cleaning progress updates
@@ -19,4 +20,5 @@ websocket_urlpatterns = [
     
     # File upload progress
     path('ws/upload-progress/<int:upload_id>/', consumers.UploadProgressConsumer.as_asgi()),
-]
+] + insights_patterns
+

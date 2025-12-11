@@ -16,6 +16,7 @@ urlpatterns = [
     path('dashboards/', include('dashboards.urls')),  # Dashboards application
     path('datasets/', include('datasets.urls')),  # Datasets application
     path('visualizations/', include('visualizations.urls')),  # Visualizations application
+    path('insights/', include('insights.urls')),  # Insights application
     path('api/', include('api.urls')),  # REST API
     path('api-auth/', include('rest_framework.urls')),
 ]

@@ -1,0 +1,370 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ dataset.name }} - Data Insights - LuminaBI{% endblock %}
+
+{% block content %}
+<style>
+    .tab-button {
+        padding: 12px 24px;
+        border-bottom: 3px solid transparent;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+    }
+
+    .tab-button.active {
+        border-color: #00f3ff;
+        color: #00f3ff;
+    }
+
+    .tab-button:not(.active) {
+        color: rgba(255, 255, 255, 0.6);
+        border-color: transparent;
+    }
+
+    .tab-button:hover:not(.active) {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .insight-item {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 16px;
+        border-radius: 8px;
+        margin-bottom: 12px;
+        transition: all 0.2s ease;
+    }
+
+    .insight-item:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(0, 243, 255, 0.3);
+    }
+
+    .loading-spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(0, 243, 255, 0.3);
+        border-top: 3px solid #00f3ff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .progress-bar {
+        height: 6px;
+        background: rgba(0, 243, 255, 0.1);
+        border-radius: 3px;
+        overflow: hidden;
+        margin: 8px 0;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #00f3ff, #bd00ff);
+        animation: progress 3s ease-in-out infinite;
+    }
+
+    @keyframes progress {
+        0% { width: 0%; }
+        50% { width: 70%; }
+        100% { width: 100%; }
+    }
+</style>
+
+<div class="max-w-7xl mx-auto py-8 px-4">
+    <!-- Header -->
+    <div class="mb-8">
+        <a href="{% url 'datasets:dataset_detail' dataset.id %}" class="text-neonBlue hover:text-neonPurple transition mb-4 inline-flex items-center gap-2">
+            <i class="fas fa-arrow-left"></i>
+            Back to Dataset
+        </a>
+
+        <div class="flex items-start justify-between mb-6">
+            <div>
+                <h1 class="text-4xl font-bold text-gradient mb-2">{{ dataset.name }}</h1>
+                <p class="text-gray-400">{{ dataset.row_count|default:"?" }} rows • {{ dataset.col_count|default:"?" }} columns</p>
+            </div>
+            <button id="generateBtn" onclick="generateInsights({{ dataset.id }})" class="px-6 py-3 bg-gradient-to-r from-neonBlue to-neonPurple text-black rounded-lg font-bold hover:shadow-lg hover:shadow-neonBlue/50 transition flex items-center gap-2">
+                <i class="fas fa-sparkles"></i>
+                Generate Insights
+            </button>
+        </div>
+
+        <!-- Generation Status -->
+        <div id="generationStatus" class="hidden glass-panel p-4 rounded-lg mb-6">
+            <div class="flex items-center gap-3">
+                <div class="loading-spinner"></div>
+                <div class="flex-1">
+                    <div class="font-medium">Generating insights...</div>
+                    <p class="text-sm text-gray-400 mt-1">This may take a moment depending on dataset size</p>
+                    <div class="progress-bar mt-2">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="glass-panel rounded-t-lg border-b border-white/10 mb-0">
+        <div class="flex border-b border-white/10">
+            <button class="tab-button active" onclick="switchTab('overview')">
+                <i class="fas fa-chart-pie mr-2"></i>Overview
+            </button>
+            <button class="tab-button" onclick="switchTab('insights')">
+                <i class="fas fa-lightbulb mr-2"></i>Insights ({{ insights.count }})
+            </button>
+            <button class="tab-button" onclick="switchTab('anomalies')">
+                <i class="fas fa-exclamation-triangle mr-2"></i>Anomalies ({{ anomalies.count }})
+            </button>
+            <button class="tab-button" onclick="switchTab('outliers')">
+                <i class="fas fa-chart-scatter mr-2"></i>Outliers ({{ outlier_analyses.count }})
+            </button>
+            <button class="tab-button" onclick="switchTab('relationships')">
+                <i class="fas fa-link mr-2"></i>Relationships ({{ relationships.count }})
+            </button>
+        </div>
+    </div>
+
+    <!-- Tab Content -->
+    <div class="glass-panel rounded-b-lg p-6">
+        <!-- Overview Tab -->
+        <div id="overview-tab" class="tab-content block">
+            <h2 class="text-2xl font-bold mb-4">Dataset Overview</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white/5 p-4 rounded-lg border border-white/10">
+                    <div class="text-sm text-gray-400">Total Rows</div>
+                    <div class="text-2xl font-bold text-neonBlue">{{ dataset.row_count|default:"N/A" }}</div>
+                </div>
+                <div class="bg-white/5 p-4 rounded-lg border border-white/10">
+                    <div class="text-sm text-gray-400">Total Columns</div>
+                    <div class="text-2xl font-bold text-neonBlue">{{ dataset.col_count|default:"N/A" }}</div>
+                </div>
+                <div class="bg-white/5 p-4 rounded-lg border border-white/10">
+                    <div class="text-sm text-gray-400">Data Quality</div>
+                    <div class="text-2xl font-bold text-neonBlue">{{ dataset.data_quality_score|default:"N/A" }}%</div>
+                </div>
+                <div class="bg-white/5 p-4 rounded-lg border border-white/10">
+                    <div class="text-sm text-gray-400">File Size</div>
+                    <div class="text-2xl font-bold text-neonBlue">{{ dataset.file_size|filesizeformat }}</div>
+                </div>
+            </div>
+            <p class="text-gray-400">Click "Generate Insights" to analyze this dataset and discover patterns, anomalies, and relationships.</p>
+        </div>
+
+        <!-- Insights Tab -->
+        <div id="insights-tab" class="tab-content hidden">
+            <h2 class="text-2xl font-bold mb-4">Data Insights</h2>
+            {% if insights %}
+                <div class="space-y-3">
+                    {% for insight in insights %}
+                        <a href="{% url 'insights:insight_detail' insight.id %}" class="insight-item block">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <h3 class="font-bold text-lg">{{ insight.title }}</h3>
+                                    <p class="text-sm text-gray-400 mt-1">{{ insight.description|truncatewords:15 }}</p>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-2xl font-bold text-neonBlue">{{ insight.confidence_score|floatformat:0 }}%</div>
+                                    <div class="text-xs text-gray-500">confidence</div>
+                                </div>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-gray-400 text-center py-8">No insights generated yet. Generate insights to see analysis results.</p>
+            {% endif %}
+        </div>
+
+        <!-- Anomalies Tab -->
+        <div id="anomalies-tab" class="tab-content hidden">
+            <h2 class="text-2xl font-bold mb-4">Detected Anomalies</h2>
+            {% if anomalies %}
+                <div class="space-y-3">
+                    {% for anomaly in anomalies %}
+                        <div class="insight-item">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <h3 class="font-bold text-lg">{{ anomaly.anomaly_type }}</h3>
+                                    <p class="text-sm text-gray-400 mt-1">
+                                        Affected columns: {{ anomaly.affected_columns|join:", " }}
+                                    </p>
+                                    <p class="text-xs text-gray-500 mt-2">
+                                        {{ anomaly.affected_rows|length }} rows affected
+                                    </p>
+                                </div>
+                                <div class="text-right">
+                                    <span class="px-3 py-1 rounded-full text-sm font-bold
+                                        {% if anomaly.severity == 'critical' %}bg-red-500/20 text-red-400
+                                        {% elif anomaly.severity == 'high' %}bg-orange-500/20 text-orange-400
+                                        {% elif anomaly.severity == 'medium' %}bg-yellow-500/20 text-yellow-400
+                                        {% else %}bg-blue-500/20 text-blue-400
+                                        {% endif %}">
+                                        {{ anomaly.severity|upper }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-gray-400 text-center py-8">No anomalies detected. This is good news!</p>
+            {% endif %}
+        </div>
+
+        <!-- Outliers Tab -->
+        <div id="outliers-tab" class="tab-content hidden">
+            <h2 class="text-2xl font-bold mb-4">Outlier Analyses</h2>
+            {% if outlier_analyses %}
+                <div class="space-y-3">
+                    {% for analysis in outlier_analyses %}
+                        <div class="insight-item">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <h3 class="font-bold text-lg">{{ analysis.column }}</h3>
+                                    <p class="text-sm text-gray-400 mt-1">
+                                        Method: {{ analysis.get_method_display }}
+                                    </p>
+                                    <p class="text-xs text-gray-500 mt-2">
+                                        {{ analysis.outlier_count }} outliers ({{ analysis.outlier_percentage|floatformat:1 }}%)
+                                    </p>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-2xl font-bold text-neonBlue">{{ analysis.outlier_count }}</div>
+                                    <div class="text-xs text-gray-500">outliers</div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-gray-400 text-center py-8">No outlier analyses available. Generate insights to analyze outliers.</p>
+            {% endif %}
+        </div>
+
+        <!-- Relationships Tab -->
+        <div id="relationships-tab" class="tab-content hidden">
+            <h2 class="text-2xl font-bold mb-4">Feature Relationships</h2>
+            {% if relationships %}
+                <div class="space-y-3">
+                    {% for rel in relationships %}
+                        <div class="insight-item">
+                            <div class="flex items-start justify-between">
+                                <div>
+                                    <h3 class="font-bold text-lg">{{ rel.feature_1 }} ↔ {{ rel.feature_2 }}</h3>
+                                    <p class="text-sm text-gray-400 mt-1">
+                                        {{ rel.get_relationship_type_display }} relationship
+                                    </p>
+                                    <p class="text-xs text-gray-500 mt-2">
+                                        {{ rel.description }}
+                                    </p>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-2xl font-bold text-neonBlue">{{ rel.correlation_coefficient|floatformat:2 }}</div>
+                                    <div class="text-xs text-gray-500">correlation</div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-gray-400 text-center py-8">No relationships found. Generate insights to discover correlations.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    function switchTab(tabName) {
+        // Hide all tabs
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+        document.querySelectorAll('.tab-button').forEach(el => el.classList.remove('active'));
+
+        // Show selected tab
+        document.getElementById(tabName + '-tab').classList.remove('hidden');
+        event.target.closest('.tab-button').classList.add('active');
+    }
+
+    function generateInsights(datasetId) {
+        const btn = document.getElementById('generateBtn');
+        const status = document.getElementById('generationStatus');
+
+        // Disable button and show status
+        btn.disabled = true;
+        status.classList.remove('hidden');
+
+        // WebSocket connection for real-time updates
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const ws = new WebSocket(`${protocol}//${window.location.host}/ws/insights/${datasetId}/`);
+
+        ws.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            console.log('Insight update:', data);
+
+            if (data.status === 'completed') {
+                status.classList.add('hidden');
+                btn.disabled = false;
+                alert('Insights generated successfully!');
+                location.reload();
+            } else if (data.status === 'error') {
+                status.classList.add('hidden');
+                btn.disabled = false;
+                alert('Error generating insights: ' + data.message);
+            }
+        };
+
+        ws.onerror = function(error) {
+            console.error('WebSocket error:', error);
+            // Fallback to HTTP request
+            fallbackGenerateInsights(datasetId, btn, status);
+        };
+    }
+
+    function fallbackGenerateInsights(datasetId, btn, status) {
+        fetch(`/insights/datasets/${datasetId}/generate-insights/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            status.classList.add('hidden');
+            btn.disabled = false;
+            if (data.status === 'success') {
+                alert('Insights generated successfully!');
+                location.reload();
+            } else {
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(error => {
+            status.classList.add('hidden');
+            btn.disabled = false;
+            alert('Error: ' + error.message);
+        });
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+{% endblock %}

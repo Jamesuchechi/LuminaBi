@@ -1,0 +1,543 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ insight.title }} - Insights - LuminaBI{% endblock %}
+
+{% block content %}
+<style>
+    .section-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 20px;
+    }
+
+    .plot-container {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(0, 243, 255, 0.1);
+        border-radius: 8px;
+        padding: 16px;
+        margin: 16px 0;
+        min-height: 400px;
+    }
+
+    .explanation-box {
+        background: rgba(0, 243, 255, 0.05);
+        border-left: 4px solid #00f3ff;
+        padding: 16px;
+        border-radius: 6px;
+        margin: 12px 0;
+    }
+
+    .feature-importance-bar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 8px 0;
+    }
+
+    .bar {
+        flex: 1;
+        height: 20px;
+        background: rgba(0, 243, 255, 0.1);
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .bar-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #00f3ff, #bd00ff);
+        transition: width 0.3s ease;
+    }
+
+    .feature-name {
+        width: 150px;
+        font-size: 12px;
+        color: #cbd5e1;
+    }
+
+    .feature-value {
+        width: 80px;
+        text-align: right;
+        font-weight: 600;
+        color: #00f3ff;
+    }
+</style>
+
+<div class="max-w-6xl mx-auto py-8 px-4">
+    <!-- Header -->
+    <div class="mb-8">
+        <a href="{% url 'insights:insight_list' %}" class="text-neonBlue hover:text-neonPurple transition mb-4 inline-flex items-center gap-2">
+            <i class="fas fa-arrow-left"></i>
+            Back to Insights
+        </a>
+
+        <div class="flex items-start justify-between mb-6">
+            <div>
+                <div class="flex items-center gap-3 mb-3">
+                    <span class="px-4 py-2 bg-neonBlue/20 border border-neonBlue text-neonBlue rounded-full text-sm font-bold">
+                        {{ insight.get_insight_type_display }}
+                    </span>
+                    {% if insight.is_pinned %}
+                        <i class="fas fa-thumbtack text-neonBlue"></i>
+                    {% endif %}
+                </div>
+                <h1 class="text-5xl font-bold text-gradient mb-2">{{ insight.title }}</h1>
+                <p class="text-gray-400">{{ insight.dataset.name }} • {{ insight.created_at|date:"M d, Y H:i" }}</p>
+            </div>
+            <div class="text-right">
+                <div class="text-sm text-gray-400 mb-2">Confidence Score</div>
+                <div class="text-4xl font-bold text-neonBlue">{{ insight.confidence_score|floatformat:1 }}%</div>
+            </div>
+        </div>
+
+        <!-- Description -->
+        {% if insight.description %}
+            <p class="text-gray-300 text-lg mb-6">{{ insight.description }}</p>
+        {% endif %}
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Left Column: Analysis -->
+        <div class="lg:col-span-2">
+            <!-- Human Explanation -->
+            {% if insight.human_explanation %}
+                <div class="section-card">
+                    <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                        <i class="fas fa-book" style="color: #00f3ff;"></i>
+                        Explanation
+                    </h2>
+                    <div class="explanation-box">
+                        <p class="text-gray-300">{{ insight.human_explanation }}</p>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- SHAP Summary Plot -->
+            {% if insight.shap_values %}
+                <div class="section-card">
+                    <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                        <i class="fas fa-chart-bar" style="color: #bd00ff;"></i>
+                        SHAP Summary Plot
+                    </h2>
+                    <p class="text-sm text-gray-400 mb-4">Global feature importance based on SHAP values</p>
+                    <div id="shap-summary-plot" class="plot-container">
+                        <canvas id="shap-summary-canvas"></canvas>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Force Plot -->
+            {% if insight.shap_values %}
+                <div class="section-card">
+                    <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                        <i class="fas fa-wave-square" style="color: #00ff9d;"></i>
+                        SHAP Force Plot
+                    </h2>
+                    <p class="text-sm text-gray-400 mb-4">Individual prediction explanation</p>
+                    <div id="shap-force-plot" class="plot-container">
+                        <svg id="force-plot-svg" style="width: 100%; min-height: 300px;"></svg>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Key Features -->
+            {% if insight.key_features %}
+                <div class="section-card">
+                    <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                        <i class="fas fa-star" style="color: #ffb800;"></i>
+                        Key Features
+                    </h2>
+                    <div class="space-y-2">
+                        {% for feature in insight.key_features %}
+                            <div class="feature-importance-bar">
+                                <div class="feature-name">{{ feature }}</div>
+                                <div class="bar">
+                                    <div class="bar-fill" style="width: {% widthratio forloop.counter 1 15 %}%;"></div>
+                                </div>
+                                <div class="feature-value">{{ forloop.counter }}</div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Analysis Data -->
+            {% if insight.analysis_data %}
+                <div class="section-card">
+                    <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                        <i class="fas fa-database" style="color: #00f3ff;"></i>
+                        Analysis Data
+                    </h2>
+                    <div class="bg-black/50 rounded-lg p-4 font-mono text-sm text-gray-300 max-h-96 overflow-y-auto">
+                        <pre>{{ insight.analysis_data|safe }}</pre>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Right Column: Sidebar -->
+        <div>
+            <!-- Quick Stats -->
+            <div class="section-card">
+                <h3 class="text-lg font-bold mb-4">Quick Info</h3>
+                <div class="space-y-3 text-sm">
+                    <div>
+                        <div class="text-gray-400">Type</div>
+                        <div class="text-neonBlue font-medium">{{ insight.get_insight_type_display }}</div>
+                    </div>
+                    <div>
+                        <div class="text-gray-400">Dataset</div>
+                        <a href="{% url 'datasets:dataset_detail' insight.dataset.id %}" class="text-neonBlue hover:text-neonPurple transition">
+                            {{ insight.dataset.name }}
+                        </a>
+                    </div>
+                    <div>
+                        <div class="text-gray-400">Owner</div>
+                        <div class="text-gray-300">{{ insight.owner.username }}</div>
+                    </div>
+                    <div>
+                        <div class="text-gray-400">Created</div>
+                        <div class="text-gray-300">{{ insight.created_at|date:"M d, Y" }}</div>
+                    </div>
+                    <div>
+                        <div class="text-gray-400">Updated</div>
+                        <div class="text-gray-300">{{ insight.updated_at|date:"M d, Y" }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="section-card">
+                <h3 class="text-lg font-bold mb-4">Actions</h3>
+                <div class="space-y-2">
+                    <button onclick="togglePin({{ insight.id }})" class="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg hover:bg-white/15 transition text-sm font-medium flex items-center justify-center gap-2">
+                        <i class="fas fa-thumbtack"></i>
+                        {% if insight.is_pinned %}Unpin{% else %}Pin{% endif %}
+                    </button>
+                    <button onclick="togglePublic({{ insight.id }})" class="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg hover:bg-white/15 transition text-sm font-medium flex items-center justify-center gap-2">
+                        <i class="fas fa-share"></i>
+                        {% if insight.is_public %}Make Private{% else %}Make Public{% endif %}
+                    </button>
+                    <button onclick="exportInsight({{ insight.id }})" class="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg hover:bg-white/15 transition text-sm font-medium flex items-center justify-center gap-2">
+                        <i class="fas fa-download"></i>
+                        Export
+                    </button>
+                </div>
+            </div>
+
+            <!-- Visibility -->
+            <div class="section-card">
+                <h3 class="text-lg font-bold mb-3 text-sm">Visibility</h3>
+                <div class="flex items-center gap-2">
+                    <i class="fas {% if insight.is_public %}fa-globe text-neonBlue{% else %}fa-lock text-gray-400{% endif %}"></i>
+                    <span class="text-sm">{% if insight.is_public %}Public{% else %}Private{% endif %}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let shaplotInstance = null;
+    let forceplotInstance = null;
+
+    // Render SHAP plots when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        loadSHAPData();
+        connectWebSocket();
+    });
+
+    function connectWebSocket() {
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const ws = new WebSocket(`${protocol}//${window.location.host}/ws/insights/detail/{{ insight.id }}/`);
+
+        ws.onopen = function() {
+            console.log('Connected to insight WebSocket');
+            ws.send(JSON.stringify({ action: 'load_shap_data' }));
+        };
+
+        ws.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            if (data.type === 'shap_data') {
+                renderSHAPSummaryPlot(data.data);
+                renderSHAPForcePlot(data.data);
+            }
+        };
+
+        ws.onerror = function(error) {
+            console.error('WebSocket error:', error);
+            loadSHAPDataFallback();
+        };
+
+        ws.onclose = function() {
+            console.log('WebSocket closed');
+        };
+    }
+
+    function loadSHAPData() {
+        // Fetch SHAP data from Django template context
+        const analysisData = {{ insight.analysis_data|safe }};
+        if (analysisData && analysisData.summary) {
+            renderSHAPFromAnalysis(analysisData);
+        }
+    }
+
+    function loadSHAPDataFallback() {
+        // Fallback when WebSocket is not available
+        fetch(`/insights/{{ insight.id }}/`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.analysis_data) {
+                renderSHAPFromAnalysis(data.analysis_data);
+            }
+        })
+        .catch(error => console.error('Error loading SHAP data:', error));
+    }
+
+    function renderSHAPFromAnalysis(analysisData) {
+        try {
+            const columnInfo = analysisData.summary?.column_info || {};
+            const features = [];
+            const importances = [];
+
+            // Extract feature importance from statistical summary
+            Object.entries(columnInfo).forEach(([col, info]) => {
+                if (typeof info === 'object' && info.std) {
+                    features.push(col);
+                    importances.push(Math.abs(parseFloat(info.std) || 0));
+                }
+            });
+
+            // Sort by importance
+            const paired = features.map((f, i) => ({ feature: f, importance: importances[i] }))
+                .sort((a, b) => b.importance - a.importance);
+
+            const sortedFeatures = paired.map(p => p.feature);
+            const sortedImportances = paired.map(p => p.importance);
+
+            // Render bar chart
+            renderBarChart('shap-summary-canvas', sortedFeatures, sortedImportances, 'SHAP Feature Importance');
+
+            // Render force plot simulation
+            renderForcePlotSimulation('force-plot-svg', sortedFeatures, sortedImportances);
+
+        } catch (error) {
+            console.error('Error rendering SHAP plots:', error);
+        }
+    }
+
+    function renderBarChart(canvasId, labels, values, title) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+
+        // Destroy existing chart if any
+        if (shaplotInstance) {
+            shaplotInstance.destroy();
+        }
+
+        const ctx = canvas.getContext('2d');
+
+        shaplotInstance = new Chart(ctx, {
+            type: 'horizontalBar',
+            data: {
+                labels: labels.slice(0, 15),
+                datasets: [{
+                    label: 'Importance Score',
+                    data: values.slice(0, 15),
+                    backgroundColor: 'rgba(0, 243, 255, 0.8)',
+                    borderColor: 'rgba(0, 243, 255, 1)',
+                    borderWidth: 1,
+                    borderRadius: 4,
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: title,
+                        color: '#00f3ff',
+                        font: { size: 14, weight: 'bold' }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: { color: '#cbd5e1' },
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' }
+                    },
+                    y: {
+                        ticks: { color: '#cbd5e1' },
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    }
+
+    function renderForcePlotSimulation(svgId, features, values) {
+        const svg = document.getElementById(svgId);
+        if (!svg) return;
+
+        // Clear previous SVG
+        while (svg.firstChild) {
+            svg.removeChild(svg.firstChild);
+        }
+
+        const width = svg.parentElement.offsetWidth || 400;
+        const height = 300;
+        const margin = { top: 40, right: 20, bottom: 40, left: 150 };
+        const innerWidth = width - margin.left - margin.right;
+        const innerHeight = height - margin.top - margin.bottom;
+
+        // Create SVG group
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.setAttribute('transform', `translate(${margin.left},${margin.top})`);
+
+        // Add background
+        const bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        bg.setAttribute('width', innerWidth);
+        bg.setAttribute('height', innerHeight);
+        bg.setAttribute('fill', 'rgba(0, 0, 0, 0.2)');
+        bg.setAttribute('rx', '4');
+        g.appendChild(bg);
+
+        // Find max value for scaling
+        const maxValue = Math.max(...values.slice(0, 10));
+
+        // Create waterfall effect
+        values.slice(0, 10).forEach((value, i) => {
+            const x = (i / 10) * innerWidth;
+            const barHeight = (value / maxValue) * (innerHeight * 0.8);
+
+            // Create bar
+            const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            rect.setAttribute('x', x);
+            rect.setAttribute('y', innerHeight - barHeight);
+            rect.setAttribute('width', innerWidth / 12);
+            rect.setAttribute('height', barHeight);
+            rect.setAttribute('fill', value > 0 ? 'rgba(0, 243, 255, 0.7)' : 'rgba(189, 0, 255, 0.7)');
+            rect.setAttribute('stroke', value > 0 ? '#00f3ff' : '#bd00ff');
+            rect.setAttribute('stroke-width', '1');
+            rect.setAttribute('rx', '2');
+            g.appendChild(rect);
+
+            // Add label
+            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            text.setAttribute('x', x + (innerWidth / 24));
+            text.setAttribute('y', innerHeight + 15);
+            text.setAttribute('text-anchor', 'middle');
+            text.setAttribute('fill', '#cbd5e1');
+            text.setAttribute('font-size', '10');
+            text.textContent = features[i].substring(0, 8);
+            g.appendChild(text);
+        });
+
+        // Add title
+        const title = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        title.setAttribute('x', innerWidth / 2);
+        title.setAttribute('y', -15);
+        title.setAttribute('text-anchor', 'middle');
+        title.setAttribute('fill', '#00f3ff');
+        title.setAttribute('font-size', '14');
+        title.setAttribute('font-weight', 'bold');
+        title.textContent = 'SHAP Force Plot Simulation';
+        g.appendChild(title);
+
+        svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+        svg.setAttribute('style', 'width: 100%; height: 300px;');
+        svg.appendChild(g);
+    }
+
+    function renderSHAPSummaryPlot(data) {
+        if (!data || !data.data) return;
+
+        const features = data.data.map(d => d.feature);
+        const importances = data.data.map(d => d.importance);
+
+        renderBarChart('shap-summary-canvas', features, importances, 'Mean Absolute SHAP Values');
+    }
+
+    function renderSHAPForcePlot(data) {
+        if (!data || !data.data) return;
+
+        const features = data.data.map(d => d.feature);
+        const values = data.data.map(d => Math.abs(d.contribution || 0));
+
+        renderForcePlotSimulation('force-plot-svg', features, values);
+    }
+
+    function togglePin(insightId) {
+        fetch(`/insights/${insightId}/`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({ is_pinned: !{{ insight.is_pinned|lower }} })
+        })
+        .then(response => response.json())
+        .then(data => {
+            location.reload();
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function togglePublic(insightId) {
+        fetch(`/insights/${insightId}/`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+            body: JSON.stringify({ is_public: !{{ insight.is_public|lower }} })
+        })
+        .then(response => response.json())
+        .then(data => {
+            location.reload();
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    function exportInsight(insightId) {
+        const analysisData = {{ insight.analysis_data|safe }};
+        const json = JSON.stringify(analysisData, null, 2);
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `insight-${insightId}-${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+</script>
+{% endblock %}
+

@@ -51,6 +51,7 @@ INSTALLED_APPS += [
     'dashboards',
     'datasets',
     'visualizations',
+    'insights',
     'analytics',
     'billing',
 ]
