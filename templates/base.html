@@ -201,11 +201,11 @@
                 
                 <!-- Desktop Navigation -->
                 <div class="hidden lg:flex items-center gap-8">
+                    <a href="{% url 'landing' %}" class="text-sm font-medium text-gray-300 hover:text-neonBlue transition-colors relative group py-2">
+                        <i class="fas fa-home mr-2"></i>Home
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-neonBlue transition-all duration-300 group-hover:w-full"></span>
+                    </a>
                     {% if user.is_authenticated %}
-                        <a href="{% url 'dashboards:dashboard_list' %}" class="text-sm font-medium text-gray-300 hover:text-neonBlue transition-colors relative group py-2">
-                            <i class="fas fa-chart-line mr-2"></i>Dashboards
-                            <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-neonBlue transition-all duration-300 group-hover:w-full"></span>
-                        </a>
                         <a href="{% url 'datasets:dataset_list' %}" class="text-sm font-medium text-gray-300 hover:text-neonBlue transition-colors relative group py-2">
                             <i class="fas fa-database mr-2"></i>Datasets
                             <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-neonBlue transition-all duration-300 group-hover:w-full"></span>
@@ -329,10 +329,10 @@
             <!-- Mobile Menu -->
             <div id="mobile-menu" class="hidden lg:hidden border-t border-white/10 bg-black/40 backdrop-blur-md">
                 <div class="px-6 py-4 space-y-3">
+                    <a href="{% url 'landing' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm font-medium text-gray-300 hover:text-neonBlue">
+                        <i class="fas fa-home w-5"></i>Home
+                    </a>
                     {% if user.is_authenticated %}
-                        <a href="{% url 'dashboards:dashboard_list' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm font-medium text-gray-300 hover:text-neonBlue">
-                            <i class="fas fa-chart-line w-5"></i>Dashboards
-                        </a>
                         <a href="{% url 'datasets:dataset_list' %}" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/10 transition text-sm font-medium text-gray-300 hover:text-neonBlue">
                             <i class="fas fa-database w-5"></i>Datasets
                         </a>
@@ -433,28 +433,25 @@
                 <div>
                     <h4 class="font-bold text-white mb-4">Platform</h4>
                     <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-neonBlue transition">Datasets</a></li>
-                        <li><a href="#" class="hover:text-neonBlue transition">Visualizations</a></li>
-                        <li><a href="#" class="hover:text-neonBlue transition">AI Insights</a></li>
+                        <li><a href="{% url 'datasets:dataset_list' %}" class="hover:text-neonBlue transition">Datasets</a></li>
+                        <li><a href="{% url 'visualizations:visualization_list' %}" class="hover:text-neonBlue transition">Visualizations</a></li>
+                        <li><a href="{% url 'insights:insight_list' %}" class="hover:text-neonBlue transition">AI Insights</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4 class="font-bold text-white mb-4">Support</h4>
                     <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-neonBlue transition">Documentation</a></li>
-                        <li><a href="#" class="hover:text-neonBlue transition">API Status</a></li>
+                        <li><a href="{% url 'pages:faq' %}" class="hover:text-neonBlue transition">FAQ</a></li>
+                        <li><a href="{% url 'pages:contact' %}" class="hover:text-neonBlue transition">Contact</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-bold text-white mb-4">Connect</h4>
-                    <div class="flex space-x-4">
-                        <a href="#" class="w-8 h-8 rounded-full glass-panel flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition">
-                            <i class="fab fa-github"></i>
-                        </a>
-                        <a href="#" class="w-8 h-8 rounded-full glass-panel flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 transition">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                    </div>
+                    <h4 class="font-bold text-white mb-4">Legal</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="{% url 'pages:about' %}" class="hover:text-neonBlue transition">About</a></li>
+                        <li><a href="{% url 'pages:privacy' %}" class="hover:text-neonBlue transition">Privacy</a></li>
+                        <li><a href="{% url 'pages:terms' %}" class="hover:text-neonBlue transition">Terms</a></li>
+                    </ul>
                 </div>
             </div>
             <div class="border-t border-white/5 mt-8 pt-8 text-center text-gray-500 text-sm">

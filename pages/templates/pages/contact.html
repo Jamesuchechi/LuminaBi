@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Contact | LuminaBI{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-16 px-6">
+    <h1 class="text-4xl font-bold mb-4">Contact Us</h1>
+    <p class="text-gray-400 mb-4">Reach out to us at <a href="mailto:hello@luminabi.ai" class="text-neonBlue">hello@luminabi.ai</a> for support and inquiries.</p>
+    <form method="post" action="#" class="mt-6 space-y-4">
+        <input type="text" name="name" placeholder="Your name" class="w-full p-3 rounded bg-white/5 border border-white/5 text-white" />
+        <input type="email" name="email" placeholder="Your email" class="w-full p-3 rounded bg-white/5 border border-white/5 text-white" />
+        <textarea name="message" placeholder="Message" rows="6" class="w-full p-3 rounded bg-white/5 border border-white/5 text-white"></textarea>
+        <button type="submit" class="px-6 py-3 rounded bg-neonBlue text-black font-bold">Send</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}FAQ | LuminaBI{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-16 px-6">
+    <h1 class="text-4xl font-bold mb-4">Frequently Asked Questions</h1>
+    <div class="space-y-6 text-gray-400">
+        <div>
+            <h3 class="font-bold">How do I upload data?</h3>
+            <p>Use the "Upload" button in the Datasets area. We accept CSV, JSON, and Excel files.</p>
+        </div>
+        <div>
+            <h3 class="font-bold">How long does analysis take?</h3>
+            <p>Small datasets finish within seconds. Larger datasets may take longer depending on size.</p>
+        </div>
+        <div>
+            <h3 class="font-bold">Can I export charts?</h3>
+            <p>Yes — visualizations can be exported as PNG or embedded via public links (enterprise feature).</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

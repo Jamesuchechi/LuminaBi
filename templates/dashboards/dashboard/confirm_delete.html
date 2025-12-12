@@ -7,7 +7,7 @@
     <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Navigation -->
         <div class="mb-8">
-            <a href="{% url 'dashboards:dashboard_list' %}" class="inline-flex items-center gap-2 text-neonBlue hover:text-neonPurple transition group">
+            <a href="{% url 'core:dashboard_list' %}" class="inline-flex items-center gap-2 text-neonBlue hover:text-neonPurple transition group">
                 <i class="fas fa-arrow-left group-hover:-translate-x-1 transition"></i>
                 <span class="font-mono text-sm">Back to Dashboards</span>
             </a>
@@ -39,7 +39,7 @@
                     <button type="submit" class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-red-500/20 hover:bg-red-500/40 border border-red-500/50 text-red-400 font-bold rounded-xl transition">
                         <i class="fas fa-trash"></i> Delete Dashboard
                     </button>
-                    <a href="{% url 'dashboards:dashboard_detail' object.id %}" class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-gray-600/30 hover:bg-gray-600/50 border border-gray-500/50 text-gray-300 font-bold rounded-xl transition">
+                    <a href="{% url 'core:dashboard_detail' object.id %}" class="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 bg-gray-600/30 hover:bg-gray-600/50 border border-gray-500/50 text-gray-300 font-bold rounded-xl transition">
                         <i class="fas fa-times"></i> Cancel
                     </a>
                 </div>

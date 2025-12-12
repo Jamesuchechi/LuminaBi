@@ -10,7 +10,7 @@ from accounts.models import UserProfile
 from analytics.models import Insight, Report, Trend, Anomaly, Alert, Metric, AnalyticsDashboard
 from datasets.models import Dataset
 from visualizations.models import Visualization
-from dashboards.models import Dashboard as DashboardModel
+from core.models import Dashboard as DashboardModel
 
 
 # ============================================================================

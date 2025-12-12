@@ -11,12 +11,12 @@ urlpatterns = [
     path('', LandingPageView.as_view(), name='landing'),  # Landing page
     path('accounts/', include('accounts.urls')),  # Accounts
     path('billing/', include('billing.urls')),  # Billing & Subscriptions
-    path('core/', include('core.urls')),  # Core application
+    path('core/', include('core.urls')),  # Core application (includes dashboards)
     path('analytics/', include('analytics.urls')),  # Analytics application
-    path('dashboards/', include('dashboards.urls')),  # Dashboards application
     path('datasets/', include('datasets.urls')),  # Datasets application
     path('visualizations/', include('visualizations.urls')),  # Visualizations application
     path('insights/', include('insights.urls')),  # Insights application
+    path('pages/', include('pages.urls')),  # Static pages (About, FAQ, Privacy, Terms, Contact)
     path('api/', include('api.urls')),  # REST API
     path('api-auth/', include('rest_framework.urls')),
 ]

@@ -1,6 +1,7 @@
 """
-Small helper utilities for broadcasting dashboard events over Channels.
+Helper utilities for broadcasting dashboard events over Channels.
 Uses the in-memory channel layer configured in settings (no Redis required).
+Migrated from dashboards app.
 """
 
 from asgiref.sync import async_to_sync
@@ -27,4 +28,3 @@ def broadcast_to_user_dashboards(user_id, payload: dict):
     except Exception:
         # Silent fail to avoid breaking request flow
         pass
-

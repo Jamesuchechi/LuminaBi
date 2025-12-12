@@ -117,12 +117,12 @@
                     <div class="p-3 bg-neonBlue/10 rounded-lg text-neonBlue group-hover:scale-110 transition-transform">
                         <i class="fas fa-database text-xl"></i>
                     </div>
-                    <span class="text-xs font-mono text-gray-500">DATASETS</span>
+                    <span class="text-xs font-mono text-gray-500">INSIGHTS FOUND</span>
                 </div>
-                <div class="text-3xl font-bold text-white mb-1">{{ total_datasets }}</div>
+                <div class="text-3xl font-bold text-white mb-1">{{ insight_cards.found }}</div>
                 <div class="text-xs text-gray-400 flex items-center gap-1">
                     <i class="fas fa-check-circle text-emerald-400"></i>
-                    {{ cleaned_datasets }} cleaned
+                    Anomalies detected
                 </div>
             </div>
 
@@ -131,21 +131,21 @@
                     <div class="p-3 bg-neonPurple/10 rounded-lg text-neonPurple group-hover:scale-110 transition-transform">
                         <i class="fas fa-brain text-xl"></i>
                     </div>
-                    <span class="text-xs font-mono text-gray-500">INSIGHTS</span>
+                    <span class="text-xs font-mono text-gray-500">DETECTED</span>
                 </div>
-                <div class="text-3xl font-bold text-white mb-1">{{ total_insights }}</div>
-                <div class="text-xs text-gray-400">{{ insights_types|length }} types detected</div>
+                <div class="text-3xl font-bold text-white mb-1">{{ insight_cards.detected }}</div>
+                <div class="text-xs text-gray-400">Active analyses</div>
             </div>
 
-            <div class="stat-card glass-panel p-6 rounded-2xl border-t-2 border-red-500/50 hover:bg-white/5 transition-colors group">
+            <div class="stat-card glass-panel p-6 rounded-2xl border-t-2 border-orange-500/50 hover:bg-white/5 transition-colors group">
                 <div class="flex justify-between items-start mb-4">
-                    <div class="p-3 bg-red-500/10 rounded-lg text-red-400 group-hover:scale-110 transition-transform">
+                    <div class="p-3 bg-orange-500/10 rounded-lg text-orange-400 group-hover:scale-110 transition-transform">
                         <i class="fas fa-triangle-exclamation text-xl"></i>
                     </div>
                     <span class="text-xs font-mono text-gray-500">ANOMALIES</span>
                 </div>
-                <div class="text-3xl font-bold text-white mb-1">{{ active_anomalies }}</div>
-                <div class="text-xs text-gray-400">{{ total_anomalies }} total · <span class="text-red-400 font-bold">{{ critical_anomalies|length }} critical</span></div>
+                <div class="text-3xl font-bold text-white mb-1">{{ insight_cards.found }}</div>
+                <div class="text-xs text-gray-400">{{ insight_cards.detected }} variants detected</div>
             </div>
 
             <div class="stat-card glass-panel p-6 rounded-2xl border-t-2 border-emerald-500/50 hover:bg-white/5 transition-colors group">
@@ -156,16 +156,264 @@
                     <span class="text-xs font-mono text-gray-500">DATA HEALTH</span>
                 </div>
                 <div class="flex items-end gap-2 mb-2">
-                    <div class="text-3xl font-bold text-white">{{ cleaning_progress }}%</div>
+                    <div class="text-3xl font-bold text-white">{{ insight_cards.health }}%</div>
                 </div>
                 <div class="w-full bg-gray-700 h-2 rounded-full overflow-hidden">
-                    <div class="h-full bg-gradient-to-r from-emerald-500 to-emerald-300 rounded-full transition-all duration-700" style="width: {{ cleaning_progress }}%"></div>
+                    <div class="h-full bg-gradient-to-r from-emerald-500 to-emerald-300 rounded-full transition-all duration-700" style="width: {{ insight_cards.health }}%"></div>
                 </div>
             </div>
         </div>
 
+        <!-- Datasets Section -->
+        <div class="mt-12">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                    <i class="fas fa-database text-neonBlue"></i> Your Datasets
+                </h2>
+                <a href="{% url 'datasets:dataset_list' %}" class="text-sm text-neonBlue hover:text-white transition flex items-center gap-1">
+                    View All <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            {% if datasets_page.object_list %}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for dataset in datasets_page.object_list %}
+                        <a href="{% url 'datasets:dataset_detail' dataset.id %}" class="group glass-panel p-6 rounded-2xl border border-white/10 hover:border-neonBlue/30 transition-all hover:bg-white/5">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="p-3 bg-neonBlue/10 rounded-lg text-neonBlue group-hover:scale-110 transition-transform">
+                                    <i class="fas fa-file-csv text-xl"></i>
+                                </div>
+                                {% if dataset.is_cleaned %}
+                                    <span class="px-2 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Cleaned</span>
+                                {% else %}
+                                    <span class="px-2 py-1 text-xs rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">Raw</span>
+                                {% endif %}
+                            </div>
+                            <h3 class="font-bold text-white group-hover:text-neonBlue transition mb-2 truncate">{{ dataset.name }}</h3>
+                            <p class="text-xs text-gray-400 mb-4">{{ dataset.uploaded_at|date:"M d, Y" }}</p>
+                            <div class="flex items-center justify-between pt-4 border-t border-white/10">
+                                <span class="text-sm text-gray-400">{{ dataset.row_count }} rows</span>
+                                <i class="fas fa-chevron-right text-gray-600 group-hover:text-neonBlue transition"></i>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+
+                <!-- Datasets Pagination -->
+                {% if datasets_page.paginator.num_pages > 1 %}
+                    <div class="flex justify-center gap-2 mt-6">
+                        {% if datasets_page.has_previous %}
+                            <a href="?datasets_page=1" class="px-3 py-2 rounded-lg glass-panel border border-white/10 hover:border-neonBlue/30 text-white text-sm">First</a>
+                            <a href="?datasets_page={{ datasets_page.previous_page_number }}" class="px-3 py-2 rounded-lg glass-panel border border-white/10 hover:border-neonBlue/30 text-white text-sm">← Previous</a>
+                        {% endif %}
+                        {% for page_num in datasets_page.paginator.page_range %}
+                            {% if page_num == datasets_page.number %}
+                                <span class="px-3 py-2 rounded-lg bg-neonBlue/20 border border-neonBlue/50 text-neonBlue font-bold text-sm">{{ page_num }}</span>
+                            {% else %}
+                                <a href="?datasets_page={{ page_num }}" class="px-3 py-2 rounded-lg glass-panel border border-white/10 hover:border-neonBlue/30 text-white text-sm">{{ page_num }}</a>
+                            {% endif %}
+                        {% endfor %}
+                        {% if datasets_page.has_next %}
+                            <a href="?datasets_page={{ datasets_page.next_page_number }}" class="px-3 py-2 rounded-lg glass-panel border border-white/10 hover:border-neonBlue/30 text-white text-sm">Next →</a>
+                            <a href="?datasets_page={{ datasets_page.paginator.num_pages }}" class="px-3 py-2 rounded-lg glass-panel border border-white/10 hover:border-neonBlue/30 text-white text-sm">Last</a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="glass-panel p-12 rounded-2xl text-center border-dashed border-2 border-white/10">
+                    <div class="text-4xl mb-4 text-gray-500"><i class="fas fa-inbox"></i></div>
+                    <p class="text-gray-400 mb-4">No datasets yet. Upload your first dataset to begin.</p>
+                    <a href="{% url 'datasets:dataset_upload' %}" class="px-6 py-2 rounded-lg bg-neonBlue/20 border border-neonBlue/50 text-neonBlue hover:bg-neonBlue/30 transition text-sm font-bold">
+                        Upload Dataset
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Analytics Insights Section -->
+        <div class="mt-12">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                    <i class="fas fa-chart-line text-neonPurple"></i> Analytics Insights
+                </h2>
+                <a href="{% url 'analytics:insight_list' %}" class="text-sm text-neonPurple hover:text-white transition flex items-center gap-1">
+                    View All <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            {% if analytics_page.object_list %}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for insight in analytics_page.object_list %}
+                        <a href="{% url 'analytics:insight_detail' insight.id %}" class="group glass-panel p-6 rounded-2xl border border-white/10 hover:border-neonPurple/30 transition-all hover:bg-white/5">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="p-3 rounded-lg text-white transition-transform group-hover:scale-110
+                                    {% if insight.insight_type == 'trend' %}bg-blue-500/10 text-blue-400
+                                    {% elif insight.insight_type == 'anomaly' %}bg-red-500/10 text-red-400
+                                    {% else %}bg-purple-500/10 text-purple-400{% endif %}">
+                                    {% if insight.insight_type == 'trend' %}<i class="fas fa-chart-line text-xl"></i>
+                                    {% elif insight.insight_type == 'anomaly' %}<i class="fas fa-exclamation-circle text-xl"></i>
+                                    {% else %}<i class="fas fa-link text-xl"></i>{% endif %}
+                                </div>
+                                <span class="px-2 py-1 text-xs rounded-full bg-white/10 text-gray-300">{{ insight.get_insight_type_display }}</span>
+                            </div>
+                            <h3 class="font-bold text-white group-hover:text-neonPurple transition mb-2 line-clamp-2">{{ insight.title }}</h3>
+                            <p class="text-xs text-gray-400 mb-4 line-clamp-2">{{ insight.description }}</p>
+                            <div class="flex items-center justify-between pt-4 border-t border-white/10">
+                                <span class="text-xs text-gray-500">{{ insight.created_at|timesince }} ago</span>
+                                <i class="fas fa-chevron-right text-gray-600 group-hover:text-neonPurple transition"></i>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+
+                <!-- Analytics Pagination -->
+                {% if analytics_page.paginator.num_pages > 1 %}
+                    <div class="flex justify-center gap-2 mt-6">
+                        {% if analytics_page.has_previous %}
+                            <a href="?analytics_page=1" class="px-3 py-2 rounded-lg glass-panel border border-white/10 hover:border-neonPurple/30 text-white text-sm">First</a>
+                            <a href="?analytics_page={{ analytics_page.previous_page_number }}" class="px-3 py-2 rounded-lg glass-panel border border-white/10 hover:border-neonPurple/30 text-white text-sm">← Previous</a>
+                        {% endif %}
+                        {% for page_num in analytics_page.paginator.page_range %}
+                            {% if page_num == analytics_page.number %}
+                                <span class="px-3 py-2 rounded-lg bg-neonPurple/20 border border-neonPurple/50 text-neonPurple font-bold text-sm">{{ page_num }}</span>
+                            {% else %}
+                                <a href="?analytics_page={{ page_num }}" class="px-3 py-2 rounded-lg glass-panel border border-white/10 hover:border-neonPurple/30 text-white text-sm">{{ page_num }}</a>
+                            {% endif %}
+                        {% endfor %}
+                        {% if analytics_page.has_next %}
+                            <a href="?analytics_page={{ analytics_page.next_page_number }}" class="px-3 py-2 rounded-lg glass-panel border border-white/10 hover:border-neonPurple/30 text-white text-sm">Next →</a>
+                            <a href="?analytics_page={{ analytics_page.paginator.num_pages }}" class="px-3 py-2 rounded-lg glass-panel border border-white/10 hover:border-neonPurple/30 text-white text-sm">Last</a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="glass-panel p-12 rounded-2xl text-center border-dashed border-2 border-white/10">
+                    <div class="text-4xl mb-4 text-gray-500"><i class="fas fa-inbox"></i></div>
+                    <p class="text-gray-400">No analytics insights yet. Analyze a dataset to generate insights.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Data Insights Section -->
+        <div class="mt-12">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                    <i class="fas fa-lightbulb text-pink-400"></i> Data Insights
+                </h2>
+                <a href="{% url 'insights:insight_list' %}" class="text-sm text-pink-400 hover:text-white transition flex items-center gap-1">
+                    View All <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            {% if insights_page.object_list %}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for insight in insights_page.object_list %}
+                        <a href="{% url 'insights:anomaly_detail' insight.id %}" class="group glass-panel p-6 rounded-2xl border border-white/10 hover:border-pink-400/30 transition-all hover:bg-white/5">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="p-3 bg-pink-500/10 rounded-lg text-pink-400 group-hover:scale-110 transition-transform">
+                                    <i class="fas fa-sparkles text-xl"></i>
+                                </div>
+                                <span class="px-2 py-1 text-xs rounded-full bg-pink-500/10 text-pink-300 border border-pink-500/20">Data</span>
+                            </div>
+                            <h3 class="font-bold text-white group-hover:text-pink-400 transition mb-2 line-clamp-2">{{ insight.finding_summary }}</h3>
+                            <p class="text-xs text-gray-400 mb-4 line-clamp-2">{{ insight.description }}</p>
+                            <div class="flex items-center justify-between pt-4 border-t border-white/10">
+                                <span class="text-xs text-gray-500">{{ insight.created_at|date:"M d, Y" }}</span>
+                                <i class="fas fa-chevron-right text-gray-600 group-hover:text-pink-400 transition"></i>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+
+                <!-- Data Insights Pagination -->
+                {% if insights_page.paginator.num_pages > 1 %}
+                    <div class="flex justify-center gap-2 mt-6">
+                        {% if insights_page.has_previous %}
+                            <a href="?insights_page=1" class="px-3 py-2 rounded-lg glass-panel border border-white/10 hover:border-pink-400/30 text-white text-sm">First</a>
+                            <a href="?insights_page={{ insights_page.previous_page_number }}" class="px-3 py-2 rounded-lg glass-panel border border-white/10 hover:border-pink-400/30 text-white text-sm">← Previous</a>
+                        {% endif %}
+                        {% for page_num in insights_page.paginator.page_range %}
+                            {% if page_num == insights_page.number %}
+                                <span class="px-3 py-2 rounded-lg bg-pink-500/20 border border-pink-500/50 text-pink-400 font-bold text-sm">{{ page_num }}</span>
+                            {% else %}
+                                <a href="?insights_page={{ page_num }}" class="px-3 py-2 rounded-lg glass-panel border border-white/10 hover:border-pink-400/30 text-white text-sm">{{ page_num }}</a>
+                            {% endif %}
+                        {% endfor %}
+                        {% if insights_page.has_next %}
+                            <a href="?insights_page={{ insights_page.next_page_number }}" class="px-3 py-2 rounded-lg glass-panel border border-white/10 hover:border-pink-400/30 text-white text-sm">Next →</a>
+                            <a href="?insights_page={{ insights_page.paginator.num_pages }}" class="px-3 py-2 rounded-lg glass-panel border border-white/10 hover:border-pink-400/30 text-white text-sm">Last</a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="glass-panel p-12 rounded-2xl text-center border-dashed border-2 border-white/10">
+                    <div class="text-4xl mb-4 text-gray-500"><i class="fas fa-inbox"></i></div>
+                    <p class="text-gray-400">No data insights yet. Analyze a dataset to generate insights.</p>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Visualizations Section -->
+        <div class="mt-12">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                    <i class="fas fa-chart-bar text-emerald-400"></i> Your Visualizations
+                </h2>
+                <a href="{% url 'visualizations:visualization_list' %}" class="text-sm text-emerald-400 hover:text-white transition flex items-center gap-1">
+                    View All <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            {% if visualizations_page.object_list %}
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for viz in visualizations_page.object_list %}
+                        <a href="{% url 'visualizations:visualization_detail' viz.id %}" class="group glass-panel p-6 rounded-2xl border border-white/10 hover:border-emerald-400/30 transition-all hover:bg-white/5">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="p-3 bg-emerald-500/10 rounded-lg text-emerald-400 group-hover:scale-110 transition-transform">
+                                    <i class="fas fa-chart-bar text-xl"></i>
+                                </div>
+                                <span class="px-2 py-1 text-xs rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/20">{{ viz.chart_type }}</span>
+                            </div>
+                            <h3 class="font-bold text-white group-hover:text-emerald-400 transition mb-2 truncate">{{ viz.title }}</h3>
+                            <p class="text-xs text-gray-400 mb-4">{{ viz.description|truncatewords:10 }}</p>
+                            <div class="flex items-center justify-between pt-4 border-t border-white/10">
+                                <span class="text-xs text-gray-500">Created {{ viz.created_at|date:"M d, Y" }}</span>
+                                <i class="fas fa-chevron-right text-gray-600 group-hover:text-emerald-400 transition"></i>
+                            </div>
+                        </a>
+                    {% endfor %}
+                </div>
+
+                <!-- Visualizations Pagination -->
+                {% if visualizations_page.paginator.num_pages > 1 %}
+                    <div class="flex justify-center gap-2 mt-6">
+                        {% if visualizations_page.has_previous %}
+                            <a href="?visualizations_page=1" class="px-3 py-2 rounded-lg glass-panel border border-white/10 hover:border-emerald-400/30 text-white text-sm">First</a>
+                            <a href="?visualizations_page={{ visualizations_page.previous_page_number }}" class="px-3 py-2 rounded-lg glass-panel border border-white/10 hover:border-emerald-400/30 text-white text-sm">← Previous</a>
+                        {% endif %}
+                        {% for page_num in visualizations_page.paginator.page_range %}
+                            {% if page_num == visualizations_page.number %}
+                                <span class="px-3 py-2 rounded-lg bg-emerald-500/20 border border-emerald-500/50 text-emerald-400 font-bold text-sm">{{ page_num }}</span>
+                            {% else %}
+                                <a href="?visualizations_page={{ page_num }}" class="px-3 py-2 rounded-lg glass-panel border border-white/10 hover:border-emerald-400/30 text-white text-sm">{{ page_num }}</a>
+                            {% endif %}
+                        {% endfor %}
+                        {% if visualizations_page.has_next %}
+                            <a href="?visualizations_page={{ visualizations_page.next_page_number }}" class="px-3 py-2 rounded-lg glass-panel border border-white/10 hover:border-emerald-400/30 text-white text-sm">Next →</a>
+                            <a href="?visualizations_page={{ visualizations_page.paginator.num_pages }}" class="px-3 py-2 rounded-lg glass-panel border border-white/10 hover:border-emerald-400/30 text-white text-sm">Last</a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="glass-panel p-12 rounded-2xl text-center border-dashed border-2 border-white/10">
+                    <div class="text-4xl mb-4 text-gray-500"><i class="fas fa-inbox"></i></div>
+                    <p class="text-gray-400">No visualizations yet. Create a visualization to display your data.</p>
+                </div>
+            {% endif %}
+        </div>
+
         <!-- Analytics Charts Section -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-12">
             <!-- Datasets Upload Timeline -->
             <div class="glass-panel p-8 rounded-2xl border border-white/10 hover:border-white/20 transition-all">
                 <div class="flex justify-between items-center mb-6">
@@ -189,226 +437,6 @@
                 </div>
                 <div class="chart-container">
                     <canvas id="insightsChart"></canvas>
-                </div>
-            </div>
-
-            <!-- Anomaly Severity -->
-            <div class="glass-panel p-8 rounded-2xl border border-white/10 hover:border-white/20 transition-all">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                        <i class="fas fa-exclamation-circle text-red-500"></i>
-                        Anomalies by Severity
-                    </h3>
-                </div>
-                <div class="chart-container">
-                    <canvas id="anomaliesChart"></canvas>
-                </div>
-            </div>
-
-            <!-- Active Alerts -->
-            <div class="glass-panel p-8 rounded-2xl border border-white/10 hover:border-white/20 transition-all">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                        <i class="fas fa-bell text-emerald-400"></i>
-                        Active Alerts ({{ active_alerts }})
-                    </h3>
-                </div>
-                {% if active_alerts > 0 %}
-                    <div class="space-y-2 max-h-64 overflow-y-auto">
-                        {% for alert in recent_alerts %}
-                            <div class="event-item flex items-start gap-4 p-3 rounded-lg hover:bg-white/5 transition-colors border border-white/5">
-                                <div class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0
-                                    {% if alert.alert_level == 'critical' %}bg-red-500/10 text-red-400{% elif alert.alert_level == 'error' %}bg-orange-500/10 text-orange-400{% elif alert.alert_level == 'warning' %}bg-yellow-500/10 text-yellow-400{% else %}bg-blue-500/10 text-blue-400{% endif %}">
-                                    {% if alert.alert_level == 'critical' %}<i class="fas fa-bolt"></i>
-                                    {% elif alert.alert_level == 'error' %}<i class="fas fa-exclamation"></i>
-                                    {% elif alert.alert_level == 'warning' %}<i class="fas fa-alert-circle"></i>
-                                    {% else %}<i class="fas fa-info"></i>{% endif %}
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <div class="flex items-center gap-2 mb-1">
-                                        <h4 class="font-bold text-white">{{ alert.title }}</h4>
-                                        <span class="event-badge {% if alert.alert_level == 'critical' %}critical{% elif alert.alert_level == 'error' %}warning{% else %}info{% endif %}">
-                                            {{ alert.get_alert_level_display }}
-                                        </span>
-                                    </div>
-                                    <p class="text-xs text-gray-400">{{ alert.description }}</p>
-                                    <div class="text-xs text-gray-500 mt-2">{{ alert.triggered_at|timesince }} ago</div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    <div class="text-center py-12">
-                        <div class="text-4xl mb-3 text-emerald-400"><i class="fas fa-check-circle"></i></div>
-                        <p class="text-gray-400">No active alerts. Everything is running smoothly!</p>
-                    </div>
-                {% endif %}
-            </div>
-        </div>
-
-        <!-- Critical Anomalies & Recent Activity -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-1">
-                <!-- Quick Actions -->
-                <div class="space-y-6">
-                    <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                        <i class="fas fa-bolt text-neonBlue"></i> Quick Actions
-                    </h2>
-                    
-                    <div class="grid gap-4">
-                        <a href="{% url 'datasets:dataset_upload' %}" class="spotlight-card glass-panel p-6 rounded-2xl group border border-white/5 hover:border-neonBlue/30 transition-all">
-                            <div class="flex items-center gap-4 relative z-10">
-                                <div class="w-12 h-12 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-400 group-hover:text-white group-hover:bg-blue-500 transition-all">
-                                    <i class="fas fa-upload"></i>
-                                </div>
-                                <div>
-                                    <h3 class="font-bold text-white">Upload Data</h3>
-                                    <p class="text-xs text-gray-400">CSV, JSON, Excel</p>
-                                </div>
-                                <i class="fas fa-chevron-right ml-auto text-gray-600 group-hover:text-white transition-transform group-hover:translate-x-1"></i>
-                            </div>
-                        </a>
-
-                        <a href="{% url 'visualizations:visualization_list' %}" class="spotlight-card glass-panel p-6 rounded-2xl group border border-white/5 hover:border-neonPurple/30 transition-all">
-                            <div class="flex items-center gap-4 relative z-10">
-                                <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400 group-hover:text-white group-hover:bg-purple-500 transition-all">
-                                    <i class="fas fa-layer-group"></i>
-                                </div>
-                                <div>
-                                    <h3 class="font-bold text-white">Dashboard Builder</h3>
-                                    <p class="text-xs text-gray-400">Create new views</p>
-                                </div>
-                                <i class="fas fa-chevron-right ml-auto text-gray-600 group-hover:text-white transition-transform group-hover:translate-x-1"></i>
-                            </div>
-                        </a>
-                    </div>
-
-                    <!-- Critical Anomalies -->
-                    {% if critical_anomalies %}
-                        <div class="glass-panel p-6 rounded-2xl border-l-4 border-l-red-500">
-                            <h3 class="text-sm font-bold text-red-400 mb-4 uppercase tracking-wider flex items-center gap-2">
-                                <i class="fas fa-alert-circle"></i>
-                                Critical Anomalies
-                            </h3>
-                            <div class="space-y-3">
-                                {% for anomaly in critical_anomalies %}
-                                    <div class="event-item text-xs">
-                                        <div class="flex items-start gap-2 mb-1">
-                                            <span class="w-2 h-2 bg-red-500 rounded-full mt-1.5 flex-shrink-0"></span>
-                                            <p class="text-gray-300 font-medium">{{ anomaly.description|truncatewords:10 }}</p>
-                                        </div>
-                                        <div class="text-gray-500 text-xs ml-3">
-                                            Dataset: <strong class="text-white">{{ anomaly.dataset.name }}</strong>
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="lg:col-span-2 space-y-8">
-                <!-- Recent Datasets -->
-                <div>
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                            <i class="fas fa-clock text-neonPurple"></i> Recent Datasets
-                        </h2>
-                        <a href="{% url 'datasets:dataset_list' %}" class="text-xs text-neonPurple hover:text-white transition">View All →</a>
-                    </div>
-
-                    <div class="glass-panel rounded-2xl overflow-hidden">
-                        {% if recent_datasets %}
-                            <div class="divide-y divide-white/5">
-                                {% for dataset in recent_datasets %}
-                                    <div class="event-item p-4 flex items-center justify-between hover:bg-white/5 transition duration-300 group">
-                                        <div class="flex items-center gap-4">
-                                            <div class="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center text-gray-400 group-hover:text-neonBlue group-hover:bg-neonBlue/10 transition">
-                                                <i class="fas fa-file-csv"></i>
-                                            </div>
-                                            <div>
-                                                <a href="{% url 'datasets:dataset_detail' dataset.id %}" class="font-semibold text-white group-hover:text-neonBlue transition block">
-                                                    {{ dataset.name }}
-                                                </a>
-                                                <div class="text-xs text-gray-500 flex items-center gap-2">
-                                                    <span>{{ dataset.uploaded_at|date:"M d, Y" }}</span>
-                                                    <span class="w-1 h-1 rounded-full bg-gray-600"></span>
-                                                    <span>{{ dataset.row_count }} rows</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div>
-                                            {% if dataset.is_cleaned %}
-                                                <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
-                                                    Cleaned
-                                                </span>
-                                            {% else %}
-                                                <span class="px-3 py-1 rounded-full text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                                                    Raw
-                                                </span>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        {% else %}
-                            <div class="p-8 text-center">
-                                <div class="inline-flex w-16 h-16 rounded-full bg-white/5 items-center justify-center mb-4 text-gray-500">
-                                    <i class="fas fa-inbox text-2xl"></i>
-                                </div>
-                                <p class="text-gray-400 mb-4">No datasets uploaded yet.</p>
-                                <a href="{% url 'datasets:dataset_upload' %}" class="text-neonBlue hover:underline text-sm">Upload your first dataset →</a>
-                            </div>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <!-- Recent Insights -->
-                <div>
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-xl font-bold text-white flex items-center gap-2">
-                            <i class="fas fa-lightbulb text-neonPurple"></i> Recent Insights
-                        </h2>
-                        <a href="{% url 'analytics:insight_list' %}" class="text-xs text-neonPurple hover:text-white transition">View All →</a>
-                    </div>
-
-                    {% if recent_insights %}
-                        <div class="glass-panel rounded-2xl overflow-hidden">
-                            <div class="divide-y divide-white/5">
-                                {% for insight in recent_insights %}
-                                    <div class="event-item p-4 flex items-start gap-4 hover:bg-white/5 transition duration-300 group">
-                                        <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 text-gray-400 group-hover:text-white transition
-                                            {% if insight.insight_type == 'trend' %}bg-blue-500/20 text-blue-400
-                                            {% elif insight.insight_type == 'anomaly' %}bg-red-500/20 text-red-400
-                                            {% elif insight.insight_type == 'correlation' %}bg-purple-500/20 text-purple-400
-                                            {% else %}bg-gray-500/20{% endif %}">
-                                            {% if insight.insight_type == 'trend' %}<i class="fas fa-chart-line"></i>
-                                            {% elif insight.insight_type == 'anomaly' %}<i class="fas fa-exclamation-circle"></i>
-                                            {% elif insight.insight_type == 'correlation' %}<i class="fas fa-link"></i>
-                                            {% else %}<i class="fas fa-chart-bar"></i>{% endif %}
-                                        </div>
-                                        <div class="flex-1 min-w-0">
-                                            <div class="flex items-center gap-2 mb-1">
-                                                <h4 class="font-bold text-white">{{ insight.title }}</h4>
-                                                <span class="text-xs px-2 py-1 rounded-full bg-white/10 text-gray-300">{{ insight.get_insight_type_display }}</span>
-                                            </div>
-                                            <p class="text-xs text-gray-400 line-clamp-2">{{ insight.description }}</p>
-                                            <div class="text-xs text-gray-500 mt-2">
-                                                {{ insight.created_at|timesince }} ago · Confidence: <strong>{{ insight.get_confidence_level_display }}</strong>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    {% else %}
-                        <div class="glass-panel p-8 rounded-2xl text-center border-dashed border-2 border-white/10">
-                            <p class="text-gray-500 mb-2">No insights generated yet.</p>
-                            <p class="text-xs text-gray-600">Upload a dataset and analyze it to generate insights.</p>
-                        </div>
-                    {% endif %}
                 </div>
             </div>
         </div>
@@ -513,10 +541,10 @@
             new Chart(datasetsCtx, {
                 type: 'line',
                 data: {
-                    labels: {{ datasets_chart_labels|safe }},
+                    labels: {{ datasets_timeline.labels|safe }},
                     datasets: [{
                         label: 'Datasets Uploaded',
-                        data: {{ datasets_chart_data|safe }},
+                        data: {{ datasets_timeline.data|safe }},
                         borderColor: colors.primary,
                         backgroundColor: 'rgba(0, 243, 255, 0.1)',
                         borderWidth: 2,
@@ -555,16 +583,19 @@
             new Chart(insightsCtx, {
                 type: 'doughnut',
                 data: {
-                    labels: {{ insights_types|safe }},
+                    labels: ['Anomalies', 'Outliers', 'Correlations', 'Analytics'],
                     datasets: [{
-                        data: {{ insights_counts|safe }},
+                        data: [
+                            {{ insight_distribution.anomalies }},
+                            {{ insight_distribution.outliers }},
+                            {{ insight_distribution.correlations }},
+                            {{ insight_distribution.analytics }}
+                        ],
                         backgroundColor: [
                             colors.primary,
                             colors.secondary,
                             colors.purple,
-                            colors.warning,
-                            colors.danger,
-                            colors.success
+                            colors.warning
                         ],
                         borderColor: 'rgba(0, 0, 0, 0)',
                         borderWidth: 0,
@@ -577,42 +608,6 @@
                         legend: {
                             position: 'bottom',
                             labels: { color: '#d1d5db', padding: 15 }
-                        }
-                    }
-                }
-            });
-        }
-
-        // Anomalies Chart
-        const anomaliesCtx = document.getElementById('anomaliesChart');
-        if (anomaliesCtx) {
-            new Chart(anomaliesCtx, {
-                type: 'bar',
-                data: {
-                    labels: {{ anomaly_severities|safe }},
-                    datasets: [{
-                        label: 'Count',
-                        data: {{ anomaly_counts|safe }},
-                        backgroundColor: [colors.danger, colors.warning, colors.primary, colors.success],
-                        borderRadius: 8,
-                        borderSkipped: false,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: { color: 'rgba(255,255,255,0.05)' },
-                            ticks: { color: '#9ca3af' }
-                        },
-                        x: {
-                            grid: { display: false },
-                            ticks: { color: '#9ca3af' }
                         }
                     }
                 }

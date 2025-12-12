@@ -77,7 +77,7 @@ def scheduled_reports():
     """
     try:
         logger.info('Starting scheduled report generation task')
-        from dashboards.models import Dashboard
+        from core.models import Dashboard
         
         # Get dashboards with scheduled reports enabled
         dashboards_with_reports = Dashboard.objects.filter(

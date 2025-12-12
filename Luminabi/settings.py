@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env(
     DEBUG=(bool, True),
     SECRET_KEY=(str, 'django-insecure-pwwq((c-g7a(s87)kv_292h!og-k*1v^9kcbe6@dudlawt51*x'),
-    ALLOWED_HOSTS=(list, ['localhost', '127.0.0.1']),
+    ALLOWED_HOSTS=(list, ['localhost', '127.0.0.1', 'testserver']),
 )
 environ.Env.read_env(BASE_DIR / '.env')
 
@@ -48,12 +48,12 @@ INSTALLED_APPS += [
     'accounts',
     'api',
     'core',
-    'dashboards',
     'datasets',
     'visualizations',
     'insights',
     'analytics',
     'billing',
+    'pages',
 ]
 
 MIDDLEWARE = [

@@ -2,7 +2,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from .models import Dataset
-from dashboards.realtime import broadcast_to_user_dashboards
+from core.realtime import broadcast_to_user_dashboards
 
 
 @receiver(post_save, sender=Dataset)

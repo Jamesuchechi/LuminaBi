@@ -7,7 +7,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Header Navigation -->
         <div class="mb-8">
-            <a href="{% url 'dashboards:dashboard_list' %}" class="inline-flex items-center gap-2 text-neonBlue hover:text-neonPurple transition group">
+            <a href="{% url 'core:dashboard_list' %}" class="inline-flex items-center gap-2 text-neonBlue hover:text-neonPurple transition group">
                 <i class="fas fa-arrow-left group-hover:-translate-x-1 transition"></i>
                 <span class="font-mono text-sm">Back to Dashboards</span>
             </a>
@@ -45,7 +45,7 @@
                         </button>
                     </form>
                     {% endif %}
-                    <a href="{% url 'dashboards:dashboard_edit' dashboard.id %}" class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-neonBlue to-neonPurple text-white text-sm font-mono rounded-lg hover:scale-105 transition">
+                    <a href="{% url 'core:dashboard_edit' dashboard.id %}" class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-neonBlue to-neonPurple text-white text-sm font-mono rounded-lg hover:scale-105 transition">
                         <i class="fas fa-pen text-xs"></i> Edit
                     </a>
                 </div>
@@ -167,7 +167,7 @@
                                     <h3 class="text-lg font-bold text-white group-hover:text-neonBlue transition">{{ vis.title }}</h3>
                                     <p class="text-sm text-gray-400 mt-1">{{ vis.description|truncatewords:15 }}</p>
                                 </div>
-                                <form method="post" action="{% url 'dashboards:dashboard_visualizations' dashboard.id %}" class="inline">
+                                <form method="post" action="{% url 'core:dashboard_visualizations' dashboard.id %}" class="inline">
                                     {% csrf_token %}
                                     <input type="hidden" name="action" value="remove">
                                     <input type="hidden" name="visualization_id" value="{{ vis.id }}">
@@ -200,7 +200,7 @@
                         </div>
                         <p class="text-gray-300 text-lg font-mono mb-2">No visualizations added</p>
                         <p class="text-gray-500 text-sm mb-6">Add visualizations to this dashboard to display analytics data</p>
-                        <a href="{% url 'dashboards:dashboard_edit' dashboard.id %}" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-neonBlue to-neonPurple text-white font-bold rounded-xl hover:scale-105 transition">
+                        <a href="{% url 'core:dashboard_edit' dashboard.id %}" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-neonBlue to-neonPurple text-white font-bold rounded-xl hover:scale-105 transition">
                             <i class="fas fa-plus"></i> Add Visualizations
                         </a>
                     </div>
@@ -242,13 +242,13 @@
                         <h2 class="text-lg font-bold text-white">Actions</h2>
                     </div>
                     <div class="space-y-3">
-                        <a href="{% url 'dashboards:dashboard_edit' dashboard.id %}" class="flex items-center justify-center gap-2 w-full px-4 py-2 bg-neonBlue/20 hover:bg-neonBlue/40 border border-neonBlue/50 text-neonBlue text-sm font-mono rounded-lg transition">
+                        <a href="{% url 'core:dashboard_edit' dashboard.id %}" class="flex items-center justify-center gap-2 w-full px-4 py-2 bg-neonBlue/20 hover:bg-neonBlue/40 border border-neonBlue/50 text-neonBlue text-sm font-mono rounded-lg transition">
                             <i class="fas fa-pen text-xs"></i> Edit Details
                         </a>
-                        <a href="{% url 'dashboards:dashboard_list' %}" class="flex items-center justify-center gap-2 w-full px-4 py-2 bg-neonPurple/20 hover:bg-neonPurple/40 border border-neonPurple/50 text-neonPurple text-sm font-mono rounded-lg transition">
+                        <a href="{% url 'core:dashboard_list' %}" class="flex items-center justify-center gap-2 w-full px-4 py-2 bg-neonPurple/20 hover:bg-neonPurple/40 border border-neonPurple/50 text-neonPurple text-sm font-mono rounded-lg transition">
                             <i class="fas fa-arrow-left text-xs"></i> Dashboards
                         </a>
-                        <a href="{% url 'dashboards:dashboard_delete' dashboard.id %}" class="flex items-center justify-center gap-2 w-full px-4 py-2 bg-red-500/20 hover:bg-red-500/40 border border-red-500/50 text-red-400 text-sm font-mono rounded-lg transition">
+                        <a href="{% url 'core:dashboard_delete' dashboard.id %}" class="flex items-center justify-center gap-2 w-full px-4 py-2 bg-red-500/20 hover:bg-red-500/40 border border-red-500/50 text-red-400 text-sm font-mono rounded-lg transition">
                             <i class="fas fa-trash text-xs"></i> Delete
                         </a>
                     </div>
