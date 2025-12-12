@@ -1,0 +1,212 @@
+{% extends 'base.html' %}
+
+{% block title %}Anomaly Analysis - {{ anomaly.anomaly_type }} - LuminaBI{% endblock %}
+
+{% block content %}
+<div class="min-h-screen py-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Back Navigation -->
+        <div class="mb-8">
+            <a href="{% url 'insights:dataset_insights' dataset.id %}" class="inline-flex items-center gap-2 text-neonBlue hover:text-neonPurple transition group">
+                <i class="fas fa-arrow-left group-hover:-translate-x-1 transition"></i>
+                <span class="font-mono text-sm">Back to Dataset Insights</span>
+            </a>
+        </div>
+
+        <!-- Main Card -->
+        <div class="glass-panel rounded-2xl p-8 border border-white/10">
+            <!-- Header -->
+            <div class="flex items-start justify-between mb-6 pb-6 border-b border-white/10">
+                <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i class="fas fa-exclamation-triangle text-neonPurple text-2xl"></i>
+                        <h1 class="text-4xl font-bold text-white">{{ anomaly.get_anomaly_type_display }}</h1>
+                    </div>
+                    <p class="text-gray-400 text-lg">Anomaly Analysis Report</p>
+                </div>
+                <div class="text-right">
+                    <span class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold
+                        {% if anomaly.severity == 'critical' %}bg-red-500/20 text-red-400 border border-red-500/50
+                        {% elif anomaly.severity == 'high' %}bg-orange-500/20 text-orange-400 border border-orange-500/50
+                        {% elif anomaly.severity == 'medium' %}bg-yellow-500/20 text-yellow-400 border border-yellow-500/50
+                        {% else %}bg-blue-500/20 text-blue-400 border border-blue-500/50
+                        {% endif %}">
+                        <i class="fas fa-shield"></i>
+                        {{ anomaly.get_severity_display }} Severity
+                    </span>
+                </div>
+            </div>
+
+            <!-- Key Metrics -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 pb-8 border-b border-white/10">
+                <div>
+                    <h3 class="text-sm font-mono uppercase tracking-wider text-gray-500 mb-2">Anomaly Score</h3>
+                    <p class="text-4xl font-bold text-neonBlue">{{ anomaly.anomaly_score|floatformat:2 }}</p>
+                    <p class="text-xs text-gray-400 mt-1">0.00 - 1.00 (higher = more severe)</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-mono uppercase tracking-wider text-gray-500 mb-2">Affected Rows</h3>
+                    <p class="text-4xl font-bold text-warning">{{ anomaly.affected_rows|length }}</p>
+                    <p class="text-xs text-gray-400 mt-1">Rows with anomalies</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-mono uppercase tracking-wider text-gray-500 mb-2">Affected Columns</h3>
+                    <p class="text-4xl font-bold text-success">{{ anomaly.affected_columns|length }}</p>
+                    <p class="text-xs text-gray-400 mt-1">Columns involved</p>
+                </div>
+            </div>
+
+            <!-- Details -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8 pb-8 border-b border-white/10">
+                <div>
+                    <h3 class="text-sm font-mono uppercase tracking-wider text-gray-500 mb-3">Dataset</h3>
+                    <p class="text-white font-semibold">{{ dataset.name }}</p>
+                    <p class="text-gray-400 text-sm mt-1">{{ dataset.row_count }} rows × {{ dataset.col_count }} columns</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-mono uppercase tracking-wider text-gray-500 mb-3">Detected</h3>
+                    <p class="text-white font-semibold">{{ anomaly.detected_at|date:"M d, Y H:i" }}</p>
+                    <p class="text-gray-400 text-sm mt-1">
+                        {% if anomaly.acknowledged %}
+                            <span class="text-success">✓ Acknowledged</span>
+                        {% else %}
+                            <span class="text-warning">⚠ Not Acknowledged</span>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Affected Columns -->
+            <div class="mb-8 pb-8 border-b border-white/10">
+                <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <i class="fas fa-columns text-neonBlue"></i>
+                    Affected Columns
+                </h2>
+                <div class="space-y-2">
+                    {% if anomaly.affected_columns %}
+                        {% for column in anomaly.affected_columns %}
+                            <div class="flex items-center gap-2 p-3 bg-black/40 rounded-lg border border-white/10">
+                                <i class="fas fa-check text-success"></i>
+                                <span class="text-white font-mono">{{ column }}</span>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-gray-400">No specific columns identified</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Affected Rows (Sample) -->
+            <div class="mb-8 pb-8 border-b border-white/10">
+                <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <i class="fas fa-list-ol text-neonBlue"></i>
+                    Affected Rows (Sample)
+                </h2>
+                {% if anomaly.affected_rows %}
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                        {% for row_idx in anomaly.affected_rows|slice:":12" %}
+                            <div class="p-3 bg-black/40 rounded-lg border border-white/10 text-center">
+                                <p class="text-sm font-mono text-gray-400">Row</p>
+                                <p class="text-lg font-bold text-warning">{{ row_idx }}</p>
+                            </div>
+                        {% endfor %}
+                        {% if anomaly.affected_rows|length > 12 %}
+                            <div class="p-3 bg-black/40 rounded-lg border border-white/10 text-center col-span-2 md:col-span-4">
+                                <p class="text-sm text-gray-400">+{{ anomaly.affected_rows|length|add:"-12" }} more rows</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <p class="text-gray-400">No specific rows identified</p>
+                {% endif %}
+            </div>
+
+            <!-- Details JSON -->
+            {% if anomaly.details %}
+            <div class="mb-8 pb-8 border-b border-white/10">
+                <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <i class="fas fa-chart-bar text-neonBlue"></i>
+                    Analysis Details
+                </h2>
+                <div class="glass-panel p-4 rounded-lg border border-white/10 bg-black/40 overflow-x-auto">
+                    <pre class="text-sm text-gray-300 font-mono">{{ anomaly.details|safe }}</pre>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Visualization Data -->
+            {% if anomaly.visualization_data %}
+            <div class="mb-8">
+                <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <i class="fas fa-chart-line text-neonBlue"></i>
+                    Visualization
+                </h2>
+                <div class="glass-panel p-6 rounded-lg border border-white/10 bg-black/40 text-center">
+                    <p class="text-gray-400">Visualization data available for charting</p>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Actions -->
+            <div class="flex gap-4">
+                {% if not anomaly.acknowledged %}
+                    <button onclick="acknowledgeAnomaly({{ anomaly.id }})" class="px-6 py-3 bg-gradient-to-r from-neonBlue to-neonPurple text-white rounded-lg font-semibold hover:scale-105 transition-transform flex items-center gap-2">
+                        <i class="fas fa-check"></i>
+                        Mark as Acknowledged
+                    </button>
+                {% else %}
+                    <button disabled class="px-6 py-3 bg-success/20 text-success rounded-lg font-semibold border border-success/50 flex items-center gap-2">
+                        <i class="fas fa-check"></i>
+                        Acknowledged
+                    </button>
+                {% endif %}
+                <a href="{% url 'insights:dataset_insights' dataset.id %}" class="px-6 py-3 bg-white/10 text-white rounded-lg font-semibold hover:bg-white/20 transition flex items-center gap-2">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Dataset
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function acknowledgeAnomaly(anomalyId) {
+    // You would implement API call here to acknowledge the anomaly
+    fetch(`/api/anomalies/${anomalyId}/acknowledge/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Anomaly acknowledged successfully!');
+            location.reload();
+        } else {
+            alert('Error: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error acknowledging anomaly');
+    });
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+{% endblock %}

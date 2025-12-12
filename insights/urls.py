@@ -28,9 +28,15 @@ urlpatterns = [
     
     # Anomalies
     path('anomalies/', views.AnomalyListView.as_view(), name='anomaly_list'),
+    path('anomalies/<int:pk>/', views.AnomalyDetailView.as_view(), name='anomaly_detail'),
     
     # Outliers
     path('outliers/', views.OutlierListView.as_view(), name='outlier_list'),
+    path('outliers/<int:pk>/', views.OutlierDetailView.as_view(), name='outlier_detail'),
+    
+    # Relationships
+    path('relationships/', views.RelationshipListView.as_view(), name='relationship_list'),
+    path('relationships/<int:pk>/', views.RelationshipDetailView.as_view(), name='relationship_detail'),
     
     # REST API
     path('', include(router.urls)),

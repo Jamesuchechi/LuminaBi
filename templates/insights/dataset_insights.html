@@ -188,7 +188,7 @@
             {% if anomalies %}
                 <div class="space-y-3">
                     {% for anomaly in anomalies %}
-                        <div class="insight-item">
+                        <a href="{% url 'insights:anomaly_detail' anomaly.id %}" class="insight-item block hover:cursor-pointer hover:border-neonBlue/50">
                             <div class="flex items-start justify-between">
                                 <div>
                                     <h3 class="font-bold text-lg">{{ anomaly.anomaly_type }}</h3>
@@ -208,9 +208,12 @@
                                         {% endif %}">
                                         {{ anomaly.severity|upper }}
                                     </span>
+                                    <div class="text-xs text-gray-500 mt-2">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     {% endfor %}
                 </div>
             {% else %}
@@ -224,7 +227,7 @@
             {% if outlier_analyses %}
                 <div class="space-y-3">
                     {% for analysis in outlier_analyses %}
-                        <div class="insight-item">
+                        <a href="{% url 'insights:outlier_detail' analysis.id %}" class="insight-item block hover:cursor-pointer hover:border-neonBlue/50">
                             <div class="flex items-start justify-between">
                                 <div>
                                     <h3 class="font-bold text-lg">{{ analysis.column }}</h3>
@@ -238,9 +241,12 @@
                                 <div class="text-right">
                                     <div class="text-2xl font-bold text-neonBlue">{{ analysis.outlier_count }}</div>
                                     <div class="text-xs text-gray-500">outliers</div>
+                                    <div class="text-xs text-gray-500 mt-2">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     {% endfor %}
                 </div>
             {% else %}
@@ -250,11 +256,11 @@
 
         <!-- Relationships Tab -->
         <div id="relationships-tab" class="tab-content hidden">
-            <h2 class="text-2xl font-bold mb-4">Feature Relationships</h2>
+            <h2 class="text-2xl font-bold mb-4">Feature Relationships & Correlations</h2>
             {% if relationships %}
                 <div class="space-y-3">
                     {% for rel in relationships %}
-                        <div class="insight-item">
+                        <a href="{% url 'insights:relationship_detail' rel.id %}" class="insight-item block hover:cursor-pointer hover:border-neonBlue/50">
                             <div class="flex items-start justify-between">
                                 <div>
                                     <h3 class="font-bold text-lg">{{ rel.feature_1 }} ↔ {{ rel.feature_2 }}</h3>
@@ -268,9 +274,12 @@
                                 <div class="text-right">
                                     <div class="text-2xl font-bold text-neonBlue">{{ rel.correlation_coefficient|floatformat:2 }}</div>
                                     <div class="text-xs text-gray-500">correlation</div>
+                                    <div class="text-xs text-gray-500 mt-2">
+                                        <i class="fas fa-arrow-right"></i>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     {% endfor %}
                 </div>
             {% else %}

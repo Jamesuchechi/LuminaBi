@@ -8,7 +8,8 @@ from django.views.generic import ListView, DetailView, CreateView, TemplateView,
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.urls import reverse_lazy
-from django.db.models import Q
+from django.db.models import Q, Avg
+from django.db import models
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -225,6 +226,32 @@ class AnomalyListView(LoginRequiredMixin, ListView):
         return AnomalyDetection.objects.filter(
             dataset__owner=self.request.user
         ).select_related('dataset').order_by('-anomaly_score')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        anomalies = self.get_queryset()
+        context['critical_count'] = anomalies.filter(severity='critical').count()
+        context['high_count'] = anomalies.filter(severity='high').count()
+        context['medium_count'] = anomalies.filter(severity='medium').count()
+        return context
+
+
+class AnomalyDetailView(LoginRequiredMixin, DetailView):
+    """Display detailed anomaly information"""
+    model = AnomalyDetection
+    template_name = 'insights/anomaly/detail.html'
+    context_object_name = 'anomaly'
+    login_url = 'accounts:login'
+    
+    def get_queryset(self):
+        """Ensure user owns the dataset this anomaly is from"""
+        return AnomalyDetection.objects.filter(dataset__owner=self.request.user)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        anomaly = self.get_object()
+        context['dataset'] = anomaly.dataset
+        return context
 
 
 class OutlierListView(LoginRequiredMixin, ListView):
@@ -240,6 +267,74 @@ class OutlierListView(LoginRequiredMixin, ListView):
         return OutlierAnalysis.objects.filter(
             dataset__owner=self.request.user
         ).select_related('dataset').order_by('-outlier_percentage')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        analyses = self.get_queryset()
+        context['total_outliers'] = sum(a.outlier_count for a in analyses)
+        context['avg_percentage'] = analyses.aggregate(
+            avg=models.Avg('outlier_percentage')
+        )['avg'] or 0
+        return context
+
+
+class OutlierDetailView(LoginRequiredMixin, DetailView):
+    """Display detailed outlier analysis"""
+    model = OutlierAnalysis
+    template_name = 'insights/outlier/detail.html'
+    context_object_name = 'analysis'
+    login_url = 'accounts:login'
+    
+    def get_queryset(self):
+        """Ensure user owns the dataset this analysis is from"""
+        return OutlierAnalysis.objects.filter(dataset__owner=self.request.user)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        analysis = self.get_object()
+        context['dataset'] = analysis.dataset
+        return context
+
+
+class RelationshipListView(LoginRequiredMixin, ListView):
+    """List relationship analyses"""
+    model = RelationshipAnalysis
+    template_name = 'insights/relationship/list.html'
+    context_object_name = 'relationships'
+    paginate_by = 20
+    login_url = 'accounts:login'
+    
+    def get_queryset(self):
+        """Get relationships for user's datasets"""
+        return RelationshipAnalysis.objects.filter(
+            dataset__owner=self.request.user
+        ).select_related('dataset').order_by('-correlation_coefficient')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        relationships = self.get_queryset()
+        context['significant_count'] = relationships.filter(is_significant=True).count()
+        context['linear_count'] = relationships.filter(relationship_type='linear').count()
+        context['inverse_count'] = relationships.filter(relationship_type='inverse').count()
+        return context
+
+
+class RelationshipDetailView(LoginRequiredMixin, DetailView):
+    """Display detailed relationship analysis"""
+    model = RelationshipAnalysis
+    template_name = 'insights/relationship/detail.html'
+    context_object_name = 'relationship'
+    login_url = 'accounts:login'
+    
+    def get_queryset(self):
+        """Ensure user owns the dataset this relationship is from"""
+        return RelationshipAnalysis.objects.filter(dataset__owner=self.request.user)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        relationship = self.get_object()
+        context['dataset'] = relationship.dataset
+        return context
 
 
 class RunInsightsAPIView(LoginRequiredMixin, View):

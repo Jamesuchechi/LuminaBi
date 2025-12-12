@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+
+{% block title %}Outlier Analysis - {{ analysis.column }} - LuminaBI{% endblock %}
+
+{% block content %}
+<div class="min-h-screen py-12">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Back Navigation -->
+        <div class="mb-8">
+            <a href="{% url 'insights:dataset_insights' dataset.id %}" class="inline-flex items-center gap-2 text-neonBlue hover:text-neonPurple transition group">
+                <i class="fas fa-arrow-left group-hover:-translate-x-1 transition"></i>
+                <span class="font-mono text-sm">Back to Dataset Insights</span>
+            </a>
+        </div>
+
+        <!-- Main Card -->
+        <div class="glass-panel rounded-2xl p-8 border border-white/10">
+            <!-- Header -->
+            <div class="flex items-start justify-between mb-6 pb-6 border-b border-white/10">
+                <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-3">
+                        <i class="fas fa-chart-scatter text-neonPurple text-2xl"></i>
+                        <h1 class="text-4xl font-bold text-white">{{ analysis.column }}</h1>
+                    </div>
+                    <p class="text-gray-400 text-lg">Outlier Detection Analysis</p>
+                </div>
+                <div class="text-right">
+                    <div class="text-3xl font-bold text-warning">{{ analysis.outlier_count }}</div>
+                    <p class="text-sm text-gray-400">outliers detected</p>
+                </div>
+            </div>
+
+            <!-- Key Metrics -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 pb-8 border-b border-white/10">
+                <div>
+                    <h3 class="text-sm font-mono uppercase tracking-wider text-gray-500 mb-2">Detection Method</h3>
+                    <p class="text-lg font-semibold text-white">{{ analysis.get_method_display }}</p>
+                    <p class="text-xs text-gray-400 mt-1">Statistical technique used</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-mono uppercase tracking-wider text-gray-500 mb-2">Outlier Percentage</h3>
+                    <p class="text-4xl font-bold text-neonBlue">{{ analysis.outlier_percentage|floatformat:2 }}%</p>
+                    <p class="text-xs text-gray-400 mt-1">Of total dataset</p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-mono uppercase tracking-wider text-gray-500 mb-2">Detection Date</h3>
+                    <p class="text-white font-semibold">{{ analysis.created_at|date:"M d, Y" }}</p>
+                    <p class="text-xs text-gray-400 mt-1">{{ analysis.created_at|time:"H:i" }}</p>
+                </div>
+            </div>
+
+            <!-- Dataset Info -->
+            <div class="mb-8 pb-8 border-b border-white/10">
+                <h3 class="text-sm font-mono uppercase tracking-wider text-gray-500 mb-3">Dataset</h3>
+                <p class="text-white font-semibold text-lg">{{ dataset.name }}</p>
+                <p class="text-gray-400 text-sm mt-1">{{ dataset.row_count }} rows × {{ dataset.col_count }} columns</p>
+            </div>
+
+            <!-- Outlier Indices (Sample) -->
+            <div class="mb-8 pb-8 border-b border-white/10">
+                <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <i class="fas fa-list-ol text-neonBlue"></i>
+                    Outlier Indices (Sample)
+                </h2>
+                {% if analysis.outlier_indices %}
+                    <div class="grid grid-cols-2 md:grid-cols-6 gap-2 mb-4">
+                        {% for idx in analysis.outlier_indices|slice:":24" %}
+                            <div class="p-2 bg-black/40 rounded-lg border border-white/10 text-center">
+                                <p class="text-xs font-mono text-gray-300">{{ idx }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% if analysis.outlier_indices|length > 24 %}
+                        <div class="p-3 bg-black/40 rounded-lg border border-white/10 text-center">
+                            <p class="text-sm text-gray-400">Total: {{ analysis.outlier_indices|length }} outlier indices</p>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <p class="text-gray-400">No outlier indices available</p>
+                {% endif %}
+            </div>
+
+            <!-- Outlier Values (Sample) -->
+            <div class="mb-8 pb-8 border-b border-white/10">
+                <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <i class="fas fa-chart-bar text-neonBlue"></i>
+                    Outlier Values (Sample)
+                </h2>
+                {% if analysis.outlier_values %}
+                    <div class="space-y-2">
+                        {% for val in analysis.outlier_values|slice:":10" %}
+                            <div class="flex items-center justify-between p-3 bg-black/40 rounded-lg border border-white/10">
+                                <span class="text-gray-400 font-mono">{{ forloop.counter }}</span>
+                                <span class="text-lg font-bold text-warning">{{ val }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% if analysis.outlier_values|length > 10 %}
+                        <div class="p-3 bg-black/40 rounded-lg border border-white/10 text-center mt-4">
+                            <p class="text-sm text-gray-400">+ {{ analysis.outlier_values|length|add:"-10" }} more values</p>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <p class="text-gray-400">No outlier values available</p>
+                {% endif %}
+            </div>
+
+            <!-- Threshold Information -->
+            {% if analysis.threshold_values %}
+            <div class="mb-8 pb-8 border-b border-white/10">
+                <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <i class="fas fa-sliders-h text-neonBlue"></i>
+                    Threshold Values
+                </h2>
+                <div class="glass-panel p-4 rounded-lg border border-white/10 bg-black/40">
+                    <pre class="text-sm text-gray-300 font-mono">{{ analysis.threshold_values|safe }}</pre>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Statistics -->
+            {% if analysis.statistics %}
+            <div class="mb-8 pb-8 border-b border-white/10">
+                <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <i class="fas fa-calculator text-neonBlue"></i>
+                    Statistical Summary
+                </h2>
+                <div class="glass-panel p-4 rounded-lg border border-white/10 bg-black/40 overflow-x-auto">
+                    <pre class="text-sm text-gray-300 font-mono">{{ analysis.statistics|safe }}</pre>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Visualization Data -->
+            {% if analysis.visualization_data %}
+            <div class="mb-8">
+                <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <i class="fas fa-chart-line text-neonBlue"></i>
+                    Visualization
+                </h2>
+                <div class="glass-panel p-6 rounded-lg border border-white/10 bg-black/40 text-center">
+                    <p class="text-gray-400">Visualization data available for charting</p>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Actions -->
+            <div class="flex gap-4">
+                <a href="{% url 'insights:dataset_insights' dataset.id %}" class="px-6 py-3 bg-gradient-to-r from-neonBlue to-neonPurple text-white rounded-lg font-semibold hover:scale-105 transition-transform flex items-center gap-2">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Dataset
+                </a>
+                <button onclick="exportAnalysis()" class="px-6 py-3 bg-white/10 text-white rounded-lg font-semibold hover:bg-white/20 transition flex items-center gap-2">
+                    <i class="fas fa-download"></i>
+                    Export Report
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function exportAnalysis() {
+    // You would implement export functionality here
+    alert('Export functionality coming soon!');
+}
+</script>
+{% endblock %}
